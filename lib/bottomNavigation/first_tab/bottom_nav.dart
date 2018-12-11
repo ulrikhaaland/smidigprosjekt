@@ -33,7 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final Key keyOne = PageStorageKey('pageOne');
   final Key keyTwo = PageStorageKey('pageTwo');
   final Key keyThree = PageStorageKey('pageThree');
-  // final Key keyThree = PageStorageKey('pageThree');
+  final Key keyFour = PageStorageKey('pageFour');
 
   final BaseAuth auth = Auth();
 
@@ -46,7 +46,8 @@ class _MyHomePageState extends State<MyHomePage> {
   PageOne one;
   GamePage two;
   UserPage three;
-  // DisplaySearch three;
+  UserPage four;
+
   List<Widget> pages;
   Widget currentPage;
 
@@ -74,12 +75,18 @@ class _MyHomePageState extends State<MyHomePage> {
       user: widget.user,
     );
 
-    pages = [one, two, three];
+    four = UserPage(
+      key: keyTwo,
+      auth: auth,
+      onSignOut: () => _signOut(),
+      user: widget.user,
+    );
+
+    pages = [one, two, three, four];
 
     currentPage = one;
 
     super.initState();
-    setPage();
   }
 
   void _signOut() async {
@@ -89,13 +96,6 @@ class _MyHomePageState extends State<MyHomePage> {
     } catch (e) {
       print(e);
     }
-  }
-
-  setPage() {
-    setState(() {
-      currentTab = 1;
-      currentPage = two;
-    });
   }
 
   @override
@@ -118,24 +118,34 @@ class _MyHomePageState extends State<MyHomePage> {
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             backgroundColor: UIData.darkest,
-            icon: Icon(Icons.search),
-            title: Text('Find'),
+            icon: Icon(Icons.home),
+            title: Text('Hjem'),
           ),
           BottomNavigationBarItem(
             backgroundColor: UIData.darkest,
-            icon: Icon(Icons.group),
+            icon: Icon(Icons.search),
             title: Text(
-              "Groups",
+              "Søk",
               style: new TextStyle(),
             ),
           ),
           BottomNavigationBarItem(
             backgroundColor: UIData.darkest,
             icon: Icon(
-              Icons.settings,
+              Icons.people,
             ),
             title: Text(
-              "Settings",
+              "Gruppe",
+              style: new TextStyle(),
+            ),
+          ),
+          BottomNavigationBarItem(
+            backgroundColor: UIData.darkest,
+            icon: Icon(
+              Icons.person_outline,
+            ),
+            title: Text(
+              "Profil",
               style: new TextStyle(),
             ),
           ),
@@ -170,7 +180,7 @@ class PageOneState extends State<PageOne> {
         appBar: new AppBar(
           backgroundColor: UIData.darkest,
           title: new Text(
-            "Find Group",
+            "Hjem",
             style: new TextStyle(fontSize: UIData.fontSize24),
           ),
         ),

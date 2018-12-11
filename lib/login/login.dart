@@ -199,30 +199,27 @@ class LoginState extends State<Login> {
           new ListTile(
             title: padded(
                 child: new TextFormField(
-              // maxLength: 18,
               maxLengthEnforced: true,
               style: new TextStyle(
                   color: UIData.white, fontSize: UIData.fontSize18),
               key: new Key('username'),
               decoration: new InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Username (maximum 18 characters)',
+                  labelText: 'Brukernavn (maksimum 18 tegn)',
                   fillColor: UIData.white,
                   labelStyle: new TextStyle(
                       color: Colors.grey, fontSize: UIData.fontSize16)),
               autocorrect: false,
-              // focusNode: _focus,
               validator: (val) {
                 if (val.isEmpty) {
-                  return "Username can't be empty";
+                  return "Brukernavnet kan ikke være tomt";
                 }
                 if (val.length > 18) {
-                  return "Username is too long";
+                  return "Brukernavnet er for langt";
                 } else {
                   return null;
                 }
               },
-              // val.isEmpty ? "Username can't be empty" : null,
               onSaved: (val) => _username = val.trim().toLowerCase(),
               controller: myController,
             )),
@@ -240,11 +237,11 @@ class LoginState extends State<Login> {
                   labelStyle: new TextStyle(
                       color: Colors.grey, fontSize: UIData.fontSize16)),
               autocorrect: false,
-              validator: (val) => val.isEmpty ? 'Email can\'t be empty.' : null,
+              validator: (val) =>
+                  val.isEmpty ? 'Emailen kan ikke være tom' : null,
               onSaved: (val) => _email = val.trim().toLowerCase(),
             )),
           ),
-
           new ListTile(
             title: padded(
                 child: new TextFormField(
@@ -253,7 +250,7 @@ class LoginState extends State<Login> {
               key: new Key('password'),
               decoration: new InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Password (8+ characters)',
+                  labelText: 'Passord (8+ tegn)',
                   fillColor: UIData.white,
                   labelStyle: new TextStyle(
                       color: Colors.grey, fontSize: UIData.fontSize16)),
@@ -261,10 +258,10 @@ class LoginState extends State<Login> {
               autocorrect: false,
               validator: (val) {
                 if (val.isEmpty) {
-                  return 'Password can\'t be empty.';
+                  return 'Passordet kan ikke være tomt';
                 }
                 if (val.length < 8) {
-                  return "Password is too short";
+                  return "Passordet er for kort";
                 } else {
                   return null;
                 }
@@ -291,21 +288,6 @@ class LoginState extends State<Login> {
               },
             ),
           ),
-          // padded(
-          //     child: new TextField(
-          //         style: new TextStyle(
-          //             color: UIData.white, fontSize: UIData.fontSize18),
-          //         key: new Key('checkpassword'),
-          //         decoration: new InputDecoration(
-          //             border: OutlineInputBorder(),
-          //             labelText: 'Confirm Password',
-          //             fillColor: UIData.white,
-          //             labelStyle: new TextStyle(color: Colors.grey)),
-          //         obscureText: true,
-          //         autocorrect: false,
-          //         onChanged: (String str) {
-          //           _doubleCheckPassword = str;
-          //         })),
         ];
       case FormType.login:
         return [
@@ -320,7 +302,8 @@ class LoginState extends State<Login> {
                   labelText: 'Email',
                   labelStyle: new TextStyle(color: Colors.grey)),
               autocorrect: false,
-              validator: (val) => val.isEmpty ? 'Email can\'t be empty.' : null,
+              validator: (val) =>
+                  val.isEmpty ? 'Emailen kan ikke være tom' : null,
               onSaved: (val) => _email = val.trim().toLowerCase(),
             )),
           ),
@@ -332,12 +315,12 @@ class LoginState extends State<Login> {
               key: new Key('password'),
               decoration: new InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Password',
+                  labelText: 'Passord',
                   labelStyle: new TextStyle(color: Colors.grey)),
               obscureText: true,
               autocorrect: false,
               validator: (val) =>
-                  val.isEmpty ? 'Password can\'t be empty.' : null,
+                  val.isEmpty ? 'Passordet kan ikke være tomt' : null,
               onSaved: (val) => _password = val,
             )),
           ),
@@ -352,7 +335,7 @@ class LoginState extends State<Login> {
                     key: new Key('typelostpassword'),
                     decoration: new InputDecoration(
                         border: OutlineInputBorder(),
-                        labelText: 'Enter your email',
+                        labelText: 'Skriv inn din email',
                         fillColor: UIData.white,
                         labelStyle: new TextStyle(color: Colors.grey)),
                     autocorrect: false,
@@ -371,7 +354,7 @@ class LoginState extends State<Login> {
           padded(),
           new PrimaryButton(
               key: new Key('login'),
-              text: 'Login',
+              text: 'Logg inn',
               // height: 44.0,
               // color: Colors.yellow,
               onPressed: () {
@@ -385,13 +368,13 @@ class LoginState extends State<Login> {
           ),
           new FlatButton(
             key: new Key('register'),
-            child: new Text("Dont have an account? Register",
+            child: new Text("Har du ikke en konto? Registrer deg",
                 style: new TextStyle(color: UIData.white)),
             onPressed: moveToRegister,
           ),
           new FlatButton(
             key: new Key('resetpassword'),
-            child: new Text("Forgot password?",
+            child: new Text("Glemt passord?",
                 style: new TextStyle(color: UIData.white)),
             onPressed: moveToForgotPassword,
           ),
@@ -400,7 +383,7 @@ class LoginState extends State<Login> {
         return [
           new PrimaryButton(
             key: new Key('createaccount'),
-            text: 'Create an account',
+            text: 'Lag konto',
             // height: 44.0,
             // color: Colors.yellow,
             onPressed: () {
@@ -416,7 +399,7 @@ class LoginState extends State<Login> {
           new FlatButton(
               key: new Key('need-login'),
               child: new Text(
-                "Have an account? Login",
+                "Har du en bruker? Logg inn",
                 style: new TextStyle(color: UIData.white),
               ),
               onPressed: moveToLogin),
@@ -425,7 +408,7 @@ class LoginState extends State<Login> {
         return [
           new PrimaryButton(
             key: new Key('reset'),
-            text: 'Reset password',
+            text: 'Tilbakestill passord',
             // height: 44.0,
             // color: Colors.yellow,
             onPressed: sendResetEmail,
@@ -436,7 +419,7 @@ class LoginState extends State<Login> {
           new FlatButton(
               key: new Key('movetologin'),
               child: new Text(
-                "Move to login",
+                "Gå til logg inn",
                 style: new TextStyle(color: UIData.white),
               ),
               onPressed: moveToLogin),
@@ -490,7 +473,7 @@ class LoginState extends State<Login> {
     return new Scaffold(
         appBar: new AppBar(
           title: new Text(
-            "Skin In The Game",
+            "Smidig Prosjekt",
             style: new TextStyle(
                 color: Colors.yellow[700], fontSize: UIData.fontSize24),
           ),
