@@ -7,6 +7,7 @@ import 'utils/essentials.dart';
 import 'package:smidigprosjekt/objects/user.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'utils/uidata.dart';
+import 'intro.dart';
 
 class RootPage extends StatefulWidget {
   RootPage({Key key, this.auth}) : super(key: key);
@@ -19,6 +20,7 @@ class RootPage extends StatefulWidget {
 enum AuthStatus {
   notSignedIn,
   signedIn,
+  intro,
   loading,
 }
 
@@ -84,15 +86,18 @@ class RootPageState extends State<RootPage> {
           await Firestore.instance.document("users/$currentUser").get();
       if (docSnap.exists) {
         user = new User(
-          docSnap.data["email"],
-          docSnap.data["id"],
-          docSnap.data["name"],
-          await updateFcmToken(),
-        );
+            docSnap.data["email"],
+            docSnap.data["id"],
+            docSnap.data["name"],
+            await updateFcmToken(),
+            docSnap.data["intro"]);
         setState(() {
           authStatus = currentUser != null
               ? AuthStatus.signedIn
               : AuthStatus.notSignedIn;
+          if (user.intro) {
+            authStatus = AuthStatus.intro;
+          }
         });
       } else {
         setState(() {
@@ -128,6 +133,10 @@ class RootPageState extends State<RootPage> {
             onSignOut: () => _updateAuthStatus(AuthStatus.notSignedIn));
       case AuthStatus.loading:
         return new Essentials();
+      case AuthStatus.intro:
+        return new Intro(
+            user: user,
+            onSignOut: () => _updateAuthStatus(AuthStatus.notSignedIn));
     }
   }
 }

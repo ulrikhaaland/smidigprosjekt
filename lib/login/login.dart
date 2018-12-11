@@ -46,6 +46,8 @@ class LoginState extends State<Login> {
   FormType _formType = FormType.login;
   String _authHint = '';
 
+  bool firstTime;
+
   bool passwordsMatch = false;
   bool usernameAvailable = false;
   bool loading = false;
@@ -116,7 +118,7 @@ class LoginState extends State<Login> {
   }
 
   void saveUserData() {
-    User user = new User(_email, uid, _username, widget.messagingToken);
+    User user = new User(_email, uid, _username, widget.messagingToken, true);
     DocumentReference docRef = Firestore.instance.document("users/$uid");
     Firestore.instance.runTransaction((Transaction tx) async {
       await docRef.setData(user.toJson());
@@ -201,14 +203,14 @@ class LoginState extends State<Login> {
                 child: new TextFormField(
               maxLengthEnforced: true,
               style: new TextStyle(
-                  color: UIData.white, fontSize: UIData.fontSize18),
+                  color: Colors.black, fontSize: UIData.fontSize18),
               key: new Key('username'),
               decoration: new InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Brukernavn (maksimum 18 tegn)',
-                  fillColor: UIData.white,
+                  fillColor: Colors.black,
                   labelStyle: new TextStyle(
-                      color: Colors.grey, fontSize: UIData.fontSize16)),
+                      color: Colors.grey[600], fontSize: UIData.fontSize16)),
               autocorrect: false,
               validator: (val) {
                 if (val.isEmpty) {
@@ -228,14 +230,14 @@ class LoginState extends State<Login> {
             title: padded(
                 child: new TextFormField(
               style: new TextStyle(
-                  color: UIData.white, fontSize: UIData.fontSize18),
+                  color: Colors.black, fontSize: UIData.fontSize18),
               key: new Key('email'),
               decoration: new InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Email',
-                  fillColor: UIData.white,
+                  fillColor: Colors.black,
                   labelStyle: new TextStyle(
-                      color: Colors.grey, fontSize: UIData.fontSize16)),
+                      color: Colors.grey[600], fontSize: UIData.fontSize16)),
               autocorrect: false,
               validator: (val) =>
                   val.isEmpty ? 'Emailen kan ikke være tom' : null,
@@ -246,14 +248,14 @@ class LoginState extends State<Login> {
             title: padded(
                 child: new TextFormField(
               style: new TextStyle(
-                  color: UIData.white, fontSize: UIData.fontSize18),
+                  color: Colors.black, fontSize: UIData.fontSize18),
               key: new Key('password'),
               decoration: new InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Passord (8+ tegn)',
-                  fillColor: UIData.white,
+                  fillColor: Colors.black,
                   labelStyle: new TextStyle(
-                      color: Colors.grey, fontSize: UIData.fontSize16)),
+                      color: Colors.grey[600], fontSize: UIData.fontSize16)),
               obscureText: passwordVisible,
               autocorrect: false,
               validator: (val) {
@@ -271,7 +273,7 @@ class LoginState extends State<Login> {
             trailing: new IconButton(
               icon: new Icon(
                 passwordVisibleIcon,
-                color: UIData.white,
+                color: Colors.black,
               ),
               onPressed: () {
                 if (passwordVisible == false) {
@@ -295,12 +297,12 @@ class LoginState extends State<Login> {
             title: padded(
                 child: new TextFormField(
               style: new TextStyle(
-                  color: UIData.white, fontSize: UIData.fontSize18),
+                  color: Colors.black, fontSize: UIData.fontSize18),
               key: new Key('email'),
               decoration: new InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Email',
-                  labelStyle: new TextStyle(color: Colors.grey)),
+                  labelStyle: new TextStyle(color: Colors.grey[600])),
               autocorrect: false,
               validator: (val) =>
                   val.isEmpty ? 'Emailen kan ikke være tom' : null,
@@ -311,18 +313,21 @@ class LoginState extends State<Login> {
             title: padded(
                 child: new TextFormField(
               style: new TextStyle(
-                  color: UIData.white, fontSize: UIData.fontSize18),
+                  color: Colors.black, fontSize: UIData.fontSize18),
               key: new Key('password'),
               decoration: new InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Passord',
-                  labelStyle: new TextStyle(color: Colors.grey)),
+                  labelStyle: new TextStyle(color: Colors.grey[600])),
               obscureText: true,
               autocorrect: false,
               validator: (val) =>
                   val.isEmpty ? 'Passordet kan ikke være tomt' : null,
               onSaved: (val) => _password = val,
             )),
+            trailing: new IconButton(
+              icon: Icon(Icons.visibility),
+            ),
           ),
         ];
       case FormType.forgotPassword:
@@ -331,13 +336,13 @@ class LoginState extends State<Login> {
             title: padded(
                 child: new TextField(
                     style: new TextStyle(
-                        color: UIData.white, fontSize: UIData.fontSize18),
+                        color: Colors.black, fontSize: UIData.fontSize18),
                     key: new Key('typelostpassword'),
                     decoration: new InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Skriv inn din email',
-                        fillColor: UIData.white,
-                        labelStyle: new TextStyle(color: Colors.grey)),
+                        fillColor: Colors.black,
+                        labelStyle: new TextStyle(color: Colors.grey[600])),
                     autocorrect: false,
                     onChanged: (String str) {
                       _resetEmail = str;
@@ -355,8 +360,8 @@ class LoginState extends State<Login> {
           new PrimaryButton(
               key: new Key('login'),
               text: 'Logg inn',
-              // height: 44.0,
-              // color: Colors.yellow,
+              color: Colors.lightBlueAccent,
+              padding: 84,
               onPressed: () {
                 setState(() {
                   loading = true;
@@ -369,23 +374,24 @@ class LoginState extends State<Login> {
           new FlatButton(
             key: new Key('register'),
             child: new Text("Har du ikke en konto? Registrer deg",
-                style: new TextStyle(color: UIData.white)),
+                style: new TextStyle(color: Colors.black)),
             onPressed: moveToRegister,
           ),
           new FlatButton(
             key: new Key('resetpassword'),
             child: new Text("Glemt passord?",
-                style: new TextStyle(color: UIData.white)),
+                style: new TextStyle(color: Colors.black)),
             onPressed: moveToForgotPassword,
           ),
         ];
       case FormType.register:
         return [
+          padded(),
           new PrimaryButton(
             key: new Key('createaccount'),
             text: 'Lag konto',
-            // height: 44.0,
-            // color: Colors.yellow,
+            padding: 84,
+            color: Colors.lightBlueAccent,
             onPressed: () {
               setState(() {
                 loading = true;
@@ -400,17 +406,18 @@ class LoginState extends State<Login> {
               key: new Key('need-login'),
               child: new Text(
                 "Har du en bruker? Logg inn",
-                style: new TextStyle(color: UIData.white),
+                style: new TextStyle(color: Colors.black),
               ),
               onPressed: moveToLogin),
         ];
       case FormType.forgotPassword:
         return [
+          padded(),
           new PrimaryButton(
             key: new Key('reset'),
-            text: 'Tilbakestill passord',
-            // height: 44.0,
-            // color: Colors.yellow,
+            text: 'Tilbakestill',
+            padding: 84,
+            color: Colors.lightBlueAccent,
             onPressed: sendResetEmail,
           ),
           Padding(
@@ -420,7 +427,7 @@ class LoginState extends State<Login> {
               key: new Key('movetologin'),
               child: new Text(
                 "Gå til logg inn",
-                style: new TextStyle(color: UIData.white),
+                style: new TextStyle(color: Colors.black),
               ),
               onPressed: moveToLogin),
         ];
@@ -434,7 +441,7 @@ class LoginState extends State<Login> {
         padding: const EdgeInsets.all(32.0),
         child: new Text(_authHint,
             key: new Key('hint'),
-            style: new TextStyle(fontSize: 18.0, color: Colors.grey),
+            style: new TextStyle(fontSize: 18.0, color: Colors.grey[600]),
             textAlign: TextAlign.center));
   }
 
@@ -443,7 +450,7 @@ class LoginState extends State<Login> {
         child: new Container(
             child: new Column(children: [
       new Container(
-          color: UIData.darkest,
+          color: Colors.white,
           child: new Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
             new Container(
                 padding: const EdgeInsets.all(16.0),
@@ -471,20 +478,28 @@ class LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        appBar: new AppBar(
-          title: new Text(
-            "Smidig Prosjekt",
-            style: new TextStyle(
-                color: Colors.yellow[700], fontSize: UIData.fontSize24),
+        // appBar: new AppBar(
+        //   centerTitle: true,
+        //   title: new Text(
+        //     "Smidig Prosjekt",
+        //     style: new TextStyle(
+        //         color: Colors.yellow[700], fontSize: UIData.fontSize24),
+        //   ),
+        //   backgroundColor: UIData.darkest,
+        // ),
+        backgroundColor: Colors.white,
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Container(
+                color: Colors.lightBlue,
+                height: 300,
+              ),
+              material(),
+            ],
           ),
-          backgroundColor: UIData.darkest,
-        ),
-        backgroundColor: UIData.darkest,
-        body: new Stack(
-          children: <Widget>[
-            material(),
-            circular(),
-          ],
+          // material(),
+          // circular(),
         ));
   }
 
