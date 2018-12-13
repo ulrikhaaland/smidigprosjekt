@@ -86,11 +86,13 @@ class RootPageState extends State<RootPage> {
           await Firestore.instance.document("users/$currentUser").get();
       if (docSnap.exists) {
         user = new User(
-            docSnap.data["email"],
-            docSnap.data["id"],
-            docSnap.data["name"],
-            await updateFcmToken(),
-            docSnap.data["intro"]);
+          docSnap.data["email"],
+          docSnap.data["id"],
+          docSnap.data["name"],
+          await updateFcmToken(),
+          // docSnap.data["intro"]
+          true,
+        );
         setState(() {
           authStatus = currentUser != null
               ? AuthStatus.signedIn
