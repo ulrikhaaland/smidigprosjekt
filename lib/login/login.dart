@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../utils/uidata.dart';
 import 'dart:async';
 import '../objects/user.dart';
+import 'package:smidigprosjekt/login/feide.dart';
 
 class Login extends StatefulWidget {
   Login(
@@ -477,97 +478,109 @@ class LoginState extends State<Login> {
     }
   }
 
+  bool feide = false;
+
   @override
   Widget build(BuildContext context) {
     queryData = MediaQuery.of(context);
-
-    return new Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
-        children: <Widget>[
-          new Padding(
-            padding: EdgeInsets.only(top: 48),
-            child: new Align(
-              alignment: Alignment.topLeft,
-              child: new Container(
-                width: queryData.size.width / 2,
-                height: 30,
-                color: UIData.green,
+    if (!feide) {
+      return new Scaffold(
+        backgroundColor: Colors.white,
+        body: Column(
+          children: <Widget>[
+            new Padding(
+              padding: EdgeInsets.only(top: 48),
+              child: new Align(
+                alignment: Alignment.topLeft,
+                child: new Container(
+                  width: queryData.size.width / 2,
+                  height: 30,
+                  color: UIData.green,
+                ),
               ),
             ),
-          ),
-          new Padding(
-            padding: EdgeInsets.only(top: 48),
-            child: new Align(
-              alignment: Alignment.topRight,
-              child: new Container(
-                width: queryData.size.width / 2,
-                height: 30,
-                color: UIData.red,
+            new Padding(
+              padding: EdgeInsets.only(top: 48),
+              child: new Align(
+                alignment: Alignment.topRight,
+                child: new Container(
+                  width: queryData.size.width / 2,
+                  height: 30,
+                  color: UIData.red,
+                ),
               ),
             ),
-          ),
-          new DecoratedBox(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('/logo.gif', package: "images"),
-              ),
-            ),
-          ),
-          // Container(
-          //   height: queryData.size.height / 4,
-          // ),
-          new Padding(
-              padding: EdgeInsets.all(64.0),
-              child: new ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minHeight: 50.0,
-                    minWidth: 500.0,
-                  ),
-                  child: new FlatButton(
-                    color: Colors.black,
-                    shape: new RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.black),
-                      // borderRadius: BorderRadius.all(Radius.circular(10.0))
-                    ),
-                    onPressed: null,
-                    child: new Row(
-                      children: <Widget>[
-                        new Text(
-                          "Logg inn med FEIDE",
-                          style: new TextStyle(color: Colors.black),
-                          textAlign: TextAlign.center,
+            // Container(
+            //   height: queryData.size.height / 4,
+            // ),
+            new Stack(
+              children: <Widget>[
+                new Image.asset("lib/assets/images/logo.gif"),
+                new Padding(
+                    padding: EdgeInsets.only(left: 64.0, right: 64, top: 220),
+                    child: new ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: 50.0,
+                          minWidth: 500.0,
                         ),
-                      ],
-                    ),
-                  ))),
-          new Padding(
-            padding: EdgeInsets.only(top: 48),
-            child: new Align(
-              alignment: Alignment.topLeft,
-              child: new Container(
-                width: queryData.size.width / 2,
-                height: 30,
-                color: UIData.purple,
+                        child: new FlatButton(
+                          shape: new RoundedRectangleBorder(
+                            side: BorderSide(color: Colors.black),
+                            // borderRadius: BorderRadius.all(Radius.circular(10.0))
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              feide = true;
+                            });
+                          },
+                          child: new Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              new Text(
+                                "Logg inn med FEIDE",
+                                style: new TextStyle(color: Colors.black),
+                                textAlign: TextAlign.center,
+                              ),
+                              new Image.asset(
+                                "lib/assets/images/logo-feide-2092px.png (content).png",
+                                scale: 20,
+                              ),
+                            ],
+                          ),
+                        ))),
+              ],
+            ),
+
+            new Padding(
+              padding: EdgeInsets.only(top: 48),
+              child: new Align(
+                alignment: Alignment.topLeft,
+                child: new Container(
+                  width: queryData.size.width / 2,
+                  height: 30,
+                  color: UIData.purple,
+                ),
               ),
             ),
-          ),
-          new Padding(
-            padding: EdgeInsets.only(top: 48),
-            child: new Align(
-              alignment: Alignment.topRight,
-              child: new Container(
-                width: queryData.size.width / 2,
-                height: 30,
-                color: UIData.darkpurple,
+            new Padding(
+              padding: EdgeInsets.only(top: 48),
+              child: new Align(
+                alignment: Alignment.topRight,
+                child: new Container(
+                  width: queryData.size.width / 2,
+                  height: 30,
+                  color: UIData.darkpurple,
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-      // material(),
-      // circular(),
-    );
+          ],
+        ),
+        // material(),
+        // circular(),
+      );
+    } else {
+      return new Feide(auth: widget.auth);
+    }
   }
 
   Widget padded({Widget child}) {
