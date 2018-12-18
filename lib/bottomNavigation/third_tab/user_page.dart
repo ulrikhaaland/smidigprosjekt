@@ -39,12 +39,12 @@ class UserPageState extends State<UserPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: UIData.darkest,
+          backgroundColor: UIData.green,
           title: new Text(
             "Settings",
             style: new TextStyle(fontSize: UIData.fontSize24),
           )),
-      backgroundColor: UIData.dark,
+      backgroundColor: UIData.green,
       body: page(),
     );
   }
@@ -61,7 +61,7 @@ class UserPageState extends State<UserPage> {
           title: new Text(
             "${widget.user.getName()}",
             style:
-                new TextStyle(fontSize: UIData.fontSize20, color: UIData.white),
+                new TextStyle(fontSize: UIData.fontSize20, color: UIData.green),
             overflow: TextOverflow.ellipsis,
           ),
           subtitle: new Text(
@@ -87,7 +87,7 @@ class UserPageState extends State<UserPage> {
           title: new Text(
             "Invites",
             style:
-                new TextStyle(color: UIData.white, fontSize: UIData.fontSize20),
+                new TextStyle(color: UIData.green, fontSize: UIData.fontSize20),
           ),
           onTap: null,
         ),
@@ -105,7 +105,7 @@ class UserPageState extends State<UserPage> {
         //       child: new Text(
         //     "Notifications",
         //     style: new TextStyle(
-        //       color: UIData.white,
+        //       color: UIData.green,
         //       fontSize: UIData.fontSize20,
         //     ),
         //   )),
@@ -135,7 +135,7 @@ class UserPageState extends State<UserPage> {
           title: new Text(
             "Logout",
             style:
-                new TextStyle(color: UIData.white, fontSize: UIData.fontSize20),
+                new TextStyle(color: UIData.green, fontSize: UIData.fontSize20),
           ),
           onTap: () {
             widget.onSignOut();

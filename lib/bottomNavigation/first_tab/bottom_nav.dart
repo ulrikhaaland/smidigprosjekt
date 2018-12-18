@@ -101,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: UIData.darkest,
+      backgroundColor: UIData.green,
       body: PageStorage(
         child: currentPage,
         bucket: bucket,
@@ -117,12 +117,12 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            backgroundColor: UIData.darkest,
+            backgroundColor: UIData.green,
             icon: Icon(Icons.home),
             title: Text('Hjem'),
           ),
           BottomNavigationBarItem(
-            backgroundColor: UIData.darkest,
+            backgroundColor: UIData.green,
             icon: Icon(Icons.search),
             title: Text(
               "Søk",
@@ -130,7 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           BottomNavigationBarItem(
-            backgroundColor: UIData.darkest,
+            backgroundColor: UIData.green,
             icon: Icon(
               Icons.people,
             ),
@@ -140,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           BottomNavigationBarItem(
-            backgroundColor: UIData.darkest,
+            backgroundColor: UIData.green,
             icon: Icon(
               Icons.person_outline,
             ),
@@ -176,9 +176,9 @@ class PageOneState extends State<PageOne> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: UIData.dark,
+        backgroundColor: Colors.white,
         appBar: new AppBar(
-          backgroundColor: UIData.darkest,
+          backgroundColor: UIData.green,
           title: new Text(
             "Hjem",
             style: new TextStyle(fontSize: UIData.fontSize24),

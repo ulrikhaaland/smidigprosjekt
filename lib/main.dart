@@ -10,10 +10,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      color: UIData.darkest,
+      color: Colors.black,
       title: 'Flutter Login',
       theme: new ThemeData(
-        scaffoldBackgroundColor: UIData.dark,
+        scaffoldBackgroundColor: Colors.black,
         buttonColor: Colors.yellow[700],
       ),
       home: new RootPage(auth: new Auth()),

@@ -60,15 +60,15 @@ class GamePageState extends State<GamePage> {
         resizeToAvoidBottomPadding: true,
         // backgroundColor: UIData.dark,
         appBar: new AppBar(
-          backgroundColor: UIData.darkest,
+          backgroundColor: UIData.green,
 
           title: new Directionality(
             textDirection: Directionality.of(context),
             child: TextField(
               autocorrect: false,
-              style: new TextStyle(color: UIData.white),
+              style: new TextStyle(color: Colors.white),
               decoration: InputDecoration(
-                fillColor: UIData.white,
+                fillColor: Colors.white,
                 labelText: 'Search for group',
                 labelStyle: new TextStyle(color: Colors.grey[700]),
                 icon: new Icon(
@@ -99,7 +99,7 @@ class GamePageState extends State<GamePage> {
               },
             ),
           ),
-          // backgroundColor: UIData.darkest,
+          // backgroundColor: UIData.green,
         ),
         body: Container());
   }
@@ -114,7 +114,7 @@ class GamePageState extends State<GamePage> {
   //             child: Container(
   //           padding: EdgeInsets.all(10.0),
   //           decoration: new BoxDecoration(
-  //               border: Border.all(color: UIData.white),
+  //               border: Border.all(color: Colors.white),
   //               borderRadius: new BorderRadius.all(const Radius.circular(8.0))),
   //           child: Row(
   //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -122,7 +122,7 @@ class GamePageState extends State<GamePage> {
   //               Text(
   //                 document['name'],
   //                 style: new TextStyle(
-  //                     color: UIData.white, fontSize: UIData.fontSize20),
+  //                     color: Colors.white, fontSize: UIData.fontSize20),
   //                 overflow: TextOverflow.ellipsis,
   //               ),
   //               new Padding(
@@ -200,7 +200,7 @@ class GamePageState extends State<GamePage> {
   //             child: Container(
   //           padding: EdgeInsets.all(10.0),
   //           decoration: new BoxDecoration(
-  //               border: Border.all(color: UIData.white),
+  //               border: Border.all(color: Colors.white),
   //               borderRadius: new BorderRadius.all(const Radius.circular(8.0))),
   //           child: Row(
   //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -208,7 +208,7 @@ class GamePageState extends State<GamePage> {
   //               Text(document['name'],
   //                   overflow: TextOverflow.ellipsis,
   //                   style: new TextStyle(
-  //                       color: UIData.white, fontSize: UIData.fontSize20)),
+  //                       color: Colors.white, fontSize: UIData.fontSize20)),
   //               new Row(
   //                 children: <Widget>[
   //                   new Icon(
@@ -221,7 +221,7 @@ class GamePageState extends State<GamePage> {
   //                   Text("${document['members']}",
   //                       overflow: TextOverflow.ellipsis,
   //                       style: new TextStyle(
-  //                           color: UIData.white, fontSize: UIData.fontSize20)),
+  //                           color: Colors.white, fontSize: UIData.fontSize20)),
   //                 ],
   //               ),
   //             ],

@@ -23,7 +23,7 @@ class Essentials extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: UIData.dark,
+      backgroundColor: Colors.white,
       body: loading(true),
     );
   }

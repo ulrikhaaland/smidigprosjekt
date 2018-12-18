@@ -91,7 +91,7 @@ class RootPageState extends State<RootPage> {
           docSnap.data["name"],
           await updateFcmToken(),
           // docSnap.data["intro"]
-          true,
+          false,
         );
         setState(() {
           authStatus = currentUser != null

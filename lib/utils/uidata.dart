@@ -64,40 +64,24 @@ class UIData {
   static const MaterialColor ui_kit_color = Colors.grey;
 
 //fontSize
-static const double fontSize12 = 12.0;
-static const double fontSize16 = 16.0;
-static const double fontSize18 = 18.0;
-static const double fontSize20 = 20.0;
-static const double fontSize24 = 24.0;
+  static const double fontSize12 = 12.0;
+  static const double fontSize16 = 16.0;
+  static const double fontSize18 = 18.0;
+  static const double fontSize20 = 20.0;
+  static const double fontSize24 = 24.0;
 
 // IconSize
 
-static const double iconSizeAppBar = 35.0;
-static const double iconSizeBiggest = 40.0;
-static const double iconSizeTabBar = 30.0;
+  static const double iconSizeAppBar = 35.0;
+  static const double iconSizeBiggest = 40.0;
+  static const double iconSizeTabBar = 30.0;
 
-
-
-
-//colors 
-  static const Color dark = Color.fromRGBO(36,52,71, 1.0);
-  static const Color darkest = Color.fromRGBO(20,29,38, 1.0);
-  static const Color red = Color.fromRGBO(197,31,93, 1.0);
-  static const Color green = Colors.green;
-  static const Color blue = Colors.blue;
-  static const Color white = Color.fromRGBO(247,240,231, 1.0);
-  
-  static List<Color> kitGradients = [
-    // new Color.fromRGBO(103, 218, 255, 1.0),
-    // new Color.fromRGBO(3, 169, 244, 1.0),
-    // new Color.fromRGBO(0, 122, 193, 1.0),
-    darkest,
-    dark,
-  ];
-  static List<Color> kitGradients2 = [
-    Colors.orange.shade800,
-    Colors.pink,
-  ];
+//colors
+  static const Color green = Color.fromRGBO(139, 197, 174, 1);
+  static const Color red = Color.fromRGBO(234, 104, 110, 1.0);
+  static const Color purple = Color.fromRGBO(176, 135, 188, 1.0);
+  static const Color blue = Color.fromRGBO(162, 216, 235, 1.0);
+  static const Color darkpurple = Color.fromRGBO(61, 44, 116, 1.0);
 
   //randomcolor
   static final Random _random = new Random();

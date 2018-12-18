@@ -19,9 +19,9 @@ class GradientButton extends StatelessWidget {
         child: Ink(
           height: 50.0,
           decoration: BoxDecoration(
-              gradient: LinearGradient(
-            colors: UIData.kitGradients,
-          )),
+              // gradient: LinearGradient(
+            // colors: UIData.kitGradients,
+          ),
           child: Center(
             child: Text(
               text,

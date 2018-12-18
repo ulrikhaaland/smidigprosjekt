@@ -36,22 +36,37 @@ class IntroState extends State<Intro> {
         int indexOf = url.indexOf("=");
         verify = url.substring(indexOf + 1, url.length);
         print(verify);
-        setState(() {
-          verified = true;
-        });
-        flutterWebviewPlugin.close();
+        // verified = true;
+        httpTest();
+        // flutterWebviewPlugin.close();
       }
     });
   }
 
   void httpTest() async {
-    String dataURL =
-        "https://auth.dataporten.no/oauth/authorization?response_type=code&client_id=8a3f6c00-555b-432b-a9bf-89acd1711c3d&redirect_uri=https://us-central1-smidigprosjekt.cloudfunctions.net/getUserInfoFromFeide";
+    // String dataURL =
+    //     "https://auth.dataporten.no/oauth/authorization?response_type=code&client_id=8a3f6c00-555b-432b-a9bf-89acd1711c3d&redirect_uri=https://us-central1-smidigprosjekt.cloudfunctions.net/getUserInfoFromFeide";
 
-    print(dataURL);
+    var response =
+        await http.post("https://auth.dataporten.no/oauth/token", body: {
+      "grant_type": "authorization_code",
+      "code": verify,
+      "client_id": "8a3f6c00-555b-432b-a9bf-89acd1711c3d",
+      "client_secret": "dc705fbf-1091-47a2-9774-ec1b3c5df7da",
+      "redirect_uri":
+          "https://us-central1-smidigprosjekt.cloudfunctions.net/getUserInfoFromFeide",
+    });
+    String body = response.body;
+    body = body.substring(body.indexOf(":") + 3, body.indexOf(",") - 1);
+    print(body);
 
-    http.Response response = await http.get(dataURL);
-    print(response.toString());
+    var infoResponse =
+        await http.get("https://auth.dataporten.no/userinfo", headers: {
+      "Authorization": "Bearer " + body,
+    });
+
+    body = infoResponse.body;
+    print(body);
   }
 
   @override

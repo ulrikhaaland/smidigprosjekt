@@ -54,6 +54,8 @@ class LoginState extends State<Login> {
   bool passwordVisible = false;
   IconData passwordVisibleIcon = Icons.visibility;
 
+  MediaQueryData queryData;
+
   void dispose() {
     myController.dispose();
     super.dispose();
@@ -477,30 +479,95 @@ class LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    queryData = MediaQuery.of(context);
+
     return new Scaffold(
-        // appBar: new AppBar(
-        //   centerTitle: true,
-        //   title: new Text(
-        //     "Smidig Prosjekt",
-        //     style: new TextStyle(
-        //         color: Colors.yellow[700], fontSize: UIData.fontSize24),
-        //   ),
-        //   backgroundColor: UIData.darkest,
-        // ),
-        backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Container(
-                color: Colors.lightBlue,
-                height: 300,
+      backgroundColor: Colors.white,
+      body: Column(
+        children: <Widget>[
+          new Padding(
+            padding: EdgeInsets.only(top: 48),
+            child: new Align(
+              alignment: Alignment.topLeft,
+              child: new Container(
+                width: queryData.size.width / 2,
+                height: 30,
+                color: UIData.green,
               ),
-              material(),
-            ],
+            ),
           ),
-          // material(),
-          // circular(),
-        ));
+          new Padding(
+            padding: EdgeInsets.only(top: 48),
+            child: new Align(
+              alignment: Alignment.topRight,
+              child: new Container(
+                width: queryData.size.width / 2,
+                height: 30,
+                color: UIData.red,
+              ),
+            ),
+          ),
+          new DecoratedBox(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('/logo.gif', package: "images"),
+              ),
+            ),
+          ),
+          // Container(
+          //   height: queryData.size.height / 4,
+          // ),
+          new Padding(
+              padding: EdgeInsets.all(64.0),
+              child: new ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: 50.0,
+                    minWidth: 500.0,
+                  ),
+                  child: new FlatButton(
+                    color: Colors.black,
+                    shape: new RoundedRectangleBorder(
+                      side: BorderSide(color: Colors.black),
+                      // borderRadius: BorderRadius.all(Radius.circular(10.0))
+                    ),
+                    onPressed: null,
+                    child: new Row(
+                      children: <Widget>[
+                        new Text(
+                          "Logg inn med FEIDE",
+                          style: new TextStyle(color: Colors.black),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ))),
+          new Padding(
+            padding: EdgeInsets.only(top: 48),
+            child: new Align(
+              alignment: Alignment.topLeft,
+              child: new Container(
+                width: queryData.size.width / 2,
+                height: 30,
+                color: UIData.purple,
+              ),
+            ),
+          ),
+          new Padding(
+            padding: EdgeInsets.only(top: 48),
+            child: new Align(
+              alignment: Alignment.topRight,
+              child: new Container(
+                width: queryData.size.width / 2,
+                height: 30,
+                color: UIData.darkpurple,
+              ),
+            ),
+          ),
+        ],
+      ),
+      // material(),
+      // circular(),
+    );
   }
 
   Widget padded({Widget child}) {
