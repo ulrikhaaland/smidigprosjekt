@@ -92,6 +92,9 @@ class RootPageState extends State<RootPage> {
           docSnap.data["name"],
           await updateFcmToken(),
           docSnap.data["intro"],
+          docSnap.data["skole"],
+          docSnap.data["linje"],
+          docSnap.data["bio"],
         );
         setState(() {
           authStatus = currentUser != null
@@ -138,6 +141,7 @@ class RootPageState extends State<RootPage> {
       case AuthStatus.intro:
         return new Intro(
             user: user,
+            onIntroFinished: () => getUserId(),
             onSignOut: () => _updateAuthStatus(AuthStatus.notSignedIn));
     }
   }

@@ -1,12 +1,16 @@
 class User {
-  User(this.email, this.id, this.feideid, this.userName, this.fcm, this.intro);
+  User(this.email, this.id, this.feideid, this.userName, this.fcm, this.intro,
+      this.skole, this.linje, this.bio);
 
   final String userName;
   final String id;
   final String feideid;
   final String email;
   final String fcm;
-  final bool intro;
+  bool intro;
+  String skole;
+  String linje;
+  String bio;
 
   String getToken() {
     return this.fcm;
@@ -31,5 +35,8 @@ class User {
         'email': this.email,
         'fcm': this.fcm,
         'intro': this.intro,
+        'skole': this.skole,
+        'linje': this.linje,
+        'bio': this.bio,
       };
 }

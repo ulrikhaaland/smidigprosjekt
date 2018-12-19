@@ -2,16 +2,12 @@ import 'package:flutter/material.dart';
 import '../auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../utils/uidata.dart';
-import 'package:smidigprosjekt/login/feide.dart';
 import 'package:flutter/foundation.dart';
 import 'package:smidigprosjekt/auth.dart';
 import 'package:smidigprosjekt/objects/user.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:flutter_page_indicator/flutter_page_indicator.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_messaging/firebase_messaging.dart';
-import '../auth.dart';
 
 import 'dart:async';
 import 'dart:convert';
@@ -207,8 +203,16 @@ class LoginState extends State<Login> {
     String uid =
         await widget.auth.createUser(valueMap["email"], valueMap["userid"]);
 
-    User user = new User(valueMap["email"], uid, valueMap["userid"],
-        valueMap["name"], await updateFcmToken(valueMap["userid"]), true);
+    User user = new User(
+        valueMap["email"],
+        uid,
+        valueMap["userid"],
+        valueMap["name"],
+        await updateFcmToken(valueMap["userid"]),
+        true,
+        null,
+        null,
+        null);
     await Firestore.instance.document("users/$uid").setData(user.toJson());
     widget.onSignIn();
   }

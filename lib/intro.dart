@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:smidigprosjekt/auth.dart';
 import 'package:smidigprosjekt/objects/user.dart';
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_page_indicator/flutter_page_indicator.dart';
-import 'package:http/http.dart' as http;
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Intro extends StatefulWidget {
-  Intro({Key key, this.auth, this.onSignOut, this.user}) : super(key: key);
+  Intro({Key key, this.auth, this.onSignOut, this.user, this.onIntroFinished})
+      : super(key: key);
   final BaseAuth auth;
   final VoidCallback onSignOut;
+  final VoidCallback onIntroFinished;
   final User user;
 
   @override
@@ -19,6 +20,12 @@ class Intro extends StatefulWidget {
 }
 
 class IntroState extends State<Intro> {
+  MediaQueryData queryData;
+
+  String skole;
+  String linje;
+  String bio;
+
   @override
   void initState() {
     super.initState();
@@ -26,7 +33,10 @@ class IntroState extends State<Intro> {
 
   @override
   Widget build(BuildContext context) {
+    queryData = MediaQuery.of(context);
+
     List<Widget> list = [
+      userInfo(),
       introPageOne(),
       introPageTwo(),
       introPageThree(),
@@ -45,155 +55,192 @@ class IntroState extends State<Intro> {
           // control: new SwiperControl(),
         ));
   }
-}
 
-Widget introPageOne() {
-  return Scaffold(
-      backgroundColor: Colors.white,
-      body: new Column(children: <Widget>[
-        new Container(
-          height: 300,
+  Widget userInfo() {
+    return new SingleChildScrollView(
+        child:
+            // new Container(
+            //   height: queryData.size.height / 10,
+            // ),
+            new Stack(
+      children: <Widget>[
+        new Image.asset(
+          "lib/assets/images/profile.gif",
         ),
-        new Padding(
-          padding: EdgeInsets.all(16),
-          child: new Text(
-            "FÅ MED DEG HVA SOM SKJER I STUDENTBYEN!",
-            style: new TextStyle(
-              fontSize: 24,
+        new Center(
+          child: new Card(
+            margin: EdgeInsets.only(
+              top: queryData.size.height / 2.5,
             ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        new Padding(
-          padding: EdgeInsets.fromLTRB(64, 32, 64, 32),
-          child: new Text(
-            "Utforsk og bli med på arran- gementer andre grupper har laget eller som er i regi av skolen.",
-            style: new TextStyle(
-              fontSize: 16,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-      ]));
-}
-
-Widget introPageTwo() {
-  return Scaffold(
-      backgroundColor: Colors.white,
-      body: new Column(children: <Widget>[
-        new Container(
-          height: 300,
-        ),
-        new Padding(
-          padding: EdgeInsets.all(16),
-          child: new Text(
-            "GJØR UTFORDRINGER MED GRUPPEN!",
-            style: new TextStyle(
-              fontSize: 24,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        new Padding(
-          padding: EdgeInsets.fromLTRB(64, 32, 64, 32),
-          child: new Text(
-            "Gjennomfør utfordringene som blir gitt og få premier. Gå Til gruppesi- den for å følge med på hvor mange dere har fullført.",
-            style: new TextStyle(
-              fontSize: 16,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-      ]));
-}
-
-Widget introPageThree() {
-  return Scaffold(
-      backgroundColor: Colors.white,
-      body: new Column(children: <Widget>[
-        new GestureDetector(
-          onTap: null,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(16, 64, 16, 16),
+            color: Colors.grey[200],
+            elevation: 2,
             child: new Container(
-              height: 100,
-              color: Colors.lightBlueAccent,
-              child: Align(
-                alignment: Alignment.center,
-                child: new Padding(
-                  padding: EdgeInsets.all(32),
-                  child: new Text(
-                    "Jeg ønsker å få tildelt en kollokviegruppe basert på hvilket studie jeg går.",
-                    style: new TextStyle(fontSize: 14, color: Colors.white),
-                    textAlign: TextAlign.center,
+              height: queryData.size.height / 2,
+              width: queryData.size.width / 1.1,
+              child: new Column(
+                children: <Widget>[
+                  new Padding(
+                    padding: EdgeInsets.only(top: 12),
                   ),
-                ),
+                  new Text(
+                    widget.user.userName,
+                    style: new TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  new ListTile(
+                    leading: new Text(
+                      "Skole:",
+                      style: new TextStyle(),
+                    ),
+                    title: new TextField(
+                      textCapitalization: TextCapitalization.sentences,
+                      autocorrect: false,
+                      onChanged: (val) => skole = val,
+                    ),
+                  ),
+                  new ListTile(
+                    leading: new Text("Linje:"),
+                    title: new TextField(
+                      autocorrect: false,
+                      textCapitalization: TextCapitalization.sentences,
+                      onChanged: (val) => linje = val,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 36),
+                  ),
+                  new ListTile(
+                    leading: Text("Bio:"),
+                    title: new TextField(
+                      textCapitalization: TextCapitalization.sentences,
+                      maxLines: 5,
+                      style: new TextStyle(
+                        color: Colors.black,
+                      ),
+                      key: new Key('bio'),
+                      decoration: new InputDecoration(
+                          hintText: "Skriv noe om deg selv!",
+                          border: OutlineInputBorder(),
+                          fillColor: Colors.black,
+                          labelStyle: new TextStyle(color: Colors.grey[600])),
+                      onChanged: (val) => bio = val,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
         ),
-        new GestureDetector(
-          onTap: null,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(16, 64, 16, 16),
-            child: new Container(
-              height: 100,
-              color: Colors.pinkAccent,
-              child: Align(
-                alignment: Alignment.center,
-                child: new Padding(
-                  padding: EdgeInsets.all(32),
-                  child: new Text(
-                    "Jeg ønsker å sette sammen en gruppe selv, ved å søke opp brukere.",
-                    style: new TextStyle(fontSize: 14, color: Colors.white),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-        new GestureDetector(
-          onTap: null,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(16, 64, 16, 16),
-            child: new Container(
-              height: 100,
-              color: Colors.purple,
-              child: Align(
-                alignment: Alignment.center,
-                child: new Padding(
-                  padding: EdgeInsets.all(32),
-                  child: new Text(
-                    "Jeg ønsker ikke å bli med i en kollokviegruppe og vil bare se på/delta på offentlige arrangementer.",
-                    style: new TextStyle(fontSize: 14, color: Colors.white),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(16, 32, 16, 16),
-          child: new Text(
-            "Du kan når som helst endre valget ditt.",
-            style:
-                new TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-          ),
-        ),
-      ]));
-}
+      ],
+    ));
+  }
 
-Widget webView() {
-  return new MaterialApp(
-    routes: {
-      "/": (_) => new WebviewScaffold(
-            url: "https://www.google.com",
-            appBar: new AppBar(
-              title: new Text("Widget webview"),
-            ),
+  Widget introPageOne() {
+    return new SingleChildScrollView(
+        child: Column(children: <Widget>[
+      new Container(
+        height: queryData.size.height / 10,
+      ),
+      new Image.asset(
+        "lib/assets/images/illustrasjon1.gif",
+      ),
+      new Padding(
+        padding: EdgeInsets.all(12),
+        child: new Text(
+          "FÅ MED DEG HVA SOM SKJER I STUDENTBYEN!",
+          style: new TextStyle(fontSize: 24, fontFamily: 'ANTON'),
+          textAlign: TextAlign.center,
+        ),
+      ),
+      new Padding(
+        padding: EdgeInsets.fromLTRB(44, 16, 44, 32),
+        child: new Text(
+          "Utforsk og bli med på arrangementer andre grupper har laget eller som er i regi av skolen.",
+          style: new TextStyle(
+            fontSize: 16,
           ),
-    },
-  );
+          textAlign: TextAlign.center,
+        ),
+      ),
+    ]));
+  }
+
+  Widget introPageTwo() {
+    return new SingleChildScrollView(
+        child: Column(children: <Widget>[
+      new Container(
+        height: queryData.size.height / 10,
+      ),
+      new Image.asset(
+        "lib/assets/images/illustrasjon2.gif",
+      ),
+      new Padding(
+        padding: EdgeInsets.all(16),
+        child: new Text(
+          "GJENNOMFØR UTFORDRINGER MED GRUPPEN",
+          style: new TextStyle(fontSize: 24, fontFamily: 'Anton'),
+          textAlign: TextAlign.center,
+        ),
+      ),
+      new Padding(
+        padding: EdgeInsets.fromLTRB(44, 16, 44, 32),
+        child: new Text(
+          "Gjennomfør utfordringer med gruppen din. Gå til gruppesiden for å se hva neste utfordring er, og følg med på \nhvor mange dere har fullført.",
+          style: new TextStyle(
+            fontSize: 16,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    ]));
+  }
+
+  Widget introPageThree() {
+    return new SingleChildScrollView(
+        child: Column(children: <Widget>[
+      new Container(
+        height: queryData.size.height / 10,
+      ),
+      new Image.asset(
+        "lib/assets/images/illustrasjon3.gif",
+      ),
+      new Padding(
+        padding: EdgeInsets.all(16),
+        child: new Text(
+          "BLI MED I EN KOLLOKVIE-GRUPPE!",
+          style: new TextStyle(fontSize: 24, fontFamily: 'Anton'),
+          textAlign: TextAlign.center,
+        ),
+      ),
+      new Padding(
+        padding: EdgeInsets.fromLTRB(44, 17, 44, 32),
+        child: new Text(
+          "Velg egen gruppe ved å søke opp bruker-navn eller få tildelt en tilfeldig gruppe basert på studiet du går.",
+          style: new TextStyle(
+            fontSize: 16,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ),
+      new RaisedButton(
+        color: Colors.black,
+        child:
+            new Text("Kom i gang", style: new TextStyle(color: Colors.white)),
+        onPressed: () => saveData(),
+      )
+    ]));
+  }
+
+  saveData() async {
+    widget.user.skole = skole;
+    widget.user.linje = linje;
+    widget.user.bio = bio;
+    widget.user.intro = false;
+    await Firestore.instance
+        .document("users/${widget.user.id}")
+        .updateData(widget.user.toJson());
+    widget.onIntroFinished();
+  }
 }

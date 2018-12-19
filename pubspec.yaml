@@ -49,6 +49,13 @@ flutter:
   assets:
     - lib/assets/images/logo.gif
     - lib/assets/images/logo-feide-2092px.png (content).png
+    - lib/assets/images/profile.gif
+    - lib/assets/images/illustrasjon1.gif
+    - lib/assets/images/illustrasjon2.gif
+    - lib/assets/images/illustrasjon3.gif
+
+
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -66,17 +73,26 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: fonts/Roboto-Black.ttf
+        - asset: fonts/Roboto-BlackItalic.ttf
+        - asset: fonts/Roboto-Bold.ttf
+        - asset: fonts/Roboto-BoldItalic.ttf
+        - asset: fonts/Roboto-Italic.ttf
+        - asset: fonts/Roboto-Light.ttf
+        - asset: fonts/Roboto-LightItalic.ttf 
+        - asset: fonts/Roboto-Medium.ttf 
+        - asset: fonts/Roboto-MediumItalic.ttf 
+        - asset: fonts/Roboto-Regular.ttf
+        - asset: fonts/Roboto-Thin.ttf
+        - asset: fonts/Roboto-ThinItalic.ttf 
+          # style: italic
+    - family: Anton
+      fonts:
+        - asset: fonts/Anton-Regular.ttf
+      
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages
