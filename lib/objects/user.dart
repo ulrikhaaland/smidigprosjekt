@@ -1,8 +1,9 @@
 class User {
-  User(this.email, this.id, this.userName, this.fcm, this.intro);
+  User(this.email, this.id, this.feideid, this.userName, this.fcm, this.intro);
 
   final String userName;
   final String id;
+  final String feideid;
   final String email;
   final String fcm;
   final bool intro;
@@ -25,6 +26,7 @@ class User {
 
   Map<String, dynamic> toJson() => {
         'id': this.id,
+        'feideid': this.feideid,
         'name': this.userName,
         'email': this.email,
         'fcm': this.fcm,

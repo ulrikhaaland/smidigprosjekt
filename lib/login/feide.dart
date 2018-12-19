@@ -92,10 +92,10 @@ class _FeideState extends State<Feide> {
     );
     body = "{" + body + "}";
     Map valueMap = json.decode(body);
-    User user = new User(valueMap["email"], valueMap["userid"],
-        valueMap["name"], await updateFcmToken(valueMap["userid"]), true);
-    await widget.auth.createUser(user.email, user.id);
-    Firestore.instance.document("users/${user.id}").setData(user.toJson());
+    // User user = new User(valueMap["email"], valueMap["userid"],
+    //     valueMap["name"], await updateFcmToken(valueMap["userid"]), true);
+    // String uid = await widget.auth.createUser(user.email, user.id);
+    // Firestore.instance.document("users/$uid").setData(user.toJson());
   }
 
   Future<String> updateFcmToken(String uid) async {

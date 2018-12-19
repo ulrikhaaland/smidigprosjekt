@@ -88,10 +88,10 @@ class RootPageState extends State<RootPage> {
         user = new User(
           docSnap.data["email"],
           docSnap.data["id"],
+          docSnap.data["feideid"],
           docSnap.data["name"],
           await updateFcmToken(),
-          // docSnap.data["intro"]
-          false,
+          docSnap.data["intro"],
         );
         setState(() {
           authStatus = currentUser != null
