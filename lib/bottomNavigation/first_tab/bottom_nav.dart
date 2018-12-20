@@ -5,10 +5,11 @@ import '../second_tab/game_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../root_page.dart';
 import '../../utils/uidata.dart';
-import '../third_tab/user_page.dart';
+import '../third_tab/group_page.dart';
 import '../../objects/user.dart';
 import '../../utils/layout.dart';
 import '../../widgets/primary_button.dart';
+import 'package:smidigprosjekt/bottomNavigation/fourth_tab/profile_page.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage(
@@ -45,8 +46,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   PageOne one;
   GamePage two;
-  UserPage three;
-  UserPage four;
+  GroupPage three;
+  ProfilePage four;
 
   List<Widget> pages;
   Widget currentPage;
@@ -68,18 +69,13 @@ class _MyHomePageState extends State<MyHomePage> {
       user: widget.user,
     );
 
-    three = UserPage(
-      key: keyTwo,
-      auth: auth,
-      onSignOut: () => _signOut(),
+    three = GroupPage(
       user: widget.user,
     );
 
-    four = UserPage(
-      key: keyTwo,
-      auth: auth,
-      onSignOut: () => _signOut(),
+    four = ProfilePage(
       user: widget.user,
+      onSignOut: () => _signOut(),
     );
 
     pages = [one, two, three, four];
@@ -120,13 +116,11 @@ class _MyHomePageState extends State<MyHomePage> {
             activeIcon: new Image.asset(
               "lib/assets/images/events-v.gif",
               scale: 10,
-              
             ),
             backgroundColor: UIData.green,
             icon: new Image.asset(
               "lib/assets/images/events.gif",
               scale: 10,
-              
             ),
             title: Text(''),
           ),
@@ -135,14 +129,13 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: new Image.asset(
               "lib/assets/images/search.gif",
               scale: 10,
-            
             ),
             title: Text(''),
-          ),BottomNavigationBarItem(
+          ),
+          BottomNavigationBarItem(
             activeIcon: new Image.asset(
               "lib/assets/images/group-v.gif",
               scale: 10,
-             
             ),
             backgroundColor: UIData.green,
             icon: new Image.asset(
@@ -150,17 +143,16 @@ class _MyHomePageState extends State<MyHomePage> {
               scale: 10,
             ),
             title: Text(''),
-          ),BottomNavigationBarItem(
+          ),
+          BottomNavigationBarItem(
             activeIcon: new Image.asset(
               "lib/assets/images/profile-v.gif",
               scale: 10,
-             
             ),
             backgroundColor: UIData.green,
             icon: new Image.asset(
               "lib/assets/images/profile.gif",
               scale: 10,
-             
             ),
             title: Text(''),
           ),
