@@ -77,11 +77,11 @@ class UIData {
   static const double iconSizeTabBar = 30.0;
 
 //colors
-  static const Color green = Color.fromRGBO(139, 197, 174, 1);
-  static const Color red = Color.fromRGBO(234, 104, 110, 1.0);
-  static const Color purple = Color.fromRGBO(176, 135, 188, 1.0);
-  static const Color blue = Color.fromRGBO(162, 216, 235, 1.0);
-  static const Color darkpurple = Color.fromRGBO(61, 44, 116, 1.0);
+  static const Color green = Color.fromRGBO(135,216,179, 1);
+  static const Color red = Color.fromRGBO(244,96,110, 1.0);
+  static const Color purple = Color.fromRGBO(210,132,239, 1.0);
+  static const Color blue = Color.fromRGBO(153,204,255, 1.0);
+  static const Color darkpurple = Color.fromRGBO(61,44,116, 1.0);
 
   //randomcolor
   static final Random _random = new Random();

@@ -101,13 +101,13 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: UIData.green,
+      backgroundColor: Colors.white,
       body: PageStorage(
         child: currentPage,
         bucket: bucket,
       ),
       bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.shifting,
+        type: BottomNavigationBarType.fixed,
         currentIndex: currentTab,
         onTap: (int index) {
           setState(() {
@@ -117,37 +117,52 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
+            activeIcon: new Image.asset(
+              "lib/assets/images/events-v.gif",
+              scale: 10,
+              
+            ),
             backgroundColor: UIData.green,
-            icon: Icon(Icons.home),
-            title: Text('Hjem'),
+            icon: new Image.asset(
+              "lib/assets/images/events.gif",
+              scale: 10,
+              
+            ),
+            title: Text(''),
           ),
           BottomNavigationBarItem(
             backgroundColor: UIData.green,
-            icon: Icon(Icons.search),
-            title: Text(
-              "Søk",
-              style: new TextStyle(),
+            icon: new Image.asset(
+              "lib/assets/images/search.gif",
+              scale: 10,
+            
             ),
-          ),
-          BottomNavigationBarItem(
+            title: Text(''),
+          ),BottomNavigationBarItem(
+            activeIcon: new Image.asset(
+              "lib/assets/images/group-v.gif",
+              scale: 10,
+             
+            ),
             backgroundColor: UIData.green,
-            icon: Icon(
-              Icons.people,
+            icon: new Image.asset(
+              "lib/assets/images/group.gif",
+              scale: 10,
             ),
-            title: Text(
-              "Gruppe",
-              style: new TextStyle(),
+            title: Text(''),
+          ),BottomNavigationBarItem(
+            activeIcon: new Image.asset(
+              "lib/assets/images/profile-v.gif",
+              scale: 10,
+             
             ),
-          ),
-          BottomNavigationBarItem(
             backgroundColor: UIData.green,
-            icon: Icon(
-              Icons.person_outline,
+            icon: new Image.asset(
+              "lib/assets/images/profile.gif",
+              scale: 10,
+             
             ),
-            title: Text(
-              "Profil",
-              style: new TextStyle(),
-            ),
+            title: Text(''),
           ),
         ],
       ),
