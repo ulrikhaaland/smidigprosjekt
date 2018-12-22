@@ -58,29 +58,24 @@ class IntroState extends State<Intro> {
 
   Widget userInfo() {
     return new SingleChildScrollView(
+      padding: EdgeInsets.only(top: 68),
         child:
-            // new Container(
-            //   height: queryData.size.height / 10,
-            // ),
             new Stack(
       children: <Widget>[
-        new Image.asset(
-          "lib/assets/images/profile.gif",
-        ),
         new Center(
           child: new Card(
             margin: EdgeInsets.only(
-              top: queryData.size.height / 2.5,
+              top: queryData.size.height / 10,
             ),
             color: Colors.grey[200],
             elevation: 2,
             child: new Container(
-              height: queryData.size.height / 2,
+              height: queryData.size.height / 1.5,
               width: queryData.size.width / 1.1,
               child: new Column(
                 children: <Widget>[
                   new Padding(
-                    padding: EdgeInsets.only(top: 12),
+                    padding: EdgeInsets.only(top: 82),
                   ),
                   new Text(
                     widget.user.userName,
@@ -130,6 +125,18 @@ class IntroState extends State<Intro> {
                   ),
                 ],
               ),
+            ),
+          ),
+        ),
+        
+        new Align(
+          alignment: Alignment.center,
+          child: new CircleAvatar(
+            
+            radius: 70,
+            backgroundColor: Colors.white,
+            child: new Image.asset(
+              "lib/assets/images/profile.gif",
             ),
           ),
         ),
