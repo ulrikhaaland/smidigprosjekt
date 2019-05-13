@@ -176,11 +176,11 @@ class IntroState extends State<Intro> {
         child: Column(children: <Widget>[
       Container(
         height: ServiceProvider.instance.screenService
-            .getPortraitHeightByPercentage(context, 10),
+            .getPortraitHeightByPercentage(context, 15),
       ),
       Container(
         height: ServiceProvider.instance.screenService
-            .getPortraitHeightByPercentage(context, 30),
+            .getPortraitHeightByPercentage(context, 35),
         child: Image.asset(
           imageLink,
         ),
