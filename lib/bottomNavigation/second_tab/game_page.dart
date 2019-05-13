@@ -60,7 +60,7 @@ class GamePageState extends State<GamePage> {
         resizeToAvoidBottomPadding: true,
         // backgroundColor: UIData.dark,
         appBar: new AppBar(
-          backgroundColor: UIData.green,
+          backgroundColor: UIData.lightBlue,
 
           title: new Directionality(
             textDirection: Directionality.of(context),

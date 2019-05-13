@@ -8,7 +8,7 @@ import 'package:smidigprosjekt/objects/user.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_messaging/firebase_messaging.dart';
-
+import '../service/service_provider.dart';
 import 'dart:async';
 import 'dart:convert';
 
@@ -37,8 +37,6 @@ class LoginState extends State<Login> {
   static final formKey = new GlobalKey<FormState>();
   final FlutterWebviewPlugin flutterWebviewPlugin = new FlutterWebviewPlugin();
 
-  MediaQueryData queryData;
-
   bool feide = false;
   String verify;
   bool verified = false;
@@ -50,8 +48,13 @@ class LoginState extends State<Login> {
   }
 
   @override
+  dispose() {
+    super.dispose();
+    flutterWebviewPlugin.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    queryData = MediaQuery.of(context);
     if (!feide) {
       return new Scaffold(
         backgroundColor: Colors.white,
@@ -62,9 +65,10 @@ class LoginState extends State<Login> {
               child: new Align(
                 alignment: Alignment.topLeft,
                 child: new Container(
-                  width: queryData.size.width / 2,
+                  width: ServiceProvider.instance.screenService
+                      .getPortraitWidthByPercentage(context, 50),
                   height: 30,
-                  color: UIData.green,
+                  color: UIData.lightBlue,
                 ),
               ),
             ),
@@ -73,9 +77,10 @@ class LoginState extends State<Login> {
               child: new Align(
                 alignment: Alignment.topRight,
                 child: new Container(
-                  width: queryData.size.width / 2,
+                  width: ServiceProvider.instance.screenService
+                      .getPortraitWidthByPercentage(context, 50),
                   height: 30,
-                  color: UIData.red,
+                  color: UIData.lightBlue,
                 ),
               ),
             ),
@@ -125,9 +130,10 @@ class LoginState extends State<Login> {
               child: new Align(
                 alignment: Alignment.topLeft,
                 child: new Container(
-                  width: queryData.size.width / 2,
+                  width: ServiceProvider.instance.screenService
+                      .getPortraitWidthByPercentage(context, 50),
                   height: 30,
-                  color: UIData.purple,
+                  color: UIData.pink,
                 ),
               ),
             ),
@@ -136,9 +142,10 @@ class LoginState extends State<Login> {
               child: new Align(
                 alignment: Alignment.topRight,
                 child: new Container(
-                  width: queryData.size.width / 2,
+                  width: ServiceProvider.instance.screenService
+                      .getPortraitWidthByPercentage(context, 50),
                   height: 30,
-                  color: UIData.darkpurple,
+                  color: UIData.pink,
                 ),
               ),
             ),

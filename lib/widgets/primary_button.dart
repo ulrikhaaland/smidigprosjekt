@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smidigprosjekt/utils/uidata.dart';
+import '../service/service_provider.dart';
 
 class PrimaryButton extends StatelessWidget {
   PrimaryButton({this.key, this.text, this.onPressed, this.color, this.padding})
@@ -14,18 +15,22 @@ class PrimaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return new ConstrainedBox(
         constraints: BoxConstraints(
-          minHeight: 50.0,
+          minHeight: ServiceProvider.instance.screenService
+              .getPortraitHeightByPercentage(context, 6),
           minWidth: 500.0,
         ),
         child: new Padding(
-          padding: EdgeInsets.only(left: padding, right: padding),
+          padding: EdgeInsets.only(
+              left: ServiceProvider.instance.screenService
+                  .getPortraitWidthByPercentage(context, 25),
+              right: ServiceProvider.instance.screenService
+                  .getPortraitWidthByPercentage(context, 25)),
           child: new RaisedButton(
               child: new Text(text,
-                  style: new TextStyle(color: Colors.black, fontSize: 20.0)),
+                  style: new TextStyle(color: Colors.white, fontSize: 20.0)),
               shape: new RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
-              color: color,
-              textColor: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(24.0))),
+              color: UIData.pink,
               elevation: 8.0,
               onPressed: onPressed),
         ));

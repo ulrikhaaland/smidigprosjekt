@@ -16,7 +16,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
@@ -26,7 +25,7 @@ dependencies:
   font_awesome_flutter: ^8.0.1
   firebase_analytics: 1.0.4
   firebase_auth: 0.6.2+1
-  http: '>=0.11.3+12'
+  http: ">=0.11.3+12"
   flutter_swiper: ^1.1.4
   flutter_webview_plugin: ^0.3.0+2
 
@@ -34,14 +33,11 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
-  
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -50,8 +46,8 @@ flutter:
     - lib/assets/images/logo.gif
     - lib/assets/images/logo-feide-2092px.png (content).png
     - lib/assets/images/profile.gif
-    - lib/assets/images/illustrasjon1.gif
-    - lib/assets/images/illustrasjon2.gif
+    - lib/assets/images/illustrasjon1.png
+    - lib/assets/images/illustrasjon2.png
     - lib/assets/images/illustrasjon3.gif
     - lib/assets/images/events.gif
     - lib/assets/images/events-v.gif
@@ -59,12 +55,6 @@ flutter:
     - lib/assets/images/group-v.gif
     - lib/assets/images/profile-v.gif
     - lib/assets/images/search.gif
-
-
-
-
-
-
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -91,17 +81,16 @@ flutter:
         - asset: fonts/Roboto-BoldItalic.ttf
         - asset: fonts/Roboto-Italic.ttf
         - asset: fonts/Roboto-Light.ttf
-        - asset: fonts/Roboto-LightItalic.ttf 
-        - asset: fonts/Roboto-Medium.ttf 
-        - asset: fonts/Roboto-MediumItalic.ttf 
+        - asset: fonts/Roboto-LightItalic.ttf
+        - asset: fonts/Roboto-Medium.ttf
+        - asset: fonts/Roboto-MediumItalic.ttf
         - asset: fonts/Roboto-Regular.ttf
         - asset: fonts/Roboto-Thin.ttf
-        - asset: fonts/Roboto-ThinItalic.ttf 
+        - asset: fonts/Roboto-ThinItalic.ttf
           # style: italic
     - family: Anton
       fonts:
         - asset: fonts/Anton-Regular.ttf
-      
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages

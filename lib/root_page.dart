@@ -123,7 +123,7 @@ class RootPageState extends State<RootPage> {
     switch (authStatus) {
       case AuthStatus.notSignedIn:
         return new Login(
-          title: 'Flutter Login',
+          title: 'Login',
           messagingToken: messagingToken,
           auth: widget.auth,
           onSignIn: () => getUserId(),

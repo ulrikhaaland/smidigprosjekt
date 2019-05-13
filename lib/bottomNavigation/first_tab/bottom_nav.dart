@@ -117,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
               "lib/assets/images/events-v.gif",
               scale: 10,
             ),
-            backgroundColor: UIData.green,
+            backgroundColor: UIData.lightBlue,
             icon: new Image.asset(
               "lib/assets/images/events.gif",
               scale: 10,
@@ -125,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
             title: Text(''),
           ),
           BottomNavigationBarItem(
-            backgroundColor: UIData.green,
+            backgroundColor: UIData.lightBlue,
             icon: new Image.asset(
               "lib/assets/images/search.gif",
               scale: 10,
@@ -137,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
               "lib/assets/images/group-v.gif",
               scale: 10,
             ),
-            backgroundColor: UIData.green,
+            backgroundColor: UIData.lightBlue,
             icon: new Image.asset(
               "lib/assets/images/group.gif",
               scale: 10,
@@ -149,7 +149,7 @@ class _MyHomePageState extends State<MyHomePage> {
               "lib/assets/images/profile-v.gif",
               scale: 10,
             ),
-            backgroundColor: UIData.green,
+            backgroundColor: UIData.lightBlue,
             icon: new Image.asset(
               "lib/assets/images/profile.gif",
               scale: 10,
@@ -185,7 +185,7 @@ class PageOneState extends State<PageOne> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: new AppBar(
-          backgroundColor: UIData.green,
+          backgroundColor: UIData.lightBlue,
           title: new Text(
             "Hjem",
             style: new TextStyle(fontSize: UIData.fontSize24),

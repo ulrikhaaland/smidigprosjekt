@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smidigprosjekt/objects/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../service/service_provider.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({this.user, this.onSignOut});
@@ -12,7 +13,6 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   static final formKey = new GlobalKey<FormState>();
-  MediaQueryData queryData;
 
   String bio;
   String linje;
@@ -25,8 +25,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    queryData = MediaQuery.of(context);
-
     return new Scaffold(
       backgroundColor: Colors.white,
       appBar: new AppBar(
@@ -62,13 +60,17 @@ class _ProfilePageState extends State<ProfilePage> {
           new Center(
             child: new Card(
               margin: EdgeInsets.only(
-                top: queryData.size.height / 15,
+                top: ServiceProvider.instance.screenService
+                        .getHeightByPercentage(context, 100) /
+                    15,
               ),
               color: Colors.grey[200],
               elevation: 2,
               child: new Container(
-                height: queryData.size.height / 1.5,
-                width: queryData.size.width / 1.1,
+                height: ServiceProvider.instance.screenService
+                    .getPortraitHeightByPercentage(context, 66),
+                width: ServiceProvider.instance.screenService
+                    .getPortraitWidthByPercentage(context, 90),
                 child: new Column(
                   children: <Widget>[
                     new Align(
@@ -172,13 +174,16 @@ class _ProfilePageState extends State<ProfilePage> {
           new Center(
             child: new Card(
               margin: EdgeInsets.only(
-                top: queryData.size.height / 15,
+                top: ServiceProvider.instance.screenService
+                    .getHeightByPercentage(context, 6.25),
               ),
               color: Colors.grey[200],
               elevation: 2,
               child: new Container(
-                height: queryData.size.height / 1.5,
-                width: queryData.size.width / 1.1,
+                height: ServiceProvider.instance.screenService
+                    .getHeightByPercentage(context, 66),
+                width: ServiceProvider.instance.screenService
+                    .getPortraitWidthByPercentage(context, 90),
                 child: new Column(
                   children: <Widget>[
                     new Align(

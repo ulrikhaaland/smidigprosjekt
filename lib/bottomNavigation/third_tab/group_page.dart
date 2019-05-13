@@ -60,7 +60,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                     color: Colors.grey[200],
                     child: TabBar(
                       labelColor: Colors.grey[800],
-                      indicatorColor: UIData.green,
+                      indicatorColor: UIData.lightBlue,
                       labelStyle: new TextStyle(color: Colors.black),
                       controller: _tabController,
                       tabs: [
