@@ -68,7 +68,7 @@ class EssentialsState extends State<Essentials> {
           duration: Duration(milliseconds: 500),
           // The green box needs to be the child of the AnimatedOpacity
           child: Center(
-            child: Image.asset("lib/assets/images/welcome.png"),
+            child: Image.asset("lib/assets/images/welcome.png", scale: 1),
           ),
         ),
       );

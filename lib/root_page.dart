@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:smidigprosjekt/auth.dart';
 import 'package:smidigprosjekt/login/login.dart';
@@ -76,40 +78,38 @@ class RootPageState extends State<RootPage> {
 
   Future<String> getUserId() async {
     currentUser = await widget.auth.currentUser();
-    await getUserInfo();
+    Timer(Duration(seconds: 1), () async => await getUserInfo());
+    // await getUserInfo();
     return currentUser;
   }
 
   Future<Null> getUserInfo() async {
-    Firestore.instance.runTransaction((Transaction tx) async {
-      DocumentSnapshot docSnap =
-          await Firestore.instance.document("users/$currentUser").get();
-      if (docSnap.exists) {
-        user = new User(
-          docSnap.data["email"],
-          docSnap.data["id"],
-          docSnap.data["feideid"],
-          docSnap.data["name"],
-          await updateFcmToken(),
-          docSnap.data["intro"],
-          docSnap.data["skole"],
-          docSnap.data["linje"],
-          docSnap.data["bio"],
-        );
-        setState(() {
-          authStatus = currentUser != null
-              ? AuthStatus.signedIn
-              : AuthStatus.notSignedIn;
-          if (user.intro) {
-            authStatus = AuthStatus.intro;
-          }
-        });
-      } else {
-        setState(() {
-          authStatus = AuthStatus.notSignedIn;
-        });
-      }
-    });
+    DocumentSnapshot docSnap =
+        await Firestore.instance.document("users/$currentUser").get();
+    if (docSnap.exists) {
+      user = new User(
+        docSnap.data["email"],
+        docSnap.data["id"],
+        docSnap.data["feideid"],
+        docSnap.data["name"],
+        await updateFcmToken(),
+        docSnap.data["intro"],
+        docSnap.data["skole"],
+        docSnap.data["linje"],
+        docSnap.data["bio"],
+      );
+      setState(() {
+        authStatus =
+            currentUser != null ? AuthStatus.signedIn : AuthStatus.notSignedIn;
+        if (user.intro) {
+          authStatus = AuthStatus.intro;
+        }
+      });
+    } else {
+      setState(() {
+        authStatus = AuthStatus.notSignedIn;
+      });
+    }
   }
 
   void _updateAuthStatus(AuthStatus status) {

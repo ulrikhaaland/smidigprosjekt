@@ -76,7 +76,7 @@ class LoginState extends State<Login> {
         //   duration: Duration(milliseconds: 500),
         //   // The green box needs to be the child of the AnimatedOpacity
         //   child:
-        body: Column(
+        body: new Column(
           children: <Widget>[
             Container(
               height: ServiceProvider.instance.screenService
@@ -151,10 +151,13 @@ class LoginState extends State<Login> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
-                              Text(
-                                "Logg inn med FEIDE",
-                                style: TextStyle(color: Colors.black),
-                                textAlign: TextAlign.center,
+                              Flexible(
+                                child: Text(
+                                  "Logg inn",
+                                  style: TextStyle(color: Colors.black),
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                               Image.asset(
                                 "lib/assets/images/logo-feide-2092px.png (content).png",
@@ -165,7 +168,6 @@ class LoginState extends State<Login> {
                         ))),
               ],
             ),
-
             Padding(
               padding: EdgeInsets.only(top: 90),
               child: Align(
