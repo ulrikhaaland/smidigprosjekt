@@ -238,20 +238,29 @@ class LoginState extends State<Login> {
     );
     body = "{" + body + "}";
     Map valueMap = json.decode(body);
-    String uid =
-        await widget.auth.createUser(valueMap["email"], valueMap["userid"]);
+    String uid = await widget.auth
+        .createUser(valueMap["email"], valueMap["userid"])
+        .catchError((e) => print("ERROR IS:" + e.toString()));
 
-    User user = new User(
-        valueMap["email"],
-        uid,
-        valueMap["userid"],
-        valueMap["name"],
-        await updateFcmToken(valueMap["userid"]),
-        true,
-        null,
-        null,
-        null);
-    await Firestore.instance.document("users/$uid").setData(user.toJson());
+    bool hasUser = false;
+    if (uid == null) {
+      hasUser = true;
+      uid = await widget.auth.signIn(valueMap["email"], valueMap["userid"]);
+    }
+    if (!hasUser) {
+      User user = new User(
+          valueMap["email"],
+          uid,
+          valueMap["userid"],
+          valueMap["name"],
+          await updateFcmToken(valueMap["userid"]),
+          true,
+          null,
+          null,
+          null);
+      await Firestore.instance.document("users/$uid").setData(user.toJson());
+    }
+
     widget.onSignIn();
   }
 

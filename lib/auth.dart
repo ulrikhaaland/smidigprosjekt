@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/widgets.dart';
 
 abstract class BaseAuth {
   Future<String> currentUser();
@@ -12,7 +13,6 @@ abstract class BaseAuth {
 
 class Auth implements BaseAuth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  
 
   Future<String> signIn(String email, String password) async {
     FirebaseUser user = await _firebaseAuth.signInWithEmailAndPassword(
@@ -21,8 +21,9 @@ class Auth implements BaseAuth {
   }
 
   Future<String> createUser(String email, String password) async {
-    FirebaseUser user = await _firebaseAuth.createUserWithEmailAndPassword(
-        email: email, password: password);
+    FirebaseUser user = await _firebaseAuth
+        .createUserWithEmailAndPassword(email: email, password: password)
+        .catchError((e) => debugPrint(e.toString()));
     return user.uid;
   }
 
