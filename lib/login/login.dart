@@ -40,11 +40,14 @@ class LoginState extends State<Login> {
   bool feide = false;
   String verify;
   bool verified = false;
+  bool welcome = true;
+  bool _visibleLogin = true;
 
   @override
   void initState() {
     super.initState();
     webViewListener();
+    _showWelcome();
   }
 
   @override
@@ -53,121 +56,136 @@ class LoginState extends State<Login> {
     flutterWebviewPlugin.dispose();
   }
 
+  void _showWelcome() {
+    Timer(
+        Duration(milliseconds: 1000),
+        () => setState(() {
+              welcome = false;
+            }));
+  }
+
   @override
   Widget build(BuildContext context) {
     if (!feide) {
-      return new Scaffold(
+      return Scaffold(
         backgroundColor: Colors.white,
-        body: Column(
-          children: <Widget>[
-            Container(
-              height: ServiceProvider.instance.screenService
-                  .getPortraitHeightByPercentage(context, 15),
-            ),
-            new Align(
-              alignment: Alignment.topLeft,
-              child: new Container(
-                width: ServiceProvider.instance.screenService
-                    .getPortraitWidthByPercentage(context, 50),
+        body: AnimatedOpacity(
+          // If the Widget should be visible, animate to 1.0 (fully visible).
+          // If the Widget should be hidden, animate to 0.0 (invisible).
+          opacity: _visibleLogin ? 0.0 : 1.0,
+          duration: Duration(milliseconds: 500),
+          // The green box needs to be the child of the AnimatedOpacity
+          child: Column(
+            children: <Widget>[
+              Container(
                 height: ServiceProvider.instance.screenService
-                    .getPortraitHeightByPercentage(context, 3.5),
-                color: UIData.blue,
+                    .getPortraitHeightByPercentage(context, 15),
               ),
-            ),
-            Container(
-              height: ServiceProvider.instance.screenService
-                  .getPortraitHeightByPercentage(context, 5),
-            ),
-            new Align(
-              alignment: Alignment.topRight,
-              child: new Container(
-                width: ServiceProvider.instance.screenService
-                    .getPortraitWidthByPercentage(context, 50),
-                height: ServiceProvider.instance.screenService
-                    .getPortraitHeightByPercentage(context, 3.5),
-                color: UIData.pink,
-              ),
-            ),
-
-            // Container(
-            //   height: queryData.size.height / 4,
-            // ),
-            new Stack(
-              children: <Widget>[
-                new Image.asset("lib/assets/images/logo.gif"),
-                new Padding(
-                    padding: EdgeInsets.only(
-                      left: ServiceProvider.instance.screenService
-                          .getPortraitWidthByPercentage(context, 15),
-                      right: ServiceProvider.instance.screenService
-                          .getPortraitWidthByPercentage(context, 15),
-                      top: ServiceProvider.instance.screenService
-                          .getPortraitHeightByPercentage(context, 25),
-                    ),
-                    child: new ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minHeight: 50.0,
-                          minWidth: 500.0,
-                        ),
-                        child: new FlatButton(
-                          shape: new RoundedRectangleBorder(
-                            side: BorderSide(color: Colors.black),
-                            // borderRadius: BorderRadius.all(Radius.circular(10.0))
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              feide = true;
-                            });
-                          },
-                          child: new Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              new Text(
-                                "Logg inn med FEIDE",
-                                style: new TextStyle(color: Colors.black),
-                                textAlign: TextAlign.center,
-                              ),
-                              new Image.asset(
-                                "lib/assets/images/logo-feide-2092px.png (content).png",
-                                scale: 20,
-                              ),
-                            ],
-                          ),
-                        ))),
-              ],
-            ),
-
-            new Padding(
-              padding: EdgeInsets.only(top: 48),
-              child: new Align(
+              Align(
                 alignment: Alignment.topLeft,
-                child: new Container(
+                child: Container(
                   width: ServiceProvider.instance.screenService
                       .getPortraitWidthByPercentage(context, 50),
-                  height: 30,
-                  color: UIData.darkblue,
+                  height: ServiceProvider.instance.screenService
+                      .getPortraitHeightByPercentage(context, 3.5),
+                  color: UIData.blue,
                 ),
               ),
-            ),
-            new Padding(
-              padding: EdgeInsets.only(top: 48),
-              child: new Align(
+              Container(
+                height: ServiceProvider.instance.screenService
+                    .getPortraitHeightByPercentage(context, 5),
+              ),
+              Align(
                 alignment: Alignment.topRight,
-                child: new Container(
+                child: Container(
                   width: ServiceProvider.instance.screenService
                       .getPortraitWidthByPercentage(context, 50),
-                  height: 30,
-                  color: UIData.lightBlue,
+                  height: ServiceProvider.instance.screenService
+                      .getPortraitHeightByPercentage(context, 3.5),
+                  color: UIData.pink,
                 ),
               ),
-            ),
-          ],
+
+              // Container(
+              //   height: queryData.size.height / 4,
+              // ),
+              Stack(
+                children: <Widget>[
+                  Image.asset("lib/assets/images/logo.gif"),
+                  Padding(
+                      padding: EdgeInsets.only(
+                        left: ServiceProvider.instance.screenService
+                            .getPortraitWidthByPercentage(context, 15),
+                        right: ServiceProvider.instance.screenService
+                            .getPortraitWidthByPercentage(context, 15),
+                        top: ServiceProvider.instance.screenService
+                            .getPortraitHeightByPercentage(context, 25),
+                      ),
+                      child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minHeight: 50.0,
+                            minWidth: 500.0,
+                          ),
+                          child: FlatButton(
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(color: Colors.black),
+                              // borderRadius: BorderRadius.all(Radius.circular(10.0))
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                feide = true;
+                              });
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Text(
+                                  "Logg inn med FEIDE",
+                                  style: TextStyle(color: Colors.black),
+                                  textAlign: TextAlign.center,
+                                ),
+                                Image.asset(
+                                  "lib/assets/images/logo-feide-2092px.png (content).png",
+                                  scale: 20,
+                                ),
+                              ],
+                            ),
+                          ))),
+                ],
+              ),
+
+              Padding(
+                padding: EdgeInsets.only(top: 48),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Container(
+                    width: ServiceProvider.instance.screenService
+                        .getPortraitWidthByPercentage(context, 50),
+                    height: 30,
+                    color: UIData.darkblue,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 48),
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: Container(
+                    width: ServiceProvider.instance.screenService
+                        .getPortraitWidthByPercentage(context, 50),
+                    height: 30,
+                    color: UIData.lightBlue,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       );
     } else {
-      return new MaterialApp(
+      return MaterialApp(
         routes: {
-          "/": (_) => new WebviewScaffold(
+          "/": (_) => WebviewScaffold(
                 url:
                     "https://auth.dataporten.no/oauth/authorization?response_type=code&client_id=8a3f6c00-555b-432b-a9bf-89acd1711c3d&redirect_uri=https://us-central1-smidigprosjekt.cloudfunctions.net/getUserInfoFromFeide",
               ),
