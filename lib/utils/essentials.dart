@@ -73,10 +73,4 @@ class EssentialsState extends State<Essentials> {
         ),
       );
   }
-
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return null;
-  }
 }
