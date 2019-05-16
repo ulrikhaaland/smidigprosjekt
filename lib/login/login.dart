@@ -113,18 +113,17 @@ class LoginState extends State<Login> {
 
             Stack(
               children: <Widget>[
-
-
                 Align(
-                  alignment: Alignment.center,
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 90),
-                    child: Image.asset("lib/assets/images/logo_innlogg.png", scale: 6),
-                  )
-                  //child: Image.asset("lib/assets/images/logo_innlogg.png", scale: 6),
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 90),
+                      child: Image.asset("lib/assets/images/logo_innlogg.png",
+                          scale: 6),
+                    )
+                    //child: Image.asset("lib/assets/images/logo_innlogg.png", scale: 6),
 
-                ),
-               // Image.asset("lib/assets/images/logo_innlogg.png", scale: 6),
+                    ),
+                // Image.asset("lib/assets/images/logo_innlogg.png", scale: 6),
                 Padding(
                     padding: EdgeInsets.only(
                       left: ServiceProvider.instance.screenService
@@ -141,9 +140,9 @@ class LoginState extends State<Login> {
                         ),
                         child: FlatButton(
                           shape: RoundedRectangleBorder(
-                            side: BorderSide(color: Colors.black),
-                            borderRadius: BorderRadius.all(Radius.circular(8.0))
-                          ),
+                              side: BorderSide(color: Colors.black),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8.0))),
                           onPressed: () {
                             setState(() {
                               feide = true;
