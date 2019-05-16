@@ -40,11 +40,14 @@ class LoginState extends State<Login> {
   bool feide = false;
   String verify;
   bool verified = false;
+  bool welcome = true;
+  bool _visibleLogin = true;
 
   @override
   void initState() {
     super.initState();
     webViewListener();
+    _showWelcome();
   }
 
   @override
@@ -53,70 +56,96 @@ class LoginState extends State<Login> {
     flutterWebviewPlugin.dispose();
   }
 
+  void _showWelcome() {
+    Timer(
+        Duration(milliseconds: 1000),
+        () => setState(() {
+              _visibleLogin = !_visibleLogin;
+            }));
+  }
+
   @override
   Widget build(BuildContext context) {
     if (!feide) {
-      return new Scaffold(
+      return Scaffold(
         backgroundColor: Colors.white,
+        // body: AnimatedOpacity(
+        //   // If the Widget should be visible, animate to 1.0 (fully visible).
+        //   // If the Widget should be hidden, animate to 0.0 (invisible).
+        //   opacity: _visibleLogin ? 0.0 : 1.0,
+        //   duration: Duration(milliseconds: 500),
+        //   // The green box needs to be the child of the AnimatedOpacity
+        //   child:
         body: Column(
           children: <Widget>[
-            new Padding(
-              padding: EdgeInsets.only(top: 48),
-              child: new Align(
-                alignment: Alignment.topLeft,
-                child: new Container(
-                  width: ServiceProvider.instance.screenService
-                      .getPortraitWidthByPercentage(context, 50),
-                  height: 30,
-                  color: UIData.blue,
-                ),
+            Container(
+              height: ServiceProvider.instance.screenService
+                  .getPortraitHeightByPercentage(context, 15),
+            ),
+            Align(
+              alignment: Alignment.topLeft,
+              child: Container(
+                width: ServiceProvider.instance.screenService
+                    .getPortraitWidthByPercentage(context, 50),
+                height: ServiceProvider.instance.screenService
+                    .getPortraitHeightByPercentage(context, 3.5),
+                color: UIData.blue,
               ),
             ),
-            new Padding(
-              padding: EdgeInsets.only(top: 48),
-              child: new Align(
-                alignment: Alignment.topRight,
-                child: new Container(
-                  width: ServiceProvider.instance.screenService
-                      .getPortraitWidthByPercentage(context, 50),
-                  height: 30,
-                  color: UIData.pink,
-                ),
+            Container(
+              height: ServiceProvider.instance.screenService
+                  .getPortraitHeightByPercentage(context, 5),
+            ),
+            Align(
+              alignment: Alignment.topRight,
+              child: Container(
+                width: ServiceProvider.instance.screenService
+                    .getPortraitWidthByPercentage(context, 50),
+                height: ServiceProvider.instance.screenService
+                    .getPortraitHeightByPercentage(context, 3.5),
+                color: UIData.pink,
               ),
             ),
+
             // Container(
             //   height: queryData.size.height / 4,
             // ),
-            new Stack(
+            Stack(
               children: <Widget>[
-                new Image.asset("lib/assets/images/logo_innlogg.png", scale: 5),
-
-                new Padding(
-                    padding: EdgeInsets.only(left: 64.0, right: 64, top: 220),
-                    child: new ConstrainedBox(
+                Image.asset("lib/assets/images/logo.gif"),
+                Padding(
+                    padding: EdgeInsets.only(
+                      left: ServiceProvider.instance.screenService
+                          .getPortraitWidthByPercentage(context, 15),
+                      right: ServiceProvider.instance.screenService
+                          .getPortraitWidthByPercentage(context, 15),
+                      top: ServiceProvider.instance.screenService
+                          .getPortraitHeightByPercentage(context, 25),
+                    ),
+                    child: ConstrainedBox(
                         constraints: BoxConstraints(
                           minHeight: 50.0,
                           minWidth: 500.0,
                         ),
-                        child: new FlatButton(
-                          shape: new RoundedRectangleBorder(
+                        child: FlatButton(
+                          shape: RoundedRectangleBorder(
                             side: BorderSide(color: Colors.black),
-                            borderRadius: BorderRadius.all(Radius.circular(8.0))
+                            // borderRadius: BorderRadius.all(Radius.circular(10.0))
                           ),
                           onPressed: () {
                             setState(() {
                               feide = true;
                             });
                           },
-                          child: new Row(
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
-                              new Text(
+                              Text(
                                 "Logg inn med FEIDE",
-                                style: new TextStyle(color: Colors.black),
+                                style: TextStyle(color: Colors.black),
                                 textAlign: TextAlign.center,
                               ),
-                              new Image.asset(
+                              Image.asset(
                                 "lib/assets/images/logo-feide-2092px.png (content).png",
                                 scale: 20,
                               ),
@@ -126,11 +155,11 @@ class LoginState extends State<Login> {
               ],
             ),
 
-            new Padding(
+            Padding(
               padding: EdgeInsets.only(top: 48),
-              child: new Align(
+              child: Align(
                 alignment: Alignment.topLeft,
-                child: new Container(
+                child: Container(
                   width: ServiceProvider.instance.screenService
                       .getPortraitWidthByPercentage(context, 50),
                   height: 30,
@@ -138,11 +167,11 @@ class LoginState extends State<Login> {
                 ),
               ),
             ),
-            new Padding(
+            Padding(
               padding: EdgeInsets.only(top: 48),
-              child: new Align(
+              child: Align(
                 alignment: Alignment.topRight,
-                child: new Container(
+                child: Container(
                   width: ServiceProvider.instance.screenService
                       .getPortraitWidthByPercentage(context, 50),
                   height: 30,
@@ -152,11 +181,12 @@ class LoginState extends State<Login> {
             ),
           ],
         ),
+        // ),
       );
     } else {
-      return new MaterialApp(
+      return MaterialApp(
         routes: {
-          "/": (_) => new WebviewScaffold(
+          "/": (_) => WebviewScaffold(
                 url:
                     "https://auth.dataporten.no/oauth/authorization?response_type=code&client_id=8a3f6c00-555b-432b-a9bf-89acd1711c3d&redirect_uri=https://us-central1-smidigprosjekt.cloudfunctions.net/getUserInfoFromFeide",
               ),

@@ -137,7 +137,9 @@ class RootPageState extends State<RootPage> {
             user: user,
             onSignOut: () => _updateAuthStatus(AuthStatus.notSignedIn));
       case AuthStatus.loading:
-        return new Essentials();
+        return new Essentials(
+          imageLoad: true,
+        );
       case AuthStatus.intro:
         return new Intro(
             user: user,
