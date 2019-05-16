@@ -60,30 +60,35 @@ class LoginState extends State<Login> {
         backgroundColor: Colors.white,
         body: Column(
           children: <Widget>[
-            new Padding(
-              padding: EdgeInsets.only(top: 48),
-              child: new Align(
-                alignment: Alignment.topLeft,
-                child: new Container(
-                  width: ServiceProvider.instance.screenService
-                      .getPortraitWidthByPercentage(context, 50),
-                  height: 30,
-                  color: UIData.lightBlue,
-                ),
+            Container(
+              height: ServiceProvider.instance.screenService
+                  .getPortraitHeightByPercentage(context, 15),
+            ),
+            new Align(
+              alignment: Alignment.topLeft,
+              child: new Container(
+                width: ServiceProvider.instance.screenService
+                    .getPortraitWidthByPercentage(context, 50),
+                height: ServiceProvider.instance.screenService
+                    .getPortraitHeightByPercentage(context, 3.5),
+                color: UIData.blue,
               ),
             ),
-            new Padding(
-              padding: EdgeInsets.only(top: 48),
-              child: new Align(
-                alignment: Alignment.topRight,
-                child: new Container(
-                  width: ServiceProvider.instance.screenService
-                      .getPortraitWidthByPercentage(context, 50),
-                  height: 30,
-                  color: UIData.lightBlue,
-                ),
+            Container(
+              height: ServiceProvider.instance.screenService
+                  .getPortraitHeightByPercentage(context, 5),
+            ),
+            new Align(
+              alignment: Alignment.topRight,
+              child: new Container(
+                width: ServiceProvider.instance.screenService
+                    .getPortraitWidthByPercentage(context, 50),
+                height: ServiceProvider.instance.screenService
+                    .getPortraitHeightByPercentage(context, 3.5),
+                color: UIData.pink,
               ),
             ),
+
             // Container(
             //   height: queryData.size.height / 4,
             // ),
@@ -91,7 +96,14 @@ class LoginState extends State<Login> {
               children: <Widget>[
                 new Image.asset("lib/assets/images/logo.gif"),
                 new Padding(
-                    padding: EdgeInsets.only(left: 64.0, right: 64, top: 220),
+                    padding: EdgeInsets.only(
+                      left: ServiceProvider.instance.screenService
+                          .getPortraitWidthByPercentage(context, 15),
+                      right: ServiceProvider.instance.screenService
+                          .getPortraitWidthByPercentage(context, 15),
+                      top: ServiceProvider.instance.screenService
+                          .getPortraitHeightByPercentage(context, 25),
+                    ),
                     child: new ConstrainedBox(
                         constraints: BoxConstraints(
                           minHeight: 50.0,
@@ -133,7 +145,7 @@ class LoginState extends State<Login> {
                   width: ServiceProvider.instance.screenService
                       .getPortraitWidthByPercentage(context, 50),
                   height: 30,
-                  color: UIData.pink,
+                  color: UIData.darkblue,
                 ),
               ),
             ),
@@ -145,7 +157,7 @@ class LoginState extends State<Login> {
                   width: ServiceProvider.instance.screenService
                       .getPortraitWidthByPercentage(context, 50),
                   height: 30,
-                  color: UIData.pink,
+                  color: UIData.lightBlue,
                 ),
               ),
             ),

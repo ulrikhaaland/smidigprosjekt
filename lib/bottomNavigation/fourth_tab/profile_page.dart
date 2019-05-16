@@ -14,9 +14,9 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   static final formKey = new GlobalKey<FormState>();
 
-  String bio;
-  String linje;
-  String skole;
+  String bio = "";
+  String linje = "";
+  String skole = "";
   bool edit = false;
   @override
   void initState() {
@@ -96,7 +96,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       padding: EdgeInsets.only(top: 46),
                     ),
                     new Text(
-                      widget.user.userName,
+                      "widget.user.userName",
                       style: new TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -108,10 +108,10 @@ class _ProfilePageState extends State<ProfilePage> {
                         style: new TextStyle(fontWeight: FontWeight.bold),
                       ),
                       title: new TextFormField(
-                        initialValue: widget.user.skole,
+                        initialValue: "widget.user.skole",
                         textCapitalization: TextCapitalization.sentences,
                         autocorrect: false,
-                        onSaved: (val) => widget.user.skole = val,
+                        // onSaved: (val) => "widget.user.skole "= val,
                       ),
                     ),
                     new ListTile(
@@ -120,10 +120,10 @@ class _ProfilePageState extends State<ProfilePage> {
                         style: new TextStyle(fontWeight: FontWeight.bold),
                       ),
                       title: new TextFormField(
-                        initialValue: widget.user.linje,
+                        // initialValue: widget.user.linje,
                         autocorrect: false,
                         textCapitalization: TextCapitalization.sentences,
-                        onSaved: (val) => widget.user.linje = val,
+                        // onSaved: (val) => widget.user.linje = val,
                       ),
                     ),
                     Padding(
@@ -136,7 +136,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       title: new TextFormField(
                         maxLength: 160,
-                        initialValue: widget.user.bio,
+                        // initialValue: widget.user.bio,
                         textCapitalization: TextCapitalization.sentences,
                         maxLines: 5,
                         style: new TextStyle(
@@ -147,7 +147,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             border: OutlineInputBorder(),
                             fillColor: Colors.black,
                             labelStyle: new TextStyle(color: Colors.grey[600])),
-                        onSaved: (val) => widget.user.bio = val,
+                        // onSaved: (val) => widget.user.bio = val,
                       ),
                     ),
                   ],
@@ -204,7 +204,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       padding: EdgeInsets.only(top: 46),
                     ),
                     new Text(
-                      widget.user.userName,
+                      " widget.user.userName,",
                       style: new TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -215,13 +215,13 @@ class _ProfilePageState extends State<ProfilePage> {
                           "Skole:",
                           style: new TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        title: new Text(widget.user.skole)),
+                        title: new Text("widget.user.skole")),
                     new ListTile(
                         leading: new Text(
                           "Linje:",
                           style: new TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        title: new Text(widget.user.linje)),
+                        title: new Text("widget.user.linje")),
                     Padding(
                       padding: EdgeInsets.only(top: 36),
                     ),
@@ -230,7 +230,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           "Bio:",
                           style: new TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        title: new Text(widget.user.bio)),
+                        title: new Text("widget.user.bio")),
                     new Align(
                       alignment: Alignment.bottomCenter,
                       child: new RaisedButton(
