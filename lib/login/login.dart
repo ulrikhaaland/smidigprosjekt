@@ -110,15 +110,27 @@ class LoginState extends State<Login> {
             // Container(
             //   height: queryData.size.height / 4,
             // ),
+
             Stack(
               children: <Widget>[
-                Image.asset("lib/assets/images/logo.gif"),
+
+
+                Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 90),
+                    child: Image.asset("lib/assets/images/logo_innlogg.png", scale: 6),
+                  )
+                  //child: Image.asset("lib/assets/images/logo_innlogg.png", scale: 6),
+
+                ),
+               // Image.asset("lib/assets/images/logo_innlogg.png", scale: 6),
                 Padding(
                     padding: EdgeInsets.only(
                       left: ServiceProvider.instance.screenService
-                          .getPortraitWidthByPercentage(context, 15),
+                          .getPortraitWidthByPercentage(context, 25),
                       right: ServiceProvider.instance.screenService
-                          .getPortraitWidthByPercentage(context, 15),
+                          .getPortraitWidthByPercentage(context, 25),
                       top: ServiceProvider.instance.screenService
                           .getPortraitHeightByPercentage(context, 25),
                     ),
@@ -130,7 +142,7 @@ class LoginState extends State<Login> {
                         child: FlatButton(
                           shape: RoundedRectangleBorder(
                             side: BorderSide(color: Colors.black),
-                            // borderRadius: BorderRadius.all(Radius.circular(10.0))
+                            borderRadius: BorderRadius.all(Radius.circular(8.0))
                           ),
                           onPressed: () {
                             setState(() {
@@ -156,7 +168,7 @@ class LoginState extends State<Login> {
             ),
 
             Padding(
-              padding: EdgeInsets.only(top: 48),
+              padding: EdgeInsets.only(top: 90),
               child: Align(
                 alignment: Alignment.topLeft,
                 child: Container(
