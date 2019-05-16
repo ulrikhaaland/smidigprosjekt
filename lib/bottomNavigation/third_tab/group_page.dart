@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smidigprosjekt/objects/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:smidigprosjekt/utils/uidata.dart';
+import 'package:smidigprosjekt/service/service_provider.dart';
 
 class GroupPage extends StatefulWidget {
   GroupPage({
@@ -32,7 +33,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     queryData = MediaQuery.of(context);
     return new Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: UIData.grey,
         appBar: new AppBar(
             actions: <Widget>[
               IconButton(
@@ -46,7 +47,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
             elevation: 2,
             backgroundColor: Colors.white,
             title: new Text(
-              "StudBud",
+              "Min Gruppe",
               style: new TextStyle(
                   fontFamily: 'Anton', fontSize: 24, color: Colors.black),
             ),
@@ -57,32 +58,39 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                 children: <Widget>[
                   new Row(),
                   new Container(
-                    color: Colors.grey[200],
+                    decoration: const BoxDecoration(
+                     border : Border(
+                        top: BorderSide(width: 0.5, color: UIData.black),
+                        bottom: BorderSide(width: 0.5, color: UIData.black)
+                     ),
+                      color: Colors.white,
+                    ),
+                    
                     child: TabBar(
                       labelColor: Colors.grey[800],
-                      indicatorColor: UIData.lightBlue,
-                      labelStyle: new TextStyle(color: Colors.black),
+                      indicatorColor: UIData.black,
+                      labelStyle: new TextStyle(color: UIData.black),
                       controller: _tabController,
                       tabs: [
                         Tab(
                           child: new Text(
                             "Utfordringer",
                             style: new TextStyle(
-                                color: Colors.black, fontFamily: 'Anton'),
+                                color: UIData.black, fontFamily: 'Anton'),
                           ),
                         ),
                         Tab(
                           child: new Text(
-                            "Events",
+                            "Events", 
                             style: new TextStyle(
-                                color: Colors.black, fontFamily: 'Anton'),
+                                color: UIData.black, fontFamily: 'Anton'),
                           ),
                         ),
                         Tab(
                           child: new Text(
                             "Chat",
                             style: new TextStyle(
-                                color: Colors.black, fontFamily: 'Anton'),
+                                color: UIData.black, fontFamily: 'Anton'),
                           ),
                         ),
                       ],
@@ -94,7 +102,51 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
         body: TabBarView(
           controller: _tabController,
           children: [
-            new Text("data"),
+            new Column(
+              crossAxisAlignment: CrossAxisAlignment.center, 
+              children:[
+                new Padding(
+                  padding: EdgeInsets.only(top: 20),
+                ),
+                new Row(
+                  children:[
+                    new Column(
+                      children:[
+                        new Text(
+                          "Ukens utfordring:",
+                          style: new TextStyle(
+                            color: UIData.black, fontFamily: 'Anton'
+                          ),
+                        ),
+                        new Text(
+                          "Lorem ipsum dolor sit amet\n,consectetur adipiscing elit, sed",
+                          style: new TextStyle(
+                            color: UIData.black, fontFamily: 'Anton'
+                          ),
+                        ),
+                      ],
+                    ),
+                    new Container(
+                          width:  ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 20),
+                          height: ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 20),
+                          color: UIData.pink
+                        ),
+                  ], // Text and meter row children 
+                ),
+                new Padding(
+                  padding: EdgeInsets.only(top: 20),
+                ),
+                new ClipRRect(
+                  borderRadius: new BorderRadius.circular(8.0),
+                  child: new Container(
+                    width:  ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 85),
+                    height: ServiceProvider.instance.screenService.getHeightByPercentage(context, 30),
+                    color: Colors.white
+                  ),
+                ),
+              ],
+            ),
+            
             new Text("data"),
             new Text("data"),
           ],
