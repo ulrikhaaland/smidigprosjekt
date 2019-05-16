@@ -68,7 +68,7 @@ class LoginState extends State<Login> {
                   width: ServiceProvider.instance.screenService
                       .getPortraitWidthByPercentage(context, 50),
                   height: 30,
-                  color: UIData.lightBlue,
+                  color: UIData.blue,
                 ),
               ),
             ),
@@ -80,7 +80,7 @@ class LoginState extends State<Login> {
                   width: ServiceProvider.instance.screenService
                       .getPortraitWidthByPercentage(context, 50),
                   height: 30,
-                  color: UIData.lightBlue,
+                  color: UIData.pink,
                 ),
               ),
             ),
@@ -89,7 +89,8 @@ class LoginState extends State<Login> {
             // ),
             new Stack(
               children: <Widget>[
-                new Image.asset("lib/assets/images/logo.gif"),
+                new Image.asset("lib/assets/images/logo_innlogg.png", scale: 5),
+
                 new Padding(
                     padding: EdgeInsets.only(left: 64.0, right: 64, top: 220),
                     child: new ConstrainedBox(
@@ -100,7 +101,7 @@ class LoginState extends State<Login> {
                         child: new FlatButton(
                           shape: new RoundedRectangleBorder(
                             side: BorderSide(color: Colors.black),
-                            // borderRadius: BorderRadius.all(Radius.circular(10.0))
+                            borderRadius: BorderRadius.all(Radius.circular(8.0))
                           ),
                           onPressed: () {
                             setState(() {
@@ -133,7 +134,7 @@ class LoginState extends State<Login> {
                   width: ServiceProvider.instance.screenService
                       .getPortraitWidthByPercentage(context, 50),
                   height: 30,
-                  color: UIData.pink,
+                  color: UIData.darkblue,
                 ),
               ),
             ),
@@ -145,7 +146,7 @@ class LoginState extends State<Login> {
                   width: ServiceProvider.instance.screenService
                       .getPortraitWidthByPercentage(context, 50),
                   height: 30,
-                  color: UIData.pink,
+                  color: UIData.lightBlue,
                 ),
               ),
             ),

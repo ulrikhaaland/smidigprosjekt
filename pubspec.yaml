@@ -53,6 +53,7 @@ flutter:
     - lib/assets/images/events-v.gif
     - lib/assets/images/group.gif
     - lib/assets/images/group-v.gif
+    - lib/assets/images/logo_innlogg.png
     - lib/assets/images/profile-v.gif
     - lib/assets/images/search.gif
 
