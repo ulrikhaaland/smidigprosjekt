@@ -40,6 +40,55 @@ class RootPageState extends State<RootPage> {
   initState() {
     super.initState();
 
+    var users = [
+      {
+        "bio": "Enkelt og greit menneske.",
+        "email": "",
+        "linje": "Økonomi og administrasjon",
+        "skole": "Oslo Met",
+        "name": "Per Arne Heimesen",
+      },
+      {
+        "bio": "Ser etter studenter som er interessert i å få gode karakterer.",
+        "email": "",
+        "linje": "Markedsføring",
+        "skole": "Universitet i Oslo",
+        "name": "Camilla Hunders",
+      },
+      {
+        "bio": "Glad i å fiske og se på tv",
+        "email": "",
+        "linje": "IT",
+        "skole": "Oslo Met",
+        "name": "Pripjet Vladikovski",
+      },
+      {
+        "bio": "Hater instagram ads",
+        "email": "",
+        "linje": "Film og Tv",
+        "skole": "Høyskolen Kristiania",
+        "name": "Amanda Gundersen",
+      },
+      {
+        "bio": "Jeg er ikke din kokk",
+        "email": "",
+        "linje": "Kunst",
+        "skole": "Høyskolen Kristiania",
+        "name": "Lerant Dufreau",
+      },
+      {
+        "bio": "Trene, venner og seriemordere.",
+        "email": "",
+        "linje": "Ernæring",
+        "skole": "Oslo Met",
+        "name": "Fredrik Holtet",
+      },
+    ];
+
+    users.forEach((u) {
+      Firestore.instance.collection("users").add(u);
+    });
+
     getUserId();
     firebaseMessaging.configure(onLaunch: (Map<String, dynamic> msg) {
       print("onLaunch called");

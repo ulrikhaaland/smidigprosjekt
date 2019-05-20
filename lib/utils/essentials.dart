@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'uidata.dart';
 
 class Essentials extends StatefulWidget {
   Essentials({
