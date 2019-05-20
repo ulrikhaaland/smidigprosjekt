@@ -206,6 +206,8 @@ class PageOneState extends State<PageOne> {
                 children: <Widget>[
                   new Container(
                     padding: new EdgeInsets.all(16.0),
+                  decoration: new BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(8.0))),
+
 
                   child: new Column(
                   children: <Widget>[
