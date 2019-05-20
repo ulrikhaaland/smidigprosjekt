@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smidigprosjekt/objects/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:smidigprosjekt/utils/uidata.dart';
+import 'package:smidigprosjekt/service/service_provider.dart';
 
 class GroupPage extends StatefulWidget {
   GroupPage({
