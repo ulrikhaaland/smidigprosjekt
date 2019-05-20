@@ -6,18 +6,20 @@ class Styles {
     print('Styles: constructor');
   }
 
-  TextStyle textLight(double fontSize) {
+  TextStyle textLight({double fontSize, Color color}) {
     return TextStyle(
-      color: UIData.grey,
-      fontSize: fontSize,
+      color: color ?? UIData.black,
+      fontSize: fontSize ?? 12,
       fontFamily: "RobotoLight",
     );
   }
 
-  TextStyle title() {
+  TextStyle title({Color color}) {
+    // Color selectedColor;
+    // color == null ? selectedColor = UIData.black : selectedColor = color;
     return TextStyle(
-      color: UIData.grey,
-      fontSize: 18,
+      color: color ?? UIData.black,
+      fontSize: 22,
       fontFamily: "Roboto",
     );
   }

@@ -107,11 +107,6 @@ class LoginState extends State<Login> {
                 color: UIData.pink,
               ),
             ),
-
-            // Container(
-            //   height: queryData.size.height / 4,
-            // ),
-
             Stack(
               children: <Widget>[
                 Align(
@@ -156,7 +151,7 @@ class LoginState extends State<Login> {
                                 child: Text(
                                   "Logg inn",
                                   style: ServiceProvider.instance.styles
-                                      .textLight(14),
+                                      .textLight(fontSize: 14),
                                   textAlign: TextAlign.center,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -212,6 +207,7 @@ class LoginState extends State<Login> {
                       onPressed: () {
                         setState(() {
                           flutterWebviewPlugin.close();
+                          flutterWebviewPlugin.dispose();
                           feide = false;
                         });
                       },
@@ -232,9 +228,7 @@ class LoginState extends State<Login> {
         int indexOf = url.indexOf("=");
         verify = url.substring(indexOf + 1, url.length);
         print(verify);
-        // verified = true;
         httpTest();
-        // flutterWebviewPlugin.close();
       }
     });
   }

@@ -27,6 +27,9 @@ class IntroState extends State<Intro> {
   String linje;
   String bio;
 
+  bool swipes = true;
+  bool userinfo = true;
+
   @override
   void initState() {
     super.initState();
@@ -52,19 +55,247 @@ class IntroState extends State<Intro> {
           3),
       // userInfo(),
     ];
+    Widget content;
+
+    if (userinfo) {
+      content = Column(
+        children: <Widget>[
+          Container(
+            height: ServiceProvider.instance.screenService
+                .getPortraitHeightByPercentage(context, 15),
+          ),
+          Stack(
+            alignment: Alignment.topCenter,
+            children: <Widget>[
+              Card(
+                margin: EdgeInsets.only(
+                  top: ServiceProvider.instance.screenService
+                      .getHeightByPercentage(context, 6.25),
+                ),
+                color: Colors.grey[200],
+                elevation: 2,
+                child: Container(
+                  height: ServiceProvider.instance.screenService
+                      .getHeightByPercentage(context, 66),
+                  width: ServiceProvider.instance.screenService
+                      .getPortraitWidthByPercentage(context, 80),
+                  child: Column(
+                    children: <Widget>[
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.edit,
+                            color: Colors.black,
+                          ),
+                          onPressed: null,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 46),
+                      ),
+                      Text(
+                        " widget.user.userName,",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      ListTile(
+                          leading: Text(
+                            "Skole:",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          title: Text("widget.user.skole")),
+                      ListTile(
+                          leading: Text(
+                            "Linje:",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          title: Text("widget.user.linje")),
+                      Padding(
+                        padding: EdgeInsets.only(top: 36),
+                      ),
+                      ListTile(
+                          leading: Text(
+                            "Bio:",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          title: Text("widget.user.bio")),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: RaisedButton(
+                          color: Colors.white,
+                          child: Container(
+                            width: 100,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Text(
+                                  "INNBOKS",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Icon(
+                                  Icons.chat,
+                                  size: 20,
+                                )
+                              ],
+                            ),
+                          ),
+                          onPressed: () => widget.onSignOut(),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.topCenter,
+                child: GestureDetector(
+                  onTap: null,
+                  child: CircleAvatar(
+                    radius: 70,
+                    backgroundColor: UIData.pink,
+                    child: CircleAvatar(
+                      radius: 67.5,
+                      backgroundColor: Colors.white,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(
+                            Icons.add_a_photo,
+                            size: 40,
+                            color: UIData.grey,
+                          ),
+                          Text(
+                            "Legg til et bilde",
+                            style: ServiceProvider.instance.styles.textLight(),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+    } else {
+      swipes == true
+          ? content = Swiper(
+              loop: false,
+              itemBuilder: (BuildContext context, int index) {
+                return list[index];
+              },
+              indicatorLayout: PageIndicatorLayout.COLOR,
+              itemCount: list.length,
+              pagination: SwiperPagination(
+                  builder: DotSwiperPaginationBuilder(space: 10)),
+              // control: new SwiperControl(),
+            )
+          : content = Column(
+              children: <Widget>[
+                Container(
+                  height: ServiceProvider.instance.screenService
+                      .getPortraitHeightByPercentage(context, 15),
+                ),
+                Container(
+                  height: ServiceProvider.instance.screenService
+                      .getPortraitHeightByPercentage(context, 7.5),
+                  child: Text(
+                    "Du har 3 valgmuligheter:",
+                    style: ServiceProvider.instance.styles.title(),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 24),
+                  child: GestureDetector(
+                    onTap: () => _groupDecision(1),
+                    child: Card(
+                      color: UIData.pink,
+                      child: Container(
+                        width: ServiceProvider.instance.screenService
+                            .getPortraitWidthByPercentage(context, 85),
+                        height: ServiceProvider.instance.screenService
+                            .getPortraitHeightByPercentage(context, 15),
+                        child: Center(
+                          child: Text("Bli tildelt en gruppe automatisk",
+                              style: ServiceProvider.instance.styles.textLight(
+                                  color: Colors.white, fontSize: 18)),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 24),
+                  child: GestureDetector(
+                    onTap: () => _groupDecision(2),
+                    child: Card(
+                      color: UIData.blue,
+                      child: Container(
+                        width: ServiceProvider.instance.screenService
+                            .getPortraitWidthByPercentage(context, 85),
+                        height: ServiceProvider.instance.screenService
+                            .getPortraitHeightByPercentage(context, 15),
+                        child: Center(
+                          child: Text("Søk etter en gruppe",
+                              style: ServiceProvider.instance.styles.textLight(
+                                  color: Colors.white, fontSize: 18)),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 24),
+                  child: GestureDetector(
+                    onTap: () => _groupDecision(3),
+                    child: Card(
+                      color: UIData.darkblue,
+                      child: Container(
+                        width: ServiceProvider.instance.screenService
+                            .getPortraitWidthByPercentage(context, 85),
+                        height: ServiceProvider.instance.screenService
+                            .getPortraitHeightByPercentage(context, 15),
+                        child: Center(
+                          child: Text("Opprett din egen gruppe",
+                              style: ServiceProvider.instance.styles.textLight(
+                                  color: Colors.white, fontSize: 18)),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Text(
+                  "Du kan når som helst endre valget ditt",
+                  style: ServiceProvider.instance.styles.textLight(),
+                )
+              ],
+            );
+    }
+
     return Scaffold(
-        backgroundColor: Colors.white,
-        body: new Swiper(
-          loop: false,
-          itemBuilder: (BuildContext context, int index) {
-            return list[index];
-          },
-          indicatorLayout: PageIndicatorLayout.COLOR,
-          itemCount: list.length,
-          pagination: new SwiperPagination(
-              builder: DotSwiperPaginationBuilder(space: 10)),
-          // control: new SwiperControl(),
-        ));
+        backgroundColor: userinfo ? UIData.grey : Colors.white, body: content);
+  }
+
+  void _groupDecision(int decision) {
+    switch (decision) {
+      case 1:
+        _assignToGroup();
+        break;
+      case 2:
+        break;
+      case 3:
+        break;
+
+      default:
+    }
+  }
+
+  void _assignToGroup() {
+    // Algorithm
   }
 
   Widget userInfo() {
@@ -265,7 +496,11 @@ class IntroState extends State<Intro> {
       PrimaryButton(
         text: "Kom i gang",
         padding: 52,
-        onPressed: () => saveData(),
+        onPressed: () {
+          setState(() {
+            swipes = false;
+          });
+        },
       )
     ]));
   }
@@ -275,7 +510,8 @@ class IntroState extends State<Intro> {
     widget.user.linje = linje;
     widget.user.bio = bio;
     widget.user.intro = false;
-    await Firestore.instance
+    // await ??
+    Firestore.instance
         .document("users/${widget.user.id}")
         .updateData(widget.user.toJson());
     widget.onIntroFinished();
