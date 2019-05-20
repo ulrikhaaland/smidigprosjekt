@@ -14,12 +14,10 @@ class Styles {
     );
   }
 
-  TextStyle title({Color color}) {
-    // Color selectedColor;
-    // color == null ? selectedColor = UIData.black : selectedColor = color;
+  TextStyle title({Color color, double fontSize}) {
     return TextStyle(
       color: color ?? UIData.black,
-      fontSize: 22,
+      fontSize: fontSize ?? 22,
       fontFamily: "Roboto",
     );
   }
