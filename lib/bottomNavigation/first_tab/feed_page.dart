@@ -198,7 +198,29 @@ class PageOneState extends State<PageOne> {
           ],
         ),
         body: new Center(
-          child: new Text("feed"),
+          child:
+          new ListView.builder(
+            itemCount: 5,
+              itemBuilder: (context, i) {
+              return new Column(
+                children: <Widget>[
+                  new Container(
+                    padding: new EdgeInsets.all(16.0),
+
+                  child: new Column(
+                  children: <Widget>[
+                 new Text("row $i"),
+
+                  ],
+              ),
+              ),
+
+                  new Divider(),
+                ],
+              );
+
+              },
+          )
 
 
         ));
