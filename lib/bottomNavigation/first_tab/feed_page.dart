@@ -180,9 +180,19 @@ class PageOne extends StatefulWidget {
 class PageOneState extends State<PageOne> {
   static final formKey = new GlobalKey<FormState>();
 
+  List<Event> eventList = [];
+
   @override
   void initState() {
     super.initState();
+    _getEventsData();
+  }
+
+  void _getEventsData() async {
+   QuerySnapshot eventDocs = await Firestore.instance.collection("events").getDocuments();
+   eventDocs.documents.forEach((doc) {
+     eventList.add(Event(address: doc.data["address"], cat: doc.data["cat"], desc: doc.data["data"], id: doc.data["id"], time: doc.data["data"], title: doc.data["title"]));
+   });
   }
 
   @override
@@ -190,7 +200,6 @@ class PageOneState extends State<PageOne> {
     return Scaffold(
         backgroundColor: UIData.grey,
         appBar: new AppBar(
-
           backgroundColor: Colors.white,
           actions: <Widget>[
             new Image.asset("lib/assets/images/logo_tekst.png", scale: 8,),
@@ -207,24 +216,31 @@ class PageOneState extends State<PageOne> {
                   new Container(
                     padding: new EdgeInsets.all(16.0),
                   decoration: new BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(8.0))),
-
-
                   child: new Column(
-                  children: <Widget>[
-                 new Text("row $i"),
-
-                  ],
+                  children: eventList.map((e) {
+                    Text(e.title);
+                  }).toList()
               ),
               ),
-
                   new Divider(),
                 ],
               );
 
               },
           )
-
-
         ));
   }
+}
+
+class Event {
+  Event({this.address, this.cat, this.desc, this.id, this.time, this.title});
+
+  final String address;
+  final String cat;
+  final String desc;
+  final int id;
+  final Timestamp time;
+  final String title;
+
+
 }
