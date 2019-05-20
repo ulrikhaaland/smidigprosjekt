@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smidigprosjekt/objects/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:smidigprosjekt/utils/uidata.dart';
+import 'package:smidigprosjekt/service/service_provider.dart';
 
 class GroupPage extends StatefulWidget {
   GroupPage({
@@ -94,10 +95,55 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
         body: TabBarView(
           controller: _tabController,
           children: [
-            new Text("data"),
+            new Column(
+              crossAxisAlignment: CrossAxisAlignment.center, 
+              children:[
+                new Padding(
+                  padding: EdgeInsets.only(top: 20),
+                ),
+                new Row(
+                  children:[
+                    new Column(
+                      children:[
+                        new Text(
+                          "Ukens utfordring:",
+                          style: new TextStyle(
+                            color: UIData.black, fontFamily: 'Anton'
+                          ),
+                        ),
+                        new Text(
+                          "Lorem ipsum dolor sit amet\n,consectetur adipiscing elit, sed",
+                          style: new TextStyle(
+                            color: UIData.black, fontFamily: 'Anton'
+                          ),
+                        ),
+                      ],
+                    ),
+                    new Container(
+                          width:  ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 20),
+                          height: ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 20),
+                          color: UIData.pink
+                        ),
+                  ], // Text and meter row children 
+                ),
+                new Padding(
+                  padding: EdgeInsets.only(top: 20),
+                ),
+                new ClipRRect(
+                  borderRadius: new BorderRadius.circular(8.0),
+                  child: new Container(
+                    width:  ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 85),
+                    height: ServiceProvider.instance.screenService.getHeightByPercentage(context, 30),
+                    color: Colors.white
+                  ),
+                ),
+              ],
+            ),
+            
             new Text("data"),
             new Text("data"),
           ],
         ));
   }
 }
+
