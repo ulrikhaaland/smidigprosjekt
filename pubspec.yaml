@@ -89,10 +89,10 @@ flutter:
         - asset: fonts/Roboto-Regular.ttf
         - asset: fonts/Roboto-Thin.ttf
         - asset: fonts/Roboto-ThinItalic.ttf
-          # style: italic
-    - family: Anton
+          style: italic
+    - family: RobotoLight
       fonts:
-        - asset: fonts/Anton-Regular.ttf
+        - asset: fonts/Roboto-Light.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages

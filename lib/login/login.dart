@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smidigprosjekt/service/screen_service.dart';
 import '../auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../utils/uidata.dart';
@@ -154,7 +155,8 @@ class LoginState extends State<Login> {
                               Flexible(
                                 child: Text(
                                   "Logg inn",
-                                  style: TextStyle(color: Colors.black),
+                                  style: ServiceProvider.instance.styles
+                                      .textLight(14),
                                   textAlign: TextAlign.center,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -200,6 +202,22 @@ class LoginState extends State<Login> {
       return MaterialApp(
         routes: {
           "/": (_) => WebviewScaffold(
+                appBar: AppBar(
+                  backgroundColor: Colors.white,
+                  actionsIconTheme:
+                      IconThemeData(color: Colors.black, size: 35),
+                  actions: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.cancel),
+                      onPressed: () {
+                        setState(() {
+                          flutterWebviewPlugin.close();
+                          feide = false;
+                        });
+                      },
+                    ),
+                  ],
+                ),
                 url:
                     "https://auth.dataporten.no/oauth/authorization?response_type=code&client_id=8a3f6c00-555b-432b-a9bf-89acd1711c3d&redirect_uri=https://us-central1-smidigprosjekt.cloudfunctions.net/getUserInfoFromFeide",
               ),

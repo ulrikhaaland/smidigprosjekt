@@ -1,4 +1,5 @@
 import 'screen_service.dart';
+import 'styles.dart';
 
 class ServiceProvider {
   static final ServiceProvider _instance = ServiceProvider._();
@@ -7,7 +8,6 @@ class ServiceProvider {
 
   ServiceProvider._();
 
-
   ScreenService screenService;
-  
+  Styles styles;
 }
