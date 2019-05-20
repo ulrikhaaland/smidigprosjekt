@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:smidigprosjekt/auth.dart';
 import 'package:smidigprosjekt/login/login.dart';
-import 'bottomNavigation/first_tab/bottom_nav.dart';
+import 'bottomNavigation/first_tab/feed_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'utils/essentials.dart';
 import 'package:smidigprosjekt/objects/user.dart';

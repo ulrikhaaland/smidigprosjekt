@@ -56,7 +56,17 @@ flutter:
     - lib/assets/images/logo_innlogg.png
     - lib/assets/images/profile-v.gif
     - lib/assets/images/search.gif
+    - lib/assets/images/feed_icon.png
+    - lib/assets/images/feed_icon_fill.png
+    - lib/assets/images/group_icon.png
+    - lib/assets/images/profile_icon.png
+    - lib/assets/images/search_icon.png
     - lib/assets/images/welcome.png
+    - lib/assets/images/profile_icon_fill.png
+    - lib/assets/images/group_icon_fill.png
+    - lib/assets/images/search_icon_fill.png
+    - lib/assets/images/filter_icon.png
+    - lib/assets/images/logo_tekst.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
