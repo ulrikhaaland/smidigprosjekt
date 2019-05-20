@@ -97,13 +97,14 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: UIData.grey,
       body: PageStorage(
         child: currentPage,
         bucket: bucket,
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.white,
         currentIndex: currentTab,
         onTap: (int index) {
           setState(() {
@@ -114,44 +115,48 @@ class _MyHomePageState extends State<MyHomePage> {
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             activeIcon: new Image.asset(
-              "lib/assets/images/events-v.gif",
+              "lib/assets/images/feed_icon_fill.png",
               scale: 10,
             ),
             backgroundColor: UIData.lightBlue,
             icon: new Image.asset(
-              "lib/assets/images/events.gif",
-              scale: 10,
-            ),
-            title: Text(''),
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: UIData.lightBlue,
-            icon: new Image.asset(
-              "lib/assets/images/search.gif",
+              "lib/assets/images/feed_icon.png",
               scale: 10,
             ),
             title: Text(''),
           ),
           BottomNavigationBarItem(
             activeIcon: new Image.asset(
-              "lib/assets/images/group-v.gif",
+              "lib/assets/images/search_icon_fill.png",
               scale: 10,
             ),
             backgroundColor: UIData.lightBlue,
             icon: new Image.asset(
-              "lib/assets/images/group.gif",
+              "lib/assets/images/search_icon.png",
               scale: 10,
             ),
             title: Text(''),
           ),
           BottomNavigationBarItem(
             activeIcon: new Image.asset(
-              "lib/assets/images/profile-v.gif",
+              "lib/assets/images/group_icon_fill.png",
               scale: 10,
             ),
             backgroundColor: UIData.lightBlue,
             icon: new Image.asset(
-              "lib/assets/images/profile.gif",
+              "lib/assets/images/group_icon.png",
+              scale: 10,
+            ),
+            title: Text(''),
+          ),
+          BottomNavigationBarItem(
+            activeIcon: new Image.asset(
+              "lib/assets/images/profile_icon_fill.png",
+              scale: 10,
+            ),
+            backgroundColor: UIData.lightBlue,
+            icon: new Image.asset(
+              "lib/assets/images/profile_icon.png",
               scale: 10,
             ),
             title: Text(''),
@@ -183,14 +188,43 @@ class PageOneState extends State<PageOne> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: UIData.grey,
         appBar: new AppBar(
-          backgroundColor: UIData.lightBlue,
-          title: new Text(
-            "Hjem",
-            style: new TextStyle(fontSize: UIData.fontSize24),
-          ),
+
+          backgroundColor: Colors.white,
+          actions: <Widget>[
+            new Image.asset("lib/assets/images/logo_tekst.png", scale: 8,),
+            new IconButton(icon: new Image.asset("lib/assets/images/filter_icon.png", scale: 10,), onPressed: null)
+          ],
         ),
-        body: Container());
+        body: new Center(
+          child:
+          new ListView.builder(
+            itemCount: 5,
+              itemBuilder: (context, i) {
+              return new Column(
+                children: <Widget>[
+                  new Container(
+                    padding: new EdgeInsets.all(16.0),
+                  decoration: new BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(8.0))),
+
+
+                  child: new Column(
+                  children: <Widget>[
+                 new Text("row $i"),
+
+                  ],
+              ),
+              ),
+
+                  new Divider(),
+                ],
+              );
+
+              },
+          )
+
+
+        ));
   }
 }

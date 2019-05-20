@@ -27,7 +27,7 @@ class UIData {
 
 //colors
   static const Color black = Color.fromRGBO(30, 30, 30, 1);
-  static const Color grey = Color.fromRGBO(81, 81, 81, 1);
+  static const Color grey = Color.fromRGBO(242, 242, 242, 1);
   static const Color pink = Color.fromRGBO(231, 59, 112, 1.0);
   static const Color blue = Color.fromRGBO(109, 133, 194, 1.0);
   static const Color lightBlue = Color.fromRGBO(203, 216, 238, 1.0);
