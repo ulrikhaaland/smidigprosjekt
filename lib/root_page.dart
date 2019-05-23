@@ -151,7 +151,7 @@ class RootPageState extends State<RootPage> {
         authStatus =
             currentUser != null ? AuthStatus.signedIn : AuthStatus.notSignedIn;
         if (user.intro) {
-          authStatus = AuthStatus.intro;
+          authStatus = AuthStatus.signedIn;
         }
       });
     } else {
