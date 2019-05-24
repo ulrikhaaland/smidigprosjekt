@@ -3,6 +3,9 @@ import 'package:smidigprosjekt/objects/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:smidigprosjekt/utils/uidata.dart';
 import 'package:smidigprosjekt/service/service_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:ui';
+import 'dart:math';
 
 class GroupPage extends StatefulWidget {
   GroupPage({
@@ -13,21 +16,81 @@ class GroupPage extends StatefulWidget {
   _GroupPageState createState() => _GroupPageState();
 }
 
+class MyPainter extends CustomPainter{
+
+  Color lineColor;
+  Color completeColor;
+  double completePercent;
+  double width;
+  MyPainter({this.lineColor,this.completeColor,this.completePercent,this.width});
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint line = new Paint()
+        ..color = lineColor
+        ..strokeCap = StrokeCap.round
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = width;
+    Paint complete = new Paint()
+      ..color = completeColor
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = width;
+
+    Offset center  = new Offset(size.width/2, size.height/2);
+    double radius  = min(size.width/2,size.height/2);
+    canvas.drawCircle(
+        center,
+        radius,
+        line
+    );
+
+    double arcAngle = 2*pi* (completePercent/100);
+
+    canvas.drawArc(
+        new Rect.fromCircle(center: center,radius: radius),
+        -pi/2,
+        arcAngle,
+        false,
+        complete
+    );
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return true;
+  }
+}
+
 class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
+
   TabController _tabController;
   MediaQueryData queryData;
-
-  bool _value1 = false;
-  bool _value2 = false;
-
-  void _value1Changed(bool value) => setState(() => _value1 = value);
-  void _value2Changed(bool value) => setState(() => _value2 = value);
+  List<bool> inputs = [false, false, false, false, false];
+  double percentage = 0.0;
+  double newPercentage = 0.0;
+  double bufferPercentage = 0.0;
+  AnimationController percentageAnimationController;
 
   @override
   void initState() {
     super.initState();
     _tabController = new TabController(vsync: this, length: 3);
+    setState(() {
+        percentage = 0.0;
+    });
+
+    percentageAnimationController = new AnimationController(
+      vsync: this,
+      duration: new Duration(milliseconds: 1000)
+    )
+    ..addListener((){
+      setState(() {
+        percentage = lerpDouble(percentage,newPercentage,percentageAnimationController.value);
+      });
+    });
+
   }
+
 
   @override
   void dispose() {
@@ -38,11 +101,19 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     List<String> taskList = [
-      "oppgave 1",
-      "oppgave 2",
-      "oppgave 3",
-      "oppgave 4"
+      "Oppgave 1",
+      "Oppgave 2",
+      "Oppgave 3",
+      "Oppgave 4",
+      "Oppgave 5"
     ];
+
+ 
+void itemChange(bool val,int index){
+  setState(() {
+    inputs[index] = val;
+  });
+}
     
     queryData = MediaQuery.of(context);
     return new Scaffold(
@@ -63,7 +134,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
             title: new Text(
               "Min gruppe",
               style: new TextStyle(
-                  fontFamily: 'Anton', fontSize: 24, color: Colors.black),
+                fontFamily: 'Anton', fontSize: 24, color: Colors.black),
             ),
             bottom: PreferredSize(
               preferredSize:
@@ -121,28 +192,55 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                   padding: EdgeInsets.only(top: 20),
                 ),
                 new Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children:[
                     new Column(
                       children:[
                         new Text(
                           "Ukens utfordring:",
+                          textAlign: TextAlign.left,
                           style: new TextStyle(
                             color: UIData.black, fontFamily: 'Anton'
                           ),
                         ),
                         new Text(
                           "Lorem ipsum dolor sit amet\n,consectetur adipiscing elit, sed",
+                          textAlign: TextAlign.left,
                           style: new TextStyle(
                             color: UIData.black, fontFamily: 'Anton'
                           ),
                         ),
                       ],
                     ),
+                    /*
+                     * 
+                     * Percentage indicator here
+                     * 
+                     */
                     new Container(
-                          width:  ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 20),
-                          height: ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 20),
-                          color: UIData.pink
-                        ),
+                      child: new CustomPaint(
+                      foregroundPainter: new MyPainter(
+                      lineColor: UIData.lightPink,
+                      completeColor: UIData.pink,
+                      completePercent: percentage,
+                      width: 15.0
+                      ),
+                      child: new Padding(
+            padding: const EdgeInsets.all(30.0),
+            child: new FlatButton(
+                color: UIData.grey,
+                splashColor: Color(0x00FFFFFF),
+                shape: new CircleBorder(),
+                child: new Text(percentage.toStringAsFixed(0)+"%"),
+                onPressed:(){})),
+                      ),
+                    )
+                    /*
+                     * 
+                     * Percentage indicator Ends here
+                     * 
+                     */
+
                   ], // Text and meter row children 
                 ),
                 new Padding(
@@ -154,24 +252,51 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                   child: new Container(
                     width:  ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 85),
                     height: ServiceProvider.instance.screenService.getHeightByPercentage(context, 42),
-                    color: UIData.pink,
-                    child: new Column(
-                      children: <Widget> [
+                    color: Colors.white,
+                    child: new ListView.builder(
+                      itemCount: taskList.length,
+                        itemBuilder: (context, int index) {
+                          return new Column(
+                            children: [
+                              new CheckboxListTile(
+                                value: inputs[index],
+                                title: new Text(taskList[index]),
+                                activeColor: UIData.blue,
+                                controlAffinity: ListTileControlAffinity.trailing,
+                                onChanged:(bool val){itemChange(val, index);
+                                if(inputs[index]==true) {
+                                  setState(() {
+                                    percentage = newPercentage;
+                                    newPercentage += 100 / taskList.length;
+                                    if(newPercentage>100.0){
+                                      percentage=100.0;
+                                      newPercentage=100.0;
+                                    }
+                                    percentageAnimationController.forward(from: 0.0);
+                                  });}
+                                  else {
+                                  setState(() {
+                                    bufferPercentage = newPercentage;
+                                    percentage = newPercentage;
+                                    
+                                    newPercentage -= 100 / taskList.length;
+                                    if(newPercentage<0){
+                                      percentage=0.0;
+                                      newPercentage=0.0;
+                                    }
+                                    percentageAnimationController.reverse(from: 100.0);
+                                  });}
+                                }
+                              )
+                            ]
+                          );
+                        }
+                           ),
+                  )
                         //for(var item in taskList) new Text(item),
-                        for(var item in taskList) new Checkbox(value: _value1, onChanged: _value1Changed, checkColor: UIData.blue, activeColor: Colors.white),
-                        /* for(var item in taskList)  */ /*new CheckboxListTile(
-                          value: _value1,
-                          onChanged: _value1Changed,
-                          title: new Text("Big orgie"),
-                          controlAffinity: ListTileControlAffinity.leading,
-                          subtitle: new Text('Great for getting to know each other'),
-                          activeColor: UIData.pink,
-                          checkColor: Colors.yellowAccent,
-                        ) */
-                      ]
-                    )
-                  ),
-                ),
+                        //for(var item in taskList) new Checkbox(value: _value1, onChanged: _value1Changed, checkColor: UIData.blue, activeColor: Colors.white),
+                        
+                )
               ],
             ),
             
