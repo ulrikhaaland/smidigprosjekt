@@ -211,14 +211,9 @@ class PageOneState extends State<PageOne> {
         appBar: new AppBar(
           backgroundColor: Colors.white,
           title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Image.asset('lib/assets/images/logo_tekst.png', fit: BoxFit.contain, scale: 8,),
-              Align(
-                alignment: Alignment.center,
-                  child: IconButton(icon: new Image.asset("lib/assets/images/filter_icon.png", scale: 10,), onPressed: null)
-
-              ),
             ],
           ),
 
