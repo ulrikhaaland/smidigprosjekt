@@ -72,7 +72,7 @@ class IntroState extends State<Intro> {
                   top: ServiceProvider.instance.screenService
                       .getHeightByPercentage(context, 6.25),
                 ),
-                color: Colors.grey[200],
+                color: Colors.white,
                 elevation: 2,
                 child: Container(
                   height: ServiceProvider.instance.screenService
@@ -154,10 +154,12 @@ class IntroState extends State<Intro> {
                 child: GestureDetector(
                   onTap: null,
                   child: CircleAvatar(
-                    radius: 70,
+                    radius: ServiceProvider.instance.screenService
+                        .getPortraitHeightByPercentage(context, 8.5),
                     backgroundColor: UIData.pink,
                     child: CircleAvatar(
-                      radius: 67.5,
+                      radius: ServiceProvider.instance.screenService
+                          .getPortraitHeightByPercentage(context, 8.25),
                       backgroundColor: Colors.white,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -165,7 +167,11 @@ class IntroState extends State<Intro> {
                           Icon(
                             Icons.add_a_photo,
                             size: 40,
-                            color: UIData.grey,
+                            color: UIData.black,
+                          ),
+                          Container(
+                            height: ServiceProvider.instance.screenService
+                                .getPortraitHeightByPercentage(context, 1),
                           ),
                           Text(
                             "Legg til et bilde",

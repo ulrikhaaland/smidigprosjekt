@@ -107,74 +107,76 @@ class LoginState extends State<Login> {
                 color: UIData.pink,
               ),
             ),
-            Stack(
-              children: <Widget>[
-                Align(
-                    alignment: Alignment.center,
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 90),
-                      child: Image.asset("lib/assets/images/logo_innlogg.png",
-                          scale: 6),
-                    )
-                    //child: Image.asset("lib/assets/images/logo_innlogg.png", scale: 6),
-
-                    ),
-                // Image.asset("lib/assets/images/logo_innlogg.png", scale: 6),
-                Padding(
-                    padding: EdgeInsets.only(
-                      left: ServiceProvider.instance.screenService
-                          .getPortraitWidthByPercentage(context, 25),
-                      right: ServiceProvider.instance.screenService
-                          .getPortraitWidthByPercentage(context, 25),
-                      top: ServiceProvider.instance.screenService
-                          .getPortraitHeightByPercentage(context, 25),
-                    ),
-                    child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minHeight: 50.0,
-                          minWidth: 500.0,
-                        ),
-                        child: FlatButton(
-                          shape: RoundedRectangleBorder(
-                              side: BorderSide(color: Colors.black),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8.0))),
-                          onPressed: () {
-                            setState(() {
-                              feide = true;
-                            });
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Flexible(
-                                child: Text(
-                                  "Logg inn",
-                                  style: ServiceProvider.instance.styles
-                                      .textLight(fontSize: 14),
-                                  textAlign: TextAlign.center,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                              Image.asset(
-                                "lib/assets/images/logo-feide-2092px.png (content).png",
-                                scale: 20,
-                              ),
-                            ],
-                          ),
-                        ))),
-              ],
+            Container(
+              height: ServiceProvider.instance.screenService
+                  .getPortraitHeightByPercentage(context, 10),
             ),
-            Padding(
-              padding: EdgeInsets.only(top: 90),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: Container(
-                  width: ServiceProvider.instance.screenService
-                      .getPortraitWidthByPercentage(context, 50),
-                  height: 30,
-                  color: UIData.darkblue,
-                ),
+            Container(
+              height: ServiceProvider.instance.screenService
+                  .getPortraitHeightByPercentage(context, 25),
+              child: Column(
+                children: <Widget>[
+                  Image.asset("lib/assets/images/logo_innlogg.png", scale: 6),
+                  Container(
+                    height: ServiceProvider.instance.screenService
+                        .getPortraitHeightByPercentage(context, 2),
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(
+                        left: ServiceProvider.instance.screenService
+                            .getPortraitWidthByPercentage(context, 25),
+                        right: ServiceProvider.instance.screenService
+                            .getPortraitWidthByPercentage(context, 25),
+                      ),
+                      child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minHeight: 50.0,
+                            minWidth: 500.0,
+                          ),
+                          child: FlatButton(
+                            shape: RoundedRectangleBorder(
+                                side: BorderSide(color: Colors.black),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8.0))),
+                            onPressed: () {
+                              setState(() {
+                                feide = true;
+                              });
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Flexible(
+                                  child: Text(
+                                    "Logg inn",
+                                    style: ServiceProvider.instance.styles
+                                        .textLight(fontSize: 14),
+                                    textAlign: TextAlign.center,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                Image.asset(
+                                  "lib/assets/images/logo-feide-2092px.png (content).png",
+                                  scale: 20,
+                                ),
+                              ],
+                            ),
+                          ))),
+                ],
+              ),
+            ),
+            Container(
+              height: ServiceProvider.instance.screenService
+                  .getPortraitHeightByPercentage(context, 10),
+            ),
+            Align(
+              alignment: Alignment.topLeft,
+              child: Container(
+                width: ServiceProvider.instance.screenService
+                    .getPortraitWidthByPercentage(context, 50),
+                height: ServiceProvider.instance.screenService
+                    .getPortraitHeightByPercentage(context, 3.5),
+                color: UIData.darkblue,
               ),
             ),
             Padding(
@@ -184,7 +186,8 @@ class LoginState extends State<Login> {
                 child: Container(
                   width: ServiceProvider.instance.screenService
                       .getPortraitWidthByPercentage(context, 50),
-                  height: 30,
+                  height: ServiceProvider.instance.screenService
+                      .getPortraitHeightByPercentage(context, 3.5),
                   color: UIData.lightBlue,
                 ),
               ),
