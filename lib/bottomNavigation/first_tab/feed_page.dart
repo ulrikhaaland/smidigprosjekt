@@ -9,6 +9,7 @@ import '../../root_page.dart';
 import '../../utils/uidata.dart';
 import '../third_tab/group_page.dart';
 import '../../objects/user.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../utils/layout.dart';
 import 'package:intl/intl.dart';
 import '../../widgets/primary_button.dart';
@@ -209,16 +210,18 @@ class PageOneState extends State<PageOne> {
         backgroundColor: UIData.grey,
         appBar: new AppBar(
           backgroundColor: Colors.white,
-          actions: <Widget>[
-            new Image.asset("lib/assets/images/logo_tekst.png", scale: 8,),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Image.asset('lib/assets/images/logo_tekst.png', fit: BoxFit.contain, scale: 8,),
+              Align(
+                alignment: Alignment.center,
+                  child: IconButton(icon: new Image.asset("lib/assets/images/filter_icon.png", scale: 10,), onPressed: null)
 
-            Align(
-              alignment: Alignment(0.3,0.4),
-              child: IconButton(icon: new Image.asset("lib/assets/images/filter_icon.png", scale: 10,), onPressed: null)
+              ),
+            ],
+          ),
 
-            ),
-
-          ],
         ),
         body: new Stack(
           //child: new Stack(
@@ -246,7 +249,7 @@ class PageOneState extends State<PageOne> {
                   Align(
                     alignment: Alignment.topCenter,
                                 child: Container(
-                                  height: 300,
+                                  height: 400,
                                   width: 300,
 
 
@@ -278,7 +281,7 @@ class PageOneState extends State<PageOne> {
 
                                           child: Padding(
                                             padding: EdgeInsets.all(17),
-                                            
+
 
                                             child: Column(
                                               crossAxisAlignment: CrossAxisAlignment.end,
@@ -324,7 +327,7 @@ class PageOneState extends State<PageOne> {
                     print('button tapped');
                     Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => NewEventPage()),);
+                        MaterialPageRoute(builder: (context) => StatefullNew()),);
                   },
                   backgroundColor: UIData.pink,
                   elevation: 0.0,
@@ -357,8 +360,25 @@ class Event {
 
 }
 
+class StatefullNew extends StatefulWidget {
+  StatefullNew({Key key}) : super(key: key);
 
-class NewEventPage extends StatelessWidget {
+  @override
+  NewEventPage createState() => NewEventPage();
+}
+
+
+class NewEventPage extends State<StatefullNew> {
+  String dropdownValue = "Skolejobbing";
+  String add = "";
+  String tit = "";
+  String bes = "";
+  String tim;
+  String kat = "";
+
+
+  List<Event> newEvent = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -383,6 +403,48 @@ class NewEventPage extends StatelessWidget {
               child: Column(
                 children: <Widget>[
 
+
+                  Container(
+                    width: 300,
+                    //color: Colors.white,
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0), color: Colors.white),
+                    child: SizedBox(
+                      height: 55,
+                    child: Padding(
+                      padding: EdgeInsets.all(17),
+                    child: DropdownButton<String>(
+                      //disabledHint: Text("hei"),
+                     value: dropdownValue,
+                     style: TextStyle(color: Colors.grey, fontSize: 16),
+
+                     elevation: 0,
+                      iconSize: 30,
+                      onChanged: (String newValue) {
+                       setState(() {
+                        dropdownValue = newValue;
+                        print(newValue);
+                        kat = newValue;
+                        saveKat(newValue);
+                      });
+                    },
+                      hint: Text("Kategori:"),
+                    items: <String>["Skolejobbing", "Kaffe", "Gaming", "Prosjekt", "Fest" ].map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String> (
+                        value: value,
+
+                        child: Text(value),
+                      );
+                    }) .toList(),
+
+
+                  ),
+                    ),
+                    ),
+                  ),
+                  Divider(
+                    color: UIData.grey
+                  ),
+
                   Container(
                     width: 300.0,
                     child: TextField(
@@ -400,7 +462,9 @@ class NewEventPage extends StatelessWidget {
                       },
                       onSubmitted: (text) {
                         String t = text;
-                        print(t);
+                        tit = text;
+                        //rint(t);
+                        saveTit(t);
                       },
                     ),
                   ),
@@ -423,7 +487,9 @@ class NewEventPage extends StatelessWidget {
                       },
                       onSubmitted: (text) {
                         String a = text;
-                        print(a);
+                        add = text;
+                        //print(a);
+                        saveAdd(a);
                       },
                     ),
                   ),
@@ -447,7 +513,9 @@ class NewEventPage extends StatelessWidget {
                       },
                       onSubmitted: (text) {
                         String tid = text;
-                        print(tid);
+                        //print(tid);
+                        tim = text;
+                        saveTid(tid);
                       },
 
                     ),
@@ -475,12 +543,20 @@ class NewEventPage extends StatelessWidget {
                         },
                         onSubmitted: (text) {
                           String b = text;
-                          print(b);
+                          bes = text;
+                          //print(b);
+                          saveBes(b);
                         },
 
                       ),
                     ),
 
+                  ),
+                  Divider(
+                    color: UIData.grey,
+                  ),
+                  Text(
+                      "Legg til bilde: "
                   ),
                   Divider(
                     color: UIData.grey,
@@ -491,7 +567,10 @@ class NewEventPage extends StatelessWidget {
                     width: 100,
                     child: FittedBox(
                       child: FloatingActionButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          openOptions();
+
+                        },
                         child: Icon(Icons.photo_camera, size: 30.0,),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
                         backgroundColor: Colors.white,
@@ -506,11 +585,14 @@ class NewEventPage extends StatelessWidget {
                     color: UIData.grey,
                   ),
 
+
                   PrimaryButton(
                     text: "Post event",
                     padding: 52,
                     onPressed: () {
                      print("post pressed");
+                     newEvent.add(Event(address: add, cat: kat, desc: bes, id: 10, time: new DateTime(2019),title: tit));
+                     for (var item in newEvent) print(item.address.toString());
                      Navigator.pop(context);
                     },
                   )
@@ -532,6 +614,91 @@ class NewEventPage extends StatelessWidget {
 
       ),
     );
+  }
+
+  String saveAdd(a) {
+    print(a);
+    return a;
+  }
+
+  String saveTit(t) {
+    print (t);
+    return t;
+  }
+
+  String saveTid(tid) {
+    print(tid);
+    return tid;
+  }
+
+  String saveBes(b) {
+    print(b);
+    return b;
+  }
+
+  String saveKat(newValue) {
+    return newValue;
+  }
+
+  Future<void> openOptions() {
+    return showDialog(context: context,
+        builder: (BuildContext context) {
+      return AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+
+        content: new SingleChildScrollView(
+          child: new ListBody(
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Icon(Icons.photo_camera, color: UIData.blue),
+                  Padding(
+                    padding: EdgeInsets.all(7.0),
+                  ),
+                  GestureDetector(
+                    child: new Text('Ta et bilde', style: TextStyle(fontSize: 20) ,),
+                    onTap: openCamera,
+                  ),
+                ],
+              ),
+
+              Padding(
+                padding: EdgeInsets.all(8.0),
+              ),
+              Divider(),
+              Padding(
+                padding: EdgeInsets.all(8.0),
+              ),
+              Row(
+                children: <Widget>[
+                  Icon(Icons.photo, color: UIData.blue),
+                  Padding(
+                    padding: EdgeInsets.all(7.0),
+                  ),
+                  GestureDetector(
+                    child: new Text('Velg fra kamerarull', style: TextStyle(fontSize: 20)),
+                    onTap: openGallery,
+                  ),
+                ],
+              ),
+
+            ],
+          ),
+        ),
+
+      );
+
+    });
+  }
+
+  Future openCamera() async {
+    var picture = await ImagePicker.pickImage(
+        source: ImageSource.camera );
+  }
+
+  Future openGallery() async {
+    var gallery = await ImagePicker.pickImage(
+        source: ImageSource.gallery);
   }
 }
 
