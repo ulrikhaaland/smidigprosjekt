@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "562686602964",
+    "firebase_url": "https://smidigprosjekt.firebaseio.com",
+    "project_id": "smidigprosjekt",
+    "storage_bucket": "smidigprosjekt.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:562686602964:android:0830fa4f716bb9be",
+        "android_client_info": {
+          "package_name": "com.example.smidigprosjekt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "562686602964-s4p55apsqniibtbtrlcqr7fou7gaavof.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC90hD10pMfVNcPYwz-7GaUweQRR7oGPQw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "562686602964-s4p55apsqniibtbtrlcqr7fou7gaavof.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "562686602964-4b3egb4ksi32ps0sp6h2fsh4ardu60sb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.smidigprosjekt",
+                "app_store_id": "1444997215"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
