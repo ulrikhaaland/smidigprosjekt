@@ -331,7 +331,35 @@ class IntroState extends State<Intro> {
             .getDocuments();
         if (qSnap.documents.isEmpty) {
           _createGroup();
+        } else {
+          String docId = "";
+          int size;
+          qSnap.documents.forEach((doc) {
+            if (size == null) {
+              size = doc.data["members"];
+              docId = doc.documentID;
+            } else if (doc.data["members"] < size) {
+              docId = doc.documentID;
+            }
+          });
+          Firestore.instance
+              .collection("groups/$docId/members")
+              .add(widget.user.toJson());
         }
+      } else {
+        String docId = "";
+        int size;
+        qSnapSkole.documents.forEach((doc) {
+          if (size == null) {
+            size = doc.data["members"];
+            docId = doc.documentID;
+          } else if (doc.data["members"] < size) {
+            docId = doc.documentID;
+          }
+        });
+        Firestore.instance
+            .collection("groups/$docId/members")
+            .add(widget.user.toJson());
       }
     } else {
       String docId = "";
@@ -344,9 +372,13 @@ class IntroState extends State<Intro> {
           docId = doc.documentID;
         }
       });
-      Firestore.instance
-          .collection("groups/$docId/members")
-          .add(widget.user.toJson());
+      if (size < 5) {
+        Firestore.instance
+            .collection("groups/$docId/members")
+            .add(widget.user.toJson());
+      } else {
+        _createGroup();
+      }
     }
   }
 
