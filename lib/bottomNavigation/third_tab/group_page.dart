@@ -23,6 +23,7 @@ class MyPainter extends CustomPainter{
   double completePercent;
   double width;
   MyPainter({this.lineColor,this.completeColor,this.completePercent,this.width});
+
   @override
   void paint(Canvas canvas, Size size) {
     Paint line = new Paint()
@@ -68,7 +69,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
   List<bool> inputs = [false, false, false, false, false];
   double percentage = 0.0;
   double newPercentage = 0.0;
-  double bufferPercentage = 0.0;
+  String activeChallenge = "";
   AnimationController percentageAnimationController;
 
   @override
@@ -101,12 +102,31 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     List<String> taskList = [
-      "Oppgave 1",
-      "Oppgave 2",
-      "Oppgave 3",
-      "Oppgave 4",
-      "Oppgave 5"
+      "Lorem ipsum",
+      "Lorem ipsum 2",
+      "Lorem ipsum 3",
+      "Dra på Syng sammen",
+      "Lorem ipsum 4"
     ];
+
+  if(inputs[4]==true){
+    activeChallenge = "Du har ingen utfordringer igjen!";
+  }
+  if(inputs[4]==false){
+    activeChallenge = taskList[4];
+  }
+  if(inputs[3]==false){
+    activeChallenge = taskList[3];
+  }
+  if(inputs[2]==false){
+    activeChallenge = taskList[2];
+  }
+  if(inputs[1]==false){
+    activeChallenge = taskList[1];
+  }
+  if(inputs[0]==false){
+    activeChallenge = taskList[0];
+  }
 
  
 void itemChange(bool val,int index){
@@ -119,15 +139,6 @@ void itemChange(bool val,int index){
     return new Scaffold(
         backgroundColor: UIData.grey,
         appBar: new AppBar(
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(
-                  Icons.settings,
-                  color: Colors.black,
-                ),
-                onPressed: null,
-              )
-            ],
             elevation: 2,
             backgroundColor: Colors.white,
             centerTitle: true,
@@ -185,26 +196,39 @@ void itemChange(bool val,int index){
         body: TabBarView(
           controller: _tabController,
           children: [
+            
             new Column(
               crossAxisAlignment: CrossAxisAlignment.center, 
               children:[
                 new Padding(
-                  padding: EdgeInsets.only(top: 20),
+                  padding: EdgeInsets.only(top: 50),
                 ),
-                new Row(
+                new Center(
+                  child: new Row(
+                    mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children:[
-                    new Column(
+                    new Padding(
+                      padding: EdgeInsets.only(left: 45),
+                    ),
+                    Expanded(
+                      child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children:[
+                        
                         new Text(
-                          "Ukens utfordring:",
+                          "Neste utfordring:",
                           textAlign: TextAlign.left,
                           style: new TextStyle(
                             color: UIData.black, fontFamily: 'Anton'
                           ),
                         ),
+                        new Padding(
+                          padding: EdgeInsets.only(bottom: 5),
+                        ),
                         new Text(
-                          "Lorem ipsum dolor sit amet\n,consectetur adipiscing elit, sed",
+                          activeChallenge,
                           textAlign: TextAlign.left,
                           style: new TextStyle(
                             color: UIData.black, fontFamily: 'Anton'
@@ -212,52 +236,71 @@ void itemChange(bool val,int index){
                         ),
                       ],
                     ),
+                    ),
+                    
+
+                    new Padding(
+                      padding: EdgeInsets.only(right: 10),
+                    ),
+                    
                     /*
                      * 
                      * Percentage indicator here
                      * 
                      */
                     new Container(
+                      
                       child: new CustomPaint(
-                      foregroundPainter: new MyPainter(
-                      lineColor: UIData.lightPink,
-                      completeColor: UIData.pink,
-                      completePercent: percentage,
-                      width: 15.0
+                        foregroundPainter: new MyPainter(
+                        lineColor: UIData.lightPink,
+                        completeColor: UIData.pink,
+                        completePercent: percentage,
+                        width: 15.0
+                        ),
+                        child: new Padding(
+                          padding: const EdgeInsets.all(30.0),
+                          child: new FlatButton(
+                          color: UIData.grey,
+                          splashColor: Color(0x00FFFFFF),
+                          shape: new CircleBorder(),
+                          child: new Text(percentage.toStringAsFixed(0)+"%"),
+                          onPressed:(){})
+                        ),
                       ),
-                      child: new Padding(
-            padding: const EdgeInsets.all(30.0),
-            child: new FlatButton(
-                color: UIData.grey,
-                splashColor: Color(0x00FFFFFF),
-                shape: new CircleBorder(),
-                child: new Text(percentage.toStringAsFixed(0)+"%"),
-                onPressed:(){})),
-                      ),
-                    )
+                    ),
                     /*
                      * 
                      * Percentage indicator Ends here
                      * 
                      */
+                    new Padding(
+                      padding: EdgeInsets.only(right: 35),
+                    ),
 
                   ], // Text and meter row children 
                 ),
+                ),
+                
                 new Padding(
-                  padding: EdgeInsets.only(top: 20),
+                  padding: EdgeInsets.only(top: 50),
                 ),
 
                 new ClipRRect(
+                  
                   borderRadius: new BorderRadius.circular(8.0),
                   child: new Container(
-                    width:  ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 85),
-                    height: ServiceProvider.instance.screenService.getHeightByPercentage(context, 42),
+                    width:  ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 80),
+                    height: ServiceProvider.instance.screenService.getHeightByPercentage(context, 38),
                     color: Colors.white,
+                    
                     child: new ListView.builder(
                       itemCount: taskList.length,
                         itemBuilder: (context, int index) {
                           return new Column(
                             children: [
+                              new Padding(
+                                padding: EdgeInsets.only(top: 5),
+                              ),
                               new CheckboxListTile(
                                 value: inputs[index],
                                 title: new Text(taskList[index]),
@@ -276,7 +319,6 @@ void itemChange(bool val,int index){
                                   });}
                                   else {
                                   setState(() {
-                                    bufferPercentage = newPercentage;
                                     percentage = newPercentage;
                                     
                                     newPercentage -= 100 / taskList.length;
@@ -293,15 +335,12 @@ void itemChange(bool val,int index){
                         }
                            ),
                   )
-                        //for(var item in taskList) new Text(item),
-                        //for(var item in taskList) new Checkbox(value: _value1, onChanged: _value1Changed, checkColor: UIData.blue, activeColor: Colors.white),
-                        
                 )
               ],
             ),
             
-            new Text("data"),
-            new Text("data"),
+            new Text("EVENTADO"),
+            new Text("CHATAROO"),
           ],
         ));
   }
