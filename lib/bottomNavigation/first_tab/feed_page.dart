@@ -13,6 +13,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../utils/layout.dart';
 import 'package:intl/intl.dart';
 import '../../widgets/primary_button.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:smidigprosjekt/bottomNavigation/fourth_tab/profile_page.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -371,8 +372,43 @@ class NewEventPage extends State<StatefullNew> {
   String tim;
   String kat = "";
 
+  DateTime _date = new DateTime.now();
+  TimeOfDay _time = new TimeOfDay.now();
+
+
 
   List<Event> newEvent = [];
+  List<String> cate = ['lib/assets/images/skole.png', 'lib/assets/images/kaffe.png', 'lib/assets/images/gaming.png', 'lib/assets/images/fest.png', 'lib/assets/images/prosjekt.png' ];
+  List<String> cat =  ["Skolejobbing", "Kaffe", "Gaming", "Fest", "Prosjekt" ];
+
+
+  Future<Null> selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: _date,
+        firstDate: new DateTime(2018),
+        lastDate: new DateTime(2020),
+    );
+    if(picked != null && picked != _date) {
+      print("Date: ${_date.toString()}");
+      setState(() {
+        _date = picked;
+
+      });
+    }
+  }
+
+  Future<Null> selectTime(BuildContext context) async {
+    final TimeOfDay picked = await showTimePicker(
+        context: context,
+        initialTime: _time,
+    );
+    if(picked != null && picked != _time) {
+      setState(() {
+        _time = picked;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -389,6 +425,7 @@ class NewEventPage extends State<StatefullNew> {
 
       ),
       body: new Stack(
+
         children: <Widget>[
           
           Align(
@@ -398,50 +435,129 @@ class NewEventPage extends State<StatefullNew> {
               child: Column(
                 children: <Widget>[
 
-
-                  Container(
-                    width: 300,
-                    //color: Colors.white,
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0), color: Colors.white),
-                    child: SizedBox(
-                      height: 55,
-                    child: Padding(
-                      padding: EdgeInsets.all(17),
-                    child: DropdownButton<String>(
-                      //disabledHint: Text("hei"),
-                     value: dropdownValue,
-                     style: TextStyle(color: Colors.grey, fontSize: 16),
-
-                     elevation: 0,
-                      iconSize: 30,
-                      onChanged: (String newValue) {
-                       setState(() {
-                        dropdownValue = newValue;
-                        print(newValue);
-                        kat = newValue;
-                        saveKat(newValue);
-                      });
-                    },
-                      hint: Text("Kategori:"),
-                    items: <String>["Skolejobbing", "Kaffe", "Gaming", "Prosjekt", "Fest" ].map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String> (
-                        value: value,
-
-                        child: Text(value),
-                      );
-                    }) .toList(),
-
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text("Kategori:"),
 
                   ),
+                  Divider(
+                    color: UIData.grey,
+                    height: 10,
+                  ),
+
+                  SizedBox(
+                    height: 80,
+                    child: ListView.builder(
+                      itemCount: cate.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            print("tapped: $index");
+                            },
+                          child: Container(
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0), color: Colors.white),
+                            width: 80,
+                            alignment: Alignment.center,
+                            //color: Colors.white,
+                            child: Image.asset(cate[index], ),
+                            padding: EdgeInsets.all(20),
+                          ),
+
+                        );
+
+                      },
+
+
                     ),
+                  ),
+
+                  Divider(
+                    color: UIData.grey
+                  ),
+                  Theme(
+                    data: Theme.of(context).copyWith(
+                      primaryColor: UIData.blue,
+                      splashColor: UIData.pink,
+                    ),
+                    child: Container(
+                      width: 300.0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+
+                          SizedBox(
+                            width: 140,
+                            height: 50,
+                            child: TextField(
+                              decoration: InputDecoration(
+                                hintText: ("Dato"),
+                                prefixIcon: Icon(Icons.calendar_today, color: UIData.blue, size: 20,),
+                                filled: true,
+                                contentPadding: EdgeInsets.all(17.0),
+                                fillColor: Colors.white,
+                                hintStyle: TextStyle(color: Colors.grey),
+                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0), borderSide: BorderSide(width: 0, style: BorderStyle.none)),
+                              ),
+                              onTap: () {
+                                selectDate(context);
+
+                              },
+                              onChanged: (text) {
+                                String value = text;
+                              },
+                              onSubmitted: (text) {
+                                new Text(_date.toString());
+
+                              },
+
+
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(5),
+                          ),
+                          SizedBox(
+                            width: 140,
+                            height: 50,
+                            child: TextField(
+                              decoration: InputDecoration(
+                                hintText: ("Tid"),
+                                prefixIcon: Icon(Icons.access_time, color: UIData.blue, size: 20,),
+                                filled: true,
+                                contentPadding: EdgeInsets.all(17.0),
+                                fillColor: Colors.white,
+                                hintStyle: TextStyle(color: Colors.grey),
+                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0), borderSide: BorderSide(width: 0, style: BorderStyle.none)),
+                              ),
+                              onTap: () {
+                                selectTime(context);
+
+                              },
+                              onChanged: (text) {
+                                String value = text;
+                              },
+                              onSubmitted: (text) {
+                                new Text(_date.toString());
+
+                              },
+
+
+                            ),
+                          ),
+
+                        ],
+                      ),
+
                     ),
                   ),
                   Divider(
-                    color: UIData.grey
+                    color: UIData.grey,
                   ),
 
                   Container(
                     width: 300.0,
+                    height: 50,
                     child: TextField(
                       decoration: InputDecoration(
                         hintText: "Tittel",
@@ -468,6 +584,7 @@ class NewEventPage extends State<StatefullNew> {
                   ),
                   Container(
                     width: 300.0,
+                    height: 50,
                     child: TextField(
                       decoration: InputDecoration(
                         hintText: "Addresse",
@@ -492,32 +609,7 @@ class NewEventPage extends State<StatefullNew> {
                   Divider(
                     color: UIData.grey,
                   ),
-                  Container(
-                    width: 300.0,
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: "Tidspunkt",
-                        filled: true,
-                        contentPadding: EdgeInsets.all(17.0),
-                        fillColor: Colors.white,
-                        hintStyle: TextStyle(color: Colors.grey),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0), borderSide: BorderSide(width: 0, style: BorderStyle.none)),
-                      ),
-                      onChanged: (text) {
-                        String value = text;
-                      },
-                      onSubmitted: (text) {
-                        String tid = text;
-                        //print(tid);
-                        tim = text;
-                        saveTid(tid);
-                      },
 
-                    ),
-                  ),
-                  Divider(
-                    color: UIData.grey,
-                  ),
                   Container(
                     //height: 190.0,
                     width: 300.0,
@@ -550,29 +642,34 @@ class NewEventPage extends State<StatefullNew> {
                   Divider(
                     color: UIData.grey,
                   ),
-                  Text(
-                      "Legg til bilde: "
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text( "Legg til bilde"
+                    ),
                   ),
                   Divider(
                     color: UIData.grey,
                   ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      height: 80,
+                      width: 80,
+                      child: FittedBox(
+                        child: FloatingActionButton(
+                          onPressed: () {
+                            openOptions();
 
-                  Container(
-                    height: 100,
-                    width: 100,
-                    child: FittedBox(
-                      child: FloatingActionButton(
-                        onPressed: () {
-                          openOptions();
+                          },
+                          child: Icon(Icons.photo_camera, size: 30.0,),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                          backgroundColor: Colors.white,
+                          foregroundColor: UIData.blue,
+                          elevation: 0.0,
 
-                        },
-                        child: Icon(Icons.photo_camera, size: 30.0,),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
-                        backgroundColor: Colors.white,
-                        foregroundColor: UIData.black,
-                        elevation: 0.0,
-
+                        ),
                       ),
+
                     ),
                   ),
 

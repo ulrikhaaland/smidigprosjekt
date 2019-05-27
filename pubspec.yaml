@@ -32,6 +32,7 @@ dependencies:
   image_picker: "^0.4.5"
   flutter_swiper: ^1.1.4
   flutter_webview_plugin: ^0.3.0+2
+  datetime_picker_formfield: ^0.1.8
 
 
 
@@ -73,6 +74,12 @@ flutter:
     - lib/assets/images/search_icon_fill.png
     - lib/assets/images/filter_icon.png
     - lib/assets/images/logo_tekst.png
+    - lib/assets/images/fest.png
+    - lib/assets/images/gaming.png
+    - lib/assets/images/kaffe.png
+    - lib/assets/images/prosjekt.png
+    - lib/assets/images/skole.png
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:
