@@ -30,8 +30,8 @@ class GamePage extends StatefulWidget {
 class GamePageState extends State<GamePage> {
   static final formKey = new GlobalKey<FormState>();
 
-  final Firestore firestoreInstance = Firestore.instance;
-  final BaseAuth auth = Auth();
+  //final Firestore firestoreInstance = Firestore.instance;
+  //final BaseAuth auth = Auth();
 
   int screen = 0;
 
@@ -57,210 +57,259 @@ class GamePageState extends State<GamePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+        backgroundColor: UIData.grey,
         resizeToAvoidBottomPadding: true,
-        // backgroundColor: UIData.dark,
+        //backgroundColor: UIData.white,
         appBar: new AppBar(
-          backgroundColor: UIData.lightBlue,
+          backgroundColor: Colors.white,
+          elevation: 0,
+          centerTitle: true,
+          title: new Text(
+            "Søk",
+            style: new TextStyle(
+                fontFamily: 'Anton', fontSize: 24, color: Colors.black),
 
-          title: new Directionality(
-            textDirection: Directionality.of(context),
-            child: TextField(
-              autocorrect: false,
-              style: new TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                fillColor: Colors.white,
-                labelText: 'Search for group',
-                labelStyle: new TextStyle(color: Colors.grey[700]),
-                icon: new Icon(
-                  Icons.group,
-                  size: 40.0,
-                  color: Colors.blue,
-                ),
-              ),
-              onChanged: (String value) {
-                // groupSearchName = value.toLowerCase();
-                // if (screen == 0) {
-                //   setState(() {
-                //     screen = 1;
-
-                //     setScreen();
-                //   });
-                // } else if (value == "") {
-                //   setState(() {
-                //     screen = 0;
-
-                //     setScreen();
-                //   });
-                // } else if (screen == 1) {
-                //   setState(() {
-                //     setScreen();
-                //   });
-                // }
-              },
-            ),
           ),
+
           // backgroundColor: UIData.green,
         ),
-        body: Container());
+
+
+
+        body: new Stack(
+          //alignment: Alignment.center,
+
+          children: <Widget>[
+
+            Column(
+
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text("Finn andre brukere" ),
+                  ),
+                ),
+
+
+                Align(
+                  alignment: Alignment.center,
+
+                  child: Container(
+
+                    //color: Colors.white,
+                    width: 300,
+
+                    child: TextField(
+                      autocorrect: false,
+                      style: new TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0),
+                            borderSide: BorderSide(width: 0, style: BorderStyle.none)),
+
+                        prefixIcon: Icon(Icons.search, color: Colors.blue,),
+                        fillColor: Colors.white,
+                        filled: true,
+                        labelText: 'Søk etter personer..',
+                        labelStyle: new TextStyle(color: Colors.grey[700]),
+
+                      ),
+
+                      onChanged: (String value) {
+
+                        // groupSearchName = value.toLowerCase();
+                        // if (screen == 0) {
+                        //   setState(() {
+                        //     screen = 1;
+
+                        //     setScreen();
+                        //   });
+                        // } else if (value == "") {
+                        //   setState(() {
+                        //     screen = 0;
+
+                        //     setScreen();
+                        //   });
+                        // } else if (screen == 1) {
+                        //   setState(() {
+                        //     setScreen();
+                        //   });
+                        // }
+
+                      },
+                    ),
+                  ),
+
+                ),
+              ],
+            ),
+
+
+          ],
+
+        ));
   }
 
-  // Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
-  //   return ListTile(
-  //     contentPadding: EdgeInsets.all(3.0),
-  //     title: new Row(
-  //       mainAxisAlignment: MainAxisAlignment.start,
-  //       children: <Widget>[
-  //         Expanded(
-  //             child: Container(
-  //           padding: EdgeInsets.all(10.0),
-  //           decoration: new BoxDecoration(
-  //               border: Border.all(color: Colors.white),
-  //               borderRadius: new BorderRadius.all(const Radius.circular(8.0))),
-  //           child: Row(
-  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //             children: <Widget>[
-  //               Text(
-  //                 document['name'],
-  //                 style: new TextStyle(
-  //                     color: Colors.white, fontSize: UIData.fontSize20),
-  //                 overflow: TextOverflow.ellipsis,
-  //               ),
-  //               new Padding(
-  //                 padding: EdgeInsets.all(1.0),
-  //               ),
-  //               new Row(children: <Widget>[
-  //                 new Icon(
-  //                   Icons.whatshot,
-  //                   color: Colors.red,
-  //                   size: 25.0,
-  //                 ),
-  //                 new Align(),
-  //                 Text(" ${document["numberoftournaments"].toString()}",
-  //                     overflow: TextOverflow.ellipsis,
-  //                     style: new TextStyle(
-  //                         color: Colors.yellow[700],
-  //                         fontSize: UIData.fontSize20)),
-  //                 new Icon(
-  //                   Icons.attach_money,
-  //                   color: Colors.green,
-  //                   size: 25.0,
-  //                 ),
-  //                 Text("${document["numberofcashgames"].toString()}",
-  //                     overflow: TextOverflow.ellipsis,
-  //                     style: new TextStyle(
-  //                         color: Colors.yellow[700],
-  //                         fontSize: UIData.fontSize20)),
-  //               ]),
-  //             ],
-  //           ),
-  //         )),
-  //       ],
-  //     ),
-  //     onTap: () {
-  //       groupId = document.documentID;
+// Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
+//   return ListTile(
+//     contentPadding: EdgeInsets.all(3.0),
+//     title: new Row(
+//       mainAxisAlignment: MainAxisAlignment.start,
+//       children: <Widget>[
+//         Expanded(
+//             child: Container(
+//           padding: EdgeInsets.all(10.0),
+//           decoration: new BoxDecoration(
+//               border: Border.all(color: Colors.white),
+//               borderRadius: new BorderRadius.all(const Radius.circular(8.0))),
+//           child: Row(
+//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//             children: <Widget>[
+//               Text(
+//                 document['name'],
+//                 style: new TextStyle(
+//                     color: Colors.white, fontSize: UIData.fontSize20),
+//                 overflow: TextOverflow.ellipsis,
+//               ),
+//               new Padding(
+//                 padding: EdgeInsets.all(1.0),
+//               ),
+//               new Row(children: <Widget>[
+//                 new Icon(
+//                   Icons.whatshot,
+//                   color: Colors.red,
+//                   size: 25.0,
+//                 ),
+//                 new Align(),
+//                 Text(" ${document["numberoftournaments"].toString()}",
+//                     overflow: TextOverflow.ellipsis,
+//                     style: new TextStyle(
+//                         color: Colors.yellow[700],
+//                         fontSize: UIData.fontSize20)),
+//                 new Icon(
+//                   Icons.attach_money,
+//                   color: Colors.green,
+//                   size: 25.0,
+//                 ),
+//                 Text("${document["numberofcashgames"].toString()}",
+//                     overflow: TextOverflow.ellipsis,
+//                     style: new TextStyle(
+//                         color: Colors.yellow[700],
+//                         fontSize: UIData.fontSize20)),
+//               ]),
+//             ],
+//           ),
+//         )),
+//       ],
+//     ),
+//     onTap: () {
+//       groupId = document.documentID;
 
-  //       Navigator.push(
-  //         context,
-  //         MaterialPageRoute(
-  //             builder: (context) => GroupDashboard(
-  //                   user: widget.user,
-  //                   groupId: groupId,
-  //                   // groupType: type,
-  //                   onUpdate: () => _registeredGames(),
-  //                 )),
-  //       );
-  //     },
-  //   );
-  // }
+//       Navigator.push(
+//         context,
+//         MaterialPageRoute(
+//             builder: (context) => GroupDashboard(
+//                   user: widget.user,
+//                   groupId: groupId,
+//                   // groupType: type,
+//                   onUpdate: () => _registeredGames(),
+//                 )),
+//       );
+//     },
+//   );
+// }
 
-  // Widget friendSearch() {
-  //   return StreamBuilder(
-  //       stream: firestoreInstance
-  //           .collection("users/$currentUserId/groups")
-  //           .orderBy("members", descending: true)
-  //           .snapshots(),
-  //       builder: (context, snapshot) {
-  //         if (!snapshot.hasData) return loading();
-  //         return ListView.builder(
-  //           itemExtent: 50.0,
-  //           itemCount: snapshot.data.documents.length,
-  //           itemBuilder: (context, index) =>
-  //               _buildListItem(context, snapshot.data.documents[index]),
-  //         );
-  //       });
-  // }
+// Widget friendSearch() {
+//   return StreamBuilder(
+//       stream: firestoreInstance
+//           .collection("users/$currentUserId/groups")
+//           .orderBy("members", descending: true)
+//           .snapshots(),
+//       builder: (context, snapshot) {
+//         if (!snapshot.hasData) return loading();
+//         return ListView.builder(
+//           itemExtent: 50.0,
+//           itemCount: snapshot.data.documents.length,
+//           itemBuilder: (context, index) =>
+//               _buildListItem(context, snapshot.data.documents[index]),
+//         );
+//       });
+// }
 
-  // Widget buildSearch(BuildContext context, DocumentSnapshot document) {
-  //   return ListTile(
-  //     contentPadding: EdgeInsets.all(3.0),
-  //     title: new Row(
-  //       mainAxisAlignment: MainAxisAlignment.start,
-  //       children: <Widget>[
-  //         Expanded(
-  //             child: Container(
-  //           padding: EdgeInsets.all(10.0),
-  //           decoration: new BoxDecoration(
-  //               border: Border.all(color: Colors.white),
-  //               borderRadius: new BorderRadius.all(const Radius.circular(8.0))),
-  //           child: Row(
-  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //             children: <Widget>[
-  //               Text(document['name'],
-  //                   overflow: TextOverflow.ellipsis,
-  //                   style: new TextStyle(
-  //                       color: Colors.white, fontSize: UIData.fontSize20)),
-  //               new Row(
-  //                 children: <Widget>[
-  //                   new Icon(
-  //                     Icons.people,
-  //                     color: Colors.blue,
-  //                     size: 25.0,
-  //                   ),
-  //                   new Padding(
-  //                       padding: EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0)),
-  //                   Text("${document['members']}",
-  //                       overflow: TextOverflow.ellipsis,
-  //                       style: new TextStyle(
-  //                           color: Colors.white, fontSize: UIData.fontSize20)),
-  //                 ],
-  //               ),
-  //             ],
-  //           ),
-  //         )),
-  //       ],
-  //     ),
-  //     onTap: () {
-  //       groupId = document.documentID;
+// Widget buildSearch(BuildContext context, DocumentSnapshot document) {
+//   return ListTile(
+//     contentPadding: EdgeInsets.all(3.0),
+//     title: new Row(
+//       mainAxisAlignment: MainAxisAlignment.start,
+//       children: <Widget>[
+//         Expanded(
+//             child: Container(
+//           padding: EdgeInsets.all(10.0),
+//           decoration: new BoxDecoration(
+//               border: Border.all(color: Colors.white),
+//               borderRadius: new BorderRadius.all(const Radius.circular(8.0))),
+//           child: Row(
+//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//             children: <Widget>[
+//               Text(document['name'],
+//                   overflow: TextOverflow.ellipsis,
+//                   style: new TextStyle(
+//                       color: Colors.white, fontSize: UIData.fontSize20)),
+//               new Row(
+//                 children: <Widget>[
+//                   new Icon(
+//                     Icons.people,
+//                     color: Colors.blue,
+//                     size: 25.0,
+//                   ),
+//                   new Padding(
+//                       padding: EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0)),
+//                   Text("${document['members']}",
+//                       overflow: TextOverflow.ellipsis,
+//                       style: new TextStyle(
+//                           color: Colors.white, fontSize: UIData.fontSize20)),
+//                 ],
+//               ),
+//             ],
+//           ),
+//         )),
+//       ],
+//     ),
+//     onTap: () {
+//       groupId = document.documentID;
 
-  //       Navigator.push(
-  //         context,
-  //         MaterialPageRoute(
-  //             builder: (context) => GroupDashboard(
-  //                   user: widget.user,
-  //                   groupId: groupId,
-  //                   // groupType: type,
-  //                   onUpdate: () => _registeredGames(),
-  //                 )),
-  //       );
-  //     },
-  //   );
-  // }
+//       Navigator.push(
+//         context,
+//         MaterialPageRoute(
+//             builder: (context) => GroupDashboard(
+//                   user: widget.user,
+//                   groupId: groupId,
+//                   // groupType: type,
+//                   onUpdate: () => _registeredGames(),
+//                 )),
+//       );
+//     },
+//   );
+// }
 
-  // Widget groupSearch() {
-  //   return StreamBuilder(
-  //       stream: firestoreInstance
-  //           .collection("groups")
-  //           .where("lowercasename", isEqualTo: groupSearchName.trim())
-  //           .where("public", isEqualTo: true)
-  //           .snapshots(),
-  //       builder: (context, snapshot) {
-  //         if (!snapshot.hasData) return loading();
-  //         return ListView.builder(
-  //           itemExtent: 50.0,
-  //           itemCount: snapshot.data.documents.length,
-  //           itemBuilder: (context, index) =>
-  //               buildSearch(context, snapshot.data.documents[index]),
-  //         );
-  //       });
-  // }
+// Widget groupSearch() {
+//   return StreamBuilder(
+//       stream: firestoreInstance
+//           .collection("groups")
+//           .where("lowercasename", isEqualTo: groupSearchName.trim())
+//           .where("public", isEqualTo: true)
+//           .snapshots(),
+//       builder: (context, snapshot) {
+//         if (!snapshot.hasData) return loading();
+//         return ListView.builder(
+//           itemExtent: 50.0,
+//           itemCount: snapshot.data.documents.length,
+//           itemBuilder: (context, index) =>
+//               buildSearch(context, snapshot.data.documents[index]),
+//         );
+//       });
+// }
 }
