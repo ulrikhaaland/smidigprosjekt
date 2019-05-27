@@ -13,7 +13,9 @@ class PrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new ConstrainedBox(
+    return new Padding(
+      padding: EdgeInsets.all(12.0),
+      child: ConstrainedBox(
         constraints: BoxConstraints(
           minHeight: ServiceProvider.instance.screenService
               .getPortraitHeightByPercentage(context, 6),
@@ -22,9 +24,9 @@ class PrimaryButton extends StatelessWidget {
         child: new Padding(
           padding: EdgeInsets.only(
               left: ServiceProvider.instance.screenService
-                  .getPortraitWidthByPercentage(context, 25),
+                  .getPortraitWidthByPercentage(context, 10),
               right: ServiceProvider.instance.screenService
-                  .getPortraitWidthByPercentage(context, 25)),
+                  .getPortraitWidthByPercentage(context, 10)),
           child: new FlatButton(
               child: new Text(text,
                   style: new TextStyle(color: Colors.white, fontSize: 20.0)),
@@ -32,6 +34,8 @@ class PrimaryButton extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(24.0))),
               color: UIData.pink,
               onPressed: onPressed),
-        ));
+        ),
+      ),
+    );
   }
 }

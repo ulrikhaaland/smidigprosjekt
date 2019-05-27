@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:smidigprosjekt/root_page.dart';
 import 'package:smidigprosjekt/auth.dart';
+import 'package:smidigprosjekt/service/instance_style_service.dart';
 import 'package:smidigprosjekt/service/screen_service.dart';
 import 'package:smidigprosjekt/service/service_provider.dart';
-import 'package:smidigprosjekt/service/styles.dart';
+import 'package:smidigprosjekt/style/app_style.dart';
 import 'package:smidigprosjekt/utils/uidata.dart';
 
 void main() {
   ServiceProvider.instance.screenService = ScreenService();
-  ServiceProvider.instance.styles = Styles();
+  ServiceProvider.instance.instanceStyleService = InstanceStyleService();
 
   runApp(MyApp());
 }

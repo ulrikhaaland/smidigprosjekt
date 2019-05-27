@@ -1,5 +1,7 @@
+import 'package:smidigprosjekt/service/instance_style_service.dart';
+import 'package:smidigprosjekt/style/app_style.dart';
+
 import 'screen_service.dart';
-import 'styles.dart';
 
 class ServiceProvider {
   static final ServiceProvider _instance = ServiceProvider._();
@@ -9,5 +11,5 @@ class ServiceProvider {
   ServiceProvider._();
 
   ScreenService screenService;
-  Styles styles;
+  InstanceStyleService instanceStyleService;
 }

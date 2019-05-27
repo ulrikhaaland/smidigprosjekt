@@ -149,8 +149,8 @@ class LoginState extends State<Login> {
                                 Flexible(
                                   child: Text(
                                     "Logg inn",
-                                    style: ServiceProvider.instance.styles
-                                        .textLight(fontSize: 14),
+                                    style: ServiceProvider.instance
+                                        .instanceStyleService.appStyle.body1,
                                     textAlign: TextAlign.center,
                                     overflow: TextOverflow.ellipsis,
                                   ),

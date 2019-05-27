@@ -10,6 +10,7 @@ import 'package:smidigprosjekt/objects/user.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'utils/uidata.dart';
 import 'intro.dart';
+import "service/service_provider.dart";
 
 class RootPage extends StatefulWidget {
   RootPage({Key key, this.auth}) : super(key: key);
@@ -151,7 +152,7 @@ class RootPageState extends State<RootPage> {
         authStatus =
             currentUser != null ? AuthStatus.signedIn : AuthStatus.notSignedIn;
         if (user.intro) {
-          authStatus = AuthStatus.signedIn;
+          authStatus = AuthStatus.intro;
         }
       });
     } else {
@@ -169,6 +170,9 @@ class RootPageState extends State<RootPage> {
 
   @override
   Widget build(BuildContext context) {
+    ServiceProvider.instance.instanceStyleService.setStandardStyle(
+      ServiceProvider.instance.screenService.getPortraitHeight(context),
+    );
     switch (authStatus) {
       case AuthStatus.notSignedIn:
         return new Login(
