@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:smidigprosjekt/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -26,6 +27,16 @@ class GamePage extends StatefulWidget {
   @override
   GamePageState createState() => GamePageState();
 }
+
+
+
+
+
+
+
+
+
+
 
 class GamePageState extends State<GamePage> {
   static final formKey = new GlobalKey<FormState>();
@@ -85,26 +96,37 @@ class GamePageState extends State<GamePage> {
             Column(
 
               children: <Widget>[
+                
                 Padding(
-                  padding: EdgeInsets.all(10),
+                  
+                  padding: EdgeInsets.only(top: 100),
                   child: Align(
+                    
                     alignment: Alignment.center,
-                    child: Text("Finn andre brukere" ),
+                    child: Text("Finn personer", 
+                    style: TextStyle(
+                      fontSize: 20,
+                      
+                    ),),
                   ),
                 ),
 
 
                 Align(
+
                   alignment: Alignment.center,
 
                   child: Container(
 
                     //color: Colors.white,
+                    margin: EdgeInsets.only(top: 20),
                     width: 300,
+                    
 
                     child: TextField(
+                      
                       autocorrect: false,
-                      style: new TextStyle(color: Colors.white),
+                      style: new TextStyle(color: Colors.black),
                       decoration: InputDecoration(
 
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0),
@@ -117,6 +139,8 @@ class GamePageState extends State<GamePage> {
                         labelStyle: new TextStyle(color: Colors.grey[700]),
 
                       ),
+
+                      
 
                       onChanged: (String value) {
 
@@ -144,6 +168,144 @@ class GamePageState extends State<GamePage> {
                   ),
 
                 ),
+                
+                Align(
+                  
+                  child: Container(
+                    height: 130,
+                    width: 150,
+                    margin: EdgeInsets.only(
+                      left: 150,
+                      top: 10,  
+                    ),
+
+                    decoration: new BoxDecoration(
+                      
+                      image: DecorationImage(
+                        image: new AssetImage(
+                          "lib/assets/images/illustrasjon1.png"
+                        ),
+                        
+                        fit: BoxFit.fitHeight,
+                      ),
+                    
+                    color: Colors.white,
+
+                    borderRadius: new BorderRadius.only(
+                      topLeft:  const  Radius.circular(20.0),
+                      topRight: const  Radius.circular(20.0)
+                      ),
+                    ),
+                    
+                    child: Text(
+                      ("dis is a test"),
+                      textAlign: TextAlign.center,
+                      
+                    ),
+                    
+                  ),
+                ),
+
+                Align(
+                  child: Container(
+                    height: 40,
+                    width: 150,
+                    margin: EdgeInsets.only(left: 150),
+
+                    decoration: new BoxDecoration(
+                    color: Colors.pink,
+                    borderRadius: new BorderRadius.only(
+                    bottomLeft:  const  Radius.circular(20.0),
+                    bottomRight: const  Radius.circular(20.0)
+
+                    
+
+                    )
+                  ),
+                
+                  child: Text(
+                    ("velg"),
+                    textAlign: TextAlign.center,
+                    
+
+                    style: TextStyle(
+                      color: Colors.white,
+                      
+                    ),
+                  ),
+                    
+                  )
+                ),
+
+                Align(
+                  
+                  child: Container(
+                    height: 130,
+                    width: 150,
+                    margin: EdgeInsets.only(
+                      right: 150,
+                      top: 10,  
+                    ),
+
+                    decoration: new BoxDecoration(
+                      
+                      image: DecorationImage(
+                        image: new AssetImage(
+                          "lib/assets/images/illustrasjon1.png"
+                        ),
+                        
+                        fit: BoxFit.fitHeight,
+                      ),
+                    
+                    color: Colors.white,
+
+                    borderRadius: new BorderRadius.only(
+                      topLeft:  const  Radius.circular(20.0),
+                      topRight: const  Radius.circular(20.0)
+                      ),
+                    ),
+                    
+                    child: Text(
+                      ("REEE"),
+                      textAlign: TextAlign.center,
+                      
+                      
+                    ),
+                    
+                  ),
+                ),
+
+                Align(
+                  child: Container(
+                    height: 40,
+                    width: 150,
+                    margin: EdgeInsets.only(right: 150),
+
+                    decoration: new BoxDecoration(
+                    color: Colors.pink,
+                    borderRadius: new BorderRadius.only(
+                    bottomLeft:  const  Radius.circular(20.0),
+                    bottomRight: const  Radius.circular(20.0)
+
+                    
+
+                    )
+                  ),
+
+                  child: Text(
+                    ("velg"),
+                    textAlign: TextAlign.center,
+
+
+                    style: TextStyle(
+                      color: Colors.white,
+                      
+                    ),
+                  ),
+                    
+                  )
+                )
+
               ],
             ),
 
