@@ -210,21 +210,25 @@ class PageOneState extends State<PageOne> {
     return Scaffold(
         backgroundColor: UIData.grey,
         appBar: new AppBar(
+          elevation: 1,
+
           backgroundColor: Colors.white,
           actions: <Widget>[
            Align(
            alignment: Alignment.centerRight,
-            child: IconButton(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+              child: IconButton(
 
-              icon: Image.asset('lib/assets/images/filter_icon.png', scale: 10,),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => StateFilterPage()),);
+                    icon: Image.asset('lib/assets/images/filter_icon.png', scale: 10,),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => StateFilterPage()),);
 
-            },
-
-          ),
+                  },
+              ),
+            ),
 
         )],
 
@@ -357,6 +361,24 @@ class PageOneState extends State<PageOne> {
   }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class StateFilterPage extends StatefulWidget {
   StateFilterPage({Key key}) : super(key: key);
 
@@ -370,12 +392,20 @@ class FilterPage extends State<StateFilterPage> {
 
   String dropdown = '';
 
+  bool skole = false;
+  bool kaffe = false;
+  bool gaming = false;
+  bool fest = false;
+  bool prosjekt = false;
+
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: UIData.grey,
         appBar: new AppBar(
+          elevation: 1,
           //iconTheme: IconThemeData(
            // color: UIData.black,
          // ),
@@ -383,19 +413,20 @@ class FilterPage extends State<StateFilterPage> {
         actions: <Widget>[
         Align(
         alignment: Alignment.centerRight,
-        child: IconButton(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+          child: IconButton(
 
-        icon: Image.asset('lib/assets/images/filter_icon_selected.png', scale: 10, ),
-    onPressed: () {
-      Navigator.pop(context);
+                   icon: Image.asset('lib/assets/images/filter_icon_selected.png', scale: 10, ),
+               onPressed: () {
+                 Navigator.pop(context);
 
-    },
-
-    ),
-
+               },
+          ),
+        ),
     )],
 
-    title: Text("Filter", style: TextStyle(color: UIData.black)),
+    title: Text("Filter", style: ServiceProvider.instance.styles.title()),
     centerTitle: true,
 
 
@@ -414,7 +445,7 @@ class FilterPage extends State<StateFilterPage> {
 
             Align(
               alignment: Alignment.center,
-              child: Text("Sorter etter:", style: TextStyle(color: UIData.black, fontSize: 15, )),
+              child: Text("Sorter etter:", style: TextStyle(color: UIData.black, fontSize: 13, )),
             ),
            Divider(
              color: UIData.grey,
@@ -428,11 +459,20 @@ class FilterPage extends State<StateFilterPage> {
              //color: Colors.white,
              child: SizedBox(
                height: 40,
+               child: new Theme(
+                 data: Theme.of(context).copyWith(
+                   canvasColor: Colors.white,
+
+
+                 ),
+
                child: DropdownButtonHideUnderline(
 
                          child: DropdownButton<String>(
                            isExpanded: false,
                            value: dropdown,
+                           style: TextStyle(fontSize: 13, color: UIData.black),
+
                            onChanged: (String newValue) {
                              setState(() {
                                dropdown = newValue;                             
@@ -440,9 +480,12 @@ class FilterPage extends State<StateFilterPage> {
                            },
                            items: <String>['Avstand', 'Popularitet','']
                              .map<DropdownMenuItem<String>>((String value) {
-                               return DropdownMenuItem<String>(
+                               return DropdownMenuItem(
                                  value: value,
-                                 child: Text(value),
+                                 child: Padding(
+                                   padding: EdgeInsets.all(10),
+                                   child: Text(value),
+                                 ),
                                );
                              })
 
@@ -450,6 +493,7 @@ class FilterPage extends State<StateFilterPage> {
                          ),
 
 
+               ),
                ),
 
              ),
@@ -461,30 +505,49 @@ class FilterPage extends State<StateFilterPage> {
            Divider(
              color: UIData.grey,
            ),
+           Align(
+             alignment: Alignment.center,
+             child: Text("Filtrer:", style: TextStyle(color: UIData.black, fontSize: 13, )),
+           ),
+           Divider(
+             color: UIData.grey,
+           ),
            Row(
              mainAxisAlignment: MainAxisAlignment.center,
              children: <Widget>[
 
-               Container(
-                 height: 100,
-                 child: SizedBox(
-                   width: 100,
-                   child: Card(
-                     elevation: 0,
-                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none)),
-                     child: Padding(
-                       padding: EdgeInsets.all(7),
-                       child: Column(
-                         mainAxisAlignment: MainAxisAlignment.center,
-                         children: <Widget>[
-                           Image.asset(cate[0], scale: 20,),
-                           Divider(
-                             color: Colors.white,
-                             height: 10,
-                           ),
-                           Text(cat[0], style: TextStyle(fontSize: 10)),
 
-                         ],
+               GestureDetector(
+                 onTap: () {
+                   pressedSkole();
+
+                 },
+                 child: Container(
+                   height: 100,
+                   child: SizedBox(
+                     width: 100,
+                     child: Card(
+                       elevation: 0,
+                       //color: (pressed ? Colors.white : UIData.pink),
+                       shape: (skole ?   RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black)) :  RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
+
+
+
+                       child: Padding(
+                         padding: EdgeInsets.all(7),
+                         child: Column(
+                           mainAxisAlignment: MainAxisAlignment.center,
+                           children: <Widget>[
+                             Image.asset(cate[0], scale: 20,),
+                             Divider(
+                               color: Colors.white,
+                               height: 10,
+                             ),
+                             Text(cat[0], style: TextStyle(fontSize: 10)),
+
+                           ],
+                         ),
+
                        ),
 
                      ),
@@ -494,26 +557,38 @@ class FilterPage extends State<StateFilterPage> {
                  ),
                ),
 
-               Container(
-                 height: 100,
-                 child: SizedBox(
-                   width: 100,
-                   child: Card(
-                     elevation: 0,
-                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none)),
-                     child: Padding(
-                       padding: EdgeInsets.all(7),
-                       child: Column(
-                         mainAxisAlignment: MainAxisAlignment.center,
-                         children: <Widget>[
-                           Image.asset(cate[1], scale: 20,),
-                           Divider(
-                             color: Colors.white,
-                             height: 10,
-                           ),
-                           Text(cat[1], style: TextStyle(fontSize: 10)),
 
-                         ],
+               GestureDetector(
+                 onTap: () {
+                   pressedKaffe();
+
+                 },
+                 child: Container(
+                   height: 100,
+                   child: SizedBox(
+                     width: 100,
+                     child: Card(
+                       elevation: 0,
+                       //color: (pressed ? Colors.white : UIData.pink),
+                       shape: (kaffe ?   RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black)) :  RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
+
+
+
+                       child: Padding(
+                         padding: EdgeInsets.all(7),
+                         child: Column(
+                           mainAxisAlignment: MainAxisAlignment.center,
+                           children: <Widget>[
+                             Image.asset(cate[1], scale: 20,),
+                             Divider(
+                               color: Colors.white,
+                               height: 10,
+                             ),
+                             Text(cat[1], style: TextStyle(fontSize: 10)),
+
+                           ],
+                         ),
+
                        ),
 
                      ),
@@ -523,26 +598,38 @@ class FilterPage extends State<StateFilterPage> {
                  ),
                ),
 
-               Container(
-                 height: 100,
-                 child: SizedBox(
-                   width: 100,
-                   child: Card(
-                     elevation: 0,
-                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none)),
-                     child: Padding(
-                       padding: EdgeInsets.all(7),
-                       child: Column(
-                         mainAxisAlignment: MainAxisAlignment.center,
-                         children: <Widget>[
-                           Image.asset(cate[2], scale: 20,),
-                           Divider(
-                             color: Colors.white,
-                             height: 10,
-                           ),
-                           Text(cat[2], style: TextStyle(fontSize: 10)),
 
-                         ],
+               GestureDetector(
+                 onTap: () {
+                   pressedGaming();
+
+                 },
+                 child: Container(
+                   height: 100,
+                   child: SizedBox(
+                     width: 100,
+                     child: Card(
+                       elevation: 0,
+                       //color: (pressed ? Colors.white : UIData.pink),
+                       shape: (gaming ?   RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black)) :  RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
+
+
+
+                       child: Padding(
+                         padding: EdgeInsets.all(7),
+                         child: Column(
+                           mainAxisAlignment: MainAxisAlignment.center,
+                           children: <Widget>[
+                             Image.asset(cate[2], scale: 20,),
+                             Divider(
+                               color: Colors.white,
+                               height: 10,
+                             ),
+                             Text(cat[2], style: TextStyle(fontSize: 10)),
+
+                           ],
+                         ),
+
                        ),
 
                      ),
@@ -551,6 +638,7 @@ class FilterPage extends State<StateFilterPage> {
 
                  ),
                ),
+
 
 
 
@@ -561,26 +649,37 @@ class FilterPage extends State<StateFilterPage> {
              mainAxisAlignment: MainAxisAlignment.center,
              children: <Widget>[
 
-               Container(
-                 height: 100,
-                 child: SizedBox(
-                   width: 100,
-                   child: Card(
-                     elevation: 0,
-                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none)),
-                     child: Padding(
-                       padding: EdgeInsets.all(7),
-                       child: Column(
-                         mainAxisAlignment: MainAxisAlignment.center,
-                         children: <Widget>[
-                           Image.asset(cate[3], scale: 20,),
-                           Divider(
-                             color: Colors.white,
-                             height: 10,
-                           ),
-                           Text(cat[3], style: TextStyle(fontSize: 10)),
+               GestureDetector(
+                 onTap: () {
+                   pressedFest();
 
-                         ],
+                 },
+                 child: Container(
+                   height: 100,
+                   child: SizedBox(
+                     width: 100,
+                     child: Card(
+                       elevation: 0,
+                       //color: (pressed ? Colors.white : UIData.pink),
+                       shape: (fest ?   RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black)) :  RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
+
+
+
+                       child: Padding(
+                         padding: EdgeInsets.all(7),
+                         child: Column(
+                           mainAxisAlignment: MainAxisAlignment.center,
+                           children: <Widget>[
+                             Image.asset(cate[3], scale: 20,),
+                             Divider(
+                               color: Colors.white,
+                               height: 10,
+                             ),
+                             Text(cat[3], style: TextStyle(fontSize: 10)),
+
+                           ],
+                         ),
+
                        ),
 
                      ),
@@ -590,26 +689,38 @@ class FilterPage extends State<StateFilterPage> {
                  ),
                ),
 
-               Container(
-                 height: 100,
-                 child: SizedBox(
-                   width: 100,
-                   child: Card(
-                     elevation: 0,
-                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none)),
-                     child: Padding(
-                       padding: EdgeInsets.all(7),
-                       child: Column(
-                         mainAxisAlignment: MainAxisAlignment.center,
-                         children: <Widget>[
-                           Image.asset(cate[4], scale: 20,),
-                           Divider(
-                             color: Colors.white,
-                             height: 10,
-                           ),
-                           Text(cat[4], style: TextStyle(fontSize: 10)),
 
-                         ],
+               GestureDetector(
+                 onTap: () {
+                   pressedProsjekt();
+
+                 },
+                 child: Container(
+                   height: 100,
+                   child: SizedBox(
+                     width: 100,
+                     child: Card(
+                       elevation: 0,
+                       //color: (pressed ? Colors.white : UIData.pink),
+                       shape: (prosjekt ?   RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black)) :  RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
+
+
+
+                       child: Padding(
+                         padding: EdgeInsets.all(7),
+                         child: Column(
+                           mainAxisAlignment: MainAxisAlignment.center,
+                           children: <Widget>[
+                             Image.asset(cate[4], scale: 20,),
+                             Divider(
+                               color: Colors.white,
+                               height: 10,
+                             ),
+                             Text(cat[4], style: TextStyle(fontSize: 10)),
+
+                           ],
+                         ),
+
                        ),
 
                      ),
@@ -619,26 +730,38 @@ class FilterPage extends State<StateFilterPage> {
                  ),
                ),
 
-               Container(
-                 height: 100,
-                 child: SizedBox(
-                   width: 100,
-                   child: Card(
-                     elevation: 0,
-                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none)),
-                     child: Padding(
-                       padding: EdgeInsets.all(7),
-                       child: Column(
-                         mainAxisAlignment: MainAxisAlignment.center,
-                         children: <Widget>[
-                           Image.asset(cate[2], scale: 20,),
-                           Divider(
-                             color: Colors.white,
-                             height: 10,
-                           ),
-                           Text(cat[2], style: TextStyle(fontSize: 10)),
 
-                         ],
+               GestureDetector(
+                 onTap: () {
+                   //pressedFilter();
+
+                 },
+                 child: Container(
+                   height: 100,
+                   child: SizedBox(
+                     width: 100,
+                     child: Card(
+                       elevation: 0,
+                       //color: (pressed ? Colors.white : UIData.pink),
+                       shape: (RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
+
+
+
+                       child: Padding(
+                         padding: EdgeInsets.all(7),
+                         child: Column(
+                           mainAxisAlignment: MainAxisAlignment.center,
+                           children: <Widget>[
+                             //Image.asset(cate[0], scale: 20,),
+                             Divider(
+                               color: Colors.white,
+                               height: 10,
+                             ),
+                             //Text(cat[0], style: TextStyle(fontSize: 10)),
+
+                           ],
+                         ),
+
                        ),
 
                      ),
@@ -647,6 +770,7 @@ class FilterPage extends State<StateFilterPage> {
 
                  ),
                ),
+
 
 
 
@@ -657,26 +781,37 @@ class FilterPage extends State<StateFilterPage> {
              mainAxisAlignment: MainAxisAlignment.center,
              children: <Widget>[
 
-               Container(
-                 height: 100,
-                 child: SizedBox(
-                   width: 100,
-                   child: Card(
-                     elevation: 0,
-                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none)),
-                     child: Padding(
-                       padding: EdgeInsets.all(7),
-                       child: Column(
-                         mainAxisAlignment: MainAxisAlignment.center,
-                         children: <Widget>[
-                           Image.asset(cate[0], scale: 20,),
-                           Divider(
-                             color: Colors.white,
-                             height: 10,
-                           ),
-                           Text(cat[0], style: TextStyle(fontSize: 10)),
+               GestureDetector(
+                 onTap: () {
+                  // pressedFilter();
 
-                         ],
+                 },
+                 child: Container(
+                   height: 100,
+                   child: SizedBox(
+                     width: 100,
+                     child: Card(
+                       elevation: 0,
+                       //color: (pressed ? Colors.white : UIData.pink),
+                       shape: (RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
+
+
+
+                       child: Padding(
+                         padding: EdgeInsets.all(7),
+                         child: Column(
+                           mainAxisAlignment: MainAxisAlignment.center,
+                           children: <Widget>[
+                             //Image.asset(cate[0], scale: 20,),
+                             Divider(
+                               color: Colors.white,
+                               height: 10,
+                             ),
+                             //Text(cat[0], style: TextStyle(fontSize: 10)),
+
+                           ],
+                         ),
+
                        ),
 
                      ),
@@ -686,26 +821,38 @@ class FilterPage extends State<StateFilterPage> {
                  ),
                ),
 
-               Container(
-                 height: 100,
-                 child: SizedBox(
-                   width: 100,
-                   child: Card(
-                     elevation: 0,
-                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none)),
-                     child: Padding(
-                       padding: EdgeInsets.all(7),
-                       child: Column(
-                         mainAxisAlignment: MainAxisAlignment.center,
-                         children: <Widget>[
-                           Image.asset(cate[1], scale: 20,),
-                           Divider(
-                             color: Colors.white,
-                             height: 10,
-                           ),
-                           Text(cat[1], style: TextStyle(fontSize: 10)),
 
-                         ],
+               GestureDetector(
+                 onTap: () {
+                   //pressedFilter();
+
+                 },
+                 child: Container(
+                   height: 100,
+                   child: SizedBox(
+                     width: 100,
+                     child: Card(
+                       elevation: 0,
+                       //color: (pressed ? Colors.white : UIData.pink),
+                       shape: (RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
+
+
+
+                       child: Padding(
+                         padding: EdgeInsets.all(7),
+                         child: Column(
+                           mainAxisAlignment: MainAxisAlignment.center,
+                           children: <Widget>[
+                             //Image.asset(cate[1], scale: 20,),
+                             Divider(
+                               color: Colors.white,
+                               height: 10,
+                             ),
+                            // Text(cat[1], style: TextStyle(fontSize: 10)),
+
+                           ],
+                         ),
+
                        ),
 
                      ),
@@ -715,26 +862,38 @@ class FilterPage extends State<StateFilterPage> {
                  ),
                ),
 
-               Container(
-                 height: 100,
-                 child: SizedBox(
-                   width: 100,
-                   child: Card(
-                     elevation: 0,
-                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none)),
-                     child: Padding(
-                       padding: EdgeInsets.all(7),
-                       child: Column(
-                         mainAxisAlignment: MainAxisAlignment.center,
-                         children: <Widget>[
-                           Image.asset(cate[2], scale: 20,),
-                           Divider(
-                             color: Colors.white,
-                             height: 10,
-                           ),
-                           Text(cat[2], style: TextStyle(fontSize: 10)),
 
-                         ],
+               GestureDetector(
+                 onTap: () {
+                   //pressedFilter();
+
+                 },
+                 child: Container(
+                   height: 100,
+                   child: SizedBox(
+                     width: 100,
+                     child: Card(
+                       elevation: 0,
+                       //color: (pressed ? Colors.white : UIData.pink),
+                       shape: (RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
+
+
+
+                       child: Padding(
+                         padding: EdgeInsets.all(7),
+                         child: Column(
+                           mainAxisAlignment: MainAxisAlignment.center,
+                           children: <Widget>[
+                             //Image.asset(cate[2], scale: 20,),
+                             Divider(
+                               color: Colors.white,
+                               height: 10,
+                             ),
+                             //Text(cat[2], style: TextStyle(fontSize: 10)),
+
+                           ],
+                         ),
+
                        ),
 
                      ),
@@ -743,6 +902,7 @@ class FilterPage extends State<StateFilterPage> {
 
                  ),
                ),
+
 
              ],
            ),
@@ -757,7 +917,7 @@ class FilterPage extends State<StateFilterPage> {
 
 
                },
-               child: Text("Nullstill filter",),
+               child: Text("Nullstill filter", style: TextStyle(color: UIData.blue, fontSize: 15),),
              ),
              Divider(                   
                color: UIData.grey,
@@ -766,7 +926,7 @@ class FilterPage extends State<StateFilterPage> {
              RaisedButton(
                color: UIData.pink,
                elevation: 0,
-               padding: EdgeInsets.fromLTRB(30, 15, 30, 15),
+               padding: EdgeInsets.fromLTRB(40, 15, 40, 15),
                shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(100)), side: BorderSide(style: BorderStyle.none)),
                onPressed: () {
 
@@ -788,7 +948,74 @@ class FilterPage extends State<StateFilterPage> {
 
   }
 
-}
+  void pressedSkole() {
+    setState(() {
+      if (skole) {
+        skole = false;
+      }
+      else {
+        skole = true;
+      }
+    } );
+  }
+
+    void pressedKaffe() {
+    setState(() {
+       if(kaffe){
+         kaffe = false;
+       }
+       else {
+         kaffe = true;
+       }
+    })    ;
+    }
+
+    void pressedGaming() {
+    setState(() {
+      if (gaming) {
+        gaming = false;
+      }
+      else {
+        gaming = true;
+      }
+    });
+    }
+    void pressedFest(){
+    setState(() {
+      if (fest) {
+        fest = false;
+      }
+      else {
+        fest = true;
+      }
+    });
+    }
+    void pressedProsjekt(){
+    setState(() {
+      if (prosjekt) {
+        prosjekt = false;
+      } else {
+        prosjekt = true;
+      }
+    });
+
+    }
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class Event {
   Event({this.address, this.cat, this.desc, this.id, this.time, this.title});
@@ -820,12 +1047,15 @@ class NewEventPage extends State<StatefullNew> {
   String tim;
   String kat = "";
 
+   bool skole = false;
+   bool kaffe = false;
+   bool gaming = false;
+   bool fest = false;
+   bool prosjekt = false;
+
+
   DateTime _date = new DateTime.now();
   TimeOfDay _time = new TimeOfDay.now();
-
-  bool _pressed = true;
-
-
 
   List<Event> newEvent = [];
   List<String> cate = ['lib/assets/images/skole.png', 'lib/assets/images/kaffe.png', 'lib/assets/images/gaming.png', 'lib/assets/images/fest.png', 'lib/assets/images/prosjekt.png' ];
@@ -865,6 +1095,7 @@ class NewEventPage extends State<StatefullNew> {
     return Scaffold(
       backgroundColor: UIData.grey,
       appBar: AppBar(
+        elevation: 1,
         iconTheme: IconThemeData(
           color: UIData.black,
         ),
@@ -910,14 +1141,33 @@ class NewEventPage extends State<StatefullNew> {
                             child: InkWell(
                               onTap: () {
                                 print(cat[index]);
-
+                                if (cat[index] == "Kaffe") {
+                                  pressedKaffe();
+                                }
+                                if (cat[index] == "Prosjekt") {
+                                  pressedSkole();
+                                }
+                                if (cat[index] == "Gaming") {
+                                  pressedFest();
+                                }
+                                if (cat[index] == "Fest") {
+                                  pressedProsjekt();
+                                }
+                                if (cat[index] == "Skolejobbing") {
+                                  pressedGaming();
+                                }
                                 //RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 2, style: BorderStyle.solid));
 
                               },
                               splashColor: UIData.grey,
                             highlightColor: UIData.grey,
                               child: Card(
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none)),
+                                shape: (skole? RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black)) :
+                                kaffe? RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black))     :
+                                    fest? RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black)) :
+                                        gaming? RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black)) :
+                                            prosjekt? RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black))
+                                    : RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
                                 child: Padding(
                                   padding: EdgeInsets.all(7),
                                   child: Column(
@@ -1281,6 +1531,63 @@ class NewEventPage extends State<StatefullNew> {
     var gallery = await ImagePicker.pickImage(
         source: ImageSource.gallery);
   }
+
+
+    void pressedSkole() {
+      setState(() {
+        if (skole) {
+          skole = false;
+        }
+        else {
+          skole = true;
+        }
+      } );
+    }
+
+      void pressedKaffe() {
+      setState(() {
+         if(kaffe){
+           kaffe = false;
+         }
+         else {
+           kaffe = true;
+         }
+      })    ;
+      }
+
+      void pressedGaming() {
+      setState(() {
+        if (gaming) {
+          gaming = false;
+        }
+        else {
+          gaming = true;
+        }
+      });
+      }
+      void pressedFest(){
+      setState(() {
+        if (fest) {
+          fest = false;
+        }
+        else {
+          fest = true;
+        }
+      });
+      }
+      void pressedProsjekt(){
+      setState(() {
+        if (prosjekt) {
+          prosjekt = false;
+        } else {
+          prosjekt = true;
+        }
+      });
+
+      }                                      
+
+
+
 }
 
 //##  new ListView.builder(
