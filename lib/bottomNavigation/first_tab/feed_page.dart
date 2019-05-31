@@ -824,3 +824,19 @@ class NewEventPage extends State<StatefullNew> {
 //
 //              },
 //          )
+
+
+//## return InkWell(
+//                          onTap: () {
+//                            print("tapped: $index");
+//                            },
+//                          child: Container(
+//                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0), color: Colors.white),
+//                            width: 80,
+//                            alignment: Alignment.center,
+//                            //color: Colors.white,
+//                            child: Image.asset(cate[index], ),
+//                            padding: EdgeInsets.all(20),
+//                          ),
+//
+//                        );
