@@ -211,14 +211,29 @@ class PageOneState extends State<PageOne> {
         backgroundColor: UIData.grey,
         appBar: new AppBar(
           backgroundColor: Colors.white,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Image.asset('lib/assets/images/logo_tekst.png', fit: BoxFit.contain, scale: 8,),
-            ],
+          actions: <Widget>[
+           Align(
+           alignment: Alignment.centerRight,
+            child: IconButton(
+
+              icon: Image.asset('lib/assets/images/filter_icon.png', scale: 10,),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => StateFilterPage()),);
+
+            },
+
           ),
 
-        ),
+        )],
+
+          title: Image.asset('lib/assets/images/logo_tekst.png', fit: BoxFit.contain, scale: 8,),
+            centerTitle: true,
+
+
+
+    ),
         body: new Stack(
           //child: new Stack(
             children: <Widget>[
@@ -342,6 +357,405 @@ class PageOneState extends State<PageOne> {
   }
 }
 
+class StateFilterPage extends StatefulWidget {
+  StateFilterPage({Key key}) : super(key: key);
+
+  @override
+  FilterPage createState() => FilterPage();
+}
+
+class FilterPage extends State<StateFilterPage> {
+  List<String> cate = ['lib/assets/images/skole.png', 'lib/assets/images/kaffe.png', 'lib/assets/images/gaming.png', 'lib/assets/images/fest.png', 'lib/assets/images/prosjekt.png' ];
+  List<String> cat =  ["Skolejobbing", "Kaffe", "Gaming", "Fest", "Prosjekt" ];
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: UIData.grey,
+        appBar: new AppBar(
+          //iconTheme: IconThemeData(
+           // color: UIData.black,
+         // ),
+        backgroundColor: Colors.white,
+        actions: <Widget>[
+        Align(
+        alignment: Alignment.centerRight,
+        child: IconButton(
+
+        icon: Image.asset('lib/assets/images/filter_icon_selected.png', scale: 10, ),
+    onPressed: () {
+      Navigator.pop(context);
+
+    },
+
+    ),
+
+    )],
+
+    title: Image.asset('lib/assets/images/logo_tekst.png', fit: BoxFit.contain, scale: 8,),
+    centerTitle: true,
+
+
+
+    ),
+    body: new Stack(
+     children: <Widget>[
+
+       Center(
+         child: Column(
+         children: <Widget>[
+           Divider(
+             color: UIData.grey,
+             height: 20,
+           ),
+           Align(
+             alignment: Alignment.center,
+             child: Text("Filter:", style: TextStyle(color: UIData.black, fontSize: 18, fontWeight: FontWeight.bold)),
+           ),
+           Divider(
+             color: UIData.grey,
+           ),
+           Row(
+             mainAxisAlignment: MainAxisAlignment.center,
+             children: <Widget>[
+
+               Container(
+                 height: 100,
+                 child: SizedBox(
+                   width: 100,
+                   child: Card(
+                     elevation: 0,
+                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none)),
+                     child: Padding(
+                       padding: EdgeInsets.all(7),
+                       child: Column(
+                         mainAxisAlignment: MainAxisAlignment.center,
+                         children: <Widget>[
+                           Image.asset(cate[0], scale: 20,),
+                           Divider(
+                             color: Colors.white,
+                             height: 10,
+                           ),
+                           Text(cat[0], style: TextStyle(fontSize: 10)),
+
+                         ],
+                       ),
+
+                     ),
+
+                   ),
+
+                 ),
+               ),
+
+               Container(
+                 height: 100,
+                 child: SizedBox(
+                   width: 100,
+                   child: Card(
+                     elevation: 0,
+                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none)),
+                     child: Padding(
+                       padding: EdgeInsets.all(7),
+                       child: Column(
+                         mainAxisAlignment: MainAxisAlignment.center,
+                         children: <Widget>[
+                           Image.asset(cate[1], scale: 20,),
+                           Divider(
+                             color: Colors.white,
+                             height: 10,
+                           ),
+                           Text(cat[1], style: TextStyle(fontSize: 10)),
+
+                         ],
+                       ),
+
+                     ),
+
+                   ),
+
+                 ),
+               ),
+
+               Container(
+                 height: 100,
+                 child: SizedBox(
+                   width: 100,
+                   child: Card(
+                     elevation: 0,
+                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none)),
+                     child: Padding(
+                       padding: EdgeInsets.all(7),
+                       child: Column(
+                         mainAxisAlignment: MainAxisAlignment.center,
+                         children: <Widget>[
+                           Image.asset(cate[2], scale: 20,),
+                           Divider(
+                             color: Colors.white,
+                             height: 10,
+                           ),
+                           Text(cat[2], style: TextStyle(fontSize: 10)),
+
+                         ],
+                       ),
+
+                     ),
+
+                   ),
+
+                 ),
+               ),
+
+
+
+
+             ],
+           ),
+           Row(
+             mainAxisAlignment: MainAxisAlignment.center,
+             children: <Widget>[
+
+               Container(
+                 height: 100,
+                 child: SizedBox(
+                   width: 100,
+                   child: Card(
+                     elevation: 0,
+                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none)),
+                     child: Padding(
+                       padding: EdgeInsets.all(7),
+                       child: Column(
+                         mainAxisAlignment: MainAxisAlignment.center,
+                         children: <Widget>[
+                           Image.asset(cate[3], scale: 20,),
+                           Divider(
+                             color: Colors.white,
+                             height: 10,
+                           ),
+                           Text(cat[3], style: TextStyle(fontSize: 10)),
+
+                         ],
+                       ),
+
+                     ),
+
+                   ),
+
+                 ),
+               ),
+
+               Container(
+                 height: 100,
+                 child: SizedBox(
+                   width: 100,
+                   child: Card(
+                     elevation: 0,
+                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none)),
+                     child: Padding(
+                       padding: EdgeInsets.all(7),
+                       child: Column(
+                         mainAxisAlignment: MainAxisAlignment.center,
+                         children: <Widget>[
+                           Image.asset(cate[4], scale: 20,),
+                           Divider(
+                             color: Colors.white,
+                             height: 10,
+                           ),
+                           Text(cat[4], style: TextStyle(fontSize: 10)),
+
+                         ],
+                       ),
+
+                     ),
+
+                   ),
+
+                 ),
+               ),
+
+               Container(
+                 height: 100,
+                 child: SizedBox(
+                   width: 100,
+                   child: Card(
+                     elevation: 0,
+                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none)),
+                     child: Padding(
+                       padding: EdgeInsets.all(7),
+                       child: Column(
+                         mainAxisAlignment: MainAxisAlignment.center,
+                         children: <Widget>[
+                           Image.asset(cate[2], scale: 20,),
+                           Divider(
+                             color: Colors.white,
+                             height: 10,
+                           ),
+                           Text(cat[2], style: TextStyle(fontSize: 10)),
+
+                         ],
+                       ),
+
+                     ),
+
+                   ),
+
+                 ),
+               ),
+
+
+
+
+             ],
+           ),
+           Row(
+             mainAxisAlignment: MainAxisAlignment.center,
+             children: <Widget>[
+
+               Container(
+                 height: 100,
+                 child: SizedBox(
+                   width: 100,
+                   child: Card(
+                     elevation: 0,
+                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none)),
+                     child: Padding(
+                       padding: EdgeInsets.all(7),
+                       child: Column(
+                         mainAxisAlignment: MainAxisAlignment.center,
+                         children: <Widget>[
+                           Image.asset(cate[0], scale: 20,),
+                           Divider(
+                             color: Colors.white,
+                             height: 10,
+                           ),
+                           Text(cat[0], style: TextStyle(fontSize: 10)),
+
+                         ],
+                       ),
+
+                     ),
+
+                   ),
+
+                 ),
+               ),
+
+               Container(
+                 height: 100,
+                 child: SizedBox(
+                   width: 100,
+                   child: Card(
+                     elevation: 0,
+                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none)),
+                     child: Padding(
+                       padding: EdgeInsets.all(7),
+                       child: Column(
+                         mainAxisAlignment: MainAxisAlignment.center,
+                         children: <Widget>[
+                           Image.asset(cate[1], scale: 20,),
+                           Divider(
+                             color: Colors.white,
+                             height: 10,
+                           ),
+                           Text(cat[1], style: TextStyle(fontSize: 10)),
+
+                         ],
+                       ),
+
+                     ),
+
+                   ),
+
+                 ),
+               ),
+
+               Container(
+                 height: 100,
+                 child: SizedBox(
+                   width: 100,
+                   child: Card(
+                     elevation: 0,
+                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none)),
+                     child: Padding(
+                       padding: EdgeInsets.all(7),
+                       child: Column(
+                         mainAxisAlignment: MainAxisAlignment.center,
+                         children: <Widget>[
+                           Image.asset(cate[2], scale: 20,),
+                           Divider(
+                             color: Colors.white,
+                             height: 10,
+                           ),
+                           Text(cat[2], style: TextStyle(fontSize: 10)),
+
+                         ],
+                       ),
+
+                     ),
+
+                   ),
+
+                 ),
+               ),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+             ],
+           ),
+
+             Divider(
+               color: UIData.grey
+             ),
+             GestureDetector(
+               onTap: () {
+
+
+               },
+               child: Text("Nullstill filter",),
+             ),
+             Divider(                   
+               color: UIData.grey       
+             ),                         
+             RaisedButton(
+               color: UIData.pink,
+               elevation: 0,
+               padding: EdgeInsets.fromLTRB(30, 15, 30, 15),
+               shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(100)), side: BorderSide(style: BorderStyle.none)),
+               onPressed: () {
+
+                Navigator.pop(context);
+               },
+               child: Text("Bruk filter", style: TextStyle(color: Colors.white))
+             ),                                                                                                                                                                                                                                                                                                                                                                                                    
+
+         ],
+
+       ),
+       ),
+     ],
+
+
+    ),
+
+    );
+
+  }
+
+}
+
 class Event {
   Event({this.address, this.cat, this.desc, this.id, this.time, this.title});
 
@@ -374,6 +788,8 @@ class NewEventPage extends State<StatefullNew> {
 
   DateTime _date = new DateTime.now();
   TimeOfDay _time = new TimeOfDay.now();
+
+  bool _pressed = true;
 
 
 
@@ -424,7 +840,8 @@ class NewEventPage extends State<StatefullNew> {
         backgroundColor: Colors.white,
 
       ),
-      body: new Stack(
+      body: SingleChildScrollView(
+        child: Stack(
 
         children: <Widget>[
           
@@ -445,24 +862,47 @@ class NewEventPage extends State<StatefullNew> {
                     height: 10,
                   ),
 
+
                   SizedBox(
-                    height: 80,
+                    height: 90,
                     child: ListView.builder(
+
                       itemCount: cate.length,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
-                        return InkWell(
-                          onTap: () {
-                            print("tapped: $index");
-                            },
-                          child: Container(
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0), color: Colors.white),
-                            width: 80,
-                            alignment: Alignment.center,
-                            //color: Colors.white,
-                            child: Image.asset(cate[index], ),
-                            padding: EdgeInsets.all(20),
-                          ),
+                        //EdgeInsets.all(10);
+                        return Container(
+                            width: 90,
+                            child: InkWell(
+                              onTap: () {
+                                print(cat[index]);
+
+                                //RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 2, style: BorderStyle.solid));
+
+                              },
+                              splashColor: UIData.grey,
+                            highlightColor: UIData.grey,
+                              child: Card(
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none)),
+                                child: Padding(
+                                  padding: EdgeInsets.all(7),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Image.asset(cate[index], scale: 20,),
+                                      Divider(
+                                        color: Colors.white,
+                                        height: 10,
+                                      ),
+                                      Text(cat[index], style: TextStyle(fontSize: 10)),
+
+                                    ],
+                                  ),
+
+                                ),
+
+                              ),
+                            ),
 
                         );
 
@@ -470,11 +910,14 @@ class NewEventPage extends State<StatefullNew> {
 
 
                     ),
+
                   ),
 
                   Divider(
-                    color: UIData.grey
+                    color: UIData.grey,
                   ),
+
+
                   Theme(
                     data: Theme.of(context).copyWith(
                       primaryColor: UIData.blue,
@@ -492,7 +935,8 @@ class NewEventPage extends State<StatefullNew> {
                             child: TextField(
                               decoration: InputDecoration(
                                 hintText: ("Dato"),
-                                prefixIcon: Icon(Icons.calendar_today, color: UIData.blue, size: 20,),
+                                //labelText: ("Dato"),
+                                prefixIcon: Icon(Icons.calendar_today, color: UIData.black, size: 20,),
                                 filled: true,
                                 contentPadding: EdgeInsets.all(17.0),
                                 fillColor: Colors.white,
@@ -523,7 +967,7 @@ class NewEventPage extends State<StatefullNew> {
                             child: TextField(
                               decoration: InputDecoration(
                                 hintText: ("Tid"),
-                                prefixIcon: Icon(Icons.access_time, color: UIData.blue, size: 20,),
+                                prefixIcon: Icon(Icons.access_time, color: UIData.black, size: 20,),
                                 filled: true,
                                 contentPadding: EdgeInsets.all(17.0),
                                 fillColor: Colors.white,
@@ -642,51 +1086,61 @@ class NewEventPage extends State<StatefullNew> {
                   Divider(
                     color: UIData.grey,
                   ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text( "Legg til bilde"
-                    ),
-                  ),
-                  Divider(
-                    color: UIData.grey,
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      height: 80,
-                      width: 80,
-                      child: FittedBox(
-                        child: FloatingActionButton(
-                          onPressed: () {
-                            openOptions();
+                  Column(
+                    children: <Widget>[
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text( "Legg til bilde"
+                        ),
+                      ),
+                      Divider(
+                        color: UIData.grey,
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Container(
 
-                          },
-                          child: Icon(Icons.photo_camera, size: 30.0,),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
-                          backgroundColor: Colors.white,
-                          foregroundColor: UIData.blue,
-                          elevation: 0.0,
+                          height: 80,
+
+                          child: FittedBox(
+
+                            child: FloatingActionButton(
+                              onPressed: () {
+                                openOptions();
+
+                              },
+                              child: Icon(Icons.photo_camera, size: 30.0,),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)), ),
+                              backgroundColor: Colors.white,
+                              foregroundColor: UIData.black,
+                              elevation: 0.0,
+
+                            ),
+                          ),
 
                         ),
                       ),
+                    ],
 
-                    ),
                   ),
 
                   Divider(
                     color: UIData.grey,
+                    height: 40,
                   ),
 
-
-                  PrimaryButton(
-                    text: "Post event",
-                    padding: 52,
+                  RaisedButton(
+                    color: UIData.pink,
+                    elevation: 0,
+                    padding: EdgeInsets.fromLTRB(30, 15, 30, 15),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(100)), side: BorderSide(style: BorderStyle.none)),
                     onPressed: () {
                      print("post pressed");
                      newEvent.add(Event(address: add, cat: kat, desc: bes, id: 10, time: new DateTime(2019),title: tit));
                      for (var item in newEvent) print(item.address.toString());
                      Navigator.pop(context);
                     },
+                    child: Text("Post event", style: TextStyle(color: Colors.white))
                   )
 
                 ],
@@ -704,6 +1158,7 @@ class NewEventPage extends State<StatefullNew> {
 
 
 
+      ),
       ),
     );
   }

@@ -79,6 +79,7 @@ flutter:
     - lib/assets/images/kaffe.png
     - lib/assets/images/prosjekt.png
     - lib/assets/images/skole.png
+    - lib/assets/images/filter_icon_selected.png
 
 
   # To add assets to your application, add an assets section, like this:

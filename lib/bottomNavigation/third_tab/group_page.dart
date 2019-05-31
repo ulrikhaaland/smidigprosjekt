@@ -197,148 +197,155 @@ void itemChange(bool val,int index){
           controller: _tabController,
           children: [
             
-            new Column(
-              crossAxisAlignment: CrossAxisAlignment.center, 
-              children:[
-                new Padding(
-                  padding: EdgeInsets.only(top: 50),
-                ),
-                new Center(
-                  child: new Row(
-                    mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children:[
-                    new Padding(
-                      padding: EdgeInsets.only(left: 45),
-                    ),
-                    Expanded(
-                      child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+            new SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children:[
+                  new Padding(
+                    padding: EdgeInsets.only(top: 50),
+                  ),
+                  new Center(
+                    child: new Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children:[
-                        
-                        new Text(
-                          "Neste utfordring:",
-                          textAlign: TextAlign.left,
-                          style: new TextStyle(
-                            color: UIData.black, fontFamily: 'Anton'
-                          ),
-                        ),
                         new Padding(
-                          padding: EdgeInsets.only(bottom: 5),
+                          padding: EdgeInsets.only(left: 45),
                         ),
-                        new Text(
-                          activeChallenge,
-                          textAlign: TextAlign.left,
-                          style: new TextStyle(
-                            color: UIData.black, fontFamily: 'Anton'
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children:[
+
+                              new Text(
+                                "Neste utfordring:",
+                                textAlign: TextAlign.left,
+                                style: new TextStyle(
+                                    color: UIData.black, fontFamily: 'Anton'
+                                ),
+                              ),
+                              new Padding(
+                                padding: EdgeInsets.only(bottom: 5),
+                              ),
+                              new Text(
+                                activeChallenge,
+                                textAlign: TextAlign.left,
+                                style: new TextStyle(
+                                    color: UIData.black, fontFamily: 'Anton'
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                    ),
-                    
 
-                    new Padding(
-                      padding: EdgeInsets.only(right: 10),
-                    ),
-                    
-                    /*
-                     * 
+
+                        new Padding(
+                          padding: EdgeInsets.only(right: 10),
+                        ),
+
+                        /*
+                     *
                      * Percentage indicator here
-                     * 
+                     *
                      */
-                    new Container(
-                      
-                      child: new CustomPaint(
-                        foregroundPainter: new MyPainter(
-                        lineColor: UIData.lightPink,
-                        completeColor: UIData.pink,
-                        completePercent: percentage,
-                        width: 15.0
+                        new Container(
+
+                          child: new CustomPaint(
+                            foregroundPainter: new MyPainter(
+                                lineColor: UIData.lightPink,
+                                completeColor: UIData.pink,
+                                completePercent: percentage,
+                                width: 15.0
+                            ),
+                            child: new Padding(
+                                padding: const EdgeInsets.all(30.0),
+                                child: new FlatButton(
+                                    color: UIData.grey,
+                                    splashColor: Color(0x00FFFFFF),
+                                    shape: new CircleBorder(),
+                                    child: new Text(percentage.toStringAsFixed(0)+"%"),
+                                    onPressed:(){})
+                            ),
+                          ),
                         ),
-                        child: new Padding(
-                          padding: const EdgeInsets.all(30.0),
-                          child: new FlatButton(
-                          color: UIData.grey,
-                          splashColor: Color(0x00FFFFFF),
-                          shape: new CircleBorder(),
-                          child: new Text(percentage.toStringAsFixed(0)+"%"),
-                          onPressed:(){})
-                        ),
-                      ),
-                    ),
-                    /*
-                     * 
+                        /*
+                     *
                      * Percentage indicator Ends here
-                     * 
+                     *
                      */
-                    new Padding(
-                      padding: EdgeInsets.only(right: 35),
+                        new Padding(
+                          padding: EdgeInsets.only(right: 35),
+                        ),
+
+                      ], // Text and meter row children
                     ),
+                  ),
 
-                  ], // Text and meter row children 
-                ),
-                ),
-                
-                new Padding(
-                  padding: EdgeInsets.only(top: 50),
-                ),
+                  new Padding(
+                    padding: EdgeInsets.only(top: 50),
+                  ),
 
-                new ClipRRect(
-                  
-                  borderRadius: new BorderRadius.circular(8.0),
-                  child: new Container(
-                    width:  ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 80),
-                    height: ServiceProvider.instance.screenService.getHeightByPercentage(context, 38),
-                    color: Colors.white,
-                    
-                    child: new ListView.builder(
-                      itemCount: taskList.length,
-                        itemBuilder: (context, int index) {
-                          return new Column(
-                            children: [
-                              new Padding(
-                                padding: EdgeInsets.only(top: 5),
-                              ),
-                              new CheckboxListTile(
-                                value: inputs[index],
-                                title: new Text(taskList[index]),
-                                activeColor: UIData.blue,
-                                controlAffinity: ListTileControlAffinity.trailing,
-                                onChanged:(bool val){itemChange(val, index);
-                                if(inputs[index]==true) {
-                                  setState(() {
-                                    percentage = newPercentage;
-                                    newPercentage += 100 / taskList.length;
-                                    if(newPercentage>100.0){
-                                      percentage=100.0;
-                                      newPercentage=100.0;
-                                    }
-                                    percentageAnimationController.forward(from: 0.0);
-                                  });}
-                                  else {
-                                  setState(() {
-                                    percentage = newPercentage;
-                                    
-                                    newPercentage -= 100 / taskList.length;
-                                    if(newPercentage<0){
-                                      percentage=0.0;
-                                      newPercentage=0.0;
-                                    }
-                                    percentageAnimationController.reverse(from: 100.0);
-                                  });}
-                                }
-                              )
-                            ]
-                          );
-                        }
-                           ),
-                  )
-                )
-              ],
+                  new ClipRRect(
+
+                      borderRadius: new BorderRadius.circular(8.0),
+                      child: new Container(
+                        width:  ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 80),
+                        height: ServiceProvider.instance.screenService.getHeightByPercentage(context, 38),
+                        color: Colors.white,
+
+                        child: new ListView.builder(
+                            itemCount: taskList.length,
+                            itemBuilder: (context, int index) {
+                              return new Column(
+                                  children: [
+                                    new Padding(
+                                      padding: EdgeInsets.only(top: 5),
+                                    ),
+                                    new CheckboxListTile(
+                                        value: inputs[index],
+                                        title: new Text(taskList[index]),
+                                        activeColor: UIData.blue,
+                                        controlAffinity: ListTileControlAffinity.trailing,
+                                        onChanged:(bool val){itemChange(val, index);
+                                        if(inputs[index]==true) {
+                                          setState(() {
+                                            percentage = newPercentage;
+                                            newPercentage += 100 / taskList.length;
+                                            if(newPercentage>100.0){
+                                              percentage=100.0;
+                                              newPercentage=100.0;
+                                            }
+                                            percentageAnimationController.forward(from: 0.0);
+                                          });}
+                                        else {
+                                          setState(() {
+                                            percentage = newPercentage;
+
+                                            newPercentage -= 100 / taskList.length;
+                                            if(newPercentage<0){
+                                              percentage=0.0;
+                                              newPercentage=0.0;
+                                            }
+                                            percentageAnimationController.reverse(from: 100.0);
+                                          });}
+                                        }
+                                    )
+                                  ]
+                              );
+                            }
+                        ),
+                      )
+                  ),
+                  new Divider(
+                    color: UIData.grey,
+                    height: 20,
+                  ),
+                ],
+
+              ),
             ),
-            
+
             new Text("EVENTADO"),
             new Text("CHATAROO"),
           ],
