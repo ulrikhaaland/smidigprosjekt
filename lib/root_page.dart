@@ -40,7 +40,7 @@ class RootPageState extends State<RootPage> {
   initState() {
     super.initState();
 
-    var users = [
+    /* var users = [
       {
         "bio": "Enkelt og greit menneske.",
         "email": "",
@@ -83,11 +83,11 @@ class RootPageState extends State<RootPage> {
         "skole": "Oslo Met",
         "name": "Fredrik Holtet",
       },
-    ];
+    ]; 
 
-    users.forEach((u) {
+   users.forEach((u) {
       Firestore.instance.collection("users").add(u);
-    });
+    }); */ 
 
     getUserId();
     firebaseMessaging.configure(onLaunch: (Map<String, dynamic> msg) {
