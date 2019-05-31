@@ -1044,7 +1044,8 @@ class NewEventPage extends State<StatefullNew> {
   String add = "";
   String tit = "";
   String bes = "";
-  String tim;
+  String tids;
+  String dats;
   String kat = "";
 
    bool skole = false;
@@ -1052,6 +1053,8 @@ class NewEventPage extends State<StatefullNew> {
    bool gaming = false;
    bool fest = false;
    bool prosjekt = false;
+   bool tidspunkt = false;
+   bool datovalg = false;
 
 
   DateTime _date = new DateTime.now();
@@ -1073,6 +1076,8 @@ class NewEventPage extends State<StatefullNew> {
       print("Date: ${_date.toString()}");
       setState(() {
         _date = picked;
+        dats = '${_date.day.toString()}' + '.' + '${_date.month.toString()}';
+        datovalg = true;
 
       });
     }
@@ -1086,8 +1091,13 @@ class NewEventPage extends State<StatefullNew> {
     if(picked != null && picked != _time) {
       setState(() {
         _time = picked;
+        print(_time.hour.toString());
+        tids = '${_time.hour.toString()}' + ':' + '${_time.minute.toString()}';
+        tidspunkt = true;
+
       });
     }
+
   }
 
   @override
@@ -1141,6 +1151,7 @@ class NewEventPage extends State<StatefullNew> {
                             child: InkWell(
                               onTap: () {
                                 print(cat[index]);
+                                kat = cat[index];
                                 if (cat[index] == "Kaffe") {
                                   pressedKaffe();
                                 }
@@ -1216,61 +1227,41 @@ class NewEventPage extends State<StatefullNew> {
                           SizedBox(
                             width: 140,
                             height: 50,
-                            child: TextField(
-                              decoration: InputDecoration(
-                                hintText: ("Dato"),
-                                //labelText: ("Dato"),
-                                prefixIcon: Icon(Icons.calendar_today, color: UIData.black, size: 20,),
-                                filled: true,
-                                contentPadding: EdgeInsets.all(17.0),
-                                fillColor: Colors.white,
-                                hintStyle: TextStyle(color: Colors.grey),
-                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0), borderSide: BorderSide(width: 0, style: BorderStyle.none)),
-                              ),
-                              onTap: () {
+                            child:
+
+                            FlatButton.icon(
+
+                              onPressed: () {
                                 selectDate(context);
-
                               },
-                              onChanged: (text) {
-                                String value = text;
-                              },
-                              onSubmitted: (text) {
-                                new Text(_date.toString());
+                              icon: Icon(Icons.calendar_today, color: UIData.black,),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8)), side: BorderSide(style: BorderStyle.none)),
 
-                              },
+                              color: Colors.white,
 
-
+                              label: (datovalg? Text(dats, style: TextStyle(color: UIData.black),) : Text("Dato", style: TextStyle(color: Colors.grey, fontWeight: FontWeight.normal))),
                             ),
                           ),
+
+
                           Padding(
                             padding: EdgeInsets.all(5),
                           ),
                           SizedBox(
                             width: 140,
                             height: 50,
-                            child: TextField(
-                              decoration: InputDecoration(
-                                hintText: ("Tid"),
-                                prefixIcon: Icon(Icons.access_time, color: UIData.black, size: 20,),
-                                filled: true,
-                                contentPadding: EdgeInsets.all(17.0),
-                                fillColor: Colors.white,
-                                hintStyle: TextStyle(color: Colors.grey),
-                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0), borderSide: BorderSide(width: 0, style: BorderStyle.none)),
-                              ),
-                              onTap: () {
+                            child:
+
+                            FlatButton.icon(
+                              onPressed: () {
                                 selectTime(context);
-
                               },
-                              onChanged: (text) {
-                                String value = text;
-                              },
-                              onSubmitted: (text) {
-                                new Text(_date.toString());
+                              icon: Icon(Icons.access_time, color: UIData.black),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8)), side: BorderSide(style: BorderStyle.none)),
 
-                              },
+                              color: Colors.white,
 
-
+                              label: (tidspunkt? Text(tids, style: TextStyle(color: UIData.black),) : Text("Tid", style: TextStyle(color: Colors.grey, fontWeight: FontWeight.normal))),
                             ),
                           ),
 
@@ -1422,7 +1413,10 @@ class NewEventPage extends State<StatefullNew> {
                      print("post pressed");
                      newEvent.add(Event(address: add, cat: kat, desc: bes, id: 10, time: new DateTime(2019),title: tit));
                      for (var item in newEvent) print(item.address.toString());
-                     Navigator.pop(context);
+                     for (var item in newEvent) print(item.cat.toString());
+                     for (var item in newEvent) print(item..toString());
+                     for (var item in newEvent) print(item.cat.toString());
+                     //Navigator.pop(context);
                     },
                     child: Text("Post event", style: TextStyle(color: Colors.white))
                   )
