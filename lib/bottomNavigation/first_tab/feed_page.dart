@@ -368,6 +368,8 @@ class FilterPage extends State<StateFilterPage> {
   List<String> cate = ['lib/assets/images/skole.png', 'lib/assets/images/kaffe.png', 'lib/assets/images/gaming.png', 'lib/assets/images/fest.png', 'lib/assets/images/prosjekt.png' ];
   List<String> cat =  ["Skolejobbing", "Kaffe", "Gaming", "Fest", "Prosjekt" ];
 
+  String dropdown = '';
+
 
   @override
   Widget build(BuildContext context) {
@@ -393,7 +395,7 @@ class FilterPage extends State<StateFilterPage> {
 
     )],
 
-    title: Image.asset('lib/assets/images/logo_tekst.png', fit: BoxFit.contain, scale: 8,),
+    title: Text("Filter", style: TextStyle(color: UIData.black)),
     centerTitle: true,
 
 
@@ -409,10 +411,53 @@ class FilterPage extends State<StateFilterPage> {
              color: UIData.grey,
              height: 20,
            ),
-           Align(
-             alignment: Alignment.center,
-             child: Text("Filter:", style: TextStyle(color: UIData.black, fontSize: 18, fontWeight: FontWeight.bold)),
+
+            Align(
+              alignment: Alignment.center,
+              child: Text("Sorter etter:", style: TextStyle(color: UIData.black, fontSize: 15, )),
+            ),
+           Divider(
+             color: UIData.grey,
            ),
+
+
+           Container(
+             width: 300,
+             //height: 50,
+             decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.white),
+             //color: Colors.white,
+             child: SizedBox(
+               height: 40,
+               child: DropdownButtonHideUnderline(
+
+                         child: DropdownButton<String>(
+                           isExpanded: false,
+                           value: dropdown,
+                           onChanged: (String newValue) {
+                             setState(() {
+                               dropdown = newValue;                             
+                             });
+                           },
+                           items: <String>['Avstand', 'Popularitet','']
+                             .map<DropdownMenuItem<String>>((String value) {
+                               return DropdownMenuItem<String>(
+                                 value: value,
+                                 child: Text(value),
+                               );
+                             })
+
+                             .toList(),
+                         ),
+
+
+               ),
+
+             ),
+
+           ),
+
+
+
            Divider(
              color: UIData.grey,
            ),
@@ -699,25 +744,13 @@ class FilterPage extends State<StateFilterPage> {
                  ),
                ),
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
              ],
            ),
 
              Divider(
-               color: UIData.grey
+               color: UIData.grey,
+               height: 20,
+
              ),
              GestureDetector(
                onTap: () {
@@ -727,7 +760,8 @@ class FilterPage extends State<StateFilterPage> {
                child: Text("Nullstill filter",),
              ),
              Divider(                   
-               color: UIData.grey       
+               color: UIData.grey,
+               height: 20,
              ),                         
              RaisedButton(
                color: UIData.pink,
