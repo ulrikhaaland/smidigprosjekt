@@ -491,6 +491,8 @@ class FilterPage extends State<StateFilterPage> {
   bool fest = false;
   bool prosjekt = false;
 
+  bool nullstill = true;
+
 
 
   @override
@@ -613,6 +615,7 @@ class FilterPage extends State<StateFilterPage> {
                GestureDetector(
                  onTap: () {
                    pressedSkole();
+                   print(cat[0]);
 
                  },
                  child: Container(
@@ -622,7 +625,7 @@ class FilterPage extends State<StateFilterPage> {
                      child: Card(
                        elevation: 0,
                        //color: (pressed ? Colors.white : UIData.pink),
-                       shape: (skole ?   RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black)) :  RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
+                       shape: (nullstill && skole ?   RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black)) :  RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
 
 
 
@@ -663,7 +666,7 @@ class FilterPage extends State<StateFilterPage> {
                      child: Card(
                        elevation: 0,
                        //color: (pressed ? Colors.white : UIData.pink),
-                       shape: (kaffe ?   RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black)) :  RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
+                       shape: (nullstill && kaffe ?   RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black)) :  RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
 
 
 
@@ -704,7 +707,7 @@ class FilterPage extends State<StateFilterPage> {
                      child: Card(
                        elevation: 0,
                        //color: (pressed ? Colors.white : UIData.pink),
-                       shape: (gaming ?   RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black)) :  RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
+                       shape: (nullstill && gaming ?   RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black)) :  RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
 
 
 
@@ -754,7 +757,7 @@ class FilterPage extends State<StateFilterPage> {
                      child: Card(
                        elevation: 0,
                        //color: (pressed ? Colors.white : UIData.pink),
-                       shape: (fest ?   RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black)) :  RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
+                       shape: (nullstill && fest ?   RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black)) :  RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
 
 
 
@@ -795,7 +798,7 @@ class FilterPage extends State<StateFilterPage> {
                      child: Card(
                        elevation: 0,
                        //color: (pressed ? Colors.white : UIData.pink),
-                       shape: (prosjekt ?   RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black)) :  RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
+                       shape: (nullstill && prosjekt  ?  RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black)) :  RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
 
 
 
@@ -1007,7 +1010,29 @@ class FilterPage extends State<StateFilterPage> {
              ),
              GestureDetector(
                onTap: () {
-
+                 nullstill = false;
+                 if (prosjekt) {
+                   pressedProsjekt();
+                   nullstill = true;
+                 }
+                 if (kaffe) {
+                   pressedKaffe();
+                   nullstill = true;
+                 }
+                 if (gaming) {
+                   pressedGaming();
+                   nullstill = true;
+                 }
+                 if (skole) {
+                   pressedSkole(); 
+                   nullstill = true;
+                 }
+                 if (fest) {
+                   pressedFest();
+                   nullstill = true;
+                 }
+               
+               
 
                },
                child: Text("Nullstill filter", style: TextStyle(color: UIData.blue, fontSize: 15),),
@@ -1022,6 +1047,23 @@ class FilterPage extends State<StateFilterPage> {
                padding: EdgeInsets.fromLTRB(40, 15, 40, 15),
                shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(100)), side: BorderSide(style: BorderStyle.none)),
                onPressed: () {
+                 if (kaffe) {
+                   print(cat[1]);
+                 }
+                 if (skole) {
+                   print(cat[0]);
+                 }
+                 if (gaming) {
+                   print(cat[2]);
+                 }
+                 if (fest) {
+                   print(cat[3]);
+                 }
+                 if (prosjekt) {
+                   print(cat[4]);
+                 }
+                 
+
 
                 Navigator.pop(context);
                },
@@ -1341,7 +1383,7 @@ class NewEventPage extends State<StatefullNew> {
                               onPressed: () {
                                 selectTime(context);
                               },
-                              icon: Icon(Icons.access_time, color: UIData.blue, size: 20),
+                              icon: Icon(Icons.access_time, color: UIData.blue, size: 22),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8)), side: BorderSide(style: BorderStyle.none)),
 
                               color: Colors.white,
@@ -1501,7 +1543,7 @@ class NewEventPage extends State<StatefullNew> {
                      for (var item in newEvent) print(item.cat.toString());
                      for (var item in newEvent) print(item..toString());
                      for (var item in newEvent) print(item.cat.toString());
-                     //Navigator.pop(context);
+                     Navigator.pop(context);
                     },
                     child: Text("Post event", style: TextStyle(color: Colors.white))
                   )
