@@ -173,10 +173,15 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class PageOne extends StatefulWidget {
-  PageOne({Key key, this.auth, this.onSignOut, this.user}) : super(key: key);
+  PageOne({Key key, this.auth, this.onSignOut, this.user, }) : super(key: key);
   final BaseAuth auth;
   final VoidCallback onSignOut;
   final User user;
+
+
+
+
+
 
   @override
   PageOneState createState() => PageOneState();
@@ -186,6 +191,10 @@ class PageOneState extends State<PageOne> {
   static final formKey = new GlobalKey<FormState>();
   final f = new DateFormat('yyyy-MM-dd hh:mm');
   List<Event> eventList = [];
+  int tapped = -1;
+  double cardWidth;
+  bool tap = false; 
+
 
   @override
   void initState() {
@@ -208,6 +217,19 @@ class PageOneState extends State<PageOne> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+
+             child: new Icon(Icons.add),
+             onPressed: () {
+               print('button tapped');
+               Navigator.push(
+                   context,
+                   MaterialPageRoute(builder: (context) => StatefullNew()),);
+             },
+             backgroundColor: UIData.pink,
+             elevation: 0.0,
+      ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         backgroundColor: UIData.grey,
         appBar: new AppBar(
           elevation: 1,
@@ -238,12 +260,22 @@ class PageOneState extends State<PageOne> {
 
 
     ),
-        body: new Stack(
+        body: new SingleChildScrollView(
+
+
+
+
+          child: Stack(
+
           //child: new Stack(
             children: <Widget>[
 
               Column(
+
                 children: <Widget>[
+
+
+
                   Align(
                     alignment: Alignment.topCenter,
 
@@ -261,15 +293,22 @@ class PageOneState extends State<PageOne> {
                   new Divider(color: Colors.white,),
 
 
-                  Align(
+
+                    Align(
+
+
+
+
                     alignment: Alignment.topCenter,
                                 child: Container(
-                                  height: 400,
+                                  height: 500,
                                   width: 300,
 
 
 
                                   child: ListView.builder(
+                                  // scrollDirection: Axis.vertical,
+                                 //shrinkWrap: true,
                                   itemBuilder: (context, position){
                                     return Column(
                                       children: <Widget>[
@@ -279,9 +318,9 @@ class PageOneState extends State<PageOne> {
                                         ),
                                         Align(
                                           alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            '${eventList[position].time.day.toString()}' + '/' + '${eventList[position].time.month.toString()}',
-                                            style: ServiceProvider.instance.styles.cardTitle(),
+                                          child: Text(_DateText(position),
+
+                                           
                                           ),
                                         ),
                                        Divider(
@@ -290,35 +329,41 @@ class PageOneState extends State<PageOne> {
 
 
                                        ),
-                                        Card(
-                                          elevation: 0.0,
-                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+                                        GestureDetector(
+                                          onTap: () { _tapped(position);},
 
-                                          child: Padding(
-                                            padding: EdgeInsets.all(17),
+                                          child: SizedBox(
+                                            height: tap == true && tapped != null && tapped == position ? 300 : 150,
+                                            child: Card(
+                                            elevation: 0.0,
+                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
 
-
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.end,
-                                              children: <Widget>[
-                                                new Text(eventList[position].title, style: ServiceProvider.instance.styles.cardTitle()),
-                                                Divider(
-                                                    color: Colors.white
-                                                ),
-                                                new Text(eventList[position].address),
-                                                Divider(
-                                                  color: Colors.white,
-                                                ),
-                                                new Text(' ${eventList[position].time.hour.toString()}' + ':' + '${eventList[position].time.minute.toString()}' + '0'),
+                                            child: Padding(
+                                              padding: EdgeInsets.all(17),
 
 
-                                              ],
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.end,
+                                                children: <Widget>[
+                                                  new Text(eventList[position].title, style: ServiceProvider.instance.styles.cardTitle()),
+                                                  Divider(
+                                                      color: Colors.white
+                                                  ),
+                                                  new Text(eventList[position].address),
+                                                  Divider(
+                                                    color: Colors.white,
+                                                  ),
+                                                  new Text(' ${eventList[position].time.hour.toString()}' + ':' + '${eventList[position].time.minute.toString()}' + '0'),
+
+
+                                                ],
+
+                                              ),
 
                                             ),
 
                                           ),
-
-
+                                          ),
                                         ),
                                       ],
                                     );
@@ -326,38 +371,86 @@ class PageOneState extends State<PageOne> {
                                 },
                                 itemCount: eventList.length,
                               ),
-                                ),
+
 
                       ),
+                  ),
+                  
                 ],
               ),
 
 
               Align(
 
-              alignment: Alignment(0.8, 0.9),
-                child:FloatingActionButton(
-                  child: new Icon(Icons.add),
-                  onPressed: () {
-                    print('button tapped');
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => StatefullNew()),);
-                  },
-                  backgroundColor: UIData.pink,
-                  elevation: 0.0,
+              alignment: Alignment.center,
 
 
-                )
+
+
+
+
               ),
             ],
           ),
+
+        ),
         );
 
   }
 
-  void opencard() {
-    final open = true;
+
+  void _tapped(position) {
+    setState((){
+      if(tap) {
+        tap = false; 
+        tapped = position;
+      } else {
+         tap = true; 
+        tapped = position;
+      }
+
+    });
+
+  }
+
+  String _DateText(int position) {
+    if (eventList[position].time.month == 1){
+      return '${eventList[position].time.day.toString()}' + '. ' + 'Januar';
+    }
+     else if (eventList[position].time.month == 2){
+       return '${eventList[position].time.day.toString()}' + '. ' + 'Februar';
+     }
+     else if (eventList[position].time.month == 3){
+        return '${eventList[position].time.day.toString()}' + '. ' + 'Mars';
+      }
+      else if (eventList[position].time.month == 4){
+        return '${eventList[position].time.day.toString()}' + '. ' + 'April';
+      }
+       else if (eventList[position].time.month == 5){
+         return '${eventList[position].time.day.toString()}' + '. ' + 'Mai';
+       }
+       else if (eventList[position].time.month == 6){
+          return '${eventList[position].time.day.toString()}' + '. ' + 'Juni';
+        }
+        else if (eventList[position].time.month == 7){
+          return '${eventList[position].time.day.toString()}' + '. ' + 'Juli';
+        }
+         else if (eventList[position].time.month == 8){
+           return '${eventList[position].time.day.toString()}' + '. ' + 'August';
+         }
+         else if (eventList[position].time.month == 9){
+            return '${eventList[position].time.day.toString()}' + '. ' + 'September';
+          }
+          else if (eventList[position].time.month == 10){
+            return '${eventList[position].time.day.toString()}' + '. ' + 'Oktober';
+          }
+           else if (eventList[position].time.month == 11){
+             return '${eventList[position].time.day.toString()}' + '. ' + 'November';
+           }
+            else if (eventList[position].time.month == 12){
+              return '${eventList[position].time.day.toString()}' + '. ' + 'Desember';
+            }
+    
   }
 }
 
@@ -1064,6 +1157,9 @@ class NewEventPage extends State<StatefullNew> {
   List<String> cate = ['lib/assets/images/skole.png', 'lib/assets/images/kaffe.png', 'lib/assets/images/gaming.png', 'lib/assets/images/fest.png', 'lib/assets/images/prosjekt.png' ];
   List<String> cat =  ["Skolejobbing", "Kaffe", "Gaming", "Fest", "Prosjekt" ];
 
+  bool tap = false;
+  int tapped = -1;
+
 
   Future<Null> selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -1102,7 +1198,12 @@ class NewEventPage extends State<StatefullNew> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return GestureDetector(
+    onTap: (){
+      this._removeKeyboard(context);
+
+    },
+    child:  Scaffold(
       backgroundColor: UIData.grey,
       appBar: AppBar(
         elevation: 1,
@@ -1150,35 +1251,19 @@ class NewEventPage extends State<StatefullNew> {
                             width: 90,
                             child: InkWell(
                               onTap: () {
+                                _tapped(index);
+
                                 print(cat[index]);
                                 kat = cat[index];
-                                if (cat[index] == "Kaffe") {
-                                  pressedKaffe();
-                                }
-                                if (cat[index] == "Prosjekt") {
-                                  pressedSkole();
-                                }
-                                if (cat[index] == "Gaming") {
-                                  pressedFest();
-                                }
-                                if (cat[index] == "Fest") {
-                                  pressedProsjekt();
-                                }
-                                if (cat[index] == "Skolejobbing") {
-                                  pressedGaming();
-                                }
                                 //RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 2, style: BorderStyle.solid));
 
                               },
                               splashColor: UIData.grey,
                             highlightColor: UIData.grey,
                               child: Card(
-                                shape: (skole? RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black)) :
-                                kaffe? RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black))     :
-                                    fest? RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black)) :
-                                        gaming? RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black)) :
-                                            prosjekt? RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black))
-                                    : RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
+                                shape: ( tap == true && tapped != null && tapped == index ? RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black)) :
+                                        RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
+
                                 child: Padding(
                                   padding: EdgeInsets.all(7),
                                   child: Column(
@@ -1234,7 +1319,7 @@ class NewEventPage extends State<StatefullNew> {
                               onPressed: () {
                                 selectDate(context);
                               },
-                              icon: Icon(Icons.calendar_today, color: UIData.black,),
+                              icon: Icon(Icons.calendar_today, color: UIData.blue, size: 20,),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8)), side: BorderSide(style: BorderStyle.none)),
 
                               color: Colors.white,
@@ -1256,7 +1341,7 @@ class NewEventPage extends State<StatefullNew> {
                               onPressed: () {
                                 selectTime(context);
                               },
-                              icon: Icon(Icons.access_time, color: UIData.black),
+                              icon: Icon(Icons.access_time, color: UIData.blue, size: 20),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8)), side: BorderSide(style: BorderStyle.none)),
 
                               color: Colors.white,
@@ -1438,6 +1523,7 @@ class NewEventPage extends State<StatefullNew> {
 
       ),
       ),
+    ),
     );
   }
 
@@ -1527,58 +1613,26 @@ class NewEventPage extends State<StatefullNew> {
   }
 
 
-    void pressedSkole() {
-      setState(() {
-        if (skole) {
-          skole = false;
+    void _tapped(index) {
+      setState((){
+        if(tap) {
+          tap = false;
+          tapped = index;
+        } else {
+           tap = true;
+          tapped = index;
         }
-        else {
-          skole = true;
-        }
-      } );
+                                                
+      });
+
     }
 
-      void pressedKaffe() {
-      setState(() {
-         if(kaffe){
-           kaffe = false;
-         }
-         else {
-           kaffe = true;
-         }
-      })    ;
-      }
 
-      void pressedGaming() {
-      setState(() {
-        if (gaming) {
-          gaming = false;
-        }
-        else {
-          gaming = true;
-        }
-      });
-      }
-      void pressedFest(){
-      setState(() {
-        if (fest) {
-          fest = false;
-        }
-        else {
-          fest = true;
-        }
-      });
-      }
-      void pressedProsjekt(){
-      setState(() {
-        if (prosjekt) {
-          prosjekt = false;
-        } else {
-          prosjekt = true;
-        }
-      });
 
-      }                                      
+
+  void _removeKeyboard(BuildContext context) {
+    FocusScope.of(context).requestFocus(new FocusNode());
+  }
 
 
 
