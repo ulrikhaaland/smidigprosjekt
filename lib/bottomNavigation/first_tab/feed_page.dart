@@ -211,17 +211,10 @@ class PageOneState extends State<PageOne> {
      eventList.add(Event(address: doc.data["address"], cat: doc.data["cat"], desc: doc.data["desc"], id: doc.data["id"], time: doc.data["time"] as DateTime,  title: doc.data["title"]));
    });
 
-
-
   }
-
 
   @override
   Widget build(BuildContext context) {
-
-
-
-
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -269,11 +262,6 @@ class PageOneState extends State<PageOne> {
     ),
         body: new SingleChildScrollView(
 
-
-
-
-
-
           child: Stack(
 
           //child: new Stack(
@@ -281,16 +269,9 @@ class PageOneState extends State<PageOne> {
 
 
               Column(
-
                 children: <Widget>[
 
-
-
                     Align(
-
-
-
-
                     alignment: Alignment.topCenter,
                                 child: Container(
                                   height: 500,

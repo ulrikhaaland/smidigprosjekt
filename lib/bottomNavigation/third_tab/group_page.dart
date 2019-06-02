@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:smidigprosjekt/objects/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:smidigprosjekt/utils/uidata.dart';
@@ -110,7 +111,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
     ];
 
   if(inputs[4]==true){
-    activeChallenge = "Du har ingen utfordringer igjen!";
+    activeChallenge = "Dere har ingen utfordringer igjen!";
   }
   if(inputs[4]==false){
     activeChallenge = taskList[4];
@@ -136,23 +137,64 @@ void itemChange(bool val,int index){
 }
     
     queryData = MediaQuery.of(context);
-    return new Scaffold(
+    return GestureDetector(
+      onTap: () {
+        this._removeKeyboard(context);
+      },
+      child: new Scaffold(
+
         backgroundColor: UIData.grey,
         appBar: new AppBar(
-            elevation: 2,
+            elevation: 1,
             backgroundColor: Colors.white,
             centerTitle: true,
-            title: new Text(
-              "Min gruppe",
-              style: new TextStyle(
-                fontFamily: 'Anton', fontSize: 24, color: Colors.black),
+            title:  new Text(
+                    "Min gruppe",
+                    style: ServiceProvider.instance.styles.title(),
             ),
+
             bottom: PreferredSize(
               preferredSize:
                   Size(queryData.size.width, queryData.size.height / 6),
               child: new Column(
                 children: <Widget>[
-                  new Row(),
+
+                  new Center(
+                   child: new SizedBox(
+                     height: 80,
+
+                    child: ListView.builder(
+                    itemCount: 4,  //list.lenght
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                    return Card(
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70), side: index == 0 ? BorderSide(color: UIData.pink, width: 2) : BorderSide(color: Colors.white)),
+                      //decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), border: index == 0 ? Border.all(width: 3, color: UIData.pink) : Border.all(color: Colors.white) ),
+                      child: ClipRRect(
+                        borderRadius: new BorderRadius.circular(70),
+                        child: Image.asset("lib/assets/images/fortnite.jpg",
+
+
+                          //height: 70,
+                          width: 72,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    );
+                  },
+
+
+                ),
+
+              ),
+              ),
+                  Padding(
+                    padding: EdgeInsets.all(4)
+                  ),
+
+
+
                   new Container(
                     decoration: const BoxDecoration(
                       border: Border(
@@ -162,7 +204,7 @@ void itemChange(bool val,int index){
                     ),
                     child: TabBar(
                       labelColor: Colors.grey[800],
-                      indicatorColor: UIData.lightBlue,
+                      indicatorColor: UIData.black,
                       labelStyle: new TextStyle(color: Colors.black),
                       controller: _tabController,
                       tabs: [
@@ -346,10 +388,133 @@ void itemChange(bool val,int index){
               ),
             ),
 
-            new Text("EVENTADO"),
-            new Text("CHATAROO"),
+            new Stack(
+              children: <Widget>[
+
+                    new Center(
+                      child: new Text("Dere har ingen felles events enda"),
+                    ),
+                  ],
+                ),
+
+            new Stack(
+              children: <Widget>[
+                new Center(
+                  child: Column(
+                    children: <Widget>[
+                      //new Text("chat"),
+                    ],
+                  ),
+                ),
+
+                new Padding(
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: new Container(
+                      width: 300,
+                      height: 50,
+                      //decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.white),
+                      //color: Colors.white,
+                      child: new TextField(
+
+
+                        decoration: InputDecoration(
+                          hintText: "Skriv noe..",
+                          fillColor: Colors.white,
+                          filled: true,
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0),
+                              borderSide: BorderSide(width: 0, style: BorderStyle.none)),
+                          prefixIcon: IconButton(
+                            onPressed: () {
+                              openOptions();
+
+                            },
+                            icon: Icon(Icons.camera_alt, color: UIData.blue, size: 30,),
+                          ),
+
+
+
+
+
+
+                        ),
+                      ),
+
+                    ),
+
+                  ),
+                ),
+
+
+
+              ],
+            ),
           ],
-        ));
+        ),),);
   }
+  void _removeKeyboard(BuildContext context) {
+    FocusScope.of(context).requestFocus(new FocusNode());
+  }
+  Future openCamera() async {
+    var picture = await ImagePicker.pickImage(
+        source: ImageSource.camera );
+  }
+
+  Future openGallery() async {
+    var gallery = await ImagePicker.pickImage(
+        source: ImageSource.gallery);
+  }
+  Future<void> openOptions() {
+    return showDialog(context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+
+            content: new SingleChildScrollView(
+              child: new ListBody(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Icon(Icons.photo_camera, color: UIData.blue),
+                      Padding(
+                        padding: EdgeInsets.all(7.0),
+                      ),
+                      GestureDetector(
+                        child: new Text('Ta et bilde', style: TextStyle(fontSize: 20) ,),
+                        onTap: openCamera,
+                      ),
+                    ],
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                  ),
+                  Divider(),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Icon(Icons.photo, color: UIData.blue),
+                      Padding(
+                        padding: EdgeInsets.all(7.0),
+                      ),
+                      GestureDetector(
+                        child: new Text('Velg fra kamerarull', style: TextStyle(fontSize: 20)),
+                        onTap: openGallery,
+                      ),
+                    ],
+                  ),
+
+                ],
+              ),
+            ),
+
+          );
+
+        });
+  }
+
 }
 
