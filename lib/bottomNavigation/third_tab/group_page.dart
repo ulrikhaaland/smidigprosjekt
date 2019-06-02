@@ -173,10 +173,8 @@ void itemChange(bool val,int index){
                       //decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), border: index == 0 ? Border.all(width: 3, color: UIData.pink) : Border.all(color: Colors.white) ),
                       child: ClipRRect(
                         borderRadius: new BorderRadius.circular(70),
-                        child: Image.asset("lib/assets/images/fortnite.jpg",
+                        child: Image.asset("lib/assets/images/fortnite.jpg", // fra list [index]
 
-
-                          //height: 70,
                           width: 62,
                           fit: BoxFit.cover,
                         ),
