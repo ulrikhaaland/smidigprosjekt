@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smidigprosjekt/objects/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:smidigprosjekt/utils/uidata.dart';
 import '../../service/service_provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -26,24 +27,25 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: UIData.grey,
       appBar: new AppBar(
         actions: <Widget>[
           IconButton(
-            icon: Icon(
-              Icons.settings,
-              color: Colors.black,
+            icon: IconButton(
+              onPressed: () {},
+              icon: Image.asset("lib/assets/images/settings_icon.png", ),
+              //color: Colors.black,
             ),
             onPressed: null,
           ),
         ],
-        elevation: 0,
+        elevation: 1,
         backgroundColor: Colors.white,
         title: new Text(
-          "StudBud",
-          style: new TextStyle(
-              fontFamily: 'Anton', fontSize: 24, color: Colors.black),
+          "Profil",
+          style: ServiceProvider.instance.styles.title(),
         ),
+        centerTitle: true,
       ),
       body: new Form(
         key: formKey,
@@ -58,28 +60,27 @@ class _ProfilePageState extends State<ProfilePage> {
           child: new Stack(
         children: <Widget>[
           new Center(
+
             child: new Card(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               margin: EdgeInsets.only(
                 top: ServiceProvider.instance.screenService
                         .getHeightByPercentage(context, 100) /
                     15,
               ),
-              color: Colors.grey[200],
-              elevation: 2,
+              color: Colors.white,
+              elevation: 0,
               child: new Container(
                 height: ServiceProvider.instance.screenService
-                    .getPortraitHeightByPercentage(context, 66),
+                    .getPortraitHeightByPercentage(context, 70),
                 width: ServiceProvider.instance.screenService
-                    .getPortraitWidthByPercentage(context, 90),
+                    .getPortraitWidthByPercentage(context, 85),
                 child: new Column(
                   children: <Widget>[
                     new Align(
                       alignment: Alignment.centerRight,
                       child: new IconButton(
-                        icon: Icon(
-                          Icons.edit,
-                          color: Colors.black,
-                        ),
+                        icon: Image.asset("lib/assets/images/editprofile_icon.png", color: UIData.black, scale: 11,),
                         onPressed: () {
                           final form = formKey.currentState;
                           form.save();
@@ -102,6 +103,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                    new Center(
+                      child:
+
                     new ListTile(
                       leading: new Text(
                         "Skole:",
@@ -114,6 +118,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         // onSaved: (val) => "widget.user.skole "= val,
                       ),
                     ),
+    ),
                     new ListTile(
                       leading: new Text(
                         "Linje:",
@@ -157,13 +162,20 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           new Align(
             alignment: Alignment.center,
-            child: new CircleAvatar(
-              radius: 70,
-              backgroundColor: Colors.white,
-              child: new Image.asset(
-                "lib/assets/images/profile.gif",
+            child: Card(
+              elevation: 0,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70), side:  BorderSide(color: UIData.pink, width: 2)),
+              //decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), border: index == 0 ? Border.all(width: 3, color: UIData.pink) : Border.all(color: Colors.white) ),
+              child: ClipRRect(
+                borderRadius: new BorderRadius.circular(70),
+                child: Image.asset("lib/assets/images/fortnite.jpg", // fra list [index]
+
+                  width: 122,
+                  height: 122,
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
+            )
           ),
         ],
       ));
@@ -171,28 +183,30 @@ class _ProfilePageState extends State<ProfilePage> {
       return new SingleChildScrollView(
           child: new Stack(
         children: <Widget>[
-          new Center(
+
+          new Column(
+            children: <Widget>[
+
+             Center(
             child: new Card(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               margin: EdgeInsets.only(
                 top: ServiceProvider.instance.screenService
                     .getHeightByPercentage(context, 6.25),
               ),
-              color: Colors.grey[200],
-              elevation: 2,
+              color: Colors.white,
+              elevation: 0,
               child: new Container(
                 height: ServiceProvider.instance.screenService
-                    .getHeightByPercentage(context, 66),
+                    .getHeightByPercentage(context, 45),
                 width: ServiceProvider.instance.screenService
-                    .getPortraitWidthByPercentage(context, 90),
+                    .getPortraitWidthByPercentage(context, 85),
                 child: new Column(
                   children: <Widget>[
                     new Align(
                       alignment: Alignment.centerRight,
                       child: new IconButton(
-                        icon: Icon(
-                          Icons.edit,
-                          color: Colors.black,
-                        ),
+                        icon: Image.asset("lib/assets/images/editprofile_icon.png", color: UIData.black, scale: 11,),
                         onPressed: () {
                           setState(() {
                             edit = !edit;
@@ -222,56 +236,79 @@ class _ProfilePageState extends State<ProfilePage> {
                           style: new TextStyle(fontWeight: FontWeight.bold),
                         ),
                         title: new Text("widget.user.linje")),
-                    Padding(
-                      padding: EdgeInsets.only(top: 36),
-                    ),
+
                     new ListTile(
                         leading: Text(
                           "Bio:",
                           style: new TextStyle(fontWeight: FontWeight.bold),
                         ),
                         title: new Text("widget.user.bio")),
-                    new Align(
-                      alignment: Alignment.bottomCenter,
-                      child: new RaisedButton(
-                        color: Colors.white,
-                        child: new Container(
-                          width: 100,
-                          child: new Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              new Text(
-                                "INNBOKS",
-                                style:
-                                    new TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              new Icon(
-                                Icons.chat,
-                                size: 20,
-                              )
-                            ],
-                          ),
-                        ),
-                        onPressed: () => widget.onSignOut(),
-                      ),
-                    ),
+
                   ],
                 ),
               ),
             ),
+
           ),
-          new Align(
-            alignment: Alignment.center,
-            child: new CircleAvatar(
-              radius: 70,
-              backgroundColor: Colors.white,
-              child: new Image.asset(
-                "lib/assets/images/profile.gif",
+              Padding(
+                padding: EdgeInsets.all(10)
               ),
-            ),
+              new Text(
+                "Mine eventer:",
+                style: new TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+
+            ]
+
+    ),
+
+          new Align(
+              alignment: Alignment.center,
+              child: Card(
+                elevation: 0,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70), side:  BorderSide(color: UIData.pink, width: 2)),
+                //decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), border: index == 0 ? Border.all(width: 3, color: UIData.pink) : Border.all(color: Colors.white) ),
+                child: ClipRRect(
+                  borderRadius: new BorderRadius.circular(70),
+                  child: Image.asset("lib/assets/images/fortnite.jpg", // fra list [index]
+
+                    width: 122,
+                    height: 122,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              )
           ),
+
         ],
       ));
     }
   }
 }
+
+
+
+//## new Align(
+//                      alignment: Alignment.bottomCenter,
+//                      child: new RaisedButton(
+//                        color: Colors.white,
+//                        child: new Container(
+//                          width: 100,
+//                          child: new Row(
+//                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                            children: <Widget>[
+//                              new Text(
+//                                "INNBOKS",
+//                                style:
+//                                    new TextStyle(fontWeight: FontWeight.bold),
+//                              ),
+//                              new Icon(
+//                                Icons.chat,
+//                                size: 20,
+//                              )
+//                            ],
+//                          ),
+//                        ),
+//                        onPressed: () => widget.onSignOut(),
+//                      ),
+//                    ),

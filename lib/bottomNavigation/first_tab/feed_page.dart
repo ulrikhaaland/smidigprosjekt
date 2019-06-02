@@ -180,10 +180,6 @@ class PageOne extends StatefulWidget {
   final User user;
 
 
-
-
-
-
   @override
   PageOneState createState() => PageOneState();
 }
