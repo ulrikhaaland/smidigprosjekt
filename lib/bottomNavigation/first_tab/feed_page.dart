@@ -216,6 +216,10 @@ class PageOneState extends State<PageOne> {
   @override
   Widget build(BuildContext context) {
 
+
+
+
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
 
@@ -265,33 +269,17 @@ class PageOneState extends State<PageOne> {
 
 
 
+
+
           child: Stack(
 
           //child: new Stack(
             children: <Widget>[
 
+
               Column(
 
                 children: <Widget>[
-
-
-
-                  Align(
-                    alignment: Alignment.topCenter,
-
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 10.0),
-                      child: Text(
-                        "juni",
-                        style: ServiceProvider.instance.styles.month(),
-                      )
-
-                    ),
-
-
-                  ),
-                  new Divider(color: Colors.white,),
-
 
 
                     Align(
@@ -329,42 +317,231 @@ class PageOneState extends State<PageOne> {
 
 
                                        ),
+
                                         GestureDetector(
                                           onTap: () { _tapped(position);},
 
-                                          child: SizedBox(
-                                            height: tap == true && tapped != null && tapped == position ? 300 : 150,
-                                            child: Card(
-                                            elevation: 0.0,
-                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
 
-                                            child: Padding(
-                                              padding: EdgeInsets.all(17),
+                                          child: Column(
+                                            children: <Widget>[
+                                              tap == true && tapped != null && tapped == position ?
+                                                  SizedBox (
+                                                    height: 310,
+                                                    child: Card(
+                                                      elevation: 0.0,
+                                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+
+                                                      child: Column(
+                                                        children: <Widget>[
+                                                          Row(
+                                                            mainAxisAlignment: MainAxisAlignment.start,
+                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                            //crossAxisAlignment: CrossAxisAlignment.stretch,
+
+                                                            children: <Widget>[
+                                                              ClipRRect(
+                                                                borderRadius: new BorderRadius.only(topLeft: Radius.circular(8)),
+                                                                child: Image.asset(
+                                                                  "lib/assets/images/fortnite.jpg",
+                                                                  height: 120,
+                                                                  width: 110,
+                                                                  fit: BoxFit.cover,
+                                                                ),
+                                                              ),
+                                                              Padding(
+                                                                padding: EdgeInsets.all(10),
+                                                                child: Align(
+                                                                  alignment: Alignment.centerRight,
+                                                                  child: Column(
+                                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                                    children: <Widget>[
+
+                                                                      new Text(eventList[position].title, style: ServiceProvider.instance.styles.cardTitle()),
+                                                                      Divider(
+                                                                          color: Colors.white
+                                                                      ),
+                                                                      Row(
+                                                                        children: <Widget>[
+                                                                          Icon(Icons.location_on, color: UIData.blue, size: 20,),
+                                                                          Text(eventList[position].address, style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                      Divider(
+                                                                        color: Colors.white,
+                                                                      ),
+                                                                      Row(
+                                                                        children: <Widget>[
+                                                                          Icon(Icons.access_time, color: UIData.blue, size: 17,),
+                                                                          Text(' ${eventList[position].time.hour.toString()}' + ':' + '${eventList[position].time.minute.toString()}' + '0', style: TextStyle( fontSize: 12),
+                                                                          ),
+                                                                        ],
+                                                                      ),
 
 
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.end,
-                                                children: <Widget>[
-                                                  new Text(eventList[position].title, style: ServiceProvider.instance.styles.cardTitle()),
-                                                  Divider(
-                                                      color: Colors.white
+
+                                                                    ],
+
+
+                                                                  ),
+                                                                ),
+
+
+
+
+                                                              ),
+
+
+                                                            ],
+
+                                                          ),
+
+
+
+                                                            Padding(
+                                                              padding: EdgeInsets.all(5),
+                                                              child: Container(
+                                                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), border: Border.all(color: Colors.white)),
+                                                                child: Padding(
+                                                                  padding: EdgeInsets.all(8),
+                                                                  child: Column(
+                                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                                    children: <Widget>[
+                                                                      Text("Beskrivelse:", style: TextStyle(fontWeight: FontWeight.bold)),
+                                                                      Divider(
+                                                                        height: 6,
+                                                                      ),
+                                                                      Text( '${eventList[position].desc}'
+
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+
+                                                              ),
+
+                                                            ),
+
+                                                          FlatButton(
+                                                            color: UIData.pink,
+                                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+                                                            padding: EdgeInsets.all(10),
+                                                            onPressed: () {
+
+                                                          },
+                                                            child: Text("Jeg skal", style: TextStyle(color: Colors.white, fontSize: 12)),
+                                                          ),
+
+
+
+
+                                                        ],
+                                                      ),
+
+
+
+
+
+
+
+
+                                                    ),
+
+
+                                                  ) : SizedBox(
+                                                height: 130,
+                                                child: Card(
+                                                  elevation: 0.0,
+                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+
+                                                  child: Column(
+                                                    children: <Widget>[
+                                                      Row(
+                                                        mainAxisAlignment: MainAxisAlignment.start,
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        //crossAxisAlignment: CrossAxisAlignment.stretch,
+
+                                                        children: <Widget>[
+                                                          ClipRRect(
+                                                            borderRadius: new BorderRadius.only(topLeft: Radius.circular(8), bottomLeft: Radius.circular(8)),
+                                                            child: Image.asset(
+                                                              "lib/assets/images/fortnite.jpg",
+                                                              height: 120,
+                                                              width: 110,
+                                                              fit: BoxFit.cover,
+                                                            ),
+                                                          ),
+                                                          Padding(
+                                                            padding: EdgeInsets.all(10),
+                                                            child: Align(
+                                                              alignment: Alignment.centerRight,
+                                                              child: Column(
+                                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                                children: <Widget>[
+
+                                                                  new Text(eventList[position].title, style: ServiceProvider.instance.styles.cardTitle()),
+                                                                  Divider(
+                                                                      color: Colors.white
+                                                                  ),
+                                                                  Row(
+                                                                    children: <Widget>[
+                                                                      Icon(Icons.location_on, color: UIData.blue, size: 20,),
+                                                                      Text(eventList[position].address, style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  Divider(
+                                                                    color: Colors.white,
+                                                                  ),
+                                                                  Row(
+                                                                    children: <Widget>[
+                                                                      Icon(Icons.access_time, color: UIData.blue, size: 17,),
+                                                                      Text(' ${eventList[position].time.hour.toString()}' + ':' + '${eventList[position].time.minute.toString()}' + '0', style: TextStyle( fontSize: 12),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ],
+
+
+                                                              ),
+                                                            ),
+
+
+
+
+                                                          ),
+
+
+                                                        ],
+
+                                                      ),
+
+
+
+                                                    ],
                                                   ),
-                                                  new Text(eventList[position].address),
-                                                  Divider(
-                                                    color: Colors.white,
-                                                  ),
-                                                  new Text(' ${eventList[position].time.hour.toString()}' + ':' + '${eventList[position].time.minute.toString()}' + '0'),
 
 
-                                                ],
+
+
+
+
+
+
+                                                ),
 
                                               ),
 
-                                            ),
+                                            ],
+                                          ),
 
-                                          ),
-                                          ),
-                                        ),
+
+
+                                        )
+
+
                                       ],
                                     );
 
@@ -377,7 +554,8 @@ class PageOneState extends State<PageOne> {
                   ),
                   
                 ],
-              ),
+              )
+              ,
 
 
               Align(
