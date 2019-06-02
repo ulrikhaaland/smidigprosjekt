@@ -108,6 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
         bucket: bucket,
       ),
       bottomNavigationBar: BottomNavigationBar(
+
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
         currentIndex: currentTab,
@@ -193,7 +194,9 @@ class PageOneState extends State<PageOne> {
   List<Event> eventList = [];
   int tapped = -1;
   double cardWidth;
-  bool tap = false; 
+  bool tap = false;
+
+  List<String> imgs = ["lib/assets/images/kaffepugg.jpg", "lib/assets/images/fortnite.jpg"];
 
 
   @override
@@ -282,6 +285,7 @@ class PageOneState extends State<PageOne> {
                 children: <Widget>[
 
 
+
                     Align(
 
 
@@ -341,8 +345,8 @@ class PageOneState extends State<PageOne> {
                                                             children: <Widget>[
                                                               ClipRRect(
                                                                 borderRadius: new BorderRadius.only(topLeft: Radius.circular(8)),
-                                                                child: Image.asset(
-                                                                  "lib/assets/images/fortnite.jpg",
+                                                                child: Image.asset("lib/assets/images/fortnite.jpg",
+
                                                                   height: 120,
                                                                   width: 110,
                                                                   fit: BoxFit.cover,
