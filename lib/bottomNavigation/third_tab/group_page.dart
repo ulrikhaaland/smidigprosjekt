@@ -161,10 +161,10 @@ void itemChange(bool val,int index){
 
                   new Center(
                    child: new SizedBox(
-                     height: 80,
+                     height: 70,
 
                     child: ListView.builder(
-                    itemCount: 4,  //list.lenght
+                    itemCount: 5,  //list.lenght
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
                     return Card(
@@ -177,7 +177,7 @@ void itemChange(bool val,int index){
 
 
                           //height: 70,
-                          width: 72,
+                          width: 62,
                           fit: BoxFit.cover,
                         ),
                       ),
