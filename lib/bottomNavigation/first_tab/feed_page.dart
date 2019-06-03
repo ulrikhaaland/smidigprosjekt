@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:toast/toast.dart';
 import 'package:smidigprosjekt/service/service_provider.dart';
 import '../../auth.dart';
 import '../second_tab/search_page.dart';
@@ -212,7 +213,7 @@ class PageOneState extends State<PageOne> {
   void _getEventsData() async {
    QuerySnapshot eventDocs = await Firestore.instance.collection("events").orderBy('time', descending: false).getDocuments();
    eventDocs.documents.forEach((doc) {
-     eventList.add(Event(address: doc.data["address"], cat: doc.data["cat"], desc: doc.data["desc"], id: doc.data["id"], time: doc.data["time"] as DateTime,  title: doc.data["title"]));
+     eventList.add(Event(address: doc.data["address"], cat: doc.data["cat"], desc: doc.data["desc"], id: doc.data["id"], time: doc.data["time"] as DateTime,  title: doc.data["title"], imgUrl: doc.data["imgUrl"]));
    });
 
   }
@@ -279,7 +280,8 @@ class PageOneState extends State<PageOne> {
                     alignment: Alignment.topCenter,
                                 child: Container(
                                   height: 500,
-                                  width: 300,
+                                  width: ServiceProvider.instance.screenService
+                                      .getPortraitWidthByPercentage(context, 82),
 
 
 
@@ -330,7 +332,7 @@ class PageOneState extends State<PageOne> {
                                                             children: <Widget>[
                                                               ClipRRect(
                                                                 borderRadius: new BorderRadius.only(topLeft: Radius.circular(8)),
-                                                                child: Image.asset("lib/assets/images/fortnite.jpg",
+                                                                child: Image.asset(eventList[position].imgUrl,
 
                                                                   height: 120,
                                                                   width: 110,
@@ -454,8 +456,7 @@ class PageOneState extends State<PageOne> {
                                                         children: <Widget>[
                                                           ClipRRect(
                                                             borderRadius: new BorderRadius.only(topLeft: Radius.circular(8), bottomLeft: Radius.circular(8)),
-                                                            child: Image.asset(
-                                                              "lib/assets/images/fortnite.jpg",
+                                                            child: Image.asset(eventList[position].imgUrl,
                                                               height: 120,
                                                               width: 110,
                                                               fit: BoxFit.cover,
@@ -723,7 +724,8 @@ class FilterPage extends State<StateFilterPage> {
 
 
            Container(
-             width: 300,
+             width: ServiceProvider.instance.screenService
+                 .getPortraitWidthByPercentage(context, 82),
              //height: 50,
              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.white),
              //color: Colors.white,
@@ -1361,6 +1363,10 @@ class NewEventPage extends State<StatefullNew> {
   String kat = "";
   var dbUrl;
 
+  File imgUrl;
+
+  bool choosen = false;
+
 
   void initState() {
     super.initState();
@@ -1531,7 +1537,8 @@ class NewEventPage extends State<StatefullNew> {
                       splashColor: UIData.pink,
                     ),
                     child: Container(
-                      width: 300.0,
+                      width: ServiceProvider.instance.screenService
+                          .getPortraitWidthByPercentage(context, 82),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
@@ -1657,7 +1664,7 @@ class NewEventPage extends State<StatefullNew> {
                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0), borderSide: BorderSide(width: 0, style: BorderStyle.none)),
                         ),
                         onChanged: (text) {
-                          String value = text;
+                          String bes = text;
                         },
                         onSubmitted: (text) {
                           String b = text;
@@ -1677,7 +1684,7 @@ class NewEventPage extends State<StatefullNew> {
                     children: <Widget>[
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: Text( "Legg til bilde"
+                        child: Text( "Legg til bilde:"
                         ),
                       ),
                       Divider(
@@ -1685,18 +1692,54 @@ class NewEventPage extends State<StatefullNew> {
                       ),
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: Container(
+                        child:  choosen?
+                            Column(
+                              //mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                FlatButton.icon(
+                                  onPressed: openOptions,
+                                  color: UIData.grey,
+                                  icon: Icon(Icons.replay, color: UIData.blue),
+                                  label:  Text  ("Ta på nytt", style: TextStyle(color: UIData.blue, fontWeight: FontWeight.bold)),
+
+
+                                ),
+
+                                Container(
+                                    height: 200,
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),),
+
+                                    child: Image.file(
+                                      imgUrl,
+                                      fit: BoxFit.fill,
+
+                                      // width: 200,
+                                      //height: 400,
+                                    )
+                                ),
+
+
+                              ],
+                            )
+
+                         :
+
+
+                        Container(
 
                           height: 80,
 
                           child: FittedBox(
 
-                            child: FloatingActionButton(
+                            child:  FloatingActionButton(
                               onPressed: () {
                                 openOptions();
+                                //choosen = true;
 
                               },
-                              child: Icon(Icons.photo_camera, size: 30.0,),
+                              child:
+                              Icon(Icons.photo_camera, size: 30.0,),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)), ),
                               backgroundColor: Colors.white,
                               foregroundColor: UIData.black,
@@ -1723,29 +1766,35 @@ class NewEventPage extends State<StatefullNew> {
                     padding: EdgeInsets.fromLTRB(30, 15, 30, 15),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(100)), side: BorderSide(style: BorderStyle.none)),
                     onPressed: () {
+
                      print("post pressed");
+
+                    DateTime titi = new DateTime(_date.year, _date.month, _date.day, _time.hour, _time.minute);
+
+                    id = new DateTime.now().millisecondsSinceEpoch;
+
+
 
                      var data =
                      {
                        "address" : add,
                        "cat" : kat,
                        "desc" : bes,
-                       "id" : 10,
-                       "time" : new DateTime(2019),
+                       "id" : id,
+                       "time" : titi,
                        "title" : tit,
                        "imgUrl" : dbUrl,
                      };
-                     Firestore.instance.document("events/$id").setData(data);
-
-                     newEvent.add(Event(address: add, cat: kat, desc: bes, id: 10, time: new DateTime(2019),title: tit, imgUrl: dbUrl));
 
 
+                     if(add != null && kat != null && bes != null && titi != null && dbUrl != null ) {
+                       Firestore.instance.document("events/$id").setData(data);
+                       Navigator.pop(context);
+                     } else {
+                       //Scaffold.of(context).showSnackBar(new SnackBar(content: new Text("Alle felt må fylles ut")));
+                      Toast.show("Alle felt på fylles inn", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM, backgroundColor: UIData.black, backgroundRadius: 8);
+                     }
 
-                     for (var item in newEvent) print(item.address.toString());
-                     for (var item in newEvent) print(item.cat.toString());
-                     for (var item in newEvent) print(item..toString());
-                     for (var item in newEvent) print(item.cat.toString());
-                     Navigator.pop(context);
                     },
                     child: Text("Post event", style: TextStyle(color: Colors.white))
                   )
@@ -1801,7 +1850,8 @@ class NewEventPage extends State<StatefullNew> {
       return AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
 
-        content: new SingleChildScrollView(
+        content:
+         new SingleChildScrollView(
           child: new ListBody(
             children: <Widget>[
               Row(
@@ -1814,6 +1864,8 @@ class NewEventPage extends State<StatefullNew> {
                     child: new Text('Ta et bilde', style: TextStyle(fontSize: 20) ,),
                     onTap:
                       openCamera,
+
+
 
                   ),
                 ],
@@ -1851,18 +1903,31 @@ class NewEventPage extends State<StatefullNew> {
   Future openCamera() async {
     var picture = await ImagePicker.pickImage(
         source: ImageSource.camera );
-    File imgUrl = picture;
+
+    setState((){
+      imgUrl = picture;
+      choosen = true;
+
+    });
+
     uploadImage(imgUrl);
+
 
     dbUrl = picture.path.toString();
     print("You selected: " + dbUrl);
+
 
   }
 
   Future openGallery() async {
     var gallery = await ImagePicker.pickImage(
         source: ImageSource.gallery);
-    File imgUrl = gallery;
+    setState((){
+      imgUrl = gallery;
+      choosen = true;
+
+    });
+
     uploadImage(imgUrl);
 
     dbUrl = gallery.path.toString();
