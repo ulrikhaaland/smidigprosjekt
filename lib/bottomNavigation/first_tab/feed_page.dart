@@ -205,6 +205,8 @@ class PageOneState extends State<PageOne> {
 
   bool going = false;
 
+  int starred = -1;
+
 
   @override
   void initState() {
@@ -405,8 +407,9 @@ class PageOneState extends State<PageOne> {
                                                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
                                                             padding: EdgeInsets.all(10),
                                                             onPressed: () {
-                                                              going = true;
+                                                              //going = true;
                                                               _tapped(position);
+                                                              _starred(position);
 
 
                                                           },
@@ -414,7 +417,7 @@ class PageOneState extends State<PageOne> {
                                                               mainAxisAlignment: MainAxisAlignment.center,
                                                               children: <Widget>[
 
-                                                                Icon(Icons.star_border, color: Colors.white, size: 20,),
+                                                                Icon(going && starred == position ? Icons.star : Icons.star_border, color: Colors.white, size: 20,),
                                                                 Padding(
                                                                   padding: EdgeInsets.all(3)
                                                                 ),
@@ -479,7 +482,7 @@ class PageOneState extends State<PageOne> {
 
                                                                     children: <Widget>[
                                                                       new Text(eventList[position].title, style: ServiceProvider.instance.styles.cardTitle()),
-                                                                      //Icon(Icons.star, color: going && tapped == position ? UIData.pink : Colors.white, size: 20,),
+                                                                      Icon(Icons.star, color: going && starred == position ? UIData.pink : Colors.white, size: 20,),
                                                                     ],
                                                                   ),
 
@@ -584,6 +587,18 @@ class PageOneState extends State<PageOne> {
         ),
         );
 
+  }
+
+  void _starred(position) {
+    setState((){
+      if(going) {
+        going = false;
+        starred = position;
+      } else {
+        starred = position;
+        going = true;
+      }
+    });
   }
 
 

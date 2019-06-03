@@ -186,7 +186,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   fit: BoxFit.cover,
                 )
 
-                    : Image.asset("lib/assets/images/profilbilde.png" ,
+                    : Image.asset("lib/assets/images/fortnite.jpg" ,
                   width: 122,
                   height: 122,
                   fit: BoxFit.cover,
@@ -293,7 +293,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     fit: BoxFit.cover,
                   )
 
-                      : Image.asset("lib/assets/images/profilbilde.png" ,
+                      : Image.asset("lib/assets/images/fortnite.jpg" ,
                     width: 122,
                     height: 122,
                     fit: BoxFit.cover,
