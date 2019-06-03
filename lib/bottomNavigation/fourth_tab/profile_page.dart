@@ -287,8 +287,13 @@ class _ProfilePageState extends State<ProfilePage> {
                 //decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), border: index == 0 ? Border.all(width: 3, color: UIData.pink) : Border.all(color: Colors.white) ),
                 child: ClipRRect(
                   borderRadius: new BorderRadius.circular(70),
-                  child: Image.asset("lib/assets/images/profilbilde.png", // fra list [index]
+                  child: newFoto ? Image.file(imgUrl,
+                    width: 122,
+                    height: 122,
+                    fit: BoxFit.cover,
+                  )
 
+                      : Image.asset("lib/assets/images/profilbilde.png" ,
                     width: 122,
                     height: 122,
                     fit: BoxFit.cover,
