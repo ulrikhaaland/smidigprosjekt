@@ -333,62 +333,20 @@ class PageOneState extends State<PageOne> {
 
                                                             children: <Widget>[
                                                               ClipRRect(
-                                                                borderRadius: new BorderRadius.only(topLeft: Radius.circular(8)),
+                                                                borderRadius: new BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
                                                                 child: Image.asset(eventList[position].imgUrl,
 
                                                                   height: 120,
-                                                                  width: 110,
+                                                                  width: 287,
                                                                   fit: BoxFit.cover,
                                                                 ),
                                                               ),
-                                                              Padding(
-                                                                padding: EdgeInsets.all(10),
-                                                                child: Align(
-                                                                  alignment: Alignment.centerRight,
-                                                                  child: Column(
-                                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                                    children: <Widget>[
-
-                                                                      new Text(eventList[position].title, style: ServiceProvider.instance.styles.cardTitle()),
-                                                                      Divider(
-                                                                          color: Colors.white
-                                                                      ),
-                                                                      Row(
-                                                                        children: <Widget>[
-                                                                          Icon(Icons.location_on, color: UIData.blue, size: 20,),
-                                                                          Text(eventList[position].address, style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                      Divider(
-                                                                        color: Colors.white,
-                                                                      ),
-                                                                      Row(
-                                                                        children: <Widget>[
-                                                                          Icon(Icons.access_time, color: UIData.black, size: 17,),
-                                                                          Text(' ${eventList[position].time.hour.toString()}' + ':' + '${eventList[position].time.minute.toString().padRight(2, '0')}', style: TextStyle( fontSize: 12)),
-
-                                                                        ],
-                                                                      ),
-
-
-
-                                                                    ],
-
-
-                                                                  ),
-                                                                ),
-
-
-
-
-                                                              ),
-
-
 
                                                             ],
 
+                                                          ),
+                                                          Divider(
+                                                            height: 1,
                                                           ),
 
 
@@ -405,9 +363,10 @@ class PageOneState extends State<PageOne> {
                                                                     children: <Widget>[
                                                                       Text("Beskrivelse:", style: TextStyle(fontWeight: FontWeight.bold)),
                                                                       Divider(
-                                                                        height: 6,
+                                                                        height: 10,
+                                                                        color: Colors.white,
                                                                       ),
-                                                                      Text( '${eventList[position].desc}'
+                                                                      Text( '${eventList[position].desc}', style: TextStyle(fontSize: 13)
 
                                                                       ),
                                                                     ],
