@@ -53,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String currentUser;
 
   PageOne one;
-  GamePage two;
+  SearchPage two;
   GroupPage three;
   ProfilePage four;
 
@@ -71,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
       user: widget.user,
     );
 
-    two = GamePage(
+    two = SearchPage(
       key: keyTwo,
       auth: auth,
       user: widget.user,
