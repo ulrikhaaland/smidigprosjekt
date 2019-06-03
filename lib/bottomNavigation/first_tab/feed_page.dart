@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:smidigprosjekt/service/service_provider.dart';
 import '../../auth.dart';
 import '../second_tab/search_page.dart';
+import 'package:smidigprosjekt/objects/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import '../../root_page.dart';
@@ -56,6 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
   SearchPage two;
   GroupPage three;
   ProfilePage four;
+  StatefullNew five;
 
   List<Widget> pages;
   Widget currentPage;
@@ -85,8 +87,11 @@ class _MyHomePageState extends State<MyHomePage> {
       user: widget.user,
       onSignOut: () => _signOut(),
     );
+    five = StatefullNew(
+      user: widget.user,
+    );
 
-    pages = [one, two, three, four,];
+    pages = [one, two, three, four, five];
 
     currentPage = one;
 
@@ -635,13 +640,21 @@ class PageOneState extends State<PageOne> {
 
 
 class StateFilterPage extends StatefulWidget {
-  StateFilterPage({Key key}) : super(key: key);
+
+  StateFilterPage({this.user});
+  final User user;
+
 
   @override
   FilterPage createState() => FilterPage();
 }
 
 class FilterPage extends State<StateFilterPage> {
+  void initState() {
+    super.initState();
+  }
+
+
   List<String> cate = ['lib/assets/images/skole.png', 'lib/assets/images/kaffe.png', 'lib/assets/images/gaming.png', 'lib/assets/images/fest.png', 'lib/assets/images/prosjekt.png' ];
   List<String> cat =  ["Skolejobbing", "Kaffe", "Gaming", "Fest", "Prosjekt" ];
 
@@ -1119,6 +1132,7 @@ class FilterPage extends State<StateFilterPage> {
 
                  ),
                ),
+               //Text("${widget.user.userName}"),
 
 
                GestureDetector(
@@ -1224,9 +1238,7 @@ class FilterPage extends State<StateFilterPage> {
                  if (prosjekt) {
                    print(cat[4]);
                  }
-                 
-
-
+                 //print("${widget.user.userName}");
                 Navigator.pop(context);
                },
                child: Text("Bruk filter", style: TextStyle(color: Colors.white))
@@ -1315,12 +1327,13 @@ class FilterPage extends State<StateFilterPage> {
 
 
 class Event {
-  Event({this.address, this.cat, this.desc, this.id, this.time, this.title});
+  Event({this.imgUrl, this.address, this.cat, this.desc, this.id, this.time, this.title});
 
 
   final String address;
   final String cat;
   final String desc;
+  final String imgUrl;
   final int id;
   final DateTime time;
   final String title;
@@ -1329,7 +1342,8 @@ class Event {
 }
 
 class StatefullNew extends StatefulWidget {
-  StatefullNew({Key key}) : super(key: key);
+  StatefullNew({this.user});
+  final User user;
 
   @override
   NewEventPage createState() => NewEventPage();
@@ -1340,10 +1354,17 @@ class NewEventPage extends State<StatefullNew> {
   String dropdownValue = "Skolejobbing";
   String add = "";
   String tit = "";
+  int id;
   String bes = "";
   String tids;
   String dats;
   String kat = "";
+  var dbUrl;
+
+
+  void initState() {
+    super.initState();
+  }
 
    bool skole = false;
    bool kaffe = false;
@@ -1364,9 +1385,6 @@ class NewEventPage extends State<StatefullNew> {
   bool tap = false;
   int tapped = -1;
 
-  List<StorageUploadTask> _images = <StorageUploadTask>[];
-
-  FirebaseStorage _firebaseStoreageUtil;
 
 
 
@@ -1697,6 +1715,7 @@ class NewEventPage extends State<StatefullNew> {
                     color: UIData.grey,
                     height: 40,
                   ),
+                  //Text("${widget.user.userName}"),
 
                   RaisedButton(
                     color: UIData.pink,
@@ -1705,7 +1724,23 @@ class NewEventPage extends State<StatefullNew> {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(100)), side: BorderSide(style: BorderStyle.none)),
                     onPressed: () {
                      print("post pressed");
-                     newEvent.add(Event(address: add, cat: kat, desc: bes, id: 10, time: new DateTime(2019),title: tit));
+
+                     var data =
+                     {
+                       "address" : add,
+                       "cat" : kat,
+                       "desc" : bes,
+                       "id" : 10,
+                       "time" : new DateTime(2019),
+                       "title" : tit,
+                       "imgUrl" : dbUrl,
+                     };
+                     Firestore.instance.document("events/$id").setData(data);
+
+                     newEvent.add(Event(address: add, cat: kat, desc: bes, id: 10, time: new DateTime(2019),title: tit, imgUrl: dbUrl));
+
+
+
                      for (var item in newEvent) print(item.address.toString());
                      for (var item in newEvent) print(item.cat.toString());
                      for (var item in newEvent) print(item..toString());
@@ -1819,7 +1854,7 @@ class NewEventPage extends State<StatefullNew> {
     File imgUrl = picture;
     uploadImage(imgUrl);
 
-    var dbUrl = picture.path.toString();
+    dbUrl = picture.path.toString();
     print("You selected: " + dbUrl);
 
   }
@@ -1830,7 +1865,7 @@ class NewEventPage extends State<StatefullNew> {
     File imgUrl = gallery;
     uploadImage(imgUrl);
 
-    var dbUrl = gallery.path.toString();
+    dbUrl = gallery.path.toString();
     print("You selected: " + dbUrl);
     //saveUrlDb(dbUrl);
   }

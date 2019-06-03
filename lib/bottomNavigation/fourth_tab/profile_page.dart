@@ -43,6 +43,7 @@ class _ProfilePageState extends State<ProfilePage> {
         elevation: 1,
         backgroundColor: Colors.white,
         title: new Text(
+           // "${widget.user.userName}",
           "Profil",
           style: ServiceProvider.instance.styles.title(),
         ),
@@ -98,7 +99,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       padding: EdgeInsets.only(top: 46),
                     ),
                     new Text(
-                      "widget.user.userName",
+                      "${widget.user.userName}",
                       style: new TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -224,7 +225,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       padding: EdgeInsets.only(top: 46),
                     ),
                     new Text(
-                      " widget.user.userName,",
+                      "${widget.user.userName}",
                       style: new TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
