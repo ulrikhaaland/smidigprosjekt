@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:smidigprosjekt/objects/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:smidigprosjekt/utils/uidata.dart';
@@ -110,7 +111,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
     ];
 
   if(inputs[4]==true){
-    activeChallenge = "Du har ingen utfordringer igjen!";
+    activeChallenge = "Dere har ingen utfordringer igjen!";
   }
   if(inputs[4]==false){
     activeChallenge = taskList[4];
@@ -136,23 +137,62 @@ void itemChange(bool val,int index){
 }
     
     queryData = MediaQuery.of(context);
-    return new Scaffold(
+    return GestureDetector(
+      onTap: () {
+        this._removeKeyboard(context);
+      },
+      child: new Scaffold(
+
         backgroundColor: UIData.grey,
         appBar: new AppBar(
-            elevation: 2,
+            elevation: 1,
             backgroundColor: Colors.white,
             centerTitle: true,
-            title: new Text(
-              "Min gruppe",
-              style: new TextStyle(
-                fontFamily: 'Anton', fontSize: 24, color: Colors.black),
+            title:  new Text(
+                    "Min gruppe",
+                    style: ServiceProvider.instance.styles.title(),
             ),
+
             bottom: PreferredSize(
               preferredSize:
                   Size(queryData.size.width, queryData.size.height / 6),
               child: new Column(
                 children: <Widget>[
-                  new Row(),
+
+                  new Center(
+                   child: new SizedBox(
+                     height: 70,
+
+                    child: ListView.builder(
+                    itemCount: 5,  //list.lenght
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                    return Card(
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70), side: index == 0 ? BorderSide(color: UIData.pink, width: 2) : BorderSide(color: Colors.white)),
+                      //decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), border: index == 0 ? Border.all(width: 3, color: UIData.pink) : Border.all(color: Colors.white) ),
+                      child: ClipRRect(
+                        borderRadius: new BorderRadius.circular(70),
+                        child: Image.asset("lib/assets/images/fortnite.jpg", // fra list [index]
+
+                          width: 62,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    );
+                  },
+
+
+                ),
+
+              ),
+              ),
+                  Padding(
+                    padding: EdgeInsets.all(4)
+                  ),
+
+
+
                   new Container(
                     decoration: const BoxDecoration(
                       border: Border(
@@ -162,7 +202,7 @@ void itemChange(bool val,int index){
                     ),
                     child: TabBar(
                       labelColor: Colors.grey[800],
-                      indicatorColor: UIData.lightBlue,
+                      indicatorColor: UIData.black,
                       labelStyle: new TextStyle(color: Colors.black),
                       controller: _tabController,
                       tabs: [
@@ -197,152 +237,282 @@ void itemChange(bool val,int index){
           controller: _tabController,
           children: [
             
-            new Column(
-              crossAxisAlignment: CrossAxisAlignment.center, 
-              children:[
-                new Padding(
-                  padding: EdgeInsets.only(top: 50),
-                ),
-                new Center(
-                  child: new Row(
-                    mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children:[
-                    new Padding(
-                      padding: EdgeInsets.only(left: 45),
-                    ),
-                    Expanded(
-                      child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+            new SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children:[
+                  new Padding(
+                    padding: EdgeInsets.only(top: 50),
+                  ),
+                  new Center(
+                    child: new Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children:[
-                        
-                        new Text(
-                          "Neste utfordring:",
-                          textAlign: TextAlign.left,
-                          style: new TextStyle(
-                            color: UIData.black, fontFamily: 'Anton'
-                          ),
-                        ),
                         new Padding(
-                          padding: EdgeInsets.only(bottom: 5),
+                          padding: EdgeInsets.only(left: 45),
                         ),
-                        new Text(
-                          activeChallenge,
-                          textAlign: TextAlign.left,
-                          style: new TextStyle(
-                            color: UIData.black, fontFamily: 'Anton'
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children:[
+
+                              new Text(
+                                "Neste utfordring:",
+                                textAlign: TextAlign.left,
+                                style: new TextStyle(
+                                    color: UIData.black, fontFamily: 'Anton'
+                                ),
+                              ),
+                              new Padding(
+                                padding: EdgeInsets.only(bottom: 5),
+                              ),
+                              new Text(
+                                activeChallenge,
+                                textAlign: TextAlign.left,
+                                style: new TextStyle(
+                                    color: UIData.black, fontFamily: 'Anton'
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                    ),
-                    
 
-                    new Padding(
-                      padding: EdgeInsets.only(right: 10),
-                    ),
-                    
-                    /*
-                     * 
-                     * Percentage indicator here
-                     * 
-                     */
-                    new Container(
-                      
-                      child: new CustomPaint(
-                        foregroundPainter: new MyPainter(
-                        lineColor: UIData.lightPink,
-                        completeColor: UIData.pink,
-                        completePercent: percentage,
-                        width: 15.0
+
+                        new Padding(
+                          padding: EdgeInsets.only(right: 10),
                         ),
-                        child: new Padding(
-                          padding: const EdgeInsets.all(30.0),
-                          child: new FlatButton(
-                          color: UIData.grey,
-                          splashColor: Color(0x00FFFFFF),
-                          shape: new CircleBorder(),
-                          child: new Text(percentage.toStringAsFixed(0)+"%"),
-                          onPressed:(){})
+
+                        /*
+                     *
+                     * Percentage indicator here
+                     *
+                     */
+                        new Container(
+
+                          child: new CustomPaint(
+                            foregroundPainter: new MyPainter(
+                                lineColor: UIData.lightPink,
+                                completeColor: UIData.pink,
+                                completePercent: percentage,
+                                width: 15.0
+                            ),
+                            child: new Padding(
+                                padding: const EdgeInsets.all(30.0),
+                                child: new FlatButton(
+                                    color: UIData.grey,
+                                    splashColor: Color(0x00FFFFFF),
+                                    shape: new CircleBorder(),
+                                    child: new Text(percentage.toStringAsFixed(0)+"%"),
+                                    onPressed:(){})
+                            ),
+                          ),
+                        ),
+                        /*
+                     *
+                     * Percentage indicator Ends here
+                     *
+                     */
+                        new Padding(
+                          padding: EdgeInsets.only(right: 35),
+                        ),
+
+                      ], // Text and meter row children
+                    ),
+                  ),
+
+                  new Padding(
+                    padding: EdgeInsets.only(top: 50),
+                  ),
+
+                  new ClipRRect(
+
+                      borderRadius: new BorderRadius.circular(8.0),
+                      child: new Container(
+                        width:  ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 80),
+                        height: ServiceProvider.instance.screenService.getHeightByPercentage(context, 38),
+                        color: Colors.white,
+
+                        child: new ListView.builder(
+                            itemCount: taskList.length,
+                            itemBuilder: (context, int index) {
+                              return new Column(
+                                  children: [
+                                    new Padding(
+                                      padding: EdgeInsets.only(top: 5),
+                                    ),
+                                    new CheckboxListTile(
+                                        value: inputs[index],
+                                        title: new Text(taskList[index]),
+                                        activeColor: UIData.blue,
+                                        controlAffinity: ListTileControlAffinity.trailing,
+                                        onChanged:(bool val){itemChange(val, index);
+                                        if(inputs[index]==true) {
+                                          setState(() {
+                                            percentage = newPercentage;
+                                            newPercentage += 100 / taskList.length;
+                                            if(newPercentage>100.0){
+                                              percentage=100.0;
+                                              newPercentage=100.0;
+                                            }
+                                            percentageAnimationController.forward(from: 0.0);
+                                          });}
+                                        else {
+                                          setState(() {
+                                            percentage = newPercentage;
+
+                                            newPercentage -= 100 / taskList.length;
+                                            if(newPercentage<0){
+                                              percentage=0.0;
+                                              newPercentage=0.0;
+                                            }
+                                            percentageAnimationController.reverse(from: 100.0);
+                                          });}
+                                        }
+                                    )
+                                  ]
+                              );
+                            }
+                        ),
+                      )
+                  ),
+                  new Divider(
+                    color: UIData.grey,
+                    height: 20,
+                  ),
+                ],
+
+              ),
+            ),
+
+            new Stack(
+              children: <Widget>[
+
+                    new Center(
+                      child: new Text("Dere har ingen felles events enda"),
+                    ),
+                  ],
+                ),
+
+            new Stack(
+              children: <Widget>[
+                new Center(
+                  child: Column(
+                    children: <Widget>[
+                      //new Text("chat"),
+                    ],
+                  ),
+                ),
+
+                new Padding(
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: new Container(
+                      width: 300,
+                      height: 50,
+                      //decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.white),
+                      //color: Colors.white,
+                      child: new TextField(
+
+
+                        decoration: InputDecoration(
+                          hintText: "Skriv noe..",
+                          fillColor: Colors.white,
+                          filled: true,
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0),
+                              borderSide: BorderSide(width: 0, style: BorderStyle.none)),
+                          prefixIcon: IconButton(
+                            onPressed: () {
+                              openOptions();
+
+                            },
+                            icon: Icon(Icons.camera_alt, color: UIData.blue, size: 30,),
+                          ),
+
+
+
+
+
+
                         ),
                       ),
-                    ),
-                    /*
-                     * 
-                     * Percentage indicator Ends here
-                     * 
-                     */
-                    new Padding(
-                      padding: EdgeInsets.only(right: 35),
+
                     ),
 
-                  ], // Text and meter row children 
-                ),
-                ),
-                
-                new Padding(
-                  padding: EdgeInsets.only(top: 50),
+                  ),
                 ),
 
-                new ClipRRect(
-                  
-                  borderRadius: new BorderRadius.circular(8.0),
-                  child: new Container(
-                    width:  ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 80),
-                    height: ServiceProvider.instance.screenService.getHeightByPercentage(context, 38),
-                    color: Colors.white,
-                    
-                    child: new ListView.builder(
-                      itemCount: taskList.length,
-                        itemBuilder: (context, int index) {
-                          return new Column(
-                            children: [
-                              new Padding(
-                                padding: EdgeInsets.only(top: 5),
-                              ),
-                              new CheckboxListTile(
-                                value: inputs[index],
-                                title: new Text(taskList[index]),
-                                activeColor: UIData.blue,
-                                controlAffinity: ListTileControlAffinity.trailing,
-                                onChanged:(bool val){itemChange(val, index);
-                                if(inputs[index]==true) {
-                                  setState(() {
-                                    percentage = newPercentage;
-                                    newPercentage += 100 / taskList.length;
-                                    if(newPercentage>100.0){
-                                      percentage=100.0;
-                                      newPercentage=100.0;
-                                    }
-                                    percentageAnimationController.forward(from: 0.0);
-                                  });}
-                                  else {
-                                  setState(() {
-                                    percentage = newPercentage;
-                                    
-                                    newPercentage -= 100 / taskList.length;
-                                    if(newPercentage<0){
-                                      percentage=0.0;
-                                      newPercentage=0.0;
-                                    }
-                                    percentageAnimationController.reverse(from: 100.0);
-                                  });}
-                                }
-                              )
-                            ]
-                          );
-                        }
-                           ),
-                  )
-                )
+
+
               ],
             ),
-            
-            new Text("EVENTADO"),
-            new Text("CHATAROO"),
           ],
-        ));
+        ),),);
   }
+  void _removeKeyboard(BuildContext context) {
+    FocusScope.of(context).requestFocus(new FocusNode());
+  }
+  Future openCamera() async {
+    var picture = await ImagePicker.pickImage(
+        source: ImageSource.camera );
+  }
+
+  Future openGallery() async {
+    var gallery = await ImagePicker.pickImage(
+        source: ImageSource.gallery);
+  }
+  Future<void> openOptions() {
+    return showDialog(context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+
+            content: new SingleChildScrollView(
+              child: new ListBody(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Icon(Icons.photo_camera, color: UIData.blue),
+                      Padding(
+                        padding: EdgeInsets.all(7.0),
+                      ),
+                      GestureDetector(
+                        child: new Text('Ta et bilde', style: TextStyle(fontSize: 20) ,),
+                        onTap: openCamera,
+                      ),
+                    ],
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                  ),
+                  Divider(),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Icon(Icons.photo, color: UIData.blue),
+                      Padding(
+                        padding: EdgeInsets.all(7.0),
+                      ),
+                      GestureDetector(
+                        child: new Text('Velg fra kamerarull', style: TextStyle(fontSize: 20)),
+                        onTap: openGallery,
+                      ),
+                    ],
+                  ),
+
+                ],
+              ),
+            ),
+
+          );
+
+        });
+  }
+
 }
 

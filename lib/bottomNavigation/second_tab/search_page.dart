@@ -74,7 +74,7 @@ class GamePageState extends State<GamePage> {
         //backgroundColor: UIData.white,
         appBar: new AppBar(
           backgroundColor: Colors.white,
-          elevation: 0,
+          elevation: 1,
           centerTitle: true,
           title: new Text(
             "Søk",
@@ -132,7 +132,7 @@ class GamePageState extends State<GamePage> {
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0),
                             borderSide: BorderSide(width: 0, style: BorderStyle.none)),
 
-                        prefixIcon: Icon(Icons.search, color: Colors.blue,),
+                        prefixIcon: Icon(Icons.search, color: UIData.blue),
                         fillColor: Colors.white,
                         filled: true,
                         labelText: 'Søk etter personer..',
