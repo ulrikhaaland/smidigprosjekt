@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:smidigprosjekt/objects/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:smidigprosjekt/utils/uidata.dart';
@@ -162,7 +163,12 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           new Align(
             alignment: Alignment.center,
-            child: Card(
+            child: GestureDetector(
+              onTap: () {
+                openOptions();
+              },
+              child:
+            Card(
               elevation: 0,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70), side:  BorderSide(color: UIData.pink, width: 2)),
               //decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), border: index == 0 ? Border.all(width: 3, color: UIData.pink) : Border.all(color: Colors.white) ),
@@ -175,7 +181,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   fit: BoxFit.cover,
                 ),
               ),
-            )
+            ), ),
           ),
         ],
       ));
@@ -284,6 +290,67 @@ class _ProfilePageState extends State<ProfilePage> {
       ));
     }
   }
+
+  Future openCamera() async {
+    var picture = await ImagePicker.pickImage(
+        source: ImageSource.camera );
+  }
+
+  Future openGallery() async {
+    var gallery = await ImagePicker.pickImage(
+        source: ImageSource.gallery);
+  }
+  Future<void> openOptions() {
+    return showDialog(context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+
+            content: new SingleChildScrollView(
+              child: new ListBody(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Icon(Icons.photo_camera, color: UIData.blue),
+                      Padding(
+                        padding: EdgeInsets.all(7.0),
+                      ),
+                      GestureDetector(
+                        child: new Text('Ta et bilde', style: TextStyle(fontSize: 20) ,),
+                        onTap: openCamera,
+                      ),
+                    ],
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                  ),
+                  Divider(),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Icon(Icons.photo, color: UIData.blue),
+                      Padding(
+                        padding: EdgeInsets.all(7.0),
+                      ),
+                      GestureDetector(
+                        child: new Text('Velg fra kamerarull', style: TextStyle(fontSize: 20)),
+                        onTap: openGallery,
+                      ),
+                    ],
+                  ),
+
+                ],
+              ),
+            ),
+
+          );
+
+        });
+  }
+
 }
 
 
