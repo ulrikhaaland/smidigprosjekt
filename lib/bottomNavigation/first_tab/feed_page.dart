@@ -203,6 +203,8 @@ class PageOneState extends State<PageOne> {
 
   List<String> imgs = ["lib/assets/images/kaffepugg.jpg", "lib/assets/images/fortnite.jpg"];
 
+  bool going = false;
+
 
   @override
   void initState() {
@@ -364,9 +366,9 @@ class PageOneState extends State<PageOne> {
                                                                       ),
                                                                       Row(
                                                                         children: <Widget>[
-                                                                          Icon(Icons.access_time, color: UIData.blue, size: 17,),
-                                                                          Text(' ${eventList[position].time.hour.toString()}' + ':' + '${eventList[position].time.minute.toString()}' + '0', style: TextStyle( fontSize: 12),
-                                                                          ),
+                                                                          Icon(Icons.access_time, color: UIData.black, size: 17,),
+                                                                          Text(' ${eventList[position].time.hour.toString()}' + ':' + '${eventList[position].time.minute.toString().padRight(2, '0')}', style: TextStyle( fontSize: 12)),
+
                                                                         ],
                                                                       ),
 
@@ -384,6 +386,7 @@ class PageOneState extends State<PageOne> {
                                                               ),
 
 
+
                                                             ],
 
                                                           ),
@@ -393,6 +396,7 @@ class PageOneState extends State<PageOne> {
                                                             Padding(
                                                               padding: EdgeInsets.all(5),
                                                               child: Container(
+                                                                height: 130,
                                                                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), border: Border.all(color: Colors.white)),
                                                                 child: Padding(
                                                                   padding: EdgeInsets.all(8),
@@ -414,15 +418,48 @@ class PageOneState extends State<PageOne> {
 
                                                             ),
 
-                                                          FlatButton(
+                                                          Expanded(
+                                                            child:
+
+
+                                                          Container(
+                                                            height: 40,
+                                                            margin: EdgeInsets.only(top: 0),
+                                                            width: ServiceProvider.instance.screenService
+                                                                .getPortraitWidthByPercentage(context, 82),
+
+                                                            decoration: new BoxDecoration(
+                                                            color: Colors.pink,
+                                                            borderRadius: new BorderRadius.only(
+                                                                bottomLeft:  const  Radius.circular(8.0),
+                                                                bottomRight: const  Radius.circular(8.0)),
+                                                          ),
+                                                            child:
+                                                            FlatButton(
                                                             color: UIData.pink,
                                                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
                                                             padding: EdgeInsets.all(10),
                                                             onPressed: () {
+                                                              going = true;
+                                                              _tapped(position);
+
 
                                                           },
-                                                            child: Text("Jeg skal", style: TextStyle(color: Colors.white, fontSize: 12)),
-                                                          ),
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              children: <Widget>[
+
+                                                                Icon(Icons.star_border, color: Colors.white, size: 20,),
+                                                                Padding(
+                                                                  padding: EdgeInsets.all(3)
+                                                                ),
+                                                                Text("Interessert", style: TextStyle(color: Colors.white, fontSize: 13)),
+
+                                                              ],
+                                                            ),
+
+
+                                                          ),),),
 
 
 
@@ -466,12 +503,22 @@ class PageOneState extends State<PageOne> {
                                                             padding: EdgeInsets.all(10),
                                                             child: Align(
                                                               alignment: Alignment.centerRight,
-                                                              child: Column(
+                                                              child:
+
+                                                              Column(
                                                                 mainAxisAlignment: MainAxisAlignment.start,
                                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                                 children: <Widget>[
 
-                                                                  new Text(eventList[position].title, style: ServiceProvider.instance.styles.cardTitle()),
+                                                                  Row(
+
+                                                                    children: <Widget>[
+                                                                      new Text(eventList[position].title, style: ServiceProvider.instance.styles.cardTitle()),
+                                                                      //Icon(Icons.star, color: going && tapped == position ? UIData.pink : Colors.white, size: 20,),
+                                                                    ],
+                                                                  ),
+
+
                                                                   Divider(
                                                                       color: Colors.white
                                                                   ),
@@ -487,8 +534,8 @@ class PageOneState extends State<PageOne> {
                                                                   ),
                                                                   Row(
                                                                     children: <Widget>[
-                                                                      Icon(Icons.access_time, color: UIData.blue, size: 17,),
-                                                                      Text(' ${eventList[position].time.hour.toString()}' + ':' + '${eventList[position].time.minute.toString()}' + '0', style: TextStyle( fontSize: 12),
+                                                                      Icon(Icons.access_time, color: UIData.black, size: 17,),
+                                                                      Text(' ${eventList[position].time.hour.toString()}' + ':' + '${eventList[position].time.minute.toString().padRight(2, '0')}', style: TextStyle( fontSize: 12),
                                                                       ),
                                                                     ],
                                                                   ),
@@ -496,6 +543,11 @@ class PageOneState extends State<PageOne> {
 
 
                                                               ),
+
+
+
+
+
                                                             ),
 
 
@@ -511,6 +563,7 @@ class PageOneState extends State<PageOne> {
 
 
                                                     ],
+
                                                   ),
 
 
@@ -523,6 +576,7 @@ class PageOneState extends State<PageOne> {
                                                 ),
 
                                               ),
+
 
                                             ],
                                           ),
@@ -2030,3 +2084,27 @@ class NewEventPage extends State<StatefullNew> {
 //                          ),
 //
 //                        );
+
+
+
+//##  Padding(
+//                                                            padding: EdgeInsets.fromLTRB(0, 80, 0, 0),
+//                                                            child:
+//                                                            SizedBox(
+//                                                              height: 40,
+//                                                              child:
+//
+//                                                              Card(
+//                                                                elevation: 0,
+//                                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30), side: BorderSide(color: UIData.pink, width: 1)),
+//                                                                //decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), border: index == 0 ? Border.all(width: 3, color: UIData.pink) : Border.all(color: Colors.white) ),
+//                                                                child: ClipRRect(
+//                                                                  borderRadius: new BorderRadius.circular(50),
+//                                                                  child: Image.asset("lib/assets/images/fortnite.jpg", // fra list [index]
+//
+//                                                                    width: 32,
+//                                                                    fit: BoxFit.cover,
+//                                                                  ),
+//                                                                ),
+//                                                              ), ),
+//                                                          ),

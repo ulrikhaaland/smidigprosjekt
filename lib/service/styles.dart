@@ -34,7 +34,7 @@ class Styles {
   TextStyle cardTitle({double fontSize, Color color}) {
     return TextStyle(
       color: color ?? UIData.black,
-      fontSize: fontSize ?? 18,
+      fontSize: fontSize ?? 16,
       fontFamily: "Roboto",
       fontWeight: FontWeight.bold,
     );
