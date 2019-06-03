@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:smidigprosjekt/objects/user.dart';
@@ -19,7 +21,10 @@ class _ProfilePageState extends State<ProfilePage> {
   String bio = "";
   String linje = "";
   String skole = "";
+  bool newFoto = false;
   bool edit = false;
+
+  File imgUrl;
   @override
   void initState() {
     super.initState();
@@ -175,8 +180,13 @@ class _ProfilePageState extends State<ProfilePage> {
               //decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), border: index == 0 ? Border.all(width: 3, color: UIData.pink) : Border.all(color: Colors.white) ),
               child: ClipRRect(
                 borderRadius: new BorderRadius.circular(70),
-                child: Image.asset("lib/assets/images/fortnite.jpg", // fra list [index]
+                child: newFoto ? Image.file(imgUrl,
+                  width: 122,
+                  height: 122,
+                  fit: BoxFit.cover,
+                )
 
+                    : Image.asset("lib/assets/images/profilbilde.png" ,
                   width: 122,
                   height: 122,
                   fit: BoxFit.cover,
@@ -277,7 +287,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 //decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), border: index == 0 ? Border.all(width: 3, color: UIData.pink) : Border.all(color: Colors.white) ),
                 child: ClipRRect(
                   borderRadius: new BorderRadius.circular(70),
-                  child: Image.asset("lib/assets/images/fortnite.jpg", // fra list [index]
+                  child: Image.asset("lib/assets/images/profilbilde.png", // fra list [index]
 
                     width: 122,
                     height: 122,
@@ -295,11 +305,21 @@ class _ProfilePageState extends State<ProfilePage> {
   Future openCamera() async {
     var picture = await ImagePicker.pickImage(
         source: ImageSource.camera );
+    setState((){
+      imgUrl = picture;
+      newFoto = true;
+
+    });
   }
 
   Future openGallery() async {
     var gallery = await ImagePicker.pickImage(
         source: ImageSource.gallery);
+    setState((){
+      imgUrl = gallery;
+      newFoto = true;
+
+    });
   }
   Future<void> openOptions() {
     return showDialog(context: context,

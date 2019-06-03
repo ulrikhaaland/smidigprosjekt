@@ -269,7 +269,13 @@ class PageOneState extends State<PageOne> {
     ),
         body: new SingleChildScrollView(
 
-          child: Stack(
+
+            child: new
+
+
+
+
+          Stack(
 
           //child: new Stack(
             children: <Widget>[
@@ -574,6 +580,7 @@ class PageOneState extends State<PageOne> {
             ],
           ),
 
+
         ),
         );
 
@@ -632,6 +639,13 @@ class PageOneState extends State<PageOne> {
               return '${eventList[position].time.day.toString()}' + '. ' + 'Desember';
             }
     
+  }
+
+  Future<void> _Refresh() async {
+    print('refreshing');
+    //setState(() => _getEventsData()
+
+
   }
 }
 
@@ -1780,7 +1794,9 @@ class NewEventPage extends State<StatefullNew> {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(100)), side: BorderSide(style: BorderStyle.none)),
                     onPressed: () {
 
-                     print("post pressed");
+                      uploadImage(imgUrl);
+
+                      print("post pressed");
 
                     DateTime titi = new DateTime(_date.year, _date.month, _date.day, _time.hour, _time.minute);
 
@@ -1802,6 +1818,7 @@ class NewEventPage extends State<StatefullNew> {
 
                      if(add != null && kat != null && bes != null && titi != null && dbUrl != null ) {
                        Firestore.instance.document("events/$id").setData(data);
+
                        Navigator.pop(context);
                      } else {
                        //Scaffold.of(context).showSnackBar(new SnackBar(content: new Text("Alle felt må fylles ut")));
@@ -1923,7 +1940,7 @@ class NewEventPage extends State<StatefullNew> {
 
     });
 
-    uploadImage(imgUrl);
+    //uploadImage(imgUrl);
 
 
     dbUrl = picture.path.toString();
@@ -1941,7 +1958,7 @@ class NewEventPage extends State<StatefullNew> {
 
     });
 
-    uploadImage(imgUrl);
+    //uploadImage(imgUrl);
 
     dbUrl = gallery.path.toString();
     print("You selected: " + dbUrl);
@@ -1955,22 +1972,6 @@ class NewEventPage extends State<StatefullNew> {
     final StorageUploadTask upTask = imgRef.child(timeKey.toString() + ".jpg").putFile(imgUrl);
 
   }
-
-  void saveUrlDb(dbUrl) {
-    var dbKey = new DateTime.now();
-    var form = new DateFormat('MMM d, yyyy');
-    var formTime = new DateFormat('EEEE, hh:mm aaa');
-    String date = form.format(dbKey);
-    String time = formTime.format(dbKey);
-
-
-
-    //QuerySnapshot eventDocs = await Firestore.instance.collection("events").orderBy('time', descending: false).getDocuments();
-
-    //Firestore.instance.document("events/$uid").setData(.toJson());
-
-  }
-
 
     void _tapped(index) {
       setState((){
