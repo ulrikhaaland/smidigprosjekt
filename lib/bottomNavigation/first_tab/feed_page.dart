@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:smidigprosjekt/service/service_provider.dart';
@@ -7,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import '../../root_page.dart';
 import '../../utils/uidata.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import '../third_tab/group_page.dart';
 import '../../objects/user.dart';
 import 'package:image_picker/image_picker.dart';
@@ -1361,6 +1364,11 @@ class NewEventPage extends State<StatefullNew> {
   bool tap = false;
   int tapped = -1;
 
+  List<StorageUploadTask> _images = <StorageUploadTask>[];
+
+  FirebaseStorage _firebaseStoreageUtil;
+
+
 
   Future<Null> selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -1769,7 +1777,9 @@ class NewEventPage extends State<StatefullNew> {
                   ),
                   GestureDetector(
                     child: new Text('Ta et bilde', style: TextStyle(fontSize: 20) ,),
-                    onTap: openCamera,
+                    onTap:
+                      openCamera,
+
                   ),
                 ],
               ),
@@ -1806,11 +1816,46 @@ class NewEventPage extends State<StatefullNew> {
   Future openCamera() async {
     var picture = await ImagePicker.pickImage(
         source: ImageSource.camera );
+    File imgUrl = picture;
+    uploadImage(imgUrl);
+
+    var dbUrl = picture.path.toString();
+    print("You selected: " + dbUrl);
+
   }
 
   Future openGallery() async {
     var gallery = await ImagePicker.pickImage(
         source: ImageSource.gallery);
+    File imgUrl = gallery;
+    uploadImage(imgUrl);
+
+    var dbUrl = gallery.path.toString();
+    print("You selected: " + dbUrl);
+    //saveUrlDb(dbUrl);
+  }
+
+  void uploadImage(imgUrl) async {
+
+    final StorageReference imgRef = FirebaseStorage.instance.ref().child("Event Images");
+    var timeKey = new DateTime.now();
+    final StorageUploadTask upTask = imgRef.child(timeKey.toString() + ".jpg").putFile(imgUrl);
+
+  }
+
+  void saveUrlDb(dbUrl) {
+    var dbKey = new DateTime.now();
+    var form = new DateFormat('MMM d, yyyy');
+    var formTime = new DateFormat('EEEE, hh:mm aaa');
+    String date = form.format(dbKey);
+    String time = formTime.format(dbKey);
+
+
+
+    //QuerySnapshot eventDocs = await Firestore.instance.collection("events").orderBy('time', descending: false).getDocuments();
+
+    //Firestore.instance.document("events/$uid").setData(.toJson());
+
   }
 
 
