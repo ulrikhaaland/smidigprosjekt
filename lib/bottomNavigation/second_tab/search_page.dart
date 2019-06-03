@@ -169,75 +169,7 @@ class GamePageState extends State<GamePage> {
 
                 ),
                 
-                Align(
-                  
-                  child: Container(
-                    height: 130,
-                    width: 150,
-                    margin: EdgeInsets.only(
-                      left: 150,
-                      top: 10,  
-                    ),
-
-                    decoration: new BoxDecoration(
-                      
-                      image: DecorationImage(
-                        image: new AssetImage(
-                          "lib/assets/images/illustrasjon1.png"
-                        ),
-                        
-                        fit: BoxFit.fitHeight,
-                      ),
-                    
-                    color: Colors.white,
-
-                    borderRadius: new BorderRadius.only(
-                      topLeft:  const  Radius.circular(20.0),
-                      topRight: const  Radius.circular(20.0)
-                      ),
-                    ),
-                    
-                    child: Text(
-                      ("dis is a test"),
-                      textAlign: TextAlign.center,
-                      
-                    ),
-                    
-                  ),
-                ),
-
-                Align(
-                  child: Container(
-                    height: 40,
-                    width: 150,
-                    margin: EdgeInsets.only(left: 150),
-
-                    decoration: new BoxDecoration(
-                    color: Colors.pink,
-                    borderRadius: new BorderRadius.only(
-                    bottomLeft:  const  Radius.circular(20.0),
-                    bottomRight: const  Radius.circular(20.0)
-
-                    
-
-                    )
-                  ),
-                
-                  child: Text(
-                    ("velg"),
-                    textAlign: TextAlign.center,
-                    
-
-                    style: TextStyle(
-                      color: Colors.white,
-                      
-                    ),
-                  ),
-                    
-                  )
-                ),
-
-                Align(
+                /*Align(
                   
                   child: Container(
                     height: 130,
@@ -249,67 +181,92 @@ class GamePageState extends State<GamePage> {
 
                     decoration: new BoxDecoration(
                       
-                      image: DecorationImage(
-                        image: new AssetImage(
-                          "lib/assets/images/illustrasjon1.png"
-                        ),
-                        
-                        fit: BoxFit.fitHeight,
-                      ),
+                      
+
+                    
                     
                     color: Colors.white,
 
                     borderRadius: new BorderRadius.only(
-                      topLeft:  const  Radius.circular(20.0),
-                      topRight: const  Radius.circular(20.0)
+                      topLeft:  const  Radius.circular(10.0),
+                      topRight: const  Radius.circular(0.0)
                       ),
                     ),
                     
                     child: Text(
-                      ("REEE"),
+                      ("dis is a test"),
                       textAlign: TextAlign.center,
-                      
                       
                     ),
                     
                   ),
+                ),*/
+                Align(
+                    
+                    child: Container(
+                      //color: Colors.white,
+                      height: 150,
+                      width: 150,
+                      margin: EdgeInsets.only(
+                        right: 150,
+                        top: 10,  
+                      ),
+
+                      child: CircleAvatar(
+                        
+                        radius: 20.0,
+                        backgroundImage: NetworkImage("https://i.imgur.com/BoN9kdC.png"),
+                      
+                      ),
+
+                    decoration: new BoxDecoration(
+                      color: Colors.white,
+
+                      borderRadius: new BorderRadius.only(
+                        topLeft: const Radius.circular(10.0),
+                        topRight: const Radius.circular(10.0),
+                      )
+                    )
+                    
+                  ) 
+                  
+                  
                 ),
 
                 Align(
                   child: Container(
-                    height: 40,
+                    height: 30,
                     width: 150,
                     margin: EdgeInsets.only(right: 150),
 
                     decoration: new BoxDecoration(
                     color: Colors.pink,
                     borderRadius: new BorderRadius.only(
-                    bottomLeft:  const  Radius.circular(20.0),
-                    bottomRight: const  Radius.circular(20.0)
+                    bottomLeft:  const  Radius.circular(10.0),
+                    bottomRight: const  Radius.circular(10.0)
 
                     
 
                     )
                   ),
-
-                  child: Text(
-                    ("velg"),
-                    textAlign: TextAlign.center,
-
-
-                    style: TextStyle(
-                      color: Colors.white,
+                  child: Center(
+                    child: Text(
+                      ("velg"),
+                      textAlign: TextAlign.center,
                       
+
+                      style: TextStyle(
+                        color: Colors.white,
+                        
+                      ),
                     ),
                   ),
                     
                   )
-                )
+                ),
 
               ],
             ),
-
-
           ],
 
         ));
