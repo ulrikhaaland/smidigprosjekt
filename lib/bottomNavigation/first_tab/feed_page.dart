@@ -593,7 +593,7 @@ class PageOneState extends State<PageOne> {
     setState((){
       if(going) {
         going = false;
-        starred = position;
+        starred = -1;
       } else {
         starred = position;
         going = true;
@@ -1837,7 +1837,7 @@ class NewEventPage extends State<StatefullNew> {
                        Navigator.pop(context);
                      } else {
                        //Scaffold.of(context).showSnackBar(new SnackBar(content: new Text("Alle felt må fylles ut")));
-                      Toast.show("Alle felt på fylles inn", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM, backgroundColor: UIData.black, backgroundRadius: 8);
+                      Toast.show("Alle felt må fylles inn", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM, backgroundColor: UIData.black, backgroundRadius: 8);
                      }
 
                     },
