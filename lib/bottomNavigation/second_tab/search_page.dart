@@ -25,13 +25,9 @@ class SearchPage extends StatefulWidget {
   final VoidCallback onSignOut;
   final User user;
   @override
+
   SearchPageState createState() => SearchPageState();
 }
-
-
-
-
-
 
 
 
@@ -55,6 +51,22 @@ class SearchPageState extends State<SearchPage> {
     );
   }
 
+  /*
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: GridView(
+        physics: BouncingScrollPhysics(), // if you want IOS bouncing effect, otherwise remove this line
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),//change the number as you want
+        children: images.map((url) {
+          return Card(child: Image.network(url));
+        }).toList(),
+      ),
+    );
+  }*/
+
+
+
   @override
   initState() {
     super.initState();
@@ -68,6 +80,7 @@ class SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
 
         backgroundColor: UIData.grey,
         resizeToAvoidBottomPadding: true,
@@ -88,10 +101,12 @@ class SearchPageState extends State<SearchPage> {
 
 
 
-        body: new Stack(
+        body:
+
+        new Stack(
           //alignment: Alignment.center,
 
-          children: <Widget>[
+          children: [
 
             Column(
 
@@ -99,13 +114,15 @@ class SearchPageState extends State<SearchPage> {
                 
                 Padding(
                   
-                  padding: EdgeInsets.only(top: 100),
+                  padding: EdgeInsets.only(top: 30),
                   child: Align(
                     
-                    alignment: Alignment.center,
-                    child: Text("Finn personer", 
-                    style: TextStyle(
-                      fontSize: 20,
+                    alignment: Alignment.topCenter,
+                    child: Text(
+                      "Finn personer:",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       
                     ),),
                   ),
@@ -166,110 +183,210 @@ class SearchPageState extends State<SearchPage> {
                       },
                     ),
                   ),
-
                 ),
-                
-                /*Align(
-                  
-                  child: Container(
-                    height: 130,
-                    width: 150,
-                    margin: EdgeInsets.only(
-                      right: 150,
-                      top: 10,  
+
+                Padding(
+                  padding: EdgeInsets.all(10)
+                ),
+
+
+                new SingleChildScrollView(
+    child:
+
+
+
+
+                Center(
+                  child: new SizedBox(
+                    height: 350,
+                    //width: 100,
+
+                    child: ListView.builder(
+                      itemCount: 10,  //list.lenght
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (context, index) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            SizedBox(
+                              width: 150,
+                              height: 180,
+                              child:
+
+                            Card(
+                              color: Colors.white,
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                              //decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), border: index == 0 ? Border.all(width: 3, color: UIData.pink) : Border.all(color: Colors.white) ),
+                             child: Column(
+                               children: <Widget>[
+                                 Padding(
+                                   padding: EdgeInsets.all(10),
+                                       child: Container(
+                                   height: 60,
+                                   child: SizedBox(
+                                    // height: 70,
+                                     child: ClipRRect(
+                                       borderRadius: new BorderRadius.circular(70),
+                                       child: Image.asset("lib/assets/images/fortnite.jpg", // fra list [index]
+                                         width: 62,
+                                         fit: BoxFit.cover,
+                                       ),
+                                     ),
+                                   ),
+
+
+
+                                 ),
+                        ),
+                                 Container(
+                                   height: 60,
+                                   child: Column(
+                                     children: <Widget>[
+                                       Text("Navn", style: TextStyle(fontWeight: FontWeight.bold)),
+                                       Text("Skole"),
+                                       Text("linje", style: TextStyle(fontStyle: FontStyle.italic)),
+                                     ],
+                                   ),
+                                 ),
+                                 Expanded(
+                                   child: Container(
+                                     height: 40,
+                                     margin: EdgeInsets.only(top: 0),
+                                     width: 150,
+                                     decoration: new BoxDecoration(
+                                       color: Colors.pink,
+                                       borderRadius: new BorderRadius.only(
+                                           bottomLeft:  const  Radius.circular(8.0),
+                                           bottomRight: const  Radius.circular(8.0)),
+                                     ),
+                                     child: FlatButton(
+                                       onPressed: () {},
+                                       child: Text("Velg", style: TextStyle(color: Colors.white)),
+                                     ),
+                                   ),
+                                 ),
+
+                               ],
+                             ),
+
+                            ),
+                        ),
+                            SizedBox(
+                              width: 150,
+                              height: 180,
+                              child:
+
+                              Card(
+                                color: Colors.white,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                //decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), border: index == 0 ? Border.all(width: 3, color: UIData.pink) : Border.all(color: Colors.white) ),
+                                child: Column(
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.all(10),
+                                      child: Container(
+                                        height: 60,
+                                        child: SizedBox(
+                                          // height: 70,
+                                          child: ClipRRect(
+                                            borderRadius: new BorderRadius.circular(70),
+                                            child: Image.asset("lib/assets/images/fortnite.jpg", // fra list [index]
+                                              width: 62,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+
+
+
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 60,
+                                      child: Column(
+                                        children: <Widget>[
+                                          Text("Navn", style: TextStyle(fontWeight: FontWeight.bold)),
+                                          Text("Skole"),
+                                          Text("linje", style: TextStyle(fontStyle: FontStyle.italic)),
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        height: 40,
+                                        margin: EdgeInsets.only(top: 0),
+                                        width: 150,
+                                        decoration: new BoxDecoration(
+                                          color: Colors.pink,
+                                          borderRadius: new BorderRadius.only(
+                                              bottomLeft:  const  Radius.circular(8.0),
+                                              bottomRight: const  Radius.circular(8.0)),
+                                        ),
+                                        child: FlatButton(
+                                          onPressed: () {},
+                                          child: Text("Velg", style: TextStyle(color: Colors.white)),
+                                        ),
+                                      ),
+                                    ),
+
+                                  ],
+                                ),
+
+                              ),
+                            ),
+                          ],
+
+                        );
+
+                      },
+
+
+
                     ),
 
-                    decoration: new BoxDecoration(
-                      
-                      
-
-                    
-                    
-                    color: Colors.white,
-
-                    borderRadius: new BorderRadius.only(
-                      topLeft:  const  Radius.circular(10.0),
-                      topRight: const  Radius.circular(0.0)
-                      ),
-                    ),
-                    
-                    child: Text(
-                      ("dis is a test"),
-                      textAlign: TextAlign.center,
-                      
-                    ),
-                    
                   ),
-                ),*/
-                Align(
-                    
-                    child: Container(
-                      //color: Colors.white,
-                      height: 150,
-                      width: 150,
-                      margin: EdgeInsets.only(
-                        right: 150,
-                        top: 10,  
-                      ),
+                ),),
 
-                      child: CircleAvatar(
+
                         
-                        radius: 20.0,
-                        backgroundImage: NetworkImage("https://i.imgur.com/BoN9kdC.png"),
-                      
-                      ),
+                      /*
+                      child: new ListView.builder(
+                        itemCount: 5,
+                        itemBuilder: (context, position) {
+                          
+                          return Card(
+                            elevation: 0,
+                            
+                            child: ClipRRect(
+                              borderRadius: new BorderRadius.circular(30),
+                              child: Container(
+                                height: 150,
+                                width: 150,
+                                
 
-                    decoration: new BoxDecoration(
-                      color: Colors.white,
+                                decoration: BoxDecoration(
+                                  borderRadius: new BorderRadius.only(
+                                    topLeft: const Radius.circular(20),
+                                    bottomLeft: const Radius.circular(20),
+                                  ),
+                                ),
 
-                      borderRadius: new BorderRadius.only(
-                        topLeft: const Radius.circular(10.0),
-                        topRight: const Radius.circular(10.0),
-                      )
-                    )
-                    
-                  ) 
-                  
-                  
-                ),
-
-                Align(
-                  child: Container(
-                    height: 30,
-                    width: 150,
-                    margin: EdgeInsets.only(right: 150),
-
-                    decoration: new BoxDecoration(
-                    color: Colors.pink,
-                    borderRadius: new BorderRadius.only(
-                    bottomLeft:  const  Radius.circular(10.0),
-                    bottomRight: const  Radius.circular(10.0)
-
-                    
-
-                    )
-                  ),
-                  child: Center(
-                    child: Text(
-                      ("velg"),
-                      textAlign: TextAlign.center,
-                      
-
-                      style: TextStyle(
-                        color: Colors.white,
-                        
-                      ),
-                    ),
-                  ),
-                    
-                  )
-                ),
+                                child: CircleAvatar(
+                                  backgroundImage: NetworkImage("https://i.imgur.com/BoN9kdC.png"),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),*/
 
               ],
             ),
           ],
 
-        ));
+        ),);
   }
 
 // Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
