@@ -329,7 +329,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 padding: EdgeInsets.all(10)
               ),
               new Text(
-                "Mine eventer:",
+                "Mine events:",
                 style: new TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               new Container(
@@ -404,7 +404,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                         borderRadius: new BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
                                                         child: Image.network(widget.myEvent[position].imgUrl,
 
-                                                          height: 120,
+                                                          height: 122,
                                                           width: 287,
                                                           fit: BoxFit.cover,
                                                         ),
@@ -522,7 +522,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                       ClipRRect(
                                                         borderRadius: new BorderRadius.only(topLeft: Radius.circular(8), bottomLeft: Radius.circular(8)),
                                                         child: Image.network(widget.myEvent[position].imgUrl,
-                                                          height: 120,
+                                                          height: 122,
                                                           width: 110,
                                                           fit: BoxFit.cover,
                                                         ),

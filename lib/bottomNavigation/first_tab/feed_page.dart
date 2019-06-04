@@ -307,10 +307,11 @@ class PageOneState extends State<PageOne> {
                     Align(
                     alignment: Alignment.topCenter,
                                 child: Container(
+                                  width: ServiceProvider.instance.screenService
+                                      .getPortraitWidthByPercentage(context, 100),
                                   height: ServiceProvider.instance.screenService
                                       .getPortraitHeightByPercentage(context, 80),
-                                  width: ServiceProvider.instance.screenService
-                                      .getPortraitWidthByPercentage(context, 82),
+
                                   child: ListView.builder(
                                   // scrollDirection: Axis.vertical,
                                  //shrinkWrap: true,
@@ -323,7 +324,12 @@ class PageOneState extends State<PageOne> {
                                         ),
                                         Align(
                                           alignment: Alignment.centerLeft,
-                                          child: Text(_DateText(position),
+                                          child: Padding(
+                                            padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                            child:  Text(_DateText(position),
+                                          ),
+
+
 
                                            
                                           ),
@@ -344,6 +350,8 @@ class PageOneState extends State<PageOne> {
                                               tap == true && tapped != null && tapped == position ?
                                                   SizedBox (
                                                     height: 310,
+                                                    width: ServiceProvider.instance.screenService
+                                                        .getPortraitWidthByPercentage(context, 82),
                                                     child: Card(
                                                       elevation: 0.0,
                                                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -463,6 +471,8 @@ class PageOneState extends State<PageOne> {
 
                                                   ) : SizedBox(
                                                 height: 130,
+                                                width: ServiceProvider.instance.screenService
+                                                    .getPortraitWidthByPercentage(context, 82),
                                                 child: Card(
                                                   elevation: 0.0,
                                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -478,7 +488,7 @@ class PageOneState extends State<PageOne> {
                                                           ClipRRect(
                                                             borderRadius: new BorderRadius.only(topLeft: Radius.circular(8), bottomLeft: Radius.circular(8)),
                                                             child: Image.network(widget.eventList[position].imgUrl,
-                                                              height: 120,
+                                                              height: 122,
                                                               width: 110,
                                                               fit: BoxFit.cover,
                                                             ),
@@ -584,6 +594,13 @@ class PageOneState extends State<PageOne> {
                 ],
               )
               ,
+
+              Padding(
+                padding: EdgeInsets.all(100)
+              ),
+              Padding(
+                  padding: EdgeInsets.all(90)
+              ),
 
 
               Align(
@@ -2003,15 +2020,13 @@ class NewEventPage extends State<StatefullNew> {
 
   void uploadImage(imgUrl) async {
 
-    final StorageReference imgRef = FirebaseStorage.instance.ref().child("Event Images");
+    final StorageReference imgRef = FirebaseStorage.instance.ref().child("Event_Images");
     var timeKey = new DateTime.now();
     final StorageUploadTask upTask = imgRef.child(timeKey.toString() + ".jpg").putFile(imgUrl);
 
     var url = await (await upTask.onComplete).ref.getDownloadURL();
     dbUrl = url.toString();
     print("upload $dbUrl");
-
-
 
 
   }
