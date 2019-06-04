@@ -292,9 +292,6 @@ class PageOneState extends State<PageOne> {
                                   height: 500,
                                   width: ServiceProvider.instance.screenService
                                       .getPortraitWidthByPercentage(context, 82),
-
-
-
                                   child: ListView.builder(
                                   // scrollDirection: Axis.vertical,
                                  //shrinkWrap: true,

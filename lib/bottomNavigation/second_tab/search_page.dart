@@ -25,13 +25,9 @@ class SearchPage extends StatefulWidget {
   final VoidCallback onSignOut;
   final User user;
   @override
+
   SearchPageState createState() => SearchPageState();
 }
-
-
-
-
-
 
 
 
@@ -55,6 +51,22 @@ class SearchPageState extends State<SearchPage> {
     );
   }
 
+  /*
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: GridView(
+        physics: BouncingScrollPhysics(), // if you want IOS bouncing effect, otherwise remove this line
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),//change the number as you want
+        children: images.map((url) {
+          return Card(child: Image.network(url));
+        }).toList(),
+      ),
+    );
+  }*/
+
+
+
   @override
   initState() {
     super.initState();
@@ -68,6 +80,7 @@ class SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
 
         backgroundColor: UIData.grey,
         resizeToAvoidBottomPadding: true,
@@ -91,7 +104,7 @@ class SearchPageState extends State<SearchPage> {
         body: new Stack(
           //alignment: Alignment.center,
 
-          children: <Widget>[
+          children: [
 
             Column(
 
@@ -103,9 +116,10 @@ class SearchPageState extends State<SearchPage> {
                   child: Align(
                     
                     alignment: Alignment.center,
-                    child: Text("Finn personer", 
-                    style: TextStyle(
-                      fontSize: 20,
+                    child: Text(
+                      "Finn personer", 
+                      style: TextStyle(
+                        fontSize: 20,
                       
                     ),),
                   ),
@@ -166,105 +180,71 @@ class SearchPageState extends State<SearchPage> {
                       },
                     ),
                   ),
+                ),  
 
-                ),
-                
-                /*Align(
+                Row(
                   
-                  child: Container(
-                    height: 130,
-                    width: 150,
-                    margin: EdgeInsets.only(
-                      right: 150,
-                      top: 10,  
-                    ),
-
-                    decoration: new BoxDecoration(
-                      
-                      
-
+                  children: <Widget>[
                     
-                    
-                    color: Colors.white,
-
-                    borderRadius: new BorderRadius.only(
-                      topLeft:  const  Radius.circular(10.0),
-                      topRight: const  Radius.circular(0.0)
-                      ),
-                    ),
-                    
-                    child: Text(
-                      ("dis is a test"),
-                      textAlign: TextAlign.center,
-                      
-                    ),
-                    
-                  ),
-                ),*/
-                Align(
-                    
-                    child: Container(
-                      //color: Colors.white,
-                      height: 150,
-                      width: 150,
-                      margin: EdgeInsets.only(
-                        right: 150,
-                        top: 10,  
-                      ),
-
-                      child: CircleAvatar(
+                      Container(
+                        width: 150,
+                        height: 150,
+                        child: new ListView.builder(
+                          itemCount: 5,
+                          itemBuilder: (context, index) {
+                            return Card(
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: new BorderRadius.circular(70),
+                                
+                                child: CircleAvatar(
+                                  
+                                  backgroundImage: NetworkImage("https://i.imgur.com/BoN9kdC.png"),
+                                ),
+                              ),
+                            );
+                          }
+                        ),
+                                             
                         
-                        radius: 20.0,
-                        backgroundImage: NetworkImage("https://i.imgur.com/BoN9kdC.png"),
-                      
-                      ),
+                      /*
+                      child: new ListView.builder(
+                        itemCount: 5,
+                        itemBuilder: (context, position) {
+                          
+                          return Card(
+                            elevation: 0,
+                            
+                            child: ClipRRect(
+                              borderRadius: new BorderRadius.circular(30),
+                              child: Container(
+                                height: 150,
+                                width: 150,
+                                
 
-                    decoration: new BoxDecoration(
-                      color: Colors.white,
+                                decoration: BoxDecoration(
+                                  borderRadius: new BorderRadius.only(
+                                    topLeft: const Radius.circular(20),
+                                    bottomLeft: const Radius.circular(20),
+                                  ),
+                                ),
 
-                      borderRadius: new BorderRadius.only(
-                        topLeft: const Radius.circular(10.0),
-                        topRight: const Radius.circular(10.0),
-                      )
-                    )
-                    
-                  ) 
-                  
-                  
-                ),
-
-                Align(
-                  child: Container(
-                    height: 30,
-                    width: 150,
-                    margin: EdgeInsets.only(right: 150),
-
-                    decoration: new BoxDecoration(
-                    color: Colors.pink,
-                    borderRadius: new BorderRadius.only(
-                    bottomLeft:  const  Radius.circular(10.0),
-                    bottomRight: const  Radius.circular(10.0)
-
-                    
-
-                    )
-                  ),
-                  child: Center(
-                    child: Text(
-                      ("velg"),
-                      textAlign: TextAlign.center,
-                      
-
-                      style: TextStyle(
-                        color: Colors.white,
-                        
-                      ),
+                                child: CircleAvatar(
+                                  backgroundImage: NetworkImage("https://i.imgur.com/BoN9kdC.png"),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),*/
                     ),
-                  ),
-                    
-                  )
-                ),
+                   
 
+                  ],
+                ),
               ],
             ),
           ],
