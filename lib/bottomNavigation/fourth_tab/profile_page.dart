@@ -219,8 +219,7 @@ class _ProfilePageState extends State<ProfilePage> {
               onTap: () {
                 openOptions();
               },
-              child:
-            Card(
+              child: Card(
               elevation: 0,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70), side:  BorderSide(color: UIData.pink, width: 2)),
               //decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), border: index == 0 ? Border.all(width: 3, color: UIData.pink) : Border.all(color: Colors.white) ),

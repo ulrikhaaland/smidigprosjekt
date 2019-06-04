@@ -101,7 +101,9 @@ class SearchPageState extends State<SearchPage> {
 
 
 
-        body: new Stack(
+        body:
+
+        new Stack(
           //alignment: Alignment.center,
 
           children: [
@@ -112,14 +114,15 @@ class SearchPageState extends State<SearchPage> {
                 
                 Padding(
                   
-                  padding: EdgeInsets.only(top: 100),
+                  padding: EdgeInsets.only(top: 30),
                   child: Align(
                     
-                    alignment: Alignment.center,
+                    alignment: Alignment.topCenter,
                     child: Text(
-                      "Finn personer", 
+                      "Finn personer:",
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       
                     ),),
                   ),
@@ -180,35 +183,173 @@ class SearchPageState extends State<SearchPage> {
                       },
                     ),
                   ),
-                ),  
+                ),
 
-                Row(
-                  
-                  children: <Widget>[
-                    
-                      Container(
-                        width: 150,
-                        height: 150,
-                        child: new ListView.builder(
-                          itemCount: 5,
-                          itemBuilder: (context, index) {
-                            return Card(
+                Padding(
+                  padding: EdgeInsets.all(10)
+                ),
+
+
+                new SingleChildScrollView(
+    child:
+
+
+
+
+                Center(
+                  child: new SizedBox(
+                    height: 350,
+                    //width: 100,
+
+                    child: ListView.builder(
+                      itemCount: 10,  //list.lenght
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (context, index) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            SizedBox(
+                              width: 150,
+                              height: 180,
+                              child:
+
+                            Card(
+                              color: Colors.white,
                               elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: ClipRRect(
-                                borderRadius: new BorderRadius.circular(70),
-                                
-                                child: CircleAvatar(
-                                  
-                                  backgroundImage: NetworkImage("https://i.imgur.com/BoN9kdC.png"),
-                                ),
-                              ),
-                            );
-                          }
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                              //decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), border: index == 0 ? Border.all(width: 3, color: UIData.pink) : Border.all(color: Colors.white) ),
+                             child: Column(
+                               children: <Widget>[
+                                 Padding(
+                                   padding: EdgeInsets.all(10),
+                                       child: Container(
+                                   height: 60,
+                                   child: SizedBox(
+                                    // height: 70,
+                                     child: ClipRRect(
+                                       borderRadius: new BorderRadius.circular(70),
+                                       child: Image.asset("lib/assets/images/fortnite.jpg", // fra list [index]
+                                         width: 62,
+                                         fit: BoxFit.cover,
+                                       ),
+                                     ),
+                                   ),
+
+
+
+                                 ),
                         ),
-                                             
+                                 Container(
+                                   height: 60,
+                                   child: Column(
+                                     children: <Widget>[
+                                       Text("Navn", style: TextStyle(fontWeight: FontWeight.bold)),
+                                       Text("Skole"),
+                                       Text("linje", style: TextStyle(fontStyle: FontStyle.italic)),
+                                     ],
+                                   ),
+                                 ),
+                                 Expanded(
+                                   child: Container(
+                                     height: 40,
+                                     margin: EdgeInsets.only(top: 0),
+                                     width: 150,
+                                     decoration: new BoxDecoration(
+                                       color: Colors.pink,
+                                       borderRadius: new BorderRadius.only(
+                                           bottomLeft:  const  Radius.circular(8.0),
+                                           bottomRight: const  Radius.circular(8.0)),
+                                     ),
+                                     child: FlatButton(
+                                       onPressed: () {},
+                                       child: Text("Velg", style: TextStyle(color: Colors.white)),
+                                     ),
+                                   ),
+                                 ),
+
+                               ],
+                             ),
+
+                            ),
+                        ),
+                            SizedBox(
+                              width: 150,
+                              height: 180,
+                              child:
+
+                              Card(
+                                color: Colors.white,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                //decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), border: index == 0 ? Border.all(width: 3, color: UIData.pink) : Border.all(color: Colors.white) ),
+                                child: Column(
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.all(10),
+                                      child: Container(
+                                        height: 60,
+                                        child: SizedBox(
+                                          // height: 70,
+                                          child: ClipRRect(
+                                            borderRadius: new BorderRadius.circular(70),
+                                            child: Image.asset("lib/assets/images/fortnite.jpg", // fra list [index]
+                                              width: 62,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+
+
+
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 60,
+                                      child: Column(
+                                        children: <Widget>[
+                                          Text("Navn", style: TextStyle(fontWeight: FontWeight.bold)),
+                                          Text("Skole"),
+                                          Text("linje", style: TextStyle(fontStyle: FontStyle.italic)),
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        height: 40,
+                                        margin: EdgeInsets.only(top: 0),
+                                        width: 150,
+                                        decoration: new BoxDecoration(
+                                          color: Colors.pink,
+                                          borderRadius: new BorderRadius.only(
+                                              bottomLeft:  const  Radius.circular(8.0),
+                                              bottomRight: const  Radius.circular(8.0)),
+                                        ),
+                                        child: FlatButton(
+                                          onPressed: () {},
+                                          child: Text("Velg", style: TextStyle(color: Colors.white)),
+                                        ),
+                                      ),
+                                    ),
+
+                                  ],
+                                ),
+
+                              ),
+                            ),
+                          ],
+
+                        );
+
+                      },
+
+
+
+                    ),
+
+                  ),
+                ),),
+
+
                         
                       /*
                       child: new ListView.builder(
@@ -240,16 +381,12 @@ class SearchPageState extends State<SearchPage> {
                           );
                         },
                       ),*/
-                    ),
-                   
 
-                  ],
-                ),
               ],
             ),
           ],
 
-        ));
+        ),);
   }
 
 // Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
