@@ -1806,29 +1806,28 @@ class NewEventPage extends State<StatefullNew> {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(100)), side: BorderSide(style: BorderStyle.none)),
                     onPressed: () {
 
-                      uploadImage(imgUrl);
+
 
                       print("post pressed");
+                      DateTime titi = new DateTime(_date.year, _date.month, _date.day, _time.hour, _time.minute);
 
-                    DateTime titi = new DateTime(_date.year, _date.month, _date.day, _time.hour, _time.minute);
+                      id = new DateTime.now().millisecondsSinceEpoch;
 
-                    id = new DateTime.now().millisecondsSinceEpoch;
+                      if(add != null && kat != null && bes != null && titi != null && dbUrl != null ) {
 
+                       var data =
+                       {
+                         "address" : add,
+                         "cat" : kat,
+                         "desc" : bes,
+                         "id" : id,
+                         "time" : titi,
+                         "title" : tit,
+                         "imgUrl" : dbUrl,
+                       };
+                       
 
-
-                     var data =
-                     {
-                       "address" : add,
-                       "cat" : kat,
-                       "desc" : bes,
-                       "id" : id,
-                       "time" : titi,
-                       "title" : tit,
-                       "imgUrl" : dbUrl,
-                     };
-
-
-                     if(add != null && kat != null && bes != null && titi != null && dbUrl != null ) {
+                       uploadImage(imgUrl);
                        Firestore.instance.document("events/$id").setData(data);
 
                        Navigator.pop(context);
