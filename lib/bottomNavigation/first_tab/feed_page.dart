@@ -41,6 +41,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  List<Event> eventList = [];
+  List<Event> myEvent = [];
+
+
   final Key keyOne = PageStorageKey('pageOne');
   final Key keyTwo = PageStorageKey('pageTwo');
   final Key keyThree = PageStorageKey('pageThree');
@@ -67,11 +72,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
+    _getEventsData();
     print(widget.user.getName());
     one = PageOne(
       key: keyOne,
       auth: auth,
       user: widget.user,
+      eventList: eventList,
     );
 
     two = SearchPage(
@@ -86,13 +93,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
     four = ProfilePage(
       user: widget.user,
+      myEvent: myEvent,
       onSignOut: () => _signOut(),
     );
-    five = StatefullNew(
-      user: widget.user,
-    );
 
-    pages = [one, two, three, four, five];
+
+    pages = [one, two, three, four];
 
     currentPage = one;
 
@@ -107,6 +113,25 @@ class _MyHomePageState extends State<MyHomePage> {
       print(e);
     }
   }
+
+  void _getEventsData()  async {
+    QuerySnapshot eventDocs =  await Firestore.instance.collection("events").orderBy('time', descending: false).getDocuments();
+    eventDocs.documents.forEach((doc) {
+      eventList.add(Event(address: doc.data["address"], cat: doc.data["cat"], desc: doc.data["desc"], id: doc.data["id"], time: doc.data["time"] as DateTime,  title: doc.data["title"], imgUrl: doc.data["imgUrl"]));
+    });
+
+    eventList.forEach((e){
+      if(e.id.contains(widget.user.userName)){
+        myEvent.add(e);
+      }
+
+    });
+
+
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -183,10 +208,11 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class PageOne extends StatefulWidget {
-  PageOne({Key key, this.auth, this.onSignOut, this.user, }) : super(key: key);
+  PageOne({Key key, this.auth, this.onSignOut, this.user, this.eventList, }) : super(key: key);
   final BaseAuth auth;
   final VoidCallback onSignOut;
   final User user;
+  final List<Event> eventList;
 
 
   @override
@@ -196,12 +222,11 @@ class PageOne extends StatefulWidget {
 class PageOneState extends State<PageOne> {
   static final formKey = new GlobalKey<FormState>();
   final f = new DateFormat('yyyy-MM-dd hh:mm');
-  List<Event> eventList = [];
+
+
   int tapped = -1;
   double cardWidth;
   bool tap = false;
-
-  List<String> imgs = ["lib/assets/images/kaffepugg.jpg", "lib/assets/images/fortnite.jpg"];
 
   bool going = false;
 
@@ -211,16 +236,9 @@ class PageOneState extends State<PageOne> {
   @override
   void initState() {
     super.initState();
-    _getEventsData();
   }
 
-  void _getEventsData() async {
-   QuerySnapshot eventDocs = await Firestore.instance.collection("events").orderBy('time', descending: false).getDocuments();
-   eventDocs.documents.forEach((doc) {
-     eventList.add(Event(address: doc.data["address"], cat: doc.data["cat"], desc: doc.data["desc"], id: doc.data["id"], time: doc.data["time"] as DateTime,  title: doc.data["title"], imgUrl: doc.data["imgUrl"]));
-   });
 
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -233,7 +251,7 @@ class PageOneState extends State<PageOne> {
                print('button tapped');
                Navigator.push(
                    context,
-                   MaterialPageRoute(builder: (context) => StatefullNew()),);
+                   MaterialPageRoute(builder: (context) => StatefullNew(user: widget.user.userName)),);
              },
              backgroundColor: UIData.pink,
              elevation: 0.0,
@@ -340,7 +358,7 @@ class PageOneState extends State<PageOne> {
                                                             children: <Widget>[
                                                               ClipRRect(
                                                                 borderRadius: new BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
-                                                                child: Image.network(eventList[position].imgUrl,
+                                                                child: Image.network(widget.eventList[position].imgUrl,
 
                                                                   height: 120,
                                                                   width: 287,
@@ -372,7 +390,7 @@ class PageOneState extends State<PageOne> {
                                                                         height: 10,
                                                                         color: Colors.white,
                                                                       ),
-                                                                      Text( '${eventList[position].desc}', style: TextStyle(fontSize: 13)
+                                                                      Text( '${widget.eventList[position].desc}', style: TextStyle(fontSize: 13)
 
                                                                       ),
                                                                     ],
@@ -459,7 +477,7 @@ class PageOneState extends State<PageOne> {
                                                         children: <Widget>[
                                                           ClipRRect(
                                                             borderRadius: new BorderRadius.only(topLeft: Radius.circular(8), bottomLeft: Radius.circular(8)),
-                                                            child: Image.network(eventList[position].imgUrl,
+                                                            child: Image.network(widget.eventList[position].imgUrl,
                                                               height: 120,
                                                               width: 110,
                                                               fit: BoxFit.cover,
@@ -479,7 +497,7 @@ class PageOneState extends State<PageOne> {
                                                                   Row(
 
                                                                     children: <Widget>[
-                                                                      new Text(eventList[position].title, style: ServiceProvider.instance.styles.cardTitle()),
+                                                                      new Text(widget.eventList[position].title, style: ServiceProvider.instance.styles.cardTitle()),
                                                                       Icon(Icons.star, color: going && starred == position ? UIData.pink : Colors.white, size: 20,),
                                                                     ],
                                                                   ),
@@ -491,7 +509,7 @@ class PageOneState extends State<PageOne> {
                                                                   Row(
                                                                     children: <Widget>[
                                                                       Icon(Icons.location_on, color: UIData.blue, size: 20,),
-                                                                      Text(eventList[position].address, style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
+                                                                      Text(widget.eventList[position].address, style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
                                                                       ),
                                                                     ],
                                                                   ),
@@ -501,7 +519,7 @@ class PageOneState extends State<PageOne> {
                                                                   Row(
                                                                     children: <Widget>[
                                                                       Icon(Icons.access_time, color: UIData.black, size: 17,),
-                                                                      Text(' ${eventList[position].time.hour.toString()}' + ':' + '${eventList[position].time.minute.toString().padRight(2, '0')}', style: TextStyle( fontSize: 12),
+                                                                      Text(' ${widget.eventList[position].time.hour.toString()}' + ':' + '${widget.eventList[position].time.minute.toString().padRight(2, '0')}', style: TextStyle( fontSize: 12),
                                                                       ),
                                                                     ],
                                                                   ),
@@ -556,7 +574,7 @@ class PageOneState extends State<PageOne> {
                                     );
 
                                 },
-                                itemCount: eventList.length,
+                                itemCount: widget.eventList.length,
                               ),
 
 
@@ -615,41 +633,41 @@ class PageOneState extends State<PageOne> {
   }
 
   String _DateText(int position) {
-    if (eventList[position].time.month == 1){
-      return '${eventList[position].time.day.toString()}' + '. ' + 'Januar';
+    if (widget.eventList[position].time.month == 1){
+      return '${widget.eventList[position].time.day.toString()}' + '. ' + 'Januar';
     }
-     else if (eventList[position].time.month == 2){
-       return '${eventList[position].time.day.toString()}' + '. ' + 'Februar';
+     else if (widget.eventList[position].time.month == 2){
+       return '${widget.eventList[position].time.day.toString()}' + '. ' + 'Februar';
      }
-     else if (eventList[position].time.month == 3){
-        return '${eventList[position].time.day.toString()}' + '. ' + 'Mars';
+     else if (widget.eventList[position].time.month == 3){
+        return '${widget.eventList[position].time.day.toString()}' + '. ' + 'Mars';
       }
-      else if (eventList[position].time.month == 4){
-        return '${eventList[position].time.day.toString()}' + '. ' + 'April';
+      else if (widget.eventList[position].time.month == 4){
+        return '${widget.eventList[position].time.day.toString()}' + '. ' + 'April';
       }
-       else if (eventList[position].time.month == 5){
-         return '${eventList[position].time.day.toString()}' + '. ' + 'Mai';
+       else if (widget.eventList[position].time.month == 5){
+         return '${widget.eventList[position].time.day.toString()}' + '. ' + 'Mai';
        }
-       else if (eventList[position].time.month == 6){
-          return '${eventList[position].time.day.toString()}' + '. ' + 'Juni';
+       else if (widget.eventList[position].time.month == 6){
+          return '${widget.eventList[position].time.day.toString()}' + '. ' + 'Juni';
         }
-        else if (eventList[position].time.month == 7){
-          return '${eventList[position].time.day.toString()}' + '. ' + 'Juli';
+        else if (widget.eventList[position].time.month == 7){
+          return '${widget.eventList[position].time.day.toString()}' + '. ' + 'Juli';
         }
-         else if (eventList[position].time.month == 8){
-           return '${eventList[position].time.day.toString()}' + '. ' + 'August';
+         else if (widget.eventList[position].time.month == 8){
+           return '${widget.eventList[position].time.day.toString()}' + '. ' + 'August';
          }
-         else if (eventList[position].time.month == 9){
-            return '${eventList[position].time.day.toString()}' + '. ' + 'September';
+         else if (widget.eventList[position].time.month == 9){
+            return '${widget.eventList[position].time.day.toString()}' + '. ' + 'September';
           }
-          else if (eventList[position].time.month == 10){
-            return '${eventList[position].time.day.toString()}' + '. ' + 'Oktober';
+          else if (widget.eventList[position].time.month == 10){
+            return '${widget.eventList[position].time.day.toString()}' + '. ' + 'Oktober';
           }
-           else if (eventList[position].time.month == 11){
-             return '${eventList[position].time.day.toString()}' + '. ' + 'November';
+           else if (widget.eventList[position].time.month == 11){
+             return '${widget.eventList[position].time.day.toString()}' + '. ' + 'November';
            }
-            else if (eventList[position].time.month == 12){
-              return '${eventList[position].time.day.toString()}' + '. ' + 'Desember';
+            else if (widget.eventList[position].time.month == 12){
+              return '${widget.eventList[position].time.day.toString()}' + '. ' + 'Desember';
             }
     
   }
@@ -1376,7 +1394,7 @@ class Event {
   final String cat;
   final String desc;
   final String imgUrl;
-  final int id;
+  final String id;
   final DateTime time;
   final String title;
 
@@ -1385,7 +1403,7 @@ class Event {
 
 class StatefullNew extends StatefulWidget {
   StatefullNew({this.user});
-  final User user;
+  final String user;
 
   @override
   NewEventPage createState() => NewEventPage();
@@ -1401,6 +1419,7 @@ class NewEventPage extends State<StatefullNew> {
   String tids;
   String dats;
   String kat = "";
+
   var dbUrl;
 
   File imgUrl;
@@ -1803,7 +1822,7 @@ class NewEventPage extends State<StatefullNew> {
                     color: UIData.grey,
                     height: 40,
                   ),
-                  //Text("${widget.user.userName}"),
+
 
                   RaisedButton(
                     color: UIData.pink,
@@ -1818,26 +1837,25 @@ class NewEventPage extends State<StatefullNew> {
                       print("post pressed");
 
                       DateTime titi = new DateTime(_date.year, _date.month, _date.day, _time.hour, _time.minute);
-                      id = new DateTime.now().millisecondsSinceEpoch;
 
+                      id = new DateTime.now().millisecondsSinceEpoch;
+                      String name = widget.user;
+                      String idu = name + " " + id.toString();
 
 
                       //if(add != null && kat != null && bes != null && titi != null && dbUrl != null) {
-
-
-
 
                           var data =
                           {
                             "address": add,
                             "cat": kat,
                             "desc": bes,
-                            "id": id,
+                            "id": idu,
                             "time": titi,
                             "title": tit,
                             "imgUrl": dbUrl,
                           };
-                          Firestore.instance.document("events/$id").setData(data);
+                          Firestore.instance.document("events/$idu").setData(data);
 
 
                        Navigator.pop(context);
@@ -1992,6 +2010,8 @@ class NewEventPage extends State<StatefullNew> {
     var url = await (await upTask.onComplete).ref.getDownloadURL();
     dbUrl = url.toString();
     print("upload $dbUrl");
+
+
 
 
   }
