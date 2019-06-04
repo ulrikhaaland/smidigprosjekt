@@ -545,7 +545,7 @@ void itemChange(bool val,int index){
       "message": message.trim(),
       "created_at": DateTime.now()
     }).then((val) {
-      print("sucess");
+      print("success");
     }).catchError((err) {
       print(err);
     });
