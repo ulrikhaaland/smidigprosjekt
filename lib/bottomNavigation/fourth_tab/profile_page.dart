@@ -40,39 +40,42 @@ class _ProfilePageState extends State<ProfilePage> {
           children: <Widget>[
            
             ListTile(
-              leading: Icon(Icons.shopping_cart),
+              leading: Icon(Icons.people_outline),
               title: Text('Profil'),
               onTap: (){
                 Navigator.pushNamed(
                   context,
-                  '/transactionList'
+                  'lib/assets/images/logout.png'
                 );
                 
               },
             ),
             ListTile(
-              leading: Icon(Icons.report),
+              leading: Icon(Icons.info_outline),
               title: Text('Om'),
               onTap: (){
                 Navigator.pushNamed(context, '/transactionsList');
               },
             ),
             ListTile(
-              leading: Icon(Icons.report),
+              leading: Icon(Icons.help_outline),
               title: Text('Hjelp'),
               onTap: (){
                 Navigator.pushNamed(context, '/transactionsList');
               },
             ),
+
             
+              
               ListTile(
-                leading: Icon(Icons.report),
+                leading: Icon(Icons.exit_to_app),
                 title: Text('Logg ut'),
                 onTap: (){
                   Navigator.pushNamed(context, '/');
+                  widget.onSignOut();
                 },
-              ),
-            
+              
+            ),
           ]
         )
       ),
