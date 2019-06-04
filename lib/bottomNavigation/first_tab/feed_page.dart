@@ -1,12 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:toast/toast.dart';
 import 'package:smidigprosjekt/service/service_provider.dart';
 import '../../auth.dart';
 import '../second_tab/search_page.dart';
+import 'package:smidigprosjekt/objects/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import '../../root_page.dart';
 import '../../utils/uidata.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import '../third_tab/group_page.dart';
 import '../../objects/user.dart';
 import 'package:image_picker/image_picker.dart';
@@ -53,6 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
   SearchPage two;
   GroupPage three;
   ProfilePage four;
+  StatefullNew five;
 
   List<Widget> pages;
   Widget currentPage;
@@ -82,8 +88,11 @@ class _MyHomePageState extends State<MyHomePage> {
       user: widget.user,
       onSignOut: () => _signOut(),
     );
+    five = StatefullNew(
+      user: widget.user,
+    );
 
-    pages = [one, two, three, four,];
+    pages = [one, two, three, four, five];
 
     currentPage = one;
 
@@ -194,6 +203,10 @@ class PageOneState extends State<PageOne> {
 
   List<String> imgs = ["lib/assets/images/kaffepugg.jpg", "lib/assets/images/fortnite.jpg"];
 
+  bool going = false;
+
+  int starred = -1;
+
 
   @override
   void initState() {
@@ -204,7 +217,7 @@ class PageOneState extends State<PageOne> {
   void _getEventsData() async {
    QuerySnapshot eventDocs = await Firestore.instance.collection("events").orderBy('time', descending: false).getDocuments();
    eventDocs.documents.forEach((doc) {
-     eventList.add(Event(address: doc.data["address"], cat: doc.data["cat"], desc: doc.data["desc"], id: doc.data["id"], time: doc.data["time"] as DateTime,  title: doc.data["title"]));
+     eventList.add(Event(address: doc.data["address"], cat: doc.data["cat"], desc: doc.data["desc"], id: doc.data["id"], time: doc.data["time"] as DateTime,  title: doc.data["title"], imgUrl: doc.data["imgUrl"]));
    });
 
   }
@@ -258,7 +271,13 @@ class PageOneState extends State<PageOne> {
     ),
         body: new SingleChildScrollView(
 
-          child: Stack(
+
+            child: new
+
+
+
+
+          Stack(
 
           //child: new Stack(
             children: <Widget>[
@@ -271,7 +290,8 @@ class PageOneState extends State<PageOne> {
                     alignment: Alignment.topCenter,
                                 child: Container(
                                   height: 500,
-                                  width: 300,
+                                  width: ServiceProvider.instance.screenService
+                                      .getPortraitWidthByPercentage(context, 82),
                                   child: ListView.builder(
                                   // scrollDirection: Axis.vertical,
                                  //shrinkWrap: true,
@@ -318,61 +338,20 @@ class PageOneState extends State<PageOne> {
 
                                                             children: <Widget>[
                                                               ClipRRect(
-                                                                borderRadius: new BorderRadius.only(topLeft: Radius.circular(8)),
-                                                                child: Image.asset("lib/assets/images/fortnite.jpg",
+                                                                borderRadius: new BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+                                                                child: Image.asset(eventList[position].imgUrl,
 
                                                                   height: 120,
-                                                                  width: 110,
+                                                                  width: 287,
                                                                   fit: BoxFit.cover,
                                                                 ),
                                                               ),
-                                                              Padding(
-                                                                padding: EdgeInsets.all(10),
-                                                                child: Align(
-                                                                  alignment: Alignment.centerRight,
-                                                                  child: Column(
-                                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                                    children: <Widget>[
-
-                                                                      new Text(eventList[position].title, style: ServiceProvider.instance.styles.cardTitle()),
-                                                                      Divider(
-                                                                          color: Colors.white
-                                                                      ),
-                                                                      Row(
-                                                                        children: <Widget>[
-                                                                          Icon(Icons.location_on, color: UIData.blue, size: 20,),
-                                                                          Text(eventList[position].address, style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                      Divider(
-                                                                        color: Colors.white,
-                                                                      ),
-                                                                      Row(
-                                                                        children: <Widget>[
-                                                                          Icon(Icons.access_time, color: UIData.blue, size: 17,),
-                                                                          Text(' ${eventList[position].time.hour.toString()}' + ':' + '${eventList[position].time.minute.toString()}' + '0', style: TextStyle( fontSize: 12),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-
-
-
-                                                                    ],
-
-
-                                                                  ),
-                                                                ),
-
-
-
-
-                                                              ),
-
 
                                                             ],
 
+                                                          ),
+                                                          Divider(
+                                                            height: 1,
                                                           ),
 
 
@@ -380,6 +359,7 @@ class PageOneState extends State<PageOne> {
                                                             Padding(
                                                               padding: EdgeInsets.all(5),
                                                               child: Container(
+                                                                height: 130,
                                                                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), border: Border.all(color: Colors.white)),
                                                                 child: Padding(
                                                                   padding: EdgeInsets.all(8),
@@ -388,9 +368,10 @@ class PageOneState extends State<PageOne> {
                                                                     children: <Widget>[
                                                                       Text("Beskrivelse:", style: TextStyle(fontWeight: FontWeight.bold)),
                                                                       Divider(
-                                                                        height: 6,
+                                                                        height: 10,
+                                                                        color: Colors.white,
                                                                       ),
-                                                                      Text( '${eventList[position].desc}'
+                                                                      Text( '${eventList[position].desc}', style: TextStyle(fontSize: 13)
 
                                                                       ),
                                                                     ],
@@ -401,15 +382,49 @@ class PageOneState extends State<PageOne> {
 
                                                             ),
 
-                                                          FlatButton(
+                                                          Expanded(
+                                                            child:
+
+
+                                                          Container(
+                                                            height: 40,
+                                                            margin: EdgeInsets.only(top: 0),
+                                                            width: ServiceProvider.instance.screenService
+                                                                .getPortraitWidthByPercentage(context, 82),
+
+                                                            decoration: new BoxDecoration(
+                                                            color: Colors.pink,
+                                                            borderRadius: new BorderRadius.only(
+                                                                bottomLeft:  const  Radius.circular(8.0),
+                                                                bottomRight: const  Radius.circular(8.0)),
+                                                          ),
+                                                            child:
+                                                            FlatButton(
                                                             color: UIData.pink,
                                                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
                                                             padding: EdgeInsets.all(10),
                                                             onPressed: () {
+                                                              //going = true;
+                                                              _tapped(position);
+                                                              _starred(position);
+
 
                                                           },
-                                                            child: Text("Jeg skal", style: TextStyle(color: Colors.white, fontSize: 12)),
-                                                          ),
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              children: <Widget>[
+
+                                                                Icon(going && starred == position ? Icons.star : Icons.star_border, color: Colors.white, size: 20,),
+                                                                Padding(
+                                                                  padding: EdgeInsets.all(3)
+                                                                ),
+                                                                Text("Interessert", style: TextStyle(color: Colors.white, fontSize: 13)),
+
+                                                              ],
+                                                            ),
+
+
+                                                          ),),),
 
 
 
@@ -443,8 +458,7 @@ class PageOneState extends State<PageOne> {
                                                         children: <Widget>[
                                                           ClipRRect(
                                                             borderRadius: new BorderRadius.only(topLeft: Radius.circular(8), bottomLeft: Radius.circular(8)),
-                                                            child: Image.asset(
-                                                              "lib/assets/images/fortnite.jpg",
+                                                            child: Image.asset(eventList[position].imgUrl,
                                                               height: 120,
                                                               width: 110,
                                                               fit: BoxFit.cover,
@@ -454,12 +468,22 @@ class PageOneState extends State<PageOne> {
                                                             padding: EdgeInsets.all(10),
                                                             child: Align(
                                                               alignment: Alignment.centerRight,
-                                                              child: Column(
+                                                              child:
+
+                                                              Column(
                                                                 mainAxisAlignment: MainAxisAlignment.start,
                                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                                 children: <Widget>[
 
-                                                                  new Text(eventList[position].title, style: ServiceProvider.instance.styles.cardTitle()),
+                                                                  Row(
+
+                                                                    children: <Widget>[
+                                                                      new Text(eventList[position].title, style: ServiceProvider.instance.styles.cardTitle()),
+                                                                      Icon(Icons.star, color: going && starred == position ? UIData.pink : Colors.white, size: 20,),
+                                                                    ],
+                                                                  ),
+
+
                                                                   Divider(
                                                                       color: Colors.white
                                                                   ),
@@ -475,8 +499,8 @@ class PageOneState extends State<PageOne> {
                                                                   ),
                                                                   Row(
                                                                     children: <Widget>[
-                                                                      Icon(Icons.access_time, color: UIData.blue, size: 17,),
-                                                                      Text(' ${eventList[position].time.hour.toString()}' + ':' + '${eventList[position].time.minute.toString()}' + '0', style: TextStyle( fontSize: 12),
+                                                                      Icon(Icons.access_time, color: UIData.black, size: 17,),
+                                                                      Text(' ${eventList[position].time.hour.toString()}' + ':' + '${eventList[position].time.minute.toString().padRight(2, '0')}', style: TextStyle( fontSize: 12),
                                                                       ),
                                                                     ],
                                                                   ),
@@ -484,6 +508,11 @@ class PageOneState extends State<PageOne> {
 
 
                                                               ),
+
+
+
+
+
                                                             ),
 
 
@@ -499,6 +528,7 @@ class PageOneState extends State<PageOne> {
 
 
                                                     ],
+
                                                   ),
 
 
@@ -511,6 +541,7 @@ class PageOneState extends State<PageOne> {
                                                 ),
 
                                               ),
+
 
                                             ],
                                           ),
@@ -549,9 +580,22 @@ class PageOneState extends State<PageOne> {
             ],
           ),
 
+
         ),
         );
 
+  }
+
+  void _starred(position) {
+    setState((){
+      if(going) {
+        going = false;
+        starred = position;
+      } else {
+        starred = position;
+        going = true;
+      }
+    });
   }
 
 
@@ -608,6 +652,13 @@ class PageOneState extends State<PageOne> {
             }
     
   }
+
+  Future<void> _Refresh() async {
+    print('refreshing');
+    //setState(() => _getEventsData()
+
+
+  }
 }
 
 
@@ -629,13 +680,21 @@ class PageOneState extends State<PageOne> {
 
 
 class StateFilterPage extends StatefulWidget {
-  StateFilterPage({Key key}) : super(key: key);
+
+  StateFilterPage({this.user});
+  final User user;
+
 
   @override
   FilterPage createState() => FilterPage();
 }
 
 class FilterPage extends State<StateFilterPage> {
+  void initState() {
+    super.initState();
+  }
+
+
   List<String> cate = ['lib/assets/images/skole.png', 'lib/assets/images/kaffe.png', 'lib/assets/images/gaming.png', 'lib/assets/images/fest.png', 'lib/assets/images/prosjekt.png' ];
   List<String> cat =  ["Skolejobbing", "Kaffe", "Gaming", "Fest", "Prosjekt" ];
 
@@ -704,7 +763,8 @@ class FilterPage extends State<StateFilterPage> {
 
 
            Container(
-             width: 300,
+             width: ServiceProvider.instance.screenService
+                 .getPortraitWidthByPercentage(context, 82),
              //height: 50,
              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.white),
              //color: Colors.white,
@@ -1113,6 +1173,7 @@ class FilterPage extends State<StateFilterPage> {
 
                  ),
                ),
+               //Text("${widget.user.userName}"),
 
 
                GestureDetector(
@@ -1218,9 +1279,7 @@ class FilterPage extends State<StateFilterPage> {
                  if (prosjekt) {
                    print(cat[4]);
                  }
-                 
-
-
+                 //print("${widget.user.userName}");
                 Navigator.pop(context);
                },
                child: Text("Bruk filter", style: TextStyle(color: Colors.white))
@@ -1309,12 +1368,13 @@ class FilterPage extends State<StateFilterPage> {
 
 
 class Event {
-  Event({this.address, this.cat, this.desc, this.id, this.time, this.title});
+  Event({this.imgUrl, this.address, this.cat, this.desc, this.id, this.time, this.title});
 
 
   final String address;
   final String cat;
   final String desc;
+  final String imgUrl;
   final int id;
   final DateTime time;
   final String title;
@@ -1323,7 +1383,8 @@ class Event {
 }
 
 class StatefullNew extends StatefulWidget {
-  StatefullNew({Key key}) : super(key: key);
+  StatefullNew({this.user});
+  final User user;
 
   @override
   NewEventPage createState() => NewEventPage();
@@ -1334,10 +1395,21 @@ class NewEventPage extends State<StatefullNew> {
   String dropdownValue = "Skolejobbing";
   String add = "";
   String tit = "";
+  int id;
   String bes = "";
   String tids;
   String dats;
   String kat = "";
+  var dbUrl;
+
+  File imgUrl;
+
+  bool choosen = false;
+
+
+  void initState() {
+    super.initState();
+  }
 
    bool skole = false;
    bool kaffe = false;
@@ -1357,6 +1429,8 @@ class NewEventPage extends State<StatefullNew> {
 
   bool tap = false;
   int tapped = -1;
+
+
 
 
   Future<Null> selectDate(BuildContext context) async {
@@ -1502,7 +1576,8 @@ class NewEventPage extends State<StatefullNew> {
                       splashColor: UIData.pink,
                     ),
                     child: Container(
-                      width: 300.0,
+                      width: ServiceProvider.instance.screenService
+                          .getPortraitWidthByPercentage(context, 82),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
@@ -1628,7 +1703,7 @@ class NewEventPage extends State<StatefullNew> {
                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0), borderSide: BorderSide(width: 0, style: BorderStyle.none)),
                         ),
                         onChanged: (text) {
-                          String value = text;
+                          String bes = text;
                         },
                         onSubmitted: (text) {
                           String b = text;
@@ -1648,7 +1723,7 @@ class NewEventPage extends State<StatefullNew> {
                     children: <Widget>[
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: Text( "Legg til bilde"
+                        child: Text( "Legg til bilde:"
                         ),
                       ),
                       Divider(
@@ -1656,18 +1731,54 @@ class NewEventPage extends State<StatefullNew> {
                       ),
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: Container(
+                        child:  choosen?
+                            Column(
+                              //mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                FlatButton.icon(
+                                  onPressed: openOptions,
+                                  color: UIData.grey,
+                                  icon: Icon(Icons.replay, color: UIData.blue),
+                                  label:  Text  ("Ta på nytt", style: TextStyle(color: UIData.blue, fontWeight: FontWeight.bold)),
+
+
+                                ),
+
+                                Container(
+                                    height: 200,
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),),
+
+                                    child: Image.file(
+                                      imgUrl,
+                                      fit: BoxFit.fill,
+
+                                      // width: 200,
+                                      //height: 400,
+                                    )
+                                ),
+
+
+                              ],
+                            )
+
+                         :
+
+
+                        Container(
 
                           height: 80,
 
                           child: FittedBox(
 
-                            child: FloatingActionButton(
+                            child:  FloatingActionButton(
                               onPressed: () {
                                 openOptions();
+                                //choosen = true;
 
                               },
-                              child: Icon(Icons.photo_camera, size: 30.0,),
+                              child:
+                              Icon(Icons.photo_camera, size: 30.0,),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)), ),
                               backgroundColor: Colors.white,
                               foregroundColor: UIData.black,
@@ -1686,6 +1797,7 @@ class NewEventPage extends State<StatefullNew> {
                     color: UIData.grey,
                     height: 40,
                   ),
+                  //Text("${widget.user.userName}"),
 
                   RaisedButton(
                     color: UIData.pink,
@@ -1693,13 +1805,38 @@ class NewEventPage extends State<StatefullNew> {
                     padding: EdgeInsets.fromLTRB(30, 15, 30, 15),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(100)), side: BorderSide(style: BorderStyle.none)),
                     onPressed: () {
-                     print("post pressed");
-                     newEvent.add(Event(address: add, cat: kat, desc: bes, id: 10, time: new DateTime(2019),title: tit));
-                     for (var item in newEvent) print(item.address.toString());
-                     for (var item in newEvent) print(item.cat.toString());
-                     for (var item in newEvent) print(item..toString());
-                     for (var item in newEvent) print(item.cat.toString());
-                     Navigator.pop(context);
+
+                      uploadImage(imgUrl);
+
+                      print("post pressed");
+
+                    DateTime titi = new DateTime(_date.year, _date.month, _date.day, _time.hour, _time.minute);
+
+                    id = new DateTime.now().millisecondsSinceEpoch;
+
+
+
+                     var data =
+                     {
+                       "address" : add,
+                       "cat" : kat,
+                       "desc" : bes,
+                       "id" : id,
+                       "time" : titi,
+                       "title" : tit,
+                       "imgUrl" : dbUrl,
+                     };
+
+
+                     if(add != null && kat != null && bes != null && titi != null && dbUrl != null ) {
+                       Firestore.instance.document("events/$id").setData(data);
+
+                       Navigator.pop(context);
+                     } else {
+                       //Scaffold.of(context).showSnackBar(new SnackBar(content: new Text("Alle felt må fylles ut")));
+                      Toast.show("Alle felt på fylles inn", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM, backgroundColor: UIData.black, backgroundRadius: 8);
+                     }
+
                     },
                     child: Text("Post event", style: TextStyle(color: Colors.white))
                   )
@@ -1755,7 +1892,8 @@ class NewEventPage extends State<StatefullNew> {
       return AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
 
-        content: new SingleChildScrollView(
+        content:
+         new SingleChildScrollView(
           child: new ListBody(
             children: <Widget>[
               Row(
@@ -1766,7 +1904,11 @@ class NewEventPage extends State<StatefullNew> {
                   ),
                   GestureDetector(
                     child: new Text('Ta et bilde', style: TextStyle(fontSize: 20) ,),
-                    onTap: openCamera,
+                    onTap:
+                      openCamera,
+
+
+
                   ),
                 ],
               ),
@@ -1803,13 +1945,45 @@ class NewEventPage extends State<StatefullNew> {
   Future openCamera() async {
     var picture = await ImagePicker.pickImage(
         source: ImageSource.camera );
+
+    setState((){
+      imgUrl = picture;
+      choosen = true;
+
+    });
+
+    //uploadImage(imgUrl);
+
+
+    dbUrl = picture.path.toString();
+    print("You selected: " + dbUrl);
+
+
   }
 
   Future openGallery() async {
     var gallery = await ImagePicker.pickImage(
         source: ImageSource.gallery);
+    setState((){
+      imgUrl = gallery;
+      choosen = true;
+
+    });
+
+    //uploadImage(imgUrl);
+
+    dbUrl = gallery.path.toString();
+    print("You selected: " + dbUrl);
+    //saveUrlDb(dbUrl);
   }
 
+  void uploadImage(imgUrl) async {
+
+    final StorageReference imgRef = FirebaseStorage.instance.ref().child("Event Images");
+    var timeKey = new DateTime.now();
+    final StorageUploadTask upTask = imgRef.child(timeKey.toString() + ".jpg").putFile(imgUrl);
+
+  }
 
     void _tapped(index) {
       setState((){
@@ -1882,3 +2056,27 @@ class NewEventPage extends State<StatefullNew> {
 //                          ),
 //
 //                        );
+
+
+
+//##  Padding(
+//                                                            padding: EdgeInsets.fromLTRB(0, 80, 0, 0),
+//                                                            child:
+//                                                            SizedBox(
+//                                                              height: 40,
+//                                                              child:
+//
+//                                                              Card(
+//                                                                elevation: 0,
+//                                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30), side: BorderSide(color: UIData.pink, width: 1)),
+//                                                                //decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), border: index == 0 ? Border.all(width: 3, color: UIData.pink) : Border.all(color: Colors.white) ),
+//                                                                child: ClipRRect(
+//                                                                  borderRadius: new BorderRadius.circular(50),
+//                                                                  child: Image.asset("lib/assets/images/fortnite.jpg", // fra list [index]
+//
+//                                                                    width: 32,
+//                                                                    fit: BoxFit.cover,
+//                                                                  ),
+//                                                                ),
+//                                                              ), ),
+//                                                          ),
