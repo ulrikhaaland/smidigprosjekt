@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:ui';
 import 'dart:math';
 
+
 class GroupPage extends StatefulWidget {
   GroupPage({
     this.user,
@@ -72,6 +73,8 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
   double newPercentage = 0.0;
   String activeChallenge = "";
   AnimationController percentageAnimationController;
+
+  final _controller = TextEditingController();
 
   @override
   void initState() {
@@ -395,7 +398,163 @@ void itemChange(bool val,int index){
                   ],
                 ),
 
-            new Stack(
+            Container(
+          margin: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Column(
+            children: <Widget>[
+              Flexible(
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: Firestore.instance
+                      .collection("chat_room")
+                      .orderBy("created_at", descending: true)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) return Container();
+                    return new ListView.builder(
+                      padding: new EdgeInsets.all(8.0),
+                      reverse: true,
+                      itemBuilder: (_, int index) {
+                        DocumentSnapshot document =
+                        snapshot.data.documents[index];
+
+                        bool isOwnMessage = false;
+                        if (document['user_name'] == widget.user.getName()) {
+                          isOwnMessage = true;
+                        }
+                        return isOwnMessage
+                            ? _ownMessage(
+                            document['message'], document['user_name'])
+                            : _message(
+                            document['message'], document['user_name']);
+                      },
+                      itemCount: snapshot.data.documents.length,
+                    );
+                  },
+                ),
+              ),
+              new Divider(height: 1.0),
+              Container(
+                margin: EdgeInsets.only(bottom: 20.0, right: 10.0, left: 10.0),
+                child: Row(
+                  children: <Widget>[
+                    new Flexible(
+                      child: new TextField(
+                        controller: _controller,
+                        onSubmitted: _handleSubmit,
+                        decoration: InputDecoration(
+                          hintText: "Skriv noe..",
+                          fillColor: Colors.white,
+                          filled: true,
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0),
+                              borderSide: BorderSide(width: 0, style: BorderStyle.none)),
+                          prefixIcon: IconButton(
+                            onPressed: () {
+                              openOptions();
+                            },
+                            icon: Icon(Icons.camera_alt, color: UIData.blue, size: 30,),
+                          ),
+                        )
+                      )
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        )])));
+  }
+
+  Widget _ownMessage(String message, String userName) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(height: 10.0,),
+            new ClipRRect(
+              borderRadius: new BorderRadius.circular(8.0),
+              child: new Container(
+                color: UIData.pink,
+                constraints: BoxConstraints(minWidth: 0, maxWidth: ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 50)),
+                padding: EdgeInsets.only(left:10, right:10, top:6, bottom:6),
+                child: Text(message, style: TextStyle(color: Colors.white))
+              )
+            )
+          ],
+        ),
+        Card(
+              elevation: 0,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70)),
+              child: ClipRRect(
+                borderRadius: new BorderRadius.circular(100),
+                child: Image.asset("lib/assets/images/fortnite.jpg", // fra list [index]
+                  height: 40,
+                  width: 40,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+      ],
+    );
+  }
+
+  Widget _message(String message, String userName) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+            Card(
+              elevation: 0,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70)),
+              child: ClipRRect(
+                borderRadius: new BorderRadius.circular(100),
+                child: Image.asset("lib/assets/images/fortnite.jpg", // fra list [index]
+                  height: 40,
+                  width: 40,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(height: 10.0,),
+            new ClipRRect(
+              borderRadius: new BorderRadius.circular(8.0),
+              child: new Container(
+                color: Colors.white,
+                constraints: BoxConstraints(minWidth: 0, maxWidth: ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 50)),
+                padding: EdgeInsets.only(left:10, right:10, top:6, bottom:6),
+                child: Text(message, style: TextStyle(color: UIData.black))
+              )
+            )
+          ],
+        )
+      ],
+    );
+  }
+
+  _handleSubmit(String message) {
+    if(_controller.text.trim().isEmpty){}
+    else{
+    _controller.text = "";
+    var db = Firestore.instance;
+    db.collection("chat_room").add({
+      "user_name": widget.user.getName(),
+      "message": message.trim(),
+      "created_at": DateTime.now()
+    }).then((val) {
+      print("sucess");
+    }).catchError((err) {
+      print(err);
+    });
+    }
+  }
+
+
+
+            /* new Stack(
               children: <Widget>[
                 new Center(
                   child: Column(
@@ -430,12 +589,6 @@ void itemChange(bool val,int index){
                             },
                             icon: Icon(Icons.camera_alt, color: UIData.blue, size: 30,),
                           ),
-
-
-
-
-
-
                         ),
                       ),
 
@@ -447,10 +600,10 @@ void itemChange(bool val,int index){
 
 
               ],
-            ),
+            ), 
           ],
         ),),);
-  }
+  }*/
   void _removeKeyboard(BuildContext context) {
     FocusScope.of(context).requestFocus(new FocusNode());
   }

@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Roboto',
         primaryColor: UIData.blue,
         accentColor: UIData.pink,
-        highlightColor: UIData.pink,
+        //highlightColor: UIData.pink,
         scaffoldBackgroundColor: Colors.black,
         buttonColor: Colors.yellow[700],
       ),

@@ -18,16 +18,15 @@ AppBar _buildAppBar(BuildContext context) {
   );
 }
 
-class GamePage extends StatefulWidget {
-  const GamePage({Key key, this.auth, this.user, this.onSignOut})
+class SearchPage extends StatefulWidget {
+  const SearchPage({Key key, this.auth, this.user, this.onSignOut})
       : super(key: key);
   final BaseAuth auth;
   final VoidCallback onSignOut;
   final User user;
   @override
-  GamePageState createState() => GamePageState();
 
-  
+  SearchPageState createState() => SearchPageState();
 }
 
 
@@ -35,7 +34,7 @@ class GamePage extends StatefulWidget {
 
 
 
-class GamePageState extends State<GamePage> {
+class SearchPageState extends State<SearchPage> {
   static final formKey = new GlobalKey<FormState>();
 
   //final Firestore firestoreInstance = Firestore.instance;
@@ -43,7 +42,7 @@ class GamePageState extends State<GamePage> {
 
   int screen = 0;
 
-  GamePageState() {
+  SearchPagefgState() {
     searchBar = new SearchBar(
       showClearButton: true,
       inBar: true,
