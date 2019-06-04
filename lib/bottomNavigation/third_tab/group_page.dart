@@ -106,11 +106,11 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     List<String> taskList = [
-      "Lorem ipsum",
-      "Lorem ipsum 2",
-      "Lorem ipsum 3",
+      "Ta en kaffe sammen",
+      "Grille i parken",
+      "Velg film sammen og dra på kino",
       "Dra på Syng sammen",
-      "Lorem ipsum 4"
+      "4 stjerners middag"
     ];
 
   if(inputs[4]==true){

@@ -8,9 +8,10 @@ import 'package:smidigprosjekt/utils/uidata.dart';
 import '../../service/service_provider.dart';
 
 class ProfilePage extends StatefulWidget {
-  ProfilePage({this.user, this.onSignOut});
+  ProfilePage({this.user, this.onSignOut, this.endDrawer});
   final User user;
   final VoidCallback onSignOut;
+  final Widget endDrawer;
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
@@ -33,22 +34,61 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      
+      endDrawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+           
+            ListTile(
+              leading: Icon(Icons.shopping_cart),
+              title: Text('Profil'),
+              onTap: (){
+                Navigator.pushNamed(
+                  context,
+                  '/transactionList'
+                );
+                
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.report),
+              title: Text('Om'),
+              onTap: (){
+                Navigator.pushNamed(context, '/transactionsList');
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.report),
+              title: Text('Hjelp'),
+              onTap: (){
+                Navigator.pushNamed(context, '/transactionsList');
+              },
+            ),
+            
+              ListTile(
+                leading: Icon(Icons.report),
+                title: Text('Logg ut'),
+                onTap: (){
+                  Navigator.pushNamed(context, '/');
+                },
+              ),
+            
+          ]
+        )
+      ),
+      
+
       backgroundColor: UIData.grey,
       appBar: new AppBar(
         actions: <Widget>[
-          IconButton(
-            icon: IconButton(
-              
-              icon: Image.asset("lib/assets/images/settings_icon.png", ),
+          Builder(
+          builder: (context) => IconButton(
+              /*leading: new IconButton(icon: Image.asset('lib/assets/images/settings_icon.png', scale: 10,),
+           onPressed: () => Scaffold.of(context).openDrawer()),*/
+              icon: Image.asset("lib/assets/images/settings_icon.png", scale: 10),
 
-              onPressed: () {
-                 /*Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => StateFilterPage()),);*/
-              },
-             
+              onPressed: () => Scaffold.of(context).openDrawer(),
             ),
-            onPressed: null,
           ),
         ],
         elevation: 1,
