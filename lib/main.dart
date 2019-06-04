@@ -6,11 +6,13 @@ import 'package:smidigprosjekt/service/service_provider.dart';
 import 'package:smidigprosjekt/service/styles.dart';
 import 'package:smidigprosjekt/utils/uidata.dart';
 
+import 'bottomNavigation/second_tab/search_page.dart';
+
 void main() {
   ServiceProvider.instance.screenService = ScreenService();
   ServiceProvider.instance.styles = Styles();
 
-  runApp(MyApp());
+  runApp(MyApp( ));
 }
 
 class MyApp extends StatelessWidget {

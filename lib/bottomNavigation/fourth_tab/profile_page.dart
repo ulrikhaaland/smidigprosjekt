@@ -33,9 +33,15 @@ class _ProfilePageState extends State<ProfilePage> {
         actions: <Widget>[
           IconButton(
             icon: IconButton(
-              onPressed: () {},
+              
               icon: Image.asset("lib/assets/images/settings_icon.png", ),
-              //color: Colors.black,
+
+              onPressed: () {
+                 /*Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => StateFilterPage()),);*/
+              },
+             
             ),
             onPressed: null,
           ),
