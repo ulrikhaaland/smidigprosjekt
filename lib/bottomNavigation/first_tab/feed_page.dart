@@ -1636,6 +1636,7 @@ class NewEventPage extends State<StatefullNew> {
                     width: 300.0,
                     height: 50,
                     child: TextField(
+                      textCapitalization: TextCapitalization.sentences,
                       decoration: InputDecoration(
                         hintText: "Tittel",
                         filled: true,
@@ -1646,7 +1647,7 @@ class NewEventPage extends State<StatefullNew> {
 
                       ),
                       onChanged: (text) {
-                        String value = text;
+                        tit = text;
                       },
                       onSubmitted: (text) {
                         String t = text;
@@ -1663,6 +1664,7 @@ class NewEventPage extends State<StatefullNew> {
                     width: 300.0,
                     height: 50,
                     child: TextField(
+                      textCapitalization: TextCapitalization.sentences,
                       decoration: InputDecoration(
                         hintText: "Addresse",
                         filled: true,
@@ -1672,7 +1674,7 @@ class NewEventPage extends State<StatefullNew> {
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0), borderSide: BorderSide(width: 0, style: BorderStyle.none)),
                       ),
                       onChanged: (text) {
-                        String value = text;
+                        add = text;
                       },
                       onSubmitted: (text) {
                         String a = text;
@@ -1693,7 +1695,9 @@ class NewEventPage extends State<StatefullNew> {
                     child: SizedBox(
                       height: 105.0,
                       child: TextField(
-                        maxLines: 10,
+                        textInputAction: TextInputAction.done,
+                        textCapitalization: TextCapitalization.sentences,
+                        maxLines: 6,
                         decoration: InputDecoration(
                           hintText: "Beskrivelse",
                           filled: true,
@@ -1703,8 +1707,9 @@ class NewEventPage extends State<StatefullNew> {
                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0), borderSide: BorderSide(width: 0, style: BorderStyle.none)),
                         ),
                         onChanged: (text) {
-                          String bes = text;
+                          bes = text;
                         },
+
                         onSubmitted: (text) {
                           String b = text;
                           bes = text;
@@ -1805,36 +1810,37 @@ class NewEventPage extends State<StatefullNew> {
                     padding: EdgeInsets.fromLTRB(30, 15, 30, 15),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(100)), side: BorderSide(style: BorderStyle.none)),
                     onPressed: () {
+                      uploadImage(imgUrl);
 
 
 
                       print("post pressed");
-                      DateTime titi = new DateTime(_date.year, _date.month, _date.day, _time.hour, _time.minute);
 
+                      DateTime titi = new DateTime(_date.year, _date.month, _date.day, _time.hour, _time.minute);
                       id = new DateTime.now().millisecondsSinceEpoch;
 
-                      if(add != null && kat != null && bes != null && titi != null && dbUrl != null ) {
 
-                       var data =
-                       {
-                         "address" : add,
-                         "cat" : kat,
-                         "desc" : bes,
-                         "id" : id,
-                         "time" : titi,
-                         "title" : tit,
-                         "imgUrl" : dbUrl,
-                       };
-                       
 
-                       uploadImage(imgUrl);
-                       Firestore.instance.document("events/$id").setData(data);
+                      //if(add != null && kat != null && bes != null && titi != null && dbUrl != null) {
+
+
+
+
+                          var data =
+                          {
+                            "address": add,
+                            "cat": kat,
+                            "desc": bes,
+                            "id": id,
+                            "time": titi,
+                            "title": tit,
+                            "imgUrl": dbUrl,
+                          };
+                          Firestore.instance.document("events/$id").setData(data);
+
 
                        Navigator.pop(context);
-                     } else {
-                       //Scaffold.of(context).showSnackBar(new SnackBar(content: new Text("Alle felt må fylles ut")));
-                      Toast.show("Alle felt må fylles inn", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM, backgroundColor: UIData.black, backgroundRadius: 8);
-                     }
+
 
                     },
                     child: Text("Post event", style: TextStyle(color: Colors.white))
@@ -1984,6 +1990,7 @@ class NewEventPage extends State<StatefullNew> {
     final StorageUploadTask upTask = imgRef.child(timeKey.toString() + ".jpg").putFile(imgUrl);
     var url = await (await upTask.onComplete).ref.getDownloadURL();
     dbUrl = url.toString();
+    print("upload $dbUrl");
 
   }
 
@@ -2082,6 +2089,20 @@ class NewEventPage extends State<StatefullNew> {
 //                                                                ),
 //                                                              ), ),
 //                                                          ),
+
+
+
+
+
+
+
+
+//## } else {
+//                       //Scaffold.of(context).showSnackBar(new SnackBar(content: new Text("Alle felt må fylles ut")));
+//                      Toast.show("Alle felt må fylles inn", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM, backgroundColor: UIData.black, backgroundRadius: 8);
+//                     }
+
+
 
 
 
