@@ -289,7 +289,8 @@ class PageOneState extends State<PageOne> {
                     Align(
                     alignment: Alignment.topCenter,
                                 child: Container(
-                                  height: 500,
+                                  height: ServiceProvider.instance.screenService
+                                      .getPortraitHeightByPercentage(context, 80),
                                   width: ServiceProvider.instance.screenService
                                       .getPortraitWidthByPercentage(context, 82),
                                   child: ListView.builder(
