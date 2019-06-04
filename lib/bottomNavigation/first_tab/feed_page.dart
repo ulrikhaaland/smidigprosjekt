@@ -339,7 +339,7 @@ class PageOneState extends State<PageOne> {
                                                             children: <Widget>[
                                                               ClipRRect(
                                                                 borderRadius: new BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
-                                                                child: Image.asset(eventList[position].imgUrl,
+                                                                child: Image.network(eventList[position].imgUrl,
 
                                                                   height: 120,
                                                                   width: 287,
@@ -458,7 +458,7 @@ class PageOneState extends State<PageOne> {
                                                         children: <Widget>[
                                                           ClipRRect(
                                                             borderRadius: new BorderRadius.only(topLeft: Radius.circular(8), bottomLeft: Radius.circular(8)),
-                                                            child: Image.asset(eventList[position].imgUrl,
+                                                            child: Image.network(eventList[position].imgUrl,
                                                               height: 120,
                                                               width: 110,
                                                               fit: BoxFit.cover,
@@ -1955,7 +1955,7 @@ class NewEventPage extends State<StatefullNew> {
     //uploadImage(imgUrl);
 
 
-    dbUrl = picture.path.toString();
+    //dbUrl = picture.path.toString();
     print("You selected: " + dbUrl);
 
 
@@ -1972,16 +1972,19 @@ class NewEventPage extends State<StatefullNew> {
 
     //uploadImage(imgUrl);
 
-    dbUrl = gallery.path.toString();
+
+    //dbUrl = gallery.path.toString();
     print("You selected: " + dbUrl);
     //saveUrlDb(dbUrl);
   }
 
   void uploadImage(imgUrl) async {
 
-    final StorageReference imgRef = FirebaseStorage.instance.ref().child("Event Images");
+    final StorageReference imgRef = FirebaseStorage.instance.ref().child("Event_Images");
     var timeKey = new DateTime.now();
     final StorageUploadTask upTask = imgRef.child(timeKey.toString() + ".jpg").putFile(imgUrl);
+    var url = await (await upTask.onComplete).ref.getDownloadURL();
+    dbUrl = url.toString();
 
   }
 
@@ -2080,3 +2083,8 @@ class NewEventPage extends State<StatefullNew> {
 //                                                                ),
 //                                                              ), ),
 //                                                          ),
+
+
+
+//## https://firebasestorage.googleapis.com/v0/b/smidigprosjekt.appspot.com/o/Event%20Images%2F2019-06-04%2013%3A15%3A34.105184.jpg?alt=media&token=e527f008-a911-4004-be0d-1f3e58c5d924
+//## https://firebasestorage.googleapis.com/v0/b/smidigprosjekt.appspot.com/o/Event%20Images%2F2019-06-04%2013%3A15%3A40.973055.jpg?alt=media&token=78c0590f-6637-426e-97e0-2d65e9d8a4a0
