@@ -272,9 +272,6 @@ class PageOneState extends State<PageOne> {
                                 child: Container(
                                   height: 500,
                                   width: 300,
-
-
-
                                   child: ListView.builder(
                                   // scrollDirection: Axis.vertical,
                                  //shrinkWrap: true,
