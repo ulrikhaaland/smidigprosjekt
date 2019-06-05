@@ -20,6 +20,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   static final formKey = new GlobalKey<FormState>();
+  
 
   String bio = "";
   String linje = "";
@@ -45,12 +46,35 @@ class _ProfilePageState extends State<ProfilePage> {
     return new Scaffold(
       
       endDrawer: Drawer(
+        
         child: ListView(
+          
           children: <Widget>[
-           
+
             ListTile(
-              leading: Icon(Icons.people_outline),
-              title: Text('Profil'),
+              title: Text(
+                "Innstillinger",
+                style: new TextStyle(fontSize: 18, fontWeight: FontWeight.bold), 
+              ),
+              
+            ),
+
+            Divider(
+              color: Colors.black45,
+            ),
+            
+            ListTile(
+              
+              leading: CircleAvatar(
+                
+                backgroundImage: AssetImage("lib/assets/images/fortnite.jpg"),
+              
+              ),
+
+              title: Text(
+                'Profil'
+                
+              ),
               onTap: (){
                 Navigator.pushNamed(
                   context,
@@ -59,31 +83,35 @@ class _ProfilePageState extends State<ProfilePage> {
                 
               },
             ),
-            ListTile(
-              leading: Icon(Icons.info_outline),
-              title: Text('Om'),
-              onTap: (){
-                Navigator.pushNamed(context, '/transactionsList');
-              },
-            ),
+            
             ListTile(
               leading: Icon(Icons.help_outline),
               title: Text('Hjelp'),
               onTap: (){
                 Navigator.pushNamed(context, '/transactionsList');
               },
+              contentPadding: EdgeInsets.only(top: 10, left: 15),
             ),
 
-            
+            ListTile(
+              leading: Icon(Icons.info_outline),
+              title: Text('Om'),
+              onTap: (){
+                Navigator.pushNamed(context, '/transactionsList');
+              },
               
-              ListTile(
-                leading: Icon(Icons.exit_to_app),
-                title: Text('Logg ut'),
-                onTap: (){
-                  Navigator.pushNamed(context, '/');
-                  widget.onSignOut();
-                },
+            ),
               
+            ListTile(
+              leading: Icon(Icons.exit_to_app),
+              title: Text('Logg ut',
+              
+              ),
+              onTap: (){
+                Navigator.pushNamed(context, '/');
+                widget.onSignOut();
+              },
+              contentPadding: EdgeInsets.only(top: 440, left: 15),
             ),
           ]
         )
