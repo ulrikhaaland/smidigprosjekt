@@ -560,7 +560,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                                   backgroundColor: UIData.blue,
                                                                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
                                                                                 content: new GestureDetector(
-                                                                                  onTap: null,
+                                                                                  onTap: _delete,
                                                                                 child: Row(
                                                                                   mainAxisAlignment: MainAxisAlignment.center,
                                                                                   children: <Widget>[
@@ -713,6 +713,15 @@ class _ProfilePageState extends State<ProfilePage> {
       ));
     }
   }
+
+
+  Future<void> _delete() async {
+    
+    // ##  await Firestore.instance.runTransaction((Transaction myTransaction) async {
+    //      await myTransaction.delete(snapshot.data.documents[index].reference);
+    //    });
+
+}
 
 
   void _tapped(position) {
