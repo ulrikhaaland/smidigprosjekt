@@ -431,9 +431,9 @@ void itemChange(bool val,int index){
                         }
                         return isOwnMessage
                             ? _ownMessage(
-                            document['message'], document['user_name'])
+                            document['message'],  document['user_name'], document['image'], document['isText'])
                             : _message(
-                            document['message'], document['user_name']);
+                            document['message'], document['user_name'], document['image'], document['isText']);
                       },
                       itemCount: snapshot.data.documents.length,
                     );
@@ -447,7 +447,8 @@ void itemChange(bool val,int index){
                 margin: EdgeInsets.only(bottom: 10.0, top: 10.0, right: 10.0, left: 10.0),
                 
                 child: Row(
-                  mainAxisSize: MainAxisSize.min,
+                  //mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     
@@ -468,8 +469,8 @@ void itemChange(bool val,int index){
                             )
                           )
                          ),
-                           Container(
-                             margin:EdgeInsets.only(left:68, top:2),
+                          Container(
+                            margin:EdgeInsets.only(left:68, top:2),
                             height: 30,
                             child: FittedBox(
                               child:FloatingActionButton(
@@ -477,14 +478,28 @@ void itemChange(bool val,int index){
                                 mini: true,
                                 backgroundColor: Colors.white,
                                 foregroundColor: UIData.black,
-                                onPressed: openOptions,
+                                onPressed: (){
+                                  setState((){
+                                    choosen = false;
+                                  });
+                                },
                                 child: Icon(Icons.clear, color: UIData.black),
                               ),
                             )
                           ), 
                       ]
                     ),
-                    Flexible(
+                    FloatingActionButton(
+                      elevation: 1,
+                      mini: true,
+                      backgroundColor: Colors.white,
+                      foregroundColor: UIData.black,
+                      onPressed: (){ 
+                        uploadImage(imgUrl);
+                      },
+                      child: Icon(Icons.send, color: UIData.blue, size: 40)
+                    )
+                   /*  Flexible(
                       child: new TextField(
                         controller: _controller,
                         onSubmitted: _handleSubmit,
@@ -496,7 +511,8 @@ void itemChange(bool val,int index){
                               borderSide: BorderSide(width: 0, style: BorderStyle.none)),
                         )
                       )
-                    ), 
+                    ),  */
+                    
                   ],
                 ),
               )
@@ -539,7 +555,7 @@ void itemChange(bool val,int index){
     );
   }
 
-  Widget _ownMessage(String message, String userName) {
+  Widget _ownMessage(String message, String userName, String image, bool isText) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -547,16 +563,36 @@ void itemChange(bool val,int index){
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            SizedBox(height: 10.0,),
-            new ClipRRect(
-              borderRadius: new BorderRadius.circular(8.0),
-              child: new Container(
-                color: UIData.pink,
-                constraints: BoxConstraints(minWidth: 0, maxWidth: ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 50)),
-                padding: EdgeInsets.only(left:10, right:10, top:6, bottom:6),
-                child: Text(message, style: TextStyle(color: Colors.white))
+            isText?
+            Padding(
+              padding: EdgeInsets.only(top:10, bottom:10),
+              child: ClipRRect(
+                borderRadius: new BorderRadius.circular(8.0),
+                child: new Container(
+                  color: UIData.pink,
+                  constraints: BoxConstraints(minWidth: 0, maxWidth: ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 50)),
+                  padding: EdgeInsets.only(left:10, right:10, top:6, bottom:6),
+                  child: Text(message, style: TextStyle(color: Colors.white))
+                )
               )
             )
+             
+            :
+
+            Padding(
+              padding: EdgeInsets.only(bottom: 10, top:10),
+              child: ClipRRect(
+              borderRadius: new BorderRadius.circular(8.0),
+                child: Container(
+                  constraints: BoxConstraints(minWidth: 0, maxWidth: ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 50)),
+                  child: Image.network(
+                    image,
+                    fit: BoxFit.cover
+                  )
+                ) 
+              )
+            )
+            
           ],
         ),
         Card(
@@ -575,7 +611,7 @@ void itemChange(bool val,int index){
     );
   }
 
-  Widget _message(String message, String userName) {
+  Widget _message(String message, String userName, String image, bool isText) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -594,14 +630,33 @@ void itemChange(bool val,int index){
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            SizedBox(height: 10.0,),
-            new ClipRRect(
+            isText?
+            Padding(
+              padding: EdgeInsets.only(top:10, bottom:10),
+              child: ClipRRect(
+                borderRadius: new BorderRadius.circular(8.0),
+                child: new Container(
+                  color: Colors.white,
+                  constraints: BoxConstraints(minWidth: 0, maxWidth: ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 50)),
+                  padding: EdgeInsets.only(left:10, right:10, top:6, bottom:6),
+                  child: Text(message, style: TextStyle(color: UIData.black))
+                )
+              )
+            )
+             
+            :
+
+            Padding(
+              padding: EdgeInsets.only(bottom: 10, top:10),
+              child: ClipRRect(
               borderRadius: new BorderRadius.circular(8.0),
-              child: new Container(
-                color: Colors.white,
-                constraints: BoxConstraints(minWidth: 0, maxWidth: ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 50)),
-                padding: EdgeInsets.only(left:10, right:10, top:6, bottom:6),
-                child: Text(message, style: TextStyle(color: UIData.black))
+                child: Container(
+                  constraints: BoxConstraints(minWidth: 0, maxWidth: ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 50)),
+                  child: Image.network(
+                    image,
+                    fit: BoxFit.cover
+                  )
+                ) 
               )
             )
           ],
@@ -618,6 +673,8 @@ void itemChange(bool val,int index){
     db.collection("chat_room").add({
       "user_name": widget.user.getName(),
       "message": message.trim(),
+      "image": "",
+      "isText": true,
       "created_at": DateTime.now()
     }).then((val) {
       print("success");
@@ -627,16 +684,36 @@ void itemChange(bool val,int index){
     }
   }
 
+  _sendImage(String dbUrl){
+    var db = Firestore.instance;
+    db.collection("chat_room").add({
+      "user_name": widget.user.getName(),
+      "image": dbUrl,
+      "message": "",
+      "isText": false,
+      "created_at": DateTime.now()
+    }).then((val) {
+      print("success");
+    }).catchError((err) {
+      print(err);
+    });
+    setState((){
+      choosen=false;
+    });  
+  }
+
   void _removeKeyboard(BuildContext context) {
     FocusScope.of(context).requestFocus(new FocusNode());
   }
   Future openCamera() async {
     var picture = await ImagePicker.pickImage(
         source: ImageSource.camera );
-        setState((){
+      setState((){
         imgUrl = picture;
         choosen = true;
     });
+    dbUrl = picture.path.toString();
+
     print("You selected: " + dbUrl);
   }
 
@@ -647,7 +724,8 @@ void itemChange(bool val,int index){
         imgUrl = gallery;
         choosen = true;
     });
-    print("You selected: " + dbUrl);
+    dbUrl = gallery.path.toString();
+    print("You selected(dbUrl): " + dbUrl);
   }
 
 void uploadImage(imgUrl) async {
@@ -657,7 +735,8 @@ void uploadImage(imgUrl) async {
     final StorageUploadTask upTask = imgRef.child(timeKey.toString() + ".jpg").putFile(imgUrl);
     var url = await (await upTask.onComplete).ref.getDownloadURL();
     dbUrl = url.toString();
-
+    print("DBURL AFTER UPLOAD:" + dbUrl);
+    _sendImage(dbUrl);
   }
 
   Future<void> openOptions() {
