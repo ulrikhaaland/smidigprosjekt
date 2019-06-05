@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:smidigprosjekt/objects/user.dart';
@@ -75,6 +78,11 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
   AnimationController percentageAnimationController;
 
   final _controller = TextEditingController();
+  var dbUrl;
+
+  File imgUrl;
+
+  bool choosen = false;
 
   @override
   void initState() {
@@ -433,11 +441,77 @@ void itemChange(bool val,int index){
                 ),
               ),
               new Divider(height: 1.0),
+              choosen?
               Container(
+                
                 margin: EdgeInsets.only(bottom: 20.0, right: 10.0, left: 10.0),
+                
                 child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    new Flexible(
+                    
+                    Stack(
+                      //mainAxisAlignment: MainAxisAlignment.center,
+                      /* mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.end, */
+                      children: <Widget>[
+                         new ClipRRect(
+                          borderRadius: new BorderRadius.circular(8.0),
+                          child: Container(
+                            padding:EdgeInsets.all(10),
+                            width: 100,
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),),
+                            child: Image.file(
+                              imgUrl,
+                              fit: BoxFit.fill,
+                            )
+                          )
+                         ),
+                           Container(
+                             margin:EdgeInsets.only(left:68, top:2),
+                            height: 30,
+                            child: FittedBox(
+                              child:FloatingActionButton(
+                                elevation: 1,
+                                mini: true,
+                                backgroundColor: Colors.white,
+                                foregroundColor: UIData.black,
+                                onPressed: openOptions,
+                                child: Icon(Icons.clear, color: UIData.black),
+                              ),
+                            )
+                          ), 
+                      ]
+                    ),
+                    Flexible(
+                      child: new TextField(
+                        controller: _controller,
+                        onSubmitted: _handleSubmit,
+                        decoration: InputDecoration(
+                          hintText: "Skriv noe..",
+                          fillColor: Colors.white,
+                          filled: true,
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0),
+                              borderSide: BorderSide(width: 0, style: BorderStyle.none)),
+                        )
+                      )
+                    ), 
+                  ],
+                ),
+              )
+              :
+
+            Container(
+                width: 300,
+                margin: EdgeInsets.only(bottom: 20.0, right: 10.0, left: 10.0),
+                child: SizedBox(
+                  width: 300,
+                
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                        new Flexible(
                       child: new TextField(
                         controller: _controller,
                         onSubmitted: _handleSubmit,
@@ -455,13 +529,19 @@ void itemChange(bool val,int index){
                           ),
                         )
                       )
-                    )
+                    )   
                   ],
                 ),
-              ),
+                ),
+              )
+            
             ],
           ),
-        )])));
+        )
+      ]
+    )
+    )
+    );
   }
 
   Widget _ownMessage(String message, String userName) {
@@ -552,70 +632,39 @@ void itemChange(bool val,int index){
     }
   }
 
-
-
-            /* new Stack(
-              children: <Widget>[
-                new Center(
-                  child: Column(
-                    children: <Widget>[
-                      //new Text("chat"),
-                    ],
-                  ),
-                ),
-
-                new Padding(
-                  padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: new Container(
-                      width: 300,
-                      height: 50,
-                      //decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.white),
-                      //color: Colors.white,
-                      child: new TextField(
-
-
-                        decoration: InputDecoration(
-                          hintText: "Skriv noe..",
-                          fillColor: Colors.white,
-                          filled: true,
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0),
-                              borderSide: BorderSide(width: 0, style: BorderStyle.none)),
-                          prefixIcon: IconButton(
-                            onPressed: () {
-                              openOptions();
-
-                            },
-                            icon: Icon(Icons.camera_alt, color: UIData.blue, size: 30,),
-                          ),
-                        ),
-                      ),
-
-                    ),
-
-                  ),
-                ),
-
-
-
-              ],
-            ), 
-          ],
-        ),),);
-  }*/
   void _removeKeyboard(BuildContext context) {
     FocusScope.of(context).requestFocus(new FocusNode());
   }
   Future openCamera() async {
     var picture = await ImagePicker.pickImage(
         source: ImageSource.camera );
+        setState((){
+        imgUrl = picture;
+        choosen = true;
+    });
+    print("You selected: " + dbUrl);
   }
 
   Future openGallery() async {
     var gallery = await ImagePicker.pickImage(
         source: ImageSource.gallery);
+      setState((){
+        imgUrl = gallery;
+        choosen = true;
+    });
+    print("You selected: " + dbUrl);
   }
+
+void uploadImage(imgUrl) async {
+
+    final StorageReference imgRef = FirebaseStorage.instance.ref().child("Chat_Images");
+    var timeKey = new DateTime.now();
+    final StorageUploadTask upTask = imgRef.child(timeKey.toString() + ".jpg").putFile(imgUrl);
+    var url = await (await upTask.onComplete).ref.getDownloadURL();
+    dbUrl = url.toString();
+
+  }
+
   Future<void> openOptions() {
     return showDialog(context: context,
         builder: (BuildContext context) {
@@ -661,11 +710,11 @@ void itemChange(bool val,int index){
                 ],
               ),
             ),
-
           );
-
         });
   }
-
 }
+
+
+
 
