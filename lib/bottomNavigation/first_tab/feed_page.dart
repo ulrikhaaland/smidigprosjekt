@@ -24,11 +24,11 @@ import 'package:smidigprosjekt/bottomNavigation/fourth_tab/profile_page.dart';
 class MyHomePage extends StatefulWidget {
   MyHomePage(
       {this.auth,
-      this.onSignOut,
-      this.currentUser,
-      this.userEmail,
-      this.userName,
-      this.user});
+        this.onSignOut,
+        this.currentUser,
+        this.userEmail,
+        this.userName,
+        this.user});
   final BaseAuth auth;
   final VoidCallback onSignOut;
   final String currentUser;
@@ -41,8 +41,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
   List<Event> eventList = [];
   List<Event> myEvent = [];
+
 
   final Key keyOne = PageStorageKey('pageOne');
   final Key keyTwo = PageStorageKey('pageTwo');
@@ -70,13 +72,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
+    _getEventsData();
     print(widget.user.getName());
     one = PageOne(
       key: keyOne,
       auth: auth,
       user: widget.user,
       eventList: eventList,
-      // onRefresh: () => _getEventsData(),
     );
 
     two = SearchPage(
@@ -95,6 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
       onSignOut: () => _signOut(),
     );
 
+
     pages = [one, two, three, four];
 
     currentPage = one;
@@ -111,6 +114,25 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  void _getEventsData()  async {
+    QuerySnapshot eventDocs =  await Firestore.instance.collection("events").orderBy('time', descending: false).getDocuments();
+    eventDocs.documents.forEach((doc) {
+      eventList.add(Event(address: doc.data["address"], cat: doc.data["cat"], desc: doc.data["desc"], id: doc.data["id"], time: doc.data["time"] as DateTime,  title: doc.data["title"], imgUrl: doc.data["imgUrl"]));
+    });
+
+    eventList.forEach((e){
+      if(e.id.contains(widget.user.userName)){
+        myEvent.add(e);
+      }
+
+    });
+
+
+  }
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,6 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
         bucket: bucket,
       ),
       bottomNavigationBar: BottomNavigationBar(
+
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
         currentIndex: currentTab,
@@ -185,19 +208,12 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class PageOne extends StatefulWidget {
-  PageOne({
-    Key key,
-    this.auth,
-    this.onSignOut,
-    this.user,
-    this.eventList,
-    this.onRefresh,
-  }) : super(key: key);
+  PageOne({Key key, this.auth, this.onSignOut, this.user, this.eventList, }) : super(key: key);
   final BaseAuth auth;
   final VoidCallback onSignOut;
   final User user;
-  final VoidCallback onRefresh;
   final List<Event> eventList;
+
 
   @override
   PageOneState createState() => PageOneState();
@@ -207,6 +223,7 @@ class PageOneState extends State<PageOne> {
   static final formKey = new GlobalKey<FormState>();
   final f = new DateFormat('yyyy-MM-dd hh:mm');
 
+
   int tapped = -1;
   double cardWidth;
   bool tap = false;
@@ -215,23 +232,26 @@ class PageOneState extends State<PageOne> {
 
   int starred = -1;
 
+
   @override
   void initState() {
     super.initState();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+
         child: new Icon(Icons.add),
         onPressed: () {
           print('button tapped');
           Navigator.push(
             context,
-            MaterialPageRoute(
-                builder: (context) => StatefullNew(user: widget.user.userName)),
-          );
+            MaterialPageRoute(builder: (context) => StatefullNew(user: widget.user.userName)),);
         },
         backgroundColor: UIData.pink,
         elevation: 0.0,
@@ -240,6 +260,7 @@ class PageOneState extends State<PageOne> {
       backgroundColor: UIData.grey,
       appBar: new AppBar(
         elevation: 1,
+
         backgroundColor: Colors.white,
         actions: <Widget>[
           Align(
@@ -247,309 +268,363 @@ class PageOneState extends State<PageOne> {
             child: Padding(
               padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
               child: IconButton(
-                icon: Image.asset(
-                  'lib/assets/images/filter_icon.png',
-                  scale: 10,
-                ),
+
+                icon: Image.asset('lib/assets/images/filter_icon.png', scale: 10,),
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => StateFilterPage()),
-                  );
+                    MaterialPageRoute(builder: (context) => StateFilterPage()),);
+
                 },
               ),
             ),
-          )
-        ],
-        title: Image.asset(
-          'lib/assets/images/logo_tekst.png',
-          fit: BoxFit.contain,
-          scale: 8,
-        ),
+
+          )],
+
+        title: Image.asset('lib/assets/images/logo_tekst.png', fit: BoxFit.contain, scale: 8,),
         centerTitle: true,
+
+
+
       ),
       body: new SingleChildScrollView(
-        child: new Stack(
+
+
+        child: new
+
+
+
+
+        Stack(
+
           //child: new Stack(
           children: <Widget>[
+
+
             Column(
               children: <Widget>[
+
                 Align(
                   alignment: Alignment.topCenter,
                   child: Container(
-                      width: ServiceProvider.instance.screenService
-                          .getPortraitWidthByPercentage(context, 100),
-                      height: ServiceProvider.instance.screenService
-                          .getPortraitHeightByPercentage(context, 80),
-                      child: StreamBuilder(
-                          stream: Firestore.instance
-                              .collection("events")
-                              .snapshots(),
-                          builder: (context, snapshot) {
-                            if (!snapshot.hasData) return Text("loading...");
-                            return ListView.builder(
-                              itemExtent: 60.0,
-                              itemCount: snapshot.data.documents.length,
-                              itemBuilder: (context, index) => _eventList(
-                                  context, snapshot.data.documents[index]),
-                            );
-                          })),
+                    width: ServiceProvider.instance.screenService
+                        .getPortraitWidthByPercentage(context, 100),
+                    height: ServiceProvider.instance.screenService
+                        .getPortraitHeightByPercentage(context, 80),
+
+                    child: ListView.builder(
+                      // scrollDirection: Axis.vertical,
+                      //shrinkWrap: true,
+                      itemBuilder: (context, position){
+                        return Column(
+                          children: <Widget>[
+
+                            Divider(
+                              color: UIData.grey,
+                            ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                child:  Text(_DateText(position),
+                                ),
+
+
+
+
+                              ),
+                            ),
+                            Divider(
+                              color: UIData.grey,
+                              height: 0.2,
+
+
+                            ),
+
+                            GestureDetector(
+                              onTap: () { _tapped(position);},
+
+
+                              child: Column(
+                                children: <Widget>[
+                                  tap == true && tapped != null && tapped == position ?
+                                  SizedBox (
+                                    height: 310,
+                                    width: ServiceProvider.instance.screenService
+                                        .getPortraitWidthByPercentage(context, 82),
+                                    child: Card(
+                                      elevation: 0.0,
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+
+                                      child: Column(
+                                        children: <Widget>[
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            //crossAxisAlignment: CrossAxisAlignment.stretch,
+
+                                            children: <Widget>[
+                                              ClipRRect(
+                                                borderRadius: new BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+                                                child: Image.network(widget.eventList[position].imgUrl,
+
+                                                  height: 120,
+                                                  width: 287,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+
+                                            ],
+
+                                          ),
+                                          Divider(
+                                            height: 1,
+                                          ),
+
+
+
+                                          Padding(
+                                            padding: EdgeInsets.all(5),
+                                            child: Container(
+                                              height: 130,
+                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), border: Border.all(color: Colors.white)),
+                                              child: Padding(
+                                                padding: EdgeInsets.all(8),
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: <Widget>[
+                                                    Text("Beskrivelse:", style: TextStyle(fontWeight: FontWeight.bold)),
+                                                    Divider(
+                                                      height: 10,
+                                                      color: Colors.white,
+                                                    ),
+                                                    Text( '${widget.eventList[position].desc}', style: TextStyle(fontSize: 13)
+
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+
+                                            ),
+
+                                          ),
+
+                                          Expanded(
+                                            child:
+
+
+                                            Container(
+                                              height: 40,
+                                              margin: EdgeInsets.only(top: 0),
+                                              width: ServiceProvider.instance.screenService
+                                                  .getPortraitWidthByPercentage(context, 82),
+
+                                              decoration: new BoxDecoration(
+                                                color: Colors.pink,
+                                                borderRadius: new BorderRadius.only(
+                                                    bottomLeft:  const  Radius.circular(8.0),
+                                                    bottomRight: const  Radius.circular(8.0)),
+                                              ),
+                                              child:
+                                              FlatButton(
+                                                color: UIData.pink,
+                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+                                                padding: EdgeInsets.all(10),
+                                                onPressed: () {
+                                                  //going = true;
+                                                  _tapped(position);
+                                                  _starred(position);
+
+
+                                                },
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: <Widget>[
+
+                                                    Icon(going && starred == position ? Icons.star : Icons.star_border, color: Colors.white, size: 20,),
+                                                    Padding(
+                                                        padding: EdgeInsets.all(3)
+                                                    ),
+                                                    Text("Interessert", style: TextStyle(color: Colors.white, fontSize: 13)),
+
+                                                  ],
+                                                ),
+
+
+                                              ),),),
+
+
+
+
+                                        ],
+                                      ),
+
+
+
+
+
+
+
+
+                                    ),
+
+
+                                  ) : SizedBox(
+                                    height: 130,
+                                    width: ServiceProvider.instance.screenService
+                                        .getPortraitWidthByPercentage(context, 82),
+                                    child: Card(
+                                      elevation: 0.0,
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+
+                                      child: Column(
+                                        children: <Widget>[
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            //crossAxisAlignment: CrossAxisAlignment.stretch,
+
+                                            children: <Widget>[
+                                              ClipRRect(
+                                                borderRadius: new BorderRadius.only(topLeft: Radius.circular(8), bottomLeft: Radius.circular(8)),
+                                                child: Image.network(widget.eventList[position].imgUrl,
+                                                  height: 122,
+                                                  width: 110,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.all(10),
+                                                child: Align(
+                                                  alignment: Alignment.centerRight,
+                                                  child:
+
+                                                  Column(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: <Widget>[
+
+                                                      Row(
+
+                                                        children: <Widget>[
+                                                          new Text(widget.eventList[position].title, style: ServiceProvider.instance.styles.cardTitle()),
+                                                          Icon(Icons.star, color: going && starred == position ? UIData.pink : Colors.white, size: 20,),
+                                                        ],
+                                                      ),
+
+
+                                                      Divider(
+                                                          color: Colors.white
+                                                      ),
+                                                      Row(
+                                                        children: <Widget>[
+                                                          Icon(Icons.location_on, color: UIData.blue, size: 20,),
+                                                          Text(widget.eventList[position].address, style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Divider(
+                                                        color: Colors.white,
+                                                      ),
+                                                      Row(
+                                                        children: <Widget>[
+                                                          Icon(Icons.access_time, color: UIData.black, size: 17,),
+                                                          Text(' ${widget.eventList[position].time.hour.toString()}' + ':' + '${widget.eventList[position].time.minute.toString().padRight(2, '0')}', style: TextStyle( fontSize: 12),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+
+
+                                                  ),
+
+
+
+
+
+                                                ),
+
+
+
+
+                                              ),
+
+
+                                            ],
+
+                                          ),
+
+
+
+                                        ],
+
+                                      ),
+
+
+
+
+
+
+
+
+                                    ),
+
+                                  ),
+
+
+                                ],
+                              ),
+
+
+
+                            )
+
+
+                          ],
+                        );
+
+                      },
+                      itemCount: widget.eventList.length,
+                    ),
+
+
+                  ),
                 ),
+
               ],
+            )
+            ,
+
+            Padding(
+                padding: EdgeInsets.all(100)
             ),
-            Padding(padding: EdgeInsets.all(100)),
-            Padding(padding: EdgeInsets.all(90)),
+            Padding(
+                padding: EdgeInsets.all(90)
+            ),
+
+
             Align(
+
               alignment: Alignment.center,
+
+
+
+
+
+
             ),
           ],
         ),
+
+
       ),
     );
-  }
 
-  Widget _eventList(BuildContext context, DocumentSnapshot snapshot) {
-    return Text(snapshot.data["address"]);
-    // return Column(
-    //   children: <Widget>[
-    //     Divider(
-    //       color: UIData.grey,
-    //     ),
-    //     Align(
-    //       alignment: Alignment.centerLeft,
-    //       child: Padding(
-    //         padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-    //         child: Text(
-    //           _DateText(position),
-    //         ),
-    //       ),
-    //     ),
-    //     Divider(
-    //       color: UIData.grey,
-    //       height: 0.2,
-    //     ),
-    //     GestureDetector(
-    //       onTap: () {
-    //         _tapped(position);
-    //       },
-    //       child: Column(
-    //         children: <Widget>[
-    //           tap == true && tapped != null && tapped == position
-    //               ? SizedBox(
-    //                   height: 310,
-    //                   width: ServiceProvider.instance.screenService
-    //                       .getPortraitWidthByPercentage(context, 82),
-    //                   child: Card(
-    //                     elevation: 0.0,
-    //                     shape: RoundedRectangleBorder(
-    //                         borderRadius: BorderRadius.circular(8)),
-    //                     child: Column(
-    //                       children: <Widget>[
-    //                         Row(
-    //                           mainAxisAlignment: MainAxisAlignment.start,
-    //                           crossAxisAlignment: CrossAxisAlignment.start,
-    //                           //crossAxisAlignment: CrossAxisAlignment.stretch,
-
-    //                           children: <Widget>[
-    //                             ClipRRect(
-    //                               borderRadius: new BorderRadius.only(
-    //                                   topLeft: Radius.circular(8),
-    //                                   topRight: Radius.circular(8)),
-    //                               child: Image.network(
-    //                                 widget.eventList[position].imgUrl,
-    //                                 height: 120,
-    //                                 width: 287,
-    //                                 fit: BoxFit.cover,
-    //                               ),
-    //                             ),
-    //                           ],
-    //                         ),
-    //                         Divider(
-    //                           height: 1,
-    //                         ),
-    //                         Padding(
-    //                           padding: EdgeInsets.all(5),
-    //                           child: Container(
-    //                             height: 130,
-    //                             decoration: BoxDecoration(
-    //                                 borderRadius: BorderRadius.circular(8),
-    //                                 border: Border.all(color: Colors.white)),
-    //                             child: Padding(
-    //                               padding: EdgeInsets.all(8),
-    //                               child: Column(
-    //                                 crossAxisAlignment:
-    //                                     CrossAxisAlignment.start,
-    //                                 children: <Widget>[
-    //                                   Text("Beskrivelse:",
-    //                                       style: TextStyle(
-    //                                           fontWeight: FontWeight.bold)),
-    //                                   Divider(
-    //                                     height: 10,
-    //                                     color: Colors.white,
-    //                                   ),
-    //                                   Text('${widget.eventList[position].desc}',
-    //                                       style: TextStyle(fontSize: 13)),
-    //                                 ],
-    //                               ),
-    //                             ),
-    //                           ),
-    //                         ),
-    //                         Expanded(
-    //                           child: Container(
-    //                             height: 40,
-    //                             margin: EdgeInsets.only(top: 0),
-    //                             width: ServiceProvider.instance.screenService
-    //                                 .getPortraitWidthByPercentage(context, 82),
-    //                             decoration: new BoxDecoration(
-    //                               color: Colors.pink,
-    //                               borderRadius: new BorderRadius.only(
-    //                                   bottomLeft: const Radius.circular(8.0),
-    //                                   bottomRight: const Radius.circular(8.0)),
-    //                             ),
-    //                             child: FlatButton(
-    //                               color: UIData.pink,
-    //                               shape: RoundedRectangleBorder(
-    //                                   borderRadius: BorderRadius.circular(100)),
-    //                               padding: EdgeInsets.all(10),
-    //                               onPressed: () {
-    //                                 //going = true;
-    //                                 _tapped(position);
-    //                                 _starred(position);
-    //                               },
-    //                               child: Row(
-    //                                 mainAxisAlignment: MainAxisAlignment.center,
-    //                                 children: <Widget>[
-    //                                   Icon(
-    //                                     going && starred == position
-    //                                         ? Icons.star
-    //                                         : Icons.star_border,
-    //                                     color: Colors.white,
-    //                                     size: 20,
-    //                                   ),
-    //                                   Padding(padding: EdgeInsets.all(3)),
-    //                                   Text("Interessert",
-    //                                       style: TextStyle(
-    //                                           color: Colors.white,
-    //                                           fontSize: 13)),
-    //                                 ],
-    //                               ),
-    //                             ),
-    //                           ),
-    //                         ),
-    //                       ],
-    //                     ),
-    //                   ),
-    //                 )
-    //               : SizedBox(
-    //                   height: 130,
-    //                   width: ServiceProvider.instance.screenService
-    //                       .getPortraitWidthByPercentage(context, 82),
-    //                   child: Card(
-    //                     elevation: 0.0,
-    //                     shape: RoundedRectangleBorder(
-    //                         borderRadius: BorderRadius.circular(8)),
-    //                     child: Column(
-    //                       children: <Widget>[
-    //                         Row(
-    //                           mainAxisAlignment: MainAxisAlignment.start,
-    //                           crossAxisAlignment: CrossAxisAlignment.start,
-    //                           //crossAxisAlignment: CrossAxisAlignment.stretch,
-
-    //                           children: <Widget>[
-    //                             ClipRRect(
-    //                               borderRadius: new BorderRadius.only(
-    //                                   topLeft: Radius.circular(8),
-    //                                   bottomLeft: Radius.circular(8)),
-    //                               child: Image.network(
-    //                                 widget.eventList[position].imgUrl,
-    //                                 height: 122,
-    //                                 width: 110,
-    //                                 fit: BoxFit.cover,
-    //                               ),
-    //                             ),
-    //                             Padding(
-    //                               padding: EdgeInsets.all(10),
-    //                               child: Align(
-    //                                 alignment: Alignment.centerRight,
-    //                                 child: Column(
-    //                                   mainAxisAlignment:
-    //                                       MainAxisAlignment.start,
-    //                                   crossAxisAlignment:
-    //                                       CrossAxisAlignment.start,
-    //                                   children: <Widget>[
-    //                                     Row(
-    //                                       children: <Widget>[
-    //                                         new Text(
-    //                                             widget
-    //                                                 .eventList[position].title,
-    //                                             style: ServiceProvider
-    //                                                 .instance.styles
-    //                                                 .cardTitle()),
-    //                                         Icon(
-    //                                           Icons.star,
-    //                                           color:
-    //                                               going && starred == position
-    //                                                   ? UIData.pink
-    //                                                   : Colors.white,
-    //                                           size: 20,
-    //                                         ),
-    //                                       ],
-    //                                     ),
-    //                                     Divider(color: Colors.white),
-    //                                     Row(
-    //                                       children: <Widget>[
-    //                                         Icon(
-    //                                           Icons.location_on,
-    //                                           color: UIData.blue,
-    //                                           size: 20,
-    //                                         ),
-    //                                         Text(
-    //                                           widget
-    //                                               .eventList[position].address,
-    //                                           style: TextStyle(
-    //                                               fontStyle: FontStyle.italic,
-    //                                               fontSize: 12),
-    //                                         ),
-    //                                       ],
-    //                                     ),
-    //                                     Divider(
-    //                                       color: Colors.white,
-    //                                     ),
-    //                                     Row(
-    //                                       children: <Widget>[
-    //                                         Icon(
-    //                                           Icons.access_time,
-    //                                           color: UIData.black,
-    //                                           size: 17,
-    //                                         ),
-    //                                         Text(
-    //                                           ' ${widget.eventList[position].time.hour.toString()}' +
-    //                                               ':' +
-    //                                               '${widget.eventList[position].time.minute.toString().padRight(2, '0')}',
-    //                                           style: TextStyle(fontSize: 12),
-    //                                         ),
-    //                                       ],
-    //                                     ),
-    //                                   ],
-    //                                 ),
-    //                               ),
-    //                             ),
-    //                           ],
-    //                         ),
-    //                       ],
-    //                     ),
-    //                   ),
-    //                 ),
-    //         ],
-    //       ),
-    //     )
-    //   ],
-    // );
   }
 
   void _starred(position) {
-    setState(() {
-      if (going) {
+    setState((){
+      if(going) {
         going = false;
         starred = position;
       } else {
@@ -559,77 +634,92 @@ class PageOneState extends State<PageOne> {
     });
   }
 
+
   void _tapped(position) {
-    setState(() {
-      if (tap) {
+    setState((){
+      if(tap) {
         tap = false;
         tapped = position;
       } else {
         tap = true;
         tapped = position;
       }
+
     });
+
   }
 
   String _DateText(int position) {
-    if (widget.eventList[position].time.month == 1) {
-      return '${widget.eventList[position].time.day.toString()}' +
-          '. ' +
-          'Januar';
-    } else if (widget.eventList[position].time.month == 2) {
-      return '${widget.eventList[position].time.day.toString()}' +
-          '. ' +
-          'Februar';
-    } else if (widget.eventList[position].time.month == 3) {
-      return '${widget.eventList[position].time.day.toString()}' +
-          '. ' +
-          'Mars';
-    } else if (widget.eventList[position].time.month == 4) {
-      return '${widget.eventList[position].time.day.toString()}' +
-          '. ' +
-          'April';
-    } else if (widget.eventList[position].time.month == 5) {
-      return '${widget.eventList[position].time.day.toString()}' + '. ' + 'Mai';
-    } else if (widget.eventList[position].time.month == 6) {
-      return '${widget.eventList[position].time.day.toString()}' +
-          '. ' +
-          'Juni';
-    } else if (widget.eventList[position].time.month == 7) {
-      return '${widget.eventList[position].time.day.toString()}' +
-          '. ' +
-          'Juli';
-    } else if (widget.eventList[position].time.month == 8) {
-      return '${widget.eventList[position].time.day.toString()}' +
-          '. ' +
-          'August';
-    } else if (widget.eventList[position].time.month == 9) {
-      return '${widget.eventList[position].time.day.toString()}' +
-          '. ' +
-          'September';
-    } else if (widget.eventList[position].time.month == 10) {
-      return '${widget.eventList[position].time.day.toString()}' +
-          '. ' +
-          'Oktober';
-    } else if (widget.eventList[position].time.month == 11) {
-      return '${widget.eventList[position].time.day.toString()}' +
-          '. ' +
-          'November';
-    } else if (widget.eventList[position].time.month == 12) {
-      return '${widget.eventList[position].time.day.toString()}' +
-          '. ' +
-          'Desember';
+    if (widget.eventList[position].time.month == 1){
+      return '${widget.eventList[position].time.day.toString()}' + '. ' + 'Januar';
     }
+    else if (widget.eventList[position].time.month == 2){
+      return '${widget.eventList[position].time.day.toString()}' + '. ' + 'Februar';
+    }
+    else if (widget.eventList[position].time.month == 3){
+      return '${widget.eventList[position].time.day.toString()}' + '. ' + 'Mars';
+    }
+    else if (widget.eventList[position].time.month == 4){
+      return '${widget.eventList[position].time.day.toString()}' + '. ' + 'April';
+    }
+    else if (widget.eventList[position].time.month == 5){
+      return '${widget.eventList[position].time.day.toString()}' + '. ' + 'Mai';
+    }
+    else if (widget.eventList[position].time.month == 6){
+      return '${widget.eventList[position].time.day.toString()}' + '. ' + 'Juni';
+    }
+    else if (widget.eventList[position].time.month == 7){
+      return '${widget.eventList[position].time.day.toString()}' + '. ' + 'Juli';
+    }
+    else if (widget.eventList[position].time.month == 8){
+      return '${widget.eventList[position].time.day.toString()}' + '. ' + 'August';
+    }
+    else if (widget.eventList[position].time.month == 9){
+      return '${widget.eventList[position].time.day.toString()}' + '. ' + 'September';
+    }
+    else if (widget.eventList[position].time.month == 10){
+      return '${widget.eventList[position].time.day.toString()}' + '. ' + 'Oktober';
+    }
+    else if (widget.eventList[position].time.month == 11){
+      return '${widget.eventList[position].time.day.toString()}' + '. ' + 'November';
+    }
+    else if (widget.eventList[position].time.month == 12){
+      return '${widget.eventList[position].time.day.toString()}' + '. ' + 'Desember';
+    }
+
   }
 
-  Future<void> _refresh() async {
+  Future<void> _Refresh() async {
     print('refreshing');
     //setState(() => _getEventsData()
+
+
   }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class StateFilterPage extends StatefulWidget {
+
   StateFilterPage({this.user});
   final User user;
+
 
   @override
   FilterPage createState() => FilterPage();
@@ -640,14 +730,9 @@ class FilterPage extends State<StateFilterPage> {
     super.initState();
   }
 
-  List<String> cate = [
-    'lib/assets/images/skole.png',
-    'lib/assets/images/kaffe.png',
-    'lib/assets/images/gaming.png',
-    'lib/assets/images/fest.png',
-    'lib/assets/images/prosjekt.png'
-  ];
-  List<String> cat = ["Skolejobbing", "Kaffe", "Gaming", "Fest", "Prosjekt"];
+
+  List<String> cate = ['lib/assets/images/skole.png', 'lib/assets/images/kaffe.png', 'lib/assets/images/gaming.png', 'lib/assets/images/fest.png', 'lib/assets/images/prosjekt.png' ];
+  List<String> cat =  ["Skolejobbing", "Kaffe", "Gaming", "Fest", "Prosjekt" ];
 
   String dropdown = '';
 
@@ -658,6 +743,8 @@ class FilterPage extends State<StateFilterPage> {
   bool prosjekt = false;
 
   bool nullstill = true;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -675,23 +762,25 @@ class FilterPage extends State<StateFilterPage> {
             child: Padding(
               padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
               child: IconButton(
-                icon: Image.asset(
-                  'lib/assets/images/filter_icon_selected.png',
-                  scale: 10,
-                ),
+
+                icon: Image.asset('lib/assets/images/filter_icon_selected.png', scale: 10, ),
                 onPressed: () {
                   Navigator.pop(context);
+
                 },
               ),
             ),
-          )
-        ],
+          )],
 
         title: Text("Filter", style: ServiceProvider.instance.styles.title()),
         centerTitle: true,
+
+
+
       ),
       body: new Stack(
         children: <Widget>[
+
           Center(
             child: Column(
               children: <Widget>[
@@ -699,42 +788,44 @@ class FilterPage extends State<StateFilterPage> {
                   color: UIData.grey,
                   height: 20,
                 ),
+
                 Align(
                   alignment: Alignment.center,
-                  child: Text("Sorter etter:",
-                      style: TextStyle(
-                        color: UIData.black,
-                        fontSize: 13,
-                      )),
+                  child: Text("Sorter etter:", style: TextStyle(color: UIData.black, fontSize: 13, )),
                 ),
                 Divider(
                   color: UIData.grey,
                 ),
+
+
                 Container(
                   width: ServiceProvider.instance.screenService
                       .getPortraitWidthByPercentage(context, 82),
                   //height: 50,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: Colors.white),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.white),
                   //color: Colors.white,
                   child: SizedBox(
                     height: 40,
                     child: new Theme(
                       data: Theme.of(context).copyWith(
                         canvasColor: Colors.white,
+
+
                       ),
+
                       child: DropdownButtonHideUnderline(
+
                         child: DropdownButton<String>(
                           isExpanded: false,
                           value: dropdown,
                           style: TextStyle(fontSize: 13, color: UIData.black),
+
                           onChanged: (String newValue) {
                             setState(() {
                               dropdown = newValue;
                             });
                           },
-                          items: <String>['Avstand', 'Popularitet', '']
+                          items: <String>['Avstand', 'Popularitet','']
                               .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem(
                               value: value,
@@ -743,22 +834,27 @@ class FilterPage extends State<StateFilterPage> {
                                 child: Text(value),
                               ),
                             );
-                          }).toList(),
+                          })
+
+                              .toList(),
                         ),
+
+
                       ),
                     ),
+
                   ),
+
                 ),
+
+
+
                 Divider(
                   color: UIData.grey,
                 ),
                 Align(
                   alignment: Alignment.center,
-                  child: Text("Filtrer:",
-                      style: TextStyle(
-                        color: UIData.black,
-                        fontSize: 13,
-                      )),
+                  child: Text("Filtrer:", style: TextStyle(color: UIData.black, fontSize: 13, )),
                 ),
                 Divider(
                   color: UIData.grey,
@@ -766,10 +862,13 @@ class FilterPage extends State<StateFilterPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
+
+
                     GestureDetector(
                       onTap: () {
                         pressedSkole();
                         print(cat[0]);
+
                       },
                       child: Container(
                         height: 100,
@@ -778,42 +877,39 @@ class FilterPage extends State<StateFilterPage> {
                           child: Card(
                             elevation: 0,
                             //color: (pressed ? Colors.white : UIData.pink),
-                            shape: (nullstill && skole
-                                ? RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    side: BorderSide(
-                                        width: 1,
-                                        style: BorderStyle.solid,
-                                        color: UIData.black))
-                                : RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    side: BorderSide(
-                                        width: 0, style: BorderStyle.none))),
+                            shape: (nullstill && skole ?   RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black)) :  RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
+
+
 
                             child: Padding(
                               padding: EdgeInsets.all(7),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  Image.asset(
-                                    cate[0],
-                                    scale: 20,
-                                  ),
+                                  Image.asset(cate[0], scale: 20,),
                                   Divider(
                                     color: Colors.white,
                                     height: 10,
                                   ),
                                   Text(cat[0], style: TextStyle(fontSize: 10)),
+
                                 ],
                               ),
+
                             ),
+
                           ),
+
                         ),
+
                       ),
                     ),
+
+
                     GestureDetector(
                       onTap: () {
                         pressedKaffe();
+
                       },
                       child: Container(
                         height: 100,
@@ -822,42 +918,39 @@ class FilterPage extends State<StateFilterPage> {
                           child: Card(
                             elevation: 0,
                             //color: (pressed ? Colors.white : UIData.pink),
-                            shape: (nullstill && kaffe
-                                ? RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    side: BorderSide(
-                                        width: 1,
-                                        style: BorderStyle.solid,
-                                        color: UIData.black))
-                                : RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    side: BorderSide(
-                                        width: 0, style: BorderStyle.none))),
+                            shape: (nullstill && kaffe ?   RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black)) :  RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
+
+
 
                             child: Padding(
                               padding: EdgeInsets.all(7),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  Image.asset(
-                                    cate[1],
-                                    scale: 20,
-                                  ),
+                                  Image.asset(cate[1], scale: 20,),
                                   Divider(
                                     color: Colors.white,
                                     height: 10,
                                   ),
                                   Text(cat[1], style: TextStyle(fontSize: 10)),
+
                                 ],
                               ),
+
                             ),
+
                           ),
+
                         ),
+
                       ),
                     ),
+
+
                     GestureDetector(
                       onTap: () {
                         pressedGaming();
+
                       },
                       child: Container(
                         height: 100,
@@ -866,47 +959,48 @@ class FilterPage extends State<StateFilterPage> {
                           child: Card(
                             elevation: 0,
                             //color: (pressed ? Colors.white : UIData.pink),
-                            shape: (nullstill && gaming
-                                ? RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    side: BorderSide(
-                                        width: 1,
-                                        style: BorderStyle.solid,
-                                        color: UIData.black))
-                                : RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    side: BorderSide(
-                                        width: 0, style: BorderStyle.none))),
+                            shape: (nullstill && gaming ?   RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black)) :  RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
+
+
 
                             child: Padding(
                               padding: EdgeInsets.all(7),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  Image.asset(
-                                    cate[2],
-                                    scale: 20,
-                                  ),
+                                  Image.asset(cate[2], scale: 20,),
                                   Divider(
                                     color: Colors.white,
                                     height: 10,
                                   ),
                                   Text(cat[2], style: TextStyle(fontSize: 10)),
+
                                 ],
                               ),
+
                             ),
+
                           ),
+
                         ),
+
                       ),
                     ),
+
+
+
+
+
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
+
                     GestureDetector(
                       onTap: () {
                         pressedFest();
+
                       },
                       child: Container(
                         height: 100,
@@ -915,42 +1009,39 @@ class FilterPage extends State<StateFilterPage> {
                           child: Card(
                             elevation: 0,
                             //color: (pressed ? Colors.white : UIData.pink),
-                            shape: (nullstill && fest
-                                ? RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    side: BorderSide(
-                                        width: 1,
-                                        style: BorderStyle.solid,
-                                        color: UIData.black))
-                                : RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    side: BorderSide(
-                                        width: 0, style: BorderStyle.none))),
+                            shape: (nullstill && fest ?   RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black)) :  RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
+
+
 
                             child: Padding(
                               padding: EdgeInsets.all(7),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  Image.asset(
-                                    cate[3],
-                                    scale: 20,
-                                  ),
+                                  Image.asset(cate[3], scale: 20,),
                                   Divider(
                                     color: Colors.white,
                                     height: 10,
                                   ),
                                   Text(cat[3], style: TextStyle(fontSize: 10)),
+
                                 ],
                               ),
+
                             ),
+
                           ),
+
                         ),
+
                       ),
                     ),
+
+
                     GestureDetector(
                       onTap: () {
                         pressedProsjekt();
+
                       },
                       child: Container(
                         height: 100,
@@ -959,42 +1050,39 @@ class FilterPage extends State<StateFilterPage> {
                           child: Card(
                             elevation: 0,
                             //color: (pressed ? Colors.white : UIData.pink),
-                            shape: (nullstill && prosjekt
-                                ? RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    side: BorderSide(
-                                        width: 1,
-                                        style: BorderStyle.solid,
-                                        color: UIData.black))
-                                : RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    side: BorderSide(
-                                        width: 0, style: BorderStyle.none))),
+                            shape: (nullstill && prosjekt  ?  RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black)) :  RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
+
+
 
                             child: Padding(
                               padding: EdgeInsets.all(7),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  Image.asset(
-                                    cate[4],
-                                    scale: 20,
-                                  ),
+                                  Image.asset(cate[4], scale: 20,),
                                   Divider(
                                     color: Colors.white,
                                     height: 10,
                                   ),
                                   Text(cat[4], style: TextStyle(fontSize: 10)),
+
                                 ],
                               ),
+
                             ),
+
                           ),
+
                         ),
+
                       ),
                     ),
+
+
                     GestureDetector(
                       onTap: () {
                         //pressedFilter();
+
                       },
                       child: Container(
                         height: 100,
@@ -1003,10 +1091,9 @@ class FilterPage extends State<StateFilterPage> {
                           child: Card(
                             elevation: 0,
                             //color: (pressed ? Colors.white : UIData.pink),
-                            shape: (RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                side: BorderSide(
-                                    width: 0, style: BorderStyle.none))),
+                            shape: (RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
+
+
 
                             child: Padding(
                               padding: EdgeInsets.all(7),
@@ -1019,21 +1106,33 @@ class FilterPage extends State<StateFilterPage> {
                                     height: 10,
                                   ),
                                   //Text(cat[0], style: TextStyle(fontSize: 10)),
+
                                 ],
                               ),
+
                             ),
+
                           ),
+
                         ),
+
                       ),
                     ),
+
+
+
+
+
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
+
                     GestureDetector(
                       onTap: () {
                         // pressedFilter();
+
                       },
                       child: Container(
                         height: 100,
@@ -1042,10 +1141,9 @@ class FilterPage extends State<StateFilterPage> {
                           child: Card(
                             elevation: 0,
                             //color: (pressed ? Colors.white : UIData.pink),
-                            shape: (RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                side: BorderSide(
-                                    width: 0, style: BorderStyle.none))),
+                            shape: (RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
+
+
 
                             child: Padding(
                               padding: EdgeInsets.all(7),
@@ -1058,17 +1156,24 @@ class FilterPage extends State<StateFilterPage> {
                                     height: 10,
                                   ),
                                   //Text(cat[0], style: TextStyle(fontSize: 10)),
+
                                 ],
                               ),
+
                             ),
+
                           ),
+
                         ),
+
                       ),
                     ),
+
 
                     GestureDetector(
                       onTap: () {
                         //pressedFilter();
+
                       },
                       child: Container(
                         height: 100,
@@ -1077,10 +1182,9 @@ class FilterPage extends State<StateFilterPage> {
                           child: Card(
                             elevation: 0,
                             //color: (pressed ? Colors.white : UIData.pink),
-                            shape: (RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                side: BorderSide(
-                                    width: 0, style: BorderStyle.none))),
+                            shape: (RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
+
+
 
                             child: Padding(
                               padding: EdgeInsets.all(7),
@@ -1093,18 +1197,25 @@ class FilterPage extends State<StateFilterPage> {
                                     height: 10,
                                   ),
                                   // Text(cat[1], style: TextStyle(fontSize: 10)),
+
                                 ],
                               ),
+
                             ),
+
                           ),
+
                         ),
+
                       ),
                     ),
                     //Text("${widget.user.userName}"),
 
+
                     GestureDetector(
                       onTap: () {
                         //pressedFilter();
+
                       },
                       child: Container(
                         height: 100,
@@ -1113,10 +1224,9 @@ class FilterPage extends State<StateFilterPage> {
                           child: Card(
                             elevation: 0,
                             //color: (pressed ? Colors.white : UIData.pink),
-                            shape: (RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                side: BorderSide(
-                                    width: 0, style: BorderStyle.none))),
+                            shape: (RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
+
+
 
                             child: Padding(
                               padding: EdgeInsets.all(7),
@@ -1129,18 +1239,27 @@ class FilterPage extends State<StateFilterPage> {
                                     height: 10,
                                   ),
                                   //Text(cat[2], style: TextStyle(fontSize: 10)),
+
                                 ],
                               ),
+
                             ),
+
                           ),
+
                         ),
+
                       ),
                     ),
+
+
                   ],
                 ),
+
                 Divider(
                   color: UIData.grey,
                   height: 20,
+
                 ),
                 GestureDetector(
                   onTap: () {
@@ -1165,11 +1284,11 @@ class FilterPage extends State<StateFilterPage> {
                       pressedFest();
                       nullstill = true;
                     }
+
+
+
                   },
-                  child: Text(
-                    "Nullstill filter",
-                    style: TextStyle(color: UIData.blue, fontSize: 15),
-                  ),
+                  child: Text("Nullstill filter", style: TextStyle(color: UIData.blue, fontSize: 15),),
                 ),
                 Divider(
                   color: UIData.grey,
@@ -1179,9 +1298,7 @@ class FilterPage extends State<StateFilterPage> {
                     color: UIData.pink,
                     elevation: 0,
                     padding: EdgeInsets.fromLTRB(40, 15, 40, 15),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(100)),
-                        side: BorderSide(style: BorderStyle.none)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(100)), side: BorderSide(style: BorderStyle.none)),
                     onPressed: () {
                       if (kaffe) {
                         print(cat[1]);
@@ -1201,57 +1318,65 @@ class FilterPage extends State<StateFilterPage> {
                       //print("${widget.user.userName}");
                       Navigator.pop(context);
                     },
-                    child: Text("Bruk filter",
-                        style: TextStyle(color: Colors.white))),
+                    child: Text("Bruk filter", style: TextStyle(color: Colors.white))
+                ),
+
               ],
+
             ),
           ),
         ],
+
+
       ),
+
     );
+
   }
 
   void pressedSkole() {
     setState(() {
       if (skole) {
         skole = false;
-      } else {
+      }
+      else {
         skole = true;
       }
-    });
+    } );
   }
 
   void pressedKaffe() {
     setState(() {
-      if (kaffe) {
+      if(kaffe){
         kaffe = false;
-      } else {
+      }
+      else {
         kaffe = true;
       }
-    });
+    })    ;
   }
 
   void pressedGaming() {
     setState(() {
       if (gaming) {
         gaming = false;
-      } else {
+      }
+      else {
         gaming = true;
       }
     });
   }
-
-  void pressedFest() {
+  void pressedFest(){
     setState(() {
       if (fest) {
         fest = false;
-      } else {
+      }
+      else {
         fest = true;
       }
     });
   }
-
-  void pressedProsjekt() {
+  void pressedProsjekt(){
     setState(() {
       if (prosjekt) {
         prosjekt = false;
@@ -1259,18 +1384,28 @@ class FilterPage extends State<StateFilterPage> {
         prosjekt = true;
       }
     });
+
   }
+
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class Event {
-  Event(
-      {this.imgUrl,
-      this.address,
-      this.cat,
-      this.desc,
-      this.id,
-      this.time,
-      this.title});
+  Event({this.imgUrl, this.address, this.cat, this.desc, this.id, this.time, this.title});
+
 
   final String address;
   final String cat;
@@ -1279,6 +1414,8 @@ class Event {
   final String id;
   final DateTime time;
   final String title;
+
+
 }
 
 class StatefullNew extends StatefulWidget {
@@ -1288,6 +1425,7 @@ class StatefullNew extends StatefulWidget {
   @override
   NewEventPage createState() => NewEventPage();
 }
+
 
 class NewEventPage extends State<StatefullNew> {
   String dropdownValue = "Skolejobbing";
@@ -1305,6 +1443,7 @@ class NewEventPage extends State<StatefullNew> {
 
   bool choosen = false;
 
+
   void initState() {
     super.initState();
   }
@@ -1317,21 +1456,19 @@ class NewEventPage extends State<StatefullNew> {
   bool tidspunkt = false;
   bool datovalg = false;
 
+
   DateTime _date = new DateTime.now();
   TimeOfDay _time = new TimeOfDay.now();
 
   List<Event> newEvent = [];
-  List<String> cate = [
-    'lib/assets/images/skole.png',
-    'lib/assets/images/kaffe.png',
-    'lib/assets/images/gaming.png',
-    'lib/assets/images/fest.png',
-    'lib/assets/images/prosjekt.png'
-  ];
-  List<String> cat = ["Skolejobbing", "Kaffe", "Gaming", "Fest", "Prosjekt"];
+  List<String> cate = ['lib/assets/images/skole.png', 'lib/assets/images/kaffe.png', 'lib/assets/images/gaming.png', 'lib/assets/images/fest.png', 'lib/assets/images/prosjekt.png' ];
+  List<String> cat =  ["Skolejobbing", "Kaffe", "Gaming", "Fest", "Prosjekt" ];
 
   bool tap = false;
   int tapped = -1;
+
+
+
 
   Future<Null> selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -1340,12 +1477,13 @@ class NewEventPage extends State<StatefullNew> {
       firstDate: new DateTime(2018),
       lastDate: new DateTime(2020),
     );
-    if (picked != null && picked != _date) {
+    if(picked != null && picked != _date) {
       print("Date: ${_date.toString()}");
       setState(() {
         _date = picked;
         dats = '${_date.day.toString()}' + '.' + '${_date.month.toString()}';
         datovalg = true;
+
       });
     }
   }
@@ -1355,23 +1493,26 @@ class NewEventPage extends State<StatefullNew> {
       context: context,
       initialTime: _time,
     );
-    if (picked != null && picked != _time) {
+    if(picked != null && picked != _time) {
       setState(() {
         _time = picked;
         print(_time.hour.toString());
         tids = '${_time.hour.toString()}' + ':' + '${_time.minute.toString()}';
         tidspunkt = true;
+
       });
     }
+
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap: (){
         this._removeKeyboard(context);
+
       },
-      child: Scaffold(
+      child:  Scaffold(
         backgroundColor: UIData.grey,
         appBar: AppBar(
           elevation: 1,
@@ -1379,32 +1520,38 @@ class NewEventPage extends State<StatefullNew> {
             color: UIData.black,
           ),
           centerTitle: true,
-          title: Text(
-            "Nytt event",
-            style: ServiceProvider.instance.styles.title(),
-          ),
+
+          title: Text("Nytt event", style: ServiceProvider.instance.styles.title(),),
           backgroundColor: Colors.white,
+
         ),
         body: SingleChildScrollView(
           child: Stack(
+
             children: <Widget>[
+
               Align(
                 alignment: Alignment.topCenter,
                 child: Padding(
                   padding: EdgeInsets.all(30.0),
                   child: Column(
                     children: <Widget>[
+
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text("Kategori:"),
+
                       ),
                       Divider(
                         color: UIData.grey,
                         height: 10,
                       ),
+
+
                       SizedBox(
                         height: 90,
                         child: ListView.builder(
+
                           itemCount: cate.length,
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) {
@@ -1418,54 +1565,48 @@ class NewEventPage extends State<StatefullNew> {
                                   print(cat[index]);
                                   kat = cat[index];
                                   //RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 2, style: BorderStyle.solid));
+
                                 },
                                 splashColor: UIData.grey,
                                 highlightColor: UIData.grey,
                                 child: Card(
-                                  shape: (tap == true &&
-                                          tapped != null &&
-                                          tapped == index
-                                      ? RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                          side: BorderSide(
-                                              width: 1,
-                                              style: BorderStyle.solid,
-                                              color: UIData.black))
-                                      : RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                          side: BorderSide(
-                                              width: 0,
-                                              style: BorderStyle.none))),
+                                  shape: ( tap == true && tapped != null && tapped == index ? RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 1, style: BorderStyle.solid, color: UIData.black)) :
+                                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 0, style: BorderStyle.none))),
+
                                   child: Padding(
                                     padding: EdgeInsets.all(7),
                                     child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: <Widget>[
-                                        Image.asset(
-                                          cate[index],
-                                          scale: 20,
-                                        ),
+                                        Image.asset(cate[index], scale: 20,),
                                         Divider(
                                           color: Colors.white,
                                           height: 10,
                                         ),
-                                        Text(cat[index],
-                                            style: TextStyle(fontSize: 10)),
+                                        Text(cat[index], style: TextStyle(fontSize: 10)),
+
                                       ],
                                     ),
+
                                   ),
+
                                 ),
                               ),
+
                             );
+
                           },
+
+
                         ),
+
                       ),
+
                       Divider(
                         color: UIData.grey,
                       ),
+
+
                       Theme(
                         data: Theme.of(context).copyWith(
                           primaryColor: UIData.blue,
@@ -1477,71 +1618,57 @@ class NewEventPage extends State<StatefullNew> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
+
                               SizedBox(
                                 width: 140,
                                 height: 50,
-                                child: FlatButton.icon(
+                                child:
+
+                                FlatButton.icon(
+
                                   onPressed: () {
                                     selectDate(context);
                                   },
-                                  icon: Icon(
-                                    Icons.calendar_today,
-                                    color: UIData.blue,
-                                    size: 20,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(8)),
-                                      side:
-                                          BorderSide(style: BorderStyle.none)),
+                                  icon: Icon(Icons.calendar_today, color: UIData.blue, size: 20,),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8)), side: BorderSide(style: BorderStyle.none)),
+
                                   color: Colors.white,
-                                  label: (datovalg
-                                      ? Text(
-                                          dats,
-                                          style: TextStyle(color: UIData.black),
-                                        )
-                                      : Text("Dato",
-                                          style: TextStyle(
-                                              color: Colors.grey,
-                                              fontWeight: FontWeight.normal))),
+
+                                  label: (datovalg? Text(dats, style: TextStyle(color: UIData.black),) : Text("Dato", style: TextStyle(color: Colors.grey, fontWeight: FontWeight.normal))),
                                 ),
                               ),
+
+
                               Padding(
                                 padding: EdgeInsets.all(5),
                               ),
                               SizedBox(
                                 width: 140,
                                 height: 50,
-                                child: FlatButton.icon(
+                                child:
+
+                                FlatButton.icon(
                                   onPressed: () {
                                     selectTime(context);
                                   },
-                                  icon: Icon(Icons.access_time,
-                                      color: UIData.blue, size: 22),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(8)),
-                                      side:
-                                          BorderSide(style: BorderStyle.none)),
+                                  icon: Icon(Icons.access_time, color: UIData.blue, size: 22),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8)), side: BorderSide(style: BorderStyle.none)),
+
                                   color: Colors.white,
-                                  label: (tidspunkt
-                                      ? Text(
-                                          tids,
-                                          style: TextStyle(color: UIData.black),
-                                        )
-                                      : Text("Tid",
-                                          style: TextStyle(
-                                              color: Colors.grey,
-                                              fontWeight: FontWeight.normal))),
+
+                                  label: (tidspunkt? Text(tids, style: TextStyle(color: UIData.black),) : Text("Tid", style: TextStyle(color: Colors.grey, fontWeight: FontWeight.normal))),
                                 ),
                               ),
+
                             ],
                           ),
+
                         ),
                       ),
                       Divider(
                         color: UIData.grey,
                       ),
+
                       Container(
                         width: 300.0,
                         height: 50,
@@ -1553,10 +1680,8 @@ class NewEventPage extends State<StatefullNew> {
                             contentPadding: EdgeInsets.all(17.0),
                             fillColor: Colors.white,
                             hintStyle: TextStyle(color: Colors.grey),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8.0),
-                                borderSide: BorderSide(
-                                    width: 0, style: BorderStyle.none)),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0), borderSide: BorderSide(width: 0, style: BorderStyle.none)),
+
                           ),
                           onChanged: (text) {
                             tit = text;
@@ -1583,10 +1708,7 @@ class NewEventPage extends State<StatefullNew> {
                             contentPadding: EdgeInsets.all(17.0),
                             fillColor: Colors.white,
                             hintStyle: TextStyle(color: Colors.grey),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8.0),
-                                borderSide: BorderSide(
-                                    width: 0, style: BorderStyle.none)),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0), borderSide: BorderSide(width: 0, style: BorderStyle.none)),
                           ),
                           onChanged: (text) {
                             add = text;
@@ -1599,9 +1721,11 @@ class NewEventPage extends State<StatefullNew> {
                           },
                         ),
                       ),
+
                       Divider(
                         color: UIData.grey,
                       ),
+
                       Container(
                         //height: 190.0,
                         width: 300.0,
@@ -1617,22 +1741,22 @@ class NewEventPage extends State<StatefullNew> {
                               contentPadding: EdgeInsets.all(17.0),
                               fillColor: Colors.white,
                               hintStyle: TextStyle(color: Colors.grey),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  borderSide: BorderSide(
-                                      width: 0, style: BorderStyle.none)),
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0), borderSide: BorderSide(width: 0, style: BorderStyle.none)),
                             ),
                             onChanged: (text) {
                               bes = text;
                             },
+
                             onSubmitted: (text) {
                               String b = text;
                               bes = text;
                               //print(b);
                               saveBes(b);
                             },
+
                           ),
                         ),
+
                       ),
                       Divider(
                         color: UIData.grey,
@@ -1641,100 +1765,105 @@ class NewEventPage extends State<StatefullNew> {
                         children: <Widget>[
                           Align(
                             alignment: Alignment.centerLeft,
-                            child: Text("Legg til bilde:"),
+                            child: Text( "Legg til bilde:"
+                            ),
                           ),
                           Divider(
                             color: UIData.grey,
                           ),
                           Align(
                             alignment: Alignment.centerLeft,
-                            child: choosen
-                                ? Column(
-                                    //mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      FlatButton.icon(
-                                        onPressed: openOptions,
-                                        color: UIData.grey,
-                                        icon: Icon(Icons.replay,
-                                            color: UIData.blue),
-                                        label: Text("Ta på nytt",
-                                            style: TextStyle(
-                                                color: UIData.blue,
-                                                fontWeight: FontWeight.bold)),
-                                      ),
-                                      Container(
-                                          height: 200,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                          ),
-                                          child: Image.file(
-                                            imgUrl,
-                                            fit: BoxFit.fill,
+                            child:  choosen?
+                            Column(
+                              //mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                FlatButton.icon(
+                                  onPressed: openOptions,
+                                  color: UIData.grey,
+                                  icon: Icon(Icons.replay, color: UIData.blue),
+                                  label:  Text  ("Ta på nytt", style: TextStyle(color: UIData.blue, fontWeight: FontWeight.bold)),
 
-                                            // width: 200,
-                                            //height: 400,
-                                          )),
-                                    ],
-                                  )
-                                : Container(
-                                    height: 80,
-                                    child: FittedBox(
-                                      child: FloatingActionButton(
-                                        onPressed: () {
-                                          openOptions();
-                                          //choosen = true;
-                                        },
-                                        child: Icon(
-                                          Icons.photo_camera,
-                                          size: 30.0,
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(8.0)),
-                                        ),
-                                        backgroundColor: Colors.white,
-                                        foregroundColor: UIData.black,
-                                        elevation: 0.0,
-                                      ),
-                                    ),
-                                  ),
+
+                                ),
+
+                                Container(
+                                    height: 200,
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),),
+
+                                    child: Image.file(
+                                      imgUrl,
+                                      fit: BoxFit.fill,
+
+                                      // width: 200,
+                                      //height: 400,
+                                    )
+                                ),
+
+
+                              ],
+                            )
+
+                                :
+
+
+                            Container(
+
+                              height: 80,
+
+                              child: FittedBox(
+
+                                child:  FloatingActionButton(
+                                  onPressed: () {
+                                    openOptions();
+                                    //choosen = true;
+
+                                  },
+                                  child:
+                                  Icon(Icons.photo_camera, size: 30.0,),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)), ),
+                                  backgroundColor: Colors.white,
+                                  foregroundColor: UIData.black,
+                                  elevation: 0.0,
+
+                                ),
+                              ),
+
+                            ),
                           ),
                         ],
+
                       ),
+
                       Divider(
                         color: UIData.grey,
                         height: 40,
                       ),
+
+
                       RaisedButton(
                           color: UIData.pink,
                           elevation: 0,
                           padding: EdgeInsets.fromLTRB(30, 15, 30, 15),
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(100)),
-                              side: BorderSide(style: BorderStyle.none)),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(100)), side: BorderSide(style: BorderStyle.none)),
                           onPressed: () {
                             uploadImage(imgUrl);
 
+
+
                             print("post pressed");
 
-                            DateTime titi = new DateTime(
-                                _date.year,
-                                _date.month,
-                                _date.day,
-                                _time.hour,
-                                _time.minute);
+                            DateTime titi = new DateTime(_date.year, _date.month, _date.day, _time.hour, _time.minute);
 
                             id = new DateTime.now().millisecondsSinceEpoch;
                             String name = widget.user;
                             String idu = name + " " + id.toString();
 
+
                             //if(add != null && kat != null && bes != null && titi != null && dbUrl != null) {
 
-                            var data = {
+                            var data =
+                            {
                               "address": add,
                               "cat": kat,
                               "desc": bes,
@@ -1743,20 +1872,31 @@ class NewEventPage extends State<StatefullNew> {
                               "title": tit,
                               "imgUrl": dbUrl,
                             };
-                            Firestore.instance
-                                .document("events/$idu")
-                                .setData(data);
+                            Firestore.instance.document("events/$idu").setData(data);
+
 
                             Navigator.pop(context);
+
+
                           },
-                          child: Text("Post event",
-                              style: TextStyle(color: Colors.white)))
+                          child: Text("Post event", style: TextStyle(color: Colors.white))
+                      )
+
                     ],
+
                   ),
                 ),
+
               ),
-              Align(),
+              Align(
+
+
+              ),
             ],
+
+
+
+
           ),
         ),
       ),
@@ -1769,7 +1909,7 @@ class NewEventPage extends State<StatefullNew> {
   }
 
   String saveTit(t) {
-    print(t);
+    print (t);
     return t;
   }
 
@@ -1788,13 +1928,13 @@ class NewEventPage extends State<StatefullNew> {
   }
 
   Future<void> openOptions() {
-    return showDialog(
-        context: context,
+    return showDialog(context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0)),
-            content: new SingleChildScrollView(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+
+            content:
+            new SingleChildScrollView(
               child: new ListBody(
                 children: <Widget>[
                   Row(
@@ -1804,14 +1944,16 @@ class NewEventPage extends State<StatefullNew> {
                         padding: EdgeInsets.all(7.0),
                       ),
                       GestureDetector(
-                        child: new Text(
-                          'Ta et bilde',
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        onTap: openCamera,
+                        child: new Text('Ta et bilde', style: TextStyle(fontSize: 20) ,),
+                        onTap:
+                        openCamera,
+
+
+
                       ),
                     ],
                   ),
+
                   Padding(
                     padding: EdgeInsets.all(8.0),
                   ),
@@ -1826,38 +1968,47 @@ class NewEventPage extends State<StatefullNew> {
                         padding: EdgeInsets.all(7.0),
                       ),
                       GestureDetector(
-                        child: new Text('Velg fra kamerarull',
-                            style: TextStyle(fontSize: 20)),
+                        child: new Text('Velg fra kamerarull', style: TextStyle(fontSize: 20)),
                         onTap: openGallery,
                       ),
                     ],
                   ),
+
                 ],
               ),
             ),
+
           );
+
         });
   }
 
   Future openCamera() async {
-    var picture = await ImagePicker.pickImage(source: ImageSource.camera);
+    var picture = await ImagePicker.pickImage(
+        source: ImageSource.camera );
 
-    setState(() {
+    setState((){
       imgUrl = picture;
       choosen = true;
+
     });
 
     //uploadImage(imgUrl);
 
+
     dbUrl = picture.path.toString();
     print("You selected: " + dbUrl);
+
+
   }
 
   Future openGallery() async {
-    var gallery = await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
+    var gallery = await ImagePicker.pickImage(
+        source: ImageSource.gallery);
+    setState((){
       imgUrl = gallery;
       choosen = true;
+
     });
 
     //uploadImage(imgUrl);
@@ -1868,30 +2019,131 @@ class NewEventPage extends State<StatefullNew> {
   }
 
   void uploadImage(imgUrl) async {
-    final StorageReference imgRef =
-        FirebaseStorage.instance.ref().child("Event_Images");
+
+    final StorageReference imgRef = FirebaseStorage.instance.ref().child("Event_Images");
     var timeKey = new DateTime.now();
-    final StorageUploadTask upTask =
-        imgRef.child(timeKey.toString() + ".jpg").putFile(imgUrl);
+    final StorageUploadTask upTask = imgRef.child(timeKey.toString() + ".jpg").putFile(imgUrl);
 
     var url = await (await upTask.onComplete).ref.getDownloadURL();
     dbUrl = url.toString();
     print("upload $dbUrl");
+
+
   }
 
   void _tapped(index) {
-    setState(() {
-      if (tap) {
+    setState((){
+      if(tap) {
         tap = false;
         tapped = index;
       } else {
         tap = true;
         tapped = index;
       }
+
     });
+
   }
+
+
+
 
   void _removeKeyboard(BuildContext context) {
     FocusScope.of(context).requestFocus(new FocusNode());
   }
+
+
+
 }
+
+//##  new ListView.builder(
+//            itemCount: eventList.length,
+//              itemBuilder: (context, i) {
+//              return new Column(
+//                children: <Widget>[
+//                  new Container(
+//
+//                    padding: new EdgeInsets.all(16.0),
+//                  decoration: new BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(8.0))),
+//                  child: new Column(
+//                  children: <Widget>[
+//                 for(var item in eventList)new Text(item.title),
+//                    for(var item in eventList) new Text(item.address),
+//
+//
+//                  ]
+//
+//
+//
+//
+//
+//
+//              ),
+//              ),
+//                  new Divider(),
+//                ],
+//              );
+//
+//              },
+//          )
+
+
+//## return InkWell(
+//                          onTap: () {
+//                            print("tapped: $index");
+//                            },
+//                          child: Container(
+//                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0), color: Colors.white),
+//                            width: 80,
+//                            alignment: Alignment.center,
+//                            //color: Colors.white,
+//                            child: Image.asset(cate[index], ),
+//                            padding: EdgeInsets.all(20),
+//                          ),
+//
+//                        );
+
+
+
+//##  Padding(
+//                                                            padding: EdgeInsets.fromLTRB(0, 80, 0, 0),
+//                                                            child:
+//                                                            SizedBox(
+//                                                              height: 40,
+//                                                              child:
+//
+//                                                              Card(
+//                                                                elevation: 0,
+//                                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30), side: BorderSide(color: UIData.pink, width: 1)),
+//                                                                //decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), border: index == 0 ? Border.all(width: 3, color: UIData.pink) : Border.all(color: Colors.white) ),
+//                                                                child: ClipRRect(
+//                                                                  borderRadius: new BorderRadius.circular(50),
+//                                                                  child: Image.asset("lib/assets/images/fortnite.jpg", // fra list [index]
+//
+//                                                                    width: 32,
+//                                                                    fit: BoxFit.cover,
+//                                                                  ),
+//                                                                ),
+//                                                              ), ),
+
+//                                                          ),
+
+
+
+
+
+
+
+
+//## } else {
+//                       //Scaffold.of(context).showSnackBar(new SnackBar(content: new Text("Alle felt må fylles ut")));
+//                      Toast.show("Alle felt må fylles inn", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM, backgroundColor: UIData.black, backgroundRadius: 8);
+//                     }
+
+
+
+
+
+//## https://firebasestorage.googleapis.com/v0/b/smidigprosjekt.appspot.com/o/Event%20Images%2F2019-06-04%2013%3A15%3A34.105184.jpg?alt=media&token=e527f008-a911-4004-be0d-1f3e58c5d924
+//## https://firebasestorage.googleapis.com/v0/b/smidigprosjekt.appspot.com/o/Event%20Images%2F2019-06-04%2013%3A15%3A40.973055.jpg?alt=media&token=78c0590f-6637-426e-97e0-2d65e9d8a4a0
+
