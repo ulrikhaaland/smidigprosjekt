@@ -41,6 +41,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  List<Event> eventList = [];
+  List<Event> myEvent = [];
+
+
   final Key keyOne = PageStorageKey('pageOne');
   final Key keyTwo = PageStorageKey('pageTwo');
   final Key keyThree = PageStorageKey('pageThree');
@@ -67,11 +72,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
+    _getEventsData();
     print(widget.user.getName());
     one = PageOne(
       key: keyOne,
       auth: auth,
       user: widget.user,
+      eventList: eventList,
     );
 
     two = SearchPage(
@@ -86,13 +93,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
     four = ProfilePage(
       user: widget.user,
+      myEvent: myEvent,
       onSignOut: () => _signOut(),
     );
-    five = StatefullNew(
-      user: widget.user,
-    );
 
-    pages = [one, two, three, four, five];
+
+    pages = [one, two, three, four];
 
     currentPage = one;
 
@@ -107,6 +113,25 @@ class _MyHomePageState extends State<MyHomePage> {
       print(e);
     }
   }
+
+  void _getEventsData()  async {
+    QuerySnapshot eventDocs =  await Firestore.instance.collection("events").orderBy('time', descending: false).getDocuments();
+    eventDocs.documents.forEach((doc) {
+      eventList.add(Event(address: doc.data["address"], cat: doc.data["cat"], desc: doc.data["desc"], id: doc.data["id"], time: doc.data["time"] as DateTime,  title: doc.data["title"], imgUrl: doc.data["imgUrl"]));
+    });
+
+    eventList.forEach((e){
+      if(e.id.contains(widget.user.userName)){
+        myEvent.add(e);
+      }
+
+    });
+
+
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -183,10 +208,11 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class PageOne extends StatefulWidget {
-  PageOne({Key key, this.auth, this.onSignOut, this.user, }) : super(key: key);
+  PageOne({Key key, this.auth, this.onSignOut, this.user, this.eventList, }) : super(key: key);
   final BaseAuth auth;
   final VoidCallback onSignOut;
   final User user;
+  final List<Event> eventList;
 
 
   @override
@@ -196,12 +222,11 @@ class PageOne extends StatefulWidget {
 class PageOneState extends State<PageOne> {
   static final formKey = new GlobalKey<FormState>();
   final f = new DateFormat('yyyy-MM-dd hh:mm');
-  List<Event> eventList = [];
+
+
   int tapped = -1;
   double cardWidth;
   bool tap = false;
-
-  List<String> imgs = ["lib/assets/images/kaffepugg.jpg", "lib/assets/images/fortnite.jpg"];
 
   bool going = false;
 
@@ -211,16 +236,9 @@ class PageOneState extends State<PageOne> {
   @override
   void initState() {
     super.initState();
-    _getEventsData();
   }
 
-  void _getEventsData() async {
-   QuerySnapshot eventDocs = await Firestore.instance.collection("events").orderBy('time', descending: false).getDocuments();
-   eventDocs.documents.forEach((doc) {
-     eventList.add(Event(address: doc.data["address"], cat: doc.data["cat"], desc: doc.data["desc"], id: doc.data["id"], time: doc.data["time"] as DateTime,  title: doc.data["title"], imgUrl: doc.data["imgUrl"]));
-   });
 
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -233,7 +251,7 @@ class PageOneState extends State<PageOne> {
                print('button tapped');
                Navigator.push(
                    context,
-                   MaterialPageRoute(builder: (context) => StatefullNew()),);
+                   MaterialPageRoute(builder: (context) => StatefullNew(user: widget.user.userName)),);
              },
              backgroundColor: UIData.pink,
              elevation: 0.0,
@@ -289,9 +307,11 @@ class PageOneState extends State<PageOne> {
                     Align(
                     alignment: Alignment.topCenter,
                                 child: Container(
-                                  height: 500,
                                   width: ServiceProvider.instance.screenService
-                                      .getPortraitWidthByPercentage(context, 82),
+                                      .getPortraitWidthByPercentage(context, 100),
+                                  height: ServiceProvider.instance.screenService
+                                      .getPortraitHeightByPercentage(context, 80),
+
                                   child: ListView.builder(
                                   // scrollDirection: Axis.vertical,
                                  //shrinkWrap: true,
@@ -304,7 +324,12 @@ class PageOneState extends State<PageOne> {
                                         ),
                                         Align(
                                           alignment: Alignment.centerLeft,
-                                          child: Text(_DateText(position),
+                                          child: Padding(
+                                            padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                            child:  Text(_DateText(position),
+                                          ),
+
+
 
                                            
                                           ),
@@ -325,6 +350,8 @@ class PageOneState extends State<PageOne> {
                                               tap == true && tapped != null && tapped == position ?
                                                   SizedBox (
                                                     height: 310,
+                                                    width: ServiceProvider.instance.screenService
+                                                        .getPortraitWidthByPercentage(context, 82),
                                                     child: Card(
                                                       elevation: 0.0,
                                                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -339,7 +366,7 @@ class PageOneState extends State<PageOne> {
                                                             children: <Widget>[
                                                               ClipRRect(
                                                                 borderRadius: new BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
-                                                                child: Image.asset(eventList[position].imgUrl,
+                                                                child: Image.network(widget.eventList[position].imgUrl,
 
                                                                   height: 120,
                                                                   width: 287,
@@ -371,7 +398,7 @@ class PageOneState extends State<PageOne> {
                                                                         height: 10,
                                                                         color: Colors.white,
                                                                       ),
-                                                                      Text( '${eventList[position].desc}', style: TextStyle(fontSize: 13)
+                                                                      Text( '${widget.eventList[position].desc}', style: TextStyle(fontSize: 13)
 
                                                                       ),
                                                                     ],
@@ -444,6 +471,8 @@ class PageOneState extends State<PageOne> {
 
                                                   ) : SizedBox(
                                                 height: 130,
+                                                width: ServiceProvider.instance.screenService
+                                                    .getPortraitWidthByPercentage(context, 82),
                                                 child: Card(
                                                   elevation: 0.0,
                                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -458,8 +487,8 @@ class PageOneState extends State<PageOne> {
                                                         children: <Widget>[
                                                           ClipRRect(
                                                             borderRadius: new BorderRadius.only(topLeft: Radius.circular(8), bottomLeft: Radius.circular(8)),
-                                                            child: Image.asset(eventList[position].imgUrl,
-                                                              height: 120,
+                                                            child: Image.network(widget.eventList[position].imgUrl,
+                                                              height: 122,
                                                               width: 110,
                                                               fit: BoxFit.cover,
                                                             ),
@@ -478,7 +507,7 @@ class PageOneState extends State<PageOne> {
                                                                   Row(
 
                                                                     children: <Widget>[
-                                                                      new Text(eventList[position].title, style: ServiceProvider.instance.styles.cardTitle()),
+                                                                      new Text(widget.eventList[position].title, style: ServiceProvider.instance.styles.cardTitle()),
                                                                       Icon(Icons.star, color: going && starred == position ? UIData.pink : Colors.white, size: 20,),
                                                                     ],
                                                                   ),
@@ -490,7 +519,7 @@ class PageOneState extends State<PageOne> {
                                                                   Row(
                                                                     children: <Widget>[
                                                                       Icon(Icons.location_on, color: UIData.blue, size: 20,),
-                                                                      Text(eventList[position].address, style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
+                                                                      Text(widget.eventList[position].address, style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
                                                                       ),
                                                                     ],
                                                                   ),
@@ -500,7 +529,7 @@ class PageOneState extends State<PageOne> {
                                                                   Row(
                                                                     children: <Widget>[
                                                                       Icon(Icons.access_time, color: UIData.black, size: 17,),
-                                                                      Text(' ${eventList[position].time.hour.toString()}' + ':' + '${eventList[position].time.minute.toString().padRight(2, '0')}', style: TextStyle( fontSize: 12),
+                                                                      Text(' ${widget.eventList[position].time.hour.toString()}' + ':' + '${widget.eventList[position].time.minute.toString().padRight(2, '0')}', style: TextStyle( fontSize: 12),
                                                                       ),
                                                                     ],
                                                                   ),
@@ -555,7 +584,7 @@ class PageOneState extends State<PageOne> {
                                     );
 
                                 },
-                                itemCount: eventList.length,
+                                itemCount: widget.eventList.length,
                               ),
 
 
@@ -565,6 +594,13 @@ class PageOneState extends State<PageOne> {
                 ],
               )
               ,
+
+              Padding(
+                padding: EdgeInsets.all(100)
+              ),
+              Padding(
+                  padding: EdgeInsets.all(90)
+              ),
 
 
               Align(
@@ -614,41 +650,41 @@ class PageOneState extends State<PageOne> {
   }
 
   String _DateText(int position) {
-    if (eventList[position].time.month == 1){
-      return '${eventList[position].time.day.toString()}' + '. ' + 'Januar';
+    if (widget.eventList[position].time.month == 1){
+      return '${widget.eventList[position].time.day.toString()}' + '. ' + 'Januar';
     }
-     else if (eventList[position].time.month == 2){
-       return '${eventList[position].time.day.toString()}' + '. ' + 'Februar';
+     else if (widget.eventList[position].time.month == 2){
+       return '${widget.eventList[position].time.day.toString()}' + '. ' + 'Februar';
      }
-     else if (eventList[position].time.month == 3){
-        return '${eventList[position].time.day.toString()}' + '. ' + 'Mars';
+     else if (widget.eventList[position].time.month == 3){
+        return '${widget.eventList[position].time.day.toString()}' + '. ' + 'Mars';
       }
-      else if (eventList[position].time.month == 4){
-        return '${eventList[position].time.day.toString()}' + '. ' + 'April';
+      else if (widget.eventList[position].time.month == 4){
+        return '${widget.eventList[position].time.day.toString()}' + '. ' + 'April';
       }
-       else if (eventList[position].time.month == 5){
-         return '${eventList[position].time.day.toString()}' + '. ' + 'Mai';
+       else if (widget.eventList[position].time.month == 5){
+         return '${widget.eventList[position].time.day.toString()}' + '. ' + 'Mai';
        }
-       else if (eventList[position].time.month == 6){
-          return '${eventList[position].time.day.toString()}' + '. ' + 'Juni';
+       else if (widget.eventList[position].time.month == 6){
+          return '${widget.eventList[position].time.day.toString()}' + '. ' + 'Juni';
         }
-        else if (eventList[position].time.month == 7){
-          return '${eventList[position].time.day.toString()}' + '. ' + 'Juli';
+        else if (widget.eventList[position].time.month == 7){
+          return '${widget.eventList[position].time.day.toString()}' + '. ' + 'Juli';
         }
-         else if (eventList[position].time.month == 8){
-           return '${eventList[position].time.day.toString()}' + '. ' + 'August';
+         else if (widget.eventList[position].time.month == 8){
+           return '${widget.eventList[position].time.day.toString()}' + '. ' + 'August';
          }
-         else if (eventList[position].time.month == 9){
-            return '${eventList[position].time.day.toString()}' + '. ' + 'September';
+         else if (widget.eventList[position].time.month == 9){
+            return '${widget.eventList[position].time.day.toString()}' + '. ' + 'September';
           }
-          else if (eventList[position].time.month == 10){
-            return '${eventList[position].time.day.toString()}' + '. ' + 'Oktober';
+          else if (widget.eventList[position].time.month == 10){
+            return '${widget.eventList[position].time.day.toString()}' + '. ' + 'Oktober';
           }
-           else if (eventList[position].time.month == 11){
-             return '${eventList[position].time.day.toString()}' + '. ' + 'November';
+           else if (widget.eventList[position].time.month == 11){
+             return '${widget.eventList[position].time.day.toString()}' + '. ' + 'November';
            }
-            else if (eventList[position].time.month == 12){
-              return '${eventList[position].time.day.toString()}' + '. ' + 'Desember';
+            else if (widget.eventList[position].time.month == 12){
+              return '${widget.eventList[position].time.day.toString()}' + '. ' + 'Desember';
             }
     
   }
@@ -1375,7 +1411,7 @@ class Event {
   final String cat;
   final String desc;
   final String imgUrl;
-  final int id;
+  final String id;
   final DateTime time;
   final String title;
 
@@ -1384,7 +1420,7 @@ class Event {
 
 class StatefullNew extends StatefulWidget {
   StatefullNew({this.user});
-  final User user;
+  final String user;
 
   @override
   NewEventPage createState() => NewEventPage();
@@ -1400,6 +1436,7 @@ class NewEventPage extends State<StatefullNew> {
   String tids;
   String dats;
   String kat = "";
+
   var dbUrl;
 
   File imgUrl;
@@ -1636,6 +1673,7 @@ class NewEventPage extends State<StatefullNew> {
                     width: 300.0,
                     height: 50,
                     child: TextField(
+                      textCapitalization: TextCapitalization.sentences,
                       decoration: InputDecoration(
                         hintText: "Tittel",
                         filled: true,
@@ -1646,7 +1684,7 @@ class NewEventPage extends State<StatefullNew> {
 
                       ),
                       onChanged: (text) {
-                        String value = text;
+                        tit = text;
                       },
                       onSubmitted: (text) {
                         String t = text;
@@ -1663,6 +1701,7 @@ class NewEventPage extends State<StatefullNew> {
                     width: 300.0,
                     height: 50,
                     child: TextField(
+                      textCapitalization: TextCapitalization.sentences,
                       decoration: InputDecoration(
                         hintText: "Addresse",
                         filled: true,
@@ -1672,7 +1711,7 @@ class NewEventPage extends State<StatefullNew> {
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0), borderSide: BorderSide(width: 0, style: BorderStyle.none)),
                       ),
                       onChanged: (text) {
-                        String value = text;
+                        add = text;
                       },
                       onSubmitted: (text) {
                         String a = text;
@@ -1693,7 +1732,9 @@ class NewEventPage extends State<StatefullNew> {
                     child: SizedBox(
                       height: 105.0,
                       child: TextField(
-                        maxLines: 10,
+                        textInputAction: TextInputAction.done,
+                        textCapitalization: TextCapitalization.sentences,
+                        maxLines: 6,
                         decoration: InputDecoration(
                           hintText: "Beskrivelse",
                           filled: true,
@@ -1703,8 +1744,9 @@ class NewEventPage extends State<StatefullNew> {
                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0), borderSide: BorderSide(width: 0, style: BorderStyle.none)),
                         ),
                         onChanged: (text) {
-                          String bes = text;
+                          bes = text;
                         },
+
                         onSubmitted: (text) {
                           String b = text;
                           bes = text;
@@ -1797,7 +1839,7 @@ class NewEventPage extends State<StatefullNew> {
                     color: UIData.grey,
                     height: 40,
                   ),
-                  //Text("${widget.user.userName}"),
+
 
                   RaisedButton(
                     color: UIData.pink,
@@ -1805,36 +1847,36 @@ class NewEventPage extends State<StatefullNew> {
                     padding: EdgeInsets.fromLTRB(30, 15, 30, 15),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(100)), side: BorderSide(style: BorderStyle.none)),
                     onPressed: () {
+                      uploadImage(imgUrl);
 
 
 
                       print("post pressed");
+
                       DateTime titi = new DateTime(_date.year, _date.month, _date.day, _time.hour, _time.minute);
 
                       id = new DateTime.now().millisecondsSinceEpoch;
+                      String name = widget.user;
+                      String idu = name + " " + id.toString();
 
-                      if(add != null && kat != null && bes != null && titi != null && dbUrl != null ) {
 
-                       var data =
-                       {
-                         "address" : add,
-                         "cat" : kat,
-                         "desc" : bes,
-                         "id" : id,
-                         "time" : titi,
-                         "title" : tit,
-                         "imgUrl" : dbUrl,
-                       };
-                       
+                      //if(add != null && kat != null && bes != null && titi != null && dbUrl != null) {
 
-                       uploadImage(imgUrl);
-                       Firestore.instance.document("events/$id").setData(data);
+                          var data =
+                          {
+                            "address": add,
+                            "cat": kat,
+                            "desc": bes,
+                            "id": idu,
+                            "time": titi,
+                            "title": tit,
+                            "imgUrl": dbUrl,
+                          };
+                          Firestore.instance.document("events/$idu").setData(data);
+
 
                        Navigator.pop(context);
-                     } else {
-                       //Scaffold.of(context).showSnackBar(new SnackBar(content: new Text("Alle felt må fylles ut")));
-                      Toast.show("Alle felt på fylles inn", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM, backgroundColor: UIData.black, backgroundRadius: 8);
-                     }
+
 
                     },
                     child: Text("Post event", style: TextStyle(color: Colors.white))
@@ -1978,9 +2020,14 @@ class NewEventPage extends State<StatefullNew> {
 
   void uploadImage(imgUrl) async {
 
-    final StorageReference imgRef = FirebaseStorage.instance.ref().child("Event Images");
+    final StorageReference imgRef = FirebaseStorage.instance.ref().child("Event_Images");
     var timeKey = new DateTime.now();
     final StorageUploadTask upTask = imgRef.child(timeKey.toString() + ".jpg").putFile(imgUrl);
+
+    var url = await (await upTask.onComplete).ref.getDownloadURL();
+    dbUrl = url.toString();
+    print("upload $dbUrl");
+
 
   }
 
@@ -2078,4 +2125,25 @@ class NewEventPage extends State<StatefullNew> {
 //                                                                  ),
 //                                                                ),
 //                                                              ), ),
+
 //                                                          ),
+
+
+
+
+
+
+
+
+//## } else {
+//                       //Scaffold.of(context).showSnackBar(new SnackBar(content: new Text("Alle felt må fylles ut")));
+//                      Toast.show("Alle felt må fylles inn", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM, backgroundColor: UIData.black, backgroundRadius: 8);
+//                     }
+
+
+
+
+
+//## https://firebasestorage.googleapis.com/v0/b/smidigprosjekt.appspot.com/o/Event%20Images%2F2019-06-04%2013%3A15%3A34.105184.jpg?alt=media&token=e527f008-a911-4004-be0d-1f3e58c5d924
+//## https://firebasestorage.googleapis.com/v0/b/smidigprosjekt.appspot.com/o/Event%20Images%2F2019-06-04%2013%3A15%3A40.973055.jpg?alt=media&token=78c0590f-6637-426e-97e0-2d65e9d8a4a0
+
