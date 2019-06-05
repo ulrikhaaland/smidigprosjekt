@@ -76,6 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
       auth: auth,
       user: widget.user,
       eventList: eventList,
+      // onRefresh: () => _getEventsData(),
     );
 
     two = SearchPage(
@@ -190,10 +191,12 @@ class PageOne extends StatefulWidget {
     this.onSignOut,
     this.user,
     this.eventList,
+    this.onRefresh,
   }) : super(key: key);
   final BaseAuth auth;
   final VoidCallback onSignOut;
   final User user;
+  final VoidCallback onRefresh;
   final List<Event> eventList;
 
   @override
@@ -618,7 +621,7 @@ class PageOneState extends State<PageOne> {
     }
   }
 
-  Future<void> _Refresh() async {
+  Future<void> _refresh() async {
     print('refreshing');
     //setState(() => _getEventsData()
   }
