@@ -6,7 +6,7 @@ import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_page_indicator/flutter_page_indicator.dart';
 import 'package:http/http.dart' as http;
-import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import '../auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -98,14 +98,14 @@ class _FeideState extends State<Feide> {
     // Firestore.instance.document("users/$uid").setData(user.toJson());
   }
 
-  Future<String> updateFcmToken(String uid) async {
-    String messagingToken;
-    messagingToken = await FirebaseMessaging().getToken();
-    print(messagingToken);
-    Firestore.instance
-        .document("users/$uid")
-        .updateData({"fcm": messagingToken});
+  // Future<String> updateFcmToken(String uid) async {
+  //   String messagingToken;
+  //   messagingToken = await FirebaseMessaging().getToken();
+  //   print(messagingToken);
+  //   Firestore.instance
+  //       .document("users/$uid")
+  //       .updateData({"fcm": messagingToken});
 
-    return messagingToken;
-  }
+  //   return messagingToken;
+  // }
 }
