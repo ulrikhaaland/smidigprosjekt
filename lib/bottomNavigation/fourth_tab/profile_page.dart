@@ -85,12 +85,12 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: new AppBar(
         actions: <Widget>[
           Builder(
-          builder: (context) => IconButton(
-              /*leading: new IconButton(icon: Image.asset('lib/assets/images/settings_icon.png', scale: 10,),
-           onPressed: () => Scaffold.of(context).openDrawer()),*/
+            builder: (context) => IconButton(
+                /*leading: new IconButton(icon: Image.asset('lib/assets/images/settings_icon.png', scale: 10,),
+                onPressed: () => Scaffold.of(context).openDrawer()),*/
               icon: Image.asset("lib/assets/images/settings_icon.png", scale: 10),
 
-              onPressed: () => Scaffold.of(context).openDrawer(),
+              onPressed: () => Scaffold.of(context).openEndDrawer(),
             ),
           ),
         ],
