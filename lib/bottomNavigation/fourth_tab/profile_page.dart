@@ -46,6 +46,9 @@ class _ProfilePageState extends State<ProfilePage> {
     return new Scaffold(
       
       endDrawer: Drawer(
+
+        child: Container(
+          color: UIData.grey,
         
         child: ListView(
           
@@ -54,13 +57,14 @@ class _ProfilePageState extends State<ProfilePage> {
             ListTile(
               title: Text(
                 "Innstillinger",
-                style: new TextStyle(fontSize: 18, fontWeight: FontWeight.bold), 
+                style: new TextStyle(fontSize: 20, fontWeight: FontWeight.bold), 
               ),
               
             ),
 
             Divider(
               color: Colors.black45,
+              height: 1,
             ),
             
             ListTile(
@@ -72,51 +76,67 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
 
               title: Text(
-                'Profil'
-                
+                widget.user.getName(),
+                style: TextStyle(fontSize: 17),
               ),
               onTap: (){
-                Navigator.pushNamed(
-                  context,
-                  'lib/assets/images/logout.png'
-                );
                 
               },
             ),
             
             ListTile(
-              leading: Icon(Icons.help_outline),
-              title: Text('Hjelp'),
+              leading: Icon(
+                Icons.help_outline,
+                color: Colors.black,
+              ),
+              title: Text(
+                'Hjelp',
+                style: TextStyle(fontSize: 17),
+              ),
               onTap: (){
-                Navigator.pushNamed(context, '/transactionsList');
               },
               contentPadding: EdgeInsets.only(top: 10, left: 15),
             ),
 
             ListTile(
-              leading: Icon(Icons.info_outline),
-              title: Text('Om'),
+              leading: Icon(
+                Icons.info_outline,
+                color: Colors.black,
+              ),
+              title: Text(
+                'Om',
+                style: TextStyle(fontSize: 17),
+                ),
               onTap: (){
-                Navigator.pushNamed(context, '/transactionsList');
               },
               
             ),
-              
-            ListTile(
-              leading: Icon(Icons.exit_to_app),
-              title: Text('Logg ut',
-              
+            Container(
+              margin: EdgeInsets.only(top: 460),
+              decoration: new BoxDecoration(
+                color: Colors.pink,
               ),
-              onTap: (){
-                Navigator.pushNamed(context, '/');
-                widget.onSignOut();
-              },
-              contentPadding: EdgeInsets.only(top: 440, left: 15),
+              child: ListTile(
+                
+                leading: Icon(
+                  Icons.exit_to_app,
+                  color: Colors.black, 
+                ),
+                title: Text(
+                  'Logg ut',
+                ),
+                
+                onTap: (){
+                  widget.onSignOut();
+                },
+                
+                
+              ),
             ),
           ]
         )
       ),
-      
+      ),
 
       backgroundColor: UIData.grey,
       appBar: new AppBar(
