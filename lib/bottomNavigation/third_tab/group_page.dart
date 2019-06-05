@@ -253,7 +253,7 @@ void itemChange(bool val,int index){
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children:[
                   new Padding(
-                    padding: EdgeInsets.only(top: 50),
+                    padding: EdgeInsets.only(top: 30),
                   ),
                   new Center(
                     child: new Row(
@@ -273,7 +273,7 @@ void itemChange(bool val,int index){
                                 "Neste utfordring:",
                                 textAlign: TextAlign.left,
                                 style: new TextStyle(
-                                    color: UIData.black, fontFamily: 'Anton'
+                                    color: UIData.black, fontFamily: 'Anton', fontWeight: FontWeight.bold,
                                 ),
                               ),
                               new Padding(
@@ -334,7 +334,7 @@ void itemChange(bool val,int index){
                   ),
 
                   new Padding(
-                    padding: EdgeInsets.only(top: 50),
+                    padding: EdgeInsets.only(top: 30),
                   ),
 
                   new ClipRRect(
@@ -355,7 +355,7 @@ void itemChange(bool val,int index){
                                     ),
                                     new CheckboxListTile(
                                         value: inputs[index],
-                                        title: new Text(taskList[index]),
+                                        title: new Text(taskList[index], style: TextStyle(fontSize: 15, fontFamily: "Anton")),
                                         activeColor: UIData.blue,
                                         controlAffinity: ListTileControlAffinity.trailing,
                                         onChanged:(bool val){itemChange(val, index);

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:smidigprosjekt/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:smidigprosjekt/service/service_provider.dart';
 import 'package:smidigprosjekt/utils/uidata.dart';
 import 'package:smidigprosjekt/userSearch/search.dart';
 import 'package:smidigprosjekt/objects/user.dart';
@@ -91,8 +92,7 @@ class SearchPageState extends State<SearchPage> {
           centerTitle: true,
           title: new Text(
             "Søk",
-            style: new TextStyle(
-                fontFamily: 'Anton', fontSize: 24, color: Colors.black),
+            style: ServiceProvider.instance.styles.title(),
 
           ),
 
@@ -112,21 +112,7 @@ class SearchPageState extends State<SearchPage> {
 
               children: <Widget>[
                 
-                Padding(
-                  
-                  padding: EdgeInsets.only(top: 30),
-                  child: Align(
-                    
-                    alignment: Alignment.topCenter,
-                    child: Text(
-                      "Finn personer:",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      
-                    ),),
-                  ),
-                ),
+
 
 
                 Align(
@@ -134,6 +120,7 @@ class SearchPageState extends State<SearchPage> {
                   alignment: Alignment.center,
 
                   child: Container(
+                    height: 50,
 
                     //color: Colors.white,
                     margin: EdgeInsets.only(top: 20),
@@ -198,7 +185,8 @@ class SearchPageState extends State<SearchPage> {
 
                 Center(
                   child: new SizedBox(
-                    height: 350,
+                    height: ServiceProvider.instance.screenService
+                        .getPortraitHeightByPercentage(context, 64.5),
                     //width: 100,
 
                     child: ListView.builder(
