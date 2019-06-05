@@ -9,10 +9,11 @@ import 'package:smidigprosjekt/utils/uidata.dart';
 import '../../service/service_provider.dart';
 
 class ProfilePage extends StatefulWidget {
-  ProfilePage({this.user, this.onSignOut, this.endDrawer, this.myEvent});
+  ProfilePage({this.user, this.onSignOut, this.endDrawer, this.myEvent,});
   final User user;
   final List<Event> myEvent;
   final VoidCallback onSignOut;
+
   final Widget endDrawer;
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -614,7 +615,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                                   backgroundColor: UIData.blue,
                                                                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
                                                                                 content: new GestureDetector(
-                                                                                  onTap: _delete,
+                                                                                  onTap: () {
+                                                                                    _delete(position);
+                                                                                  },
+                                                                                  //_delete(position),
                                                                                 child: Row(
                                                                                   mainAxisAlignment: MainAxisAlignment.center,
                                                                                   children: <Widget>[
@@ -769,14 +773,6 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
 
-  Future<void> _delete() async {
-    
-    // ##  await Firestore.instance.runTransaction((Transaction myTransaction) async {
-    //      await myTransaction.delete(snapshot.data.documents[index].reference);
-    //    });
-
-}
-
 
   void _tapped(position) {
     setState((){
@@ -829,6 +825,14 @@ class _ProfilePageState extends State<ProfilePage> {
     else if (widget.myEvent[position].time.month == 12){
       return '${widget.myEvent[position].time.day.toString()}' + '. ' + 'Desember';
     }
+
+  }
+
+  void _delete(int position) async {
+    var name = widget.myEvent[position].id;
+      Firestore.instance.collection("events").document(name).delete();
+
+
 
   }
 
@@ -901,14 +905,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
         });
   }
-
-}
-class Options {
-  static const String delete = "Slett event";
-
-  static const List<String> choices = <String>[
-    delete,
-  ];
 
 }
 

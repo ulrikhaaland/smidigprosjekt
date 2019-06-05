@@ -59,6 +59,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String currentUser;
 
+
+
+
   PageOne one;
   SearchPage two;
   GroupPage three;
@@ -129,6 +132,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
   }
+
+
 
 
 
