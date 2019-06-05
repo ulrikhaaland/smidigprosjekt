@@ -49,6 +49,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
         child: Container(
           color: UIData.grey,
+
+          
         
         child: ListView(
           
@@ -59,7 +61,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 "Innstillinger",
                 style: new TextStyle(fontSize: 20, fontWeight: FontWeight.bold), 
               ),
-              
             ),
 
             Divider(
@@ -111,29 +112,32 @@ class _ProfilePageState extends State<ProfilePage> {
               },
               
             ),
-            Align(
-              alignment: Alignment.bottomCenter,
-            child: Container(
+            
+            Container(
+              alignment: FractionalOffset.bottomCenter,
               decoration: new BoxDecoration(
                 color: Colors.pink,
               ),
-              child: ListTile(
-                
-                leading: Icon(
-                  Icons.exit_to_app,
-                  color: Colors.black, 
+            
+              child: Align(      
+                  
+                  child: ListTile(
+                    
+                    leading: Icon(
+                      Icons.exit_to_app,
+                      color: Colors.black, 
+                    ),
+                    title: Text(
+                      'Logg ut',
+                    ),
+                    
+                    onTap: (){
+                      widget.onSignOut();
+                    },
+                    
+                    
                 ),
-                title: Text(
-                  'Logg ut',
-                ),
-                
-                onTap: (){
-                  widget.onSignOut();
-                },
-                
-                
               ),
-            ),
             ),
           ]
         )
@@ -234,7 +238,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         // onSaved: (val) => "widget.user.skole "= val,
                       ),
                     ),
-    ),
+                  ),
                     new ListTile(
                       leading: new Text(
                         "Linje:",
@@ -314,32 +318,32 @@ class _ProfilePageState extends State<ProfilePage> {
             children: <Widget>[
 
              Center(
-            child: new Card(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-              margin: EdgeInsets.only(
-                top: ServiceProvider.instance.screenService
-                    .getHeightByPercentage(context, 6.25),
-              ),
-              color: Colors.white,
-              elevation: 0,
-              child: new Container(
-                height: ServiceProvider.instance.screenService
-                    .getHeightByPercentage(context, 45),
-                width: ServiceProvider.instance.screenService
-                    .getPortraitWidthByPercentage(context, 85),
-                child: new Column(
-                  children: <Widget>[
-                    new Align(
-                      alignment: Alignment.centerRight,
-                      child: new IconButton(
-                        icon: Image.asset("lib/assets/images/editprofile_icon.png", color: UIData.black, scale: 11,),
-                        onPressed: () {
-                          setState(() {
-                            edit = !edit;
-                          });
-                        },
+              child: new Card(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                margin: EdgeInsets.only(
+                  top: ServiceProvider.instance.screenService
+                      .getHeightByPercentage(context, 6.25),
+                ),
+                color: Colors.white,
+                elevation: 0,
+                child: new Container(
+                  height: ServiceProvider.instance.screenService
+                      .getHeightByPercentage(context, 45),
+                  width: ServiceProvider.instance.screenService
+                      .getPortraitWidthByPercentage(context, 85),
+                  child: new Column(
+                    children: <Widget>[
+                      new Align(
+                        alignment: Alignment.centerRight,
+                        child: new IconButton(
+                          icon: Image.asset("lib/assets/images/editprofile_icon.png", color: UIData.black, scale: 11,),
+                          onPressed: () {
+                            setState(() {
+                              edit = !edit;
+                            });
+                          },
+                        ),
                       ),
-                    ),
                     new Padding(
                       padding: EdgeInsets.only(top: 46),
                     ),
