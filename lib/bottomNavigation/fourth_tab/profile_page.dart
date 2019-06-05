@@ -20,6 +20,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   static final formKey = new GlobalKey<FormState>();
+  
 
   String bio = "";
   String linje = "";
@@ -45,12 +46,35 @@ class _ProfilePageState extends State<ProfilePage> {
     return new Scaffold(
       
       endDrawer: Drawer(
+        
         child: ListView(
+          
           children: <Widget>[
-           
+
             ListTile(
-              leading: Icon(Icons.people_outline),
-              title: Text('Profil'),
+              title: Text(
+                "Innstillinger",
+                style: new TextStyle(fontSize: 18, fontWeight: FontWeight.bold), 
+              ),
+              
+            ),
+
+            Divider(
+              color: Colors.black45,
+            ),
+            
+            ListTile(
+              
+              leading: CircleAvatar(
+                
+                backgroundImage: AssetImage("lib/assets/images/fortnite.jpg"),
+              
+              ),
+
+              title: Text(
+                'Profil'
+                
+              ),
               onTap: (){
                 Navigator.pushNamed(
                   context,
@@ -59,31 +83,35 @@ class _ProfilePageState extends State<ProfilePage> {
                 
               },
             ),
-            ListTile(
-              leading: Icon(Icons.info_outline),
-              title: Text('Om'),
-              onTap: (){
-                Navigator.pushNamed(context, '/transactionsList');
-              },
-            ),
+            
             ListTile(
               leading: Icon(Icons.help_outline),
               title: Text('Hjelp'),
               onTap: (){
                 Navigator.pushNamed(context, '/transactionsList');
               },
+              contentPadding: EdgeInsets.only(top: 10, left: 15),
             ),
 
-            
+            ListTile(
+              leading: Icon(Icons.info_outline),
+              title: Text('Om'),
+              onTap: (){
+                Navigator.pushNamed(context, '/transactionsList');
+              },
               
-              ListTile(
-                leading: Icon(Icons.exit_to_app),
-                title: Text('Logg ut'),
-                onTap: (){
-                  Navigator.pushNamed(context, '/');
-                  widget.onSignOut();
-                },
+            ),
               
+            ListTile(
+              leading: Icon(Icons.exit_to_app),
+              title: Text('Logg ut',
+              
+              ),
+              onTap: (){
+                Navigator.pushNamed(context, '/');
+                widget.onSignOut();
+              },
+              contentPadding: EdgeInsets.only(top: 440, left: 15),
             ),
           ]
         )
@@ -542,8 +570,44 @@ class _ProfilePageState extends State<ProfilePage> {
                                                               Row(
 
                                                                 children: <Widget>[
+
                                                                   new Text(widget.myEvent[position].title, style: ServiceProvider.instance.styles.cardTitle()),
-                                                                  Icon(Icons.star, color: Colors.white, size: 20,),
+                                                                  new Container(
+                                                                    child: SizedBox(
+                                                                      height: 20,
+                                                                      child: IconButton(
+                                                                        icon: Image.asset("lib/assets/images/editprofile_icon.png", scale: 12),
+                                                                        padding: EdgeInsets.all(0),
+                                                                        onPressed: () {
+                                                                          showDialog(
+                                                                            context: context,
+                                                                            builder: (BuildContext context) {
+                                                                              return AlertDialog(
+                                                                                elevation: 2,
+                                                                                  //contentPadding: EdgeInsets.all(0),
+                                                                                  backgroundColor: UIData.blue,
+                                                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+                                                                                content: new GestureDetector(
+                                                                                  onTap: null,
+                                                                                child: Row(
+                                                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                                                  children: <Widget>[
+                                                                                    Icon(Icons.delete, color: Colors.white),
+                                                                                  Text("Slett event", style: TextStyle(color: Colors.white,), textAlign: TextAlign.center,),
+                                                                                  ],
+                                                                                ),
+                                                                                ),
+                                                                              );
+                                                                            }
+                                                                          );
+
+                                                                        },
+
+                                                                      ),
+
+                                                                    ),
+                                                                  ),
+
                                                                 ],
                                                               ),
 
@@ -678,6 +742,7 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+
   void _tapped(position) {
     setState((){
       if(tap) {
@@ -801,6 +866,14 @@ class _ProfilePageState extends State<ProfilePage> {
 
         });
   }
+
+}
+class Options {
+  static const String delete = "Slett event";
+
+  static const List<String> choices = <String>[
+    delete,
+  ];
 
 }
 
