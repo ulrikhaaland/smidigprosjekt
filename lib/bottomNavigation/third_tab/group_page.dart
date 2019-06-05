@@ -491,13 +491,16 @@ void itemChange(bool val,int index){
                     ),
                     FloatingActionButton(
                       elevation: 1,
-                      mini: true,
+                      mini: false,
                       backgroundColor: Colors.white,
                       foregroundColor: UIData.black,
                       onPressed: (){ 
                         uploadImage(imgUrl);
+                        setState((){
+                          choosen=false;
+                        });
                       },
-                      child: Icon(Icons.send, color: UIData.blue, size: 40)
+                      child: Icon(Icons.send, color: UIData.pink, size: 40)
                     )
                    /*  Flexible(
                       child: new TextField(
@@ -527,6 +530,8 @@ void itemChange(bool val,int index){
                       child: new TextField(
                         controller: _controller,
                         onSubmitted: _handleSubmit,
+                        minLines: 1,
+                        maxLines: null,
                         decoration: InputDecoration(
                           hintText: "Skriv noe..",
                           fillColor: Colors.white,
@@ -534,11 +539,17 @@ void itemChange(bool val,int index){
                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0),
                               borderSide: BorderSide(width: 0, style: BorderStyle.none)),
                           prefixIcon: IconButton(
+                            icon: Icon(Icons.camera_alt, color: UIData.blue, size: 30),
                             onPressed: () {
                               openOptions();
-                            },
-                            icon: Icon(Icons.camera_alt, color: UIData.blue, size: 30,),
+                            }
                           ),
+                          suffixIcon: IconButton(
+                            icon: Icon(Icons.send, color: UIData.pink, size: 24),
+                            onPressed: () {
+                              _handleSubmit(_controller.text);
+                            }
+                          )
                         )
                       )
                     )   
@@ -684,7 +695,7 @@ void itemChange(bool val,int index){
     }
   }
 
-  _sendImage(String dbUrl){
+  _sendImage (String dbUrl){
     var db = Firestore.instance;
     db.collection("chat_room").add({
       "user_name": widget.user.getName(),
@@ -697,9 +708,6 @@ void itemChange(bool val,int index){
     }).catchError((err) {
       print(err);
     });
-    setState((){
-      choosen=false;
-    });  
   }
 
   void _removeKeyboard(BuildContext context) {
@@ -713,8 +721,7 @@ void itemChange(bool val,int index){
         choosen = true;
     });
     dbUrl = picture.path.toString();
-
-    print("You selected: " + dbUrl);
+    Navigator.of(context, rootNavigator: true).pop();
   }
 
   Future openGallery() async {
@@ -725,7 +732,7 @@ void itemChange(bool val,int index){
         choosen = true;
     });
     dbUrl = gallery.path.toString();
-    print("You selected(dbUrl): " + dbUrl);
+    Navigator.of(context, rootNavigator: true).pop();
   }
 
 void uploadImage(imgUrl) async {
