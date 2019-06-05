@@ -444,7 +444,7 @@ void itemChange(bool val,int index){
               choosen?
               Container(
                 
-                margin: EdgeInsets.only(bottom: 20.0, right: 10.0, left: 10.0),
+                margin: EdgeInsets.only(bottom: 10.0, top: 10.0, right: 10.0, left: 10.0),
                 
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -503,11 +503,7 @@ void itemChange(bool val,int index){
               :
 
             Container(
-                width: 300,
-                margin: EdgeInsets.only(bottom: 20.0, right: 10.0, left: 10.0),
-                child: SizedBox(
-                  width: 300,
-                
+                margin: EdgeInsets.only(bottom: 10.0,top:10.0, right: 10.0, left: 10.0), 
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
@@ -531,8 +527,7 @@ void itemChange(bool val,int index){
                       )
                     )   
                   ],
-                ),
-                ),
+                )
               )
             
             ],
