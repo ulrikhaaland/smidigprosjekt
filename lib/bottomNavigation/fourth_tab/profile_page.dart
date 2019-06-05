@@ -541,8 +541,44 @@ class _ProfilePageState extends State<ProfilePage> {
                                                               Row(
 
                                                                 children: <Widget>[
+
                                                                   new Text(widget.myEvent[position].title, style: ServiceProvider.instance.styles.cardTitle()),
-                                                                  Icon(Icons.star, color: Colors.white, size: 20,),
+                                                                  new Container(
+                                                                    child: SizedBox(
+                                                                      height: 20,
+                                                                      child: IconButton(
+                                                                        icon: Image.asset("lib/assets/images/editprofile_icon.png", scale: 12),
+                                                                        padding: EdgeInsets.all(0),
+                                                                        onPressed: () {
+                                                                          showDialog(
+                                                                            context: context,
+                                                                            builder: (BuildContext context) {
+                                                                              return AlertDialog(
+                                                                                elevation: 2,
+                                                                                  //contentPadding: EdgeInsets.all(0),
+                                                                                  backgroundColor: UIData.blue,
+                                                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+                                                                                content: new GestureDetector(
+                                                                                  onTap: null,
+                                                                                child: Row(
+                                                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                                                  children: <Widget>[
+                                                                                    Icon(Icons.delete, color: Colors.white),
+                                                                                  Text("Slett event", style: TextStyle(color: Colors.white,), textAlign: TextAlign.center,),
+                                                                                  ],
+                                                                                ),
+                                                                                ),
+                                                                              );
+                                                                            }
+                                                                          );
+
+                                                                        },
+
+                                                                      ),
+
+                                                                    ),
+                                                                  ),
+
                                                                 ],
                                                               ),
 
@@ -677,6 +713,7 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+
   void _tapped(position) {
     setState((){
       if(tap) {
@@ -800,6 +837,14 @@ class _ProfilePageState extends State<ProfilePage> {
 
         });
   }
+
+}
+class Options {
+  static const String delete = "Slett event";
+
+  static const List<String> choices = <String>[
+    delete,
+  ];
 
 }
 
