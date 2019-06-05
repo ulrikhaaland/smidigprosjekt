@@ -111,8 +111,9 @@ class _ProfilePageState extends State<ProfilePage> {
               },
               
             ),
-            Container(
-              margin: EdgeInsets.only(top: 460),
+            Align(
+              alignment: Alignment.bottomCenter,
+            child: Container(
               decoration: new BoxDecoration(
                 color: Colors.pink,
               ),
@@ -132,6 +133,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 
                 
               ),
+            ),
             ),
           ]
         )
