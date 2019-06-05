@@ -45,24 +45,42 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+
       
-      endDrawer: Drawer(
+      endDrawer: SizedBox(
+        width: 250,
+        child:
+
+
+      Drawer(
+
+
+
 
         child: Container(
-          color: UIData.grey,
+          color: Colors.white,
 
           
         
-        child: ListView(
+        child: Stack(
           
           children: <Widget>[
+            Column(
+              children: <Widget> [
 
-            ListTile(
-              title: Text(
+
+            Container(
+              color: Colors.white,
+              height: 80,
+              padding: EdgeInsets.fromLTRB(0, 43, 0, 0),
+              child: Text(
                 "Innstillinger",
-                style: new TextStyle(fontSize: 20, fontWeight: FontWeight.bold), 
+                style: ServiceProvider.instance.styles.title(),
+
               ),
             ),
+
+
 
             Divider(
               color: Colors.black45,
@@ -70,66 +88,78 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             
             ListTile(
-              
-              leading: CircleAvatar(
-                
-                backgroundImage: AssetImage("lib/assets/images/fortnite.jpg"),
-              
-              ),
 
               title: Text(
                 widget.user.getName(),
-                style: TextStyle(fontSize: 17),
+                style: TextStyle(color: UIData.black, fontSize: 15, fontFamily: "Anton", fontWeight: FontWeight.normal),
               ),
               onTap: (){
                 
               },
             ),
+                Divider(
+                  height: 1,
+                ),
             
             ListTile(
               leading: Icon(
                 Icons.help_outline,
-                color: Colors.black,
+                color: UIData.blue,
               ),
               title: Text(
                 'Hjelp',
-                style: TextStyle(fontSize: 17),
+                style: TextStyle(color: UIData.black, fontSize: 15, fontFamily: "Anton", fontWeight: FontWeight.normal),
               ),
               onTap: (){
               },
-              contentPadding: EdgeInsets.only(top: 10, left: 15),
+              contentPadding: EdgeInsets.only(top: 0, left: 15),
+            ),
+
+            Divider(
+              height: 1,
             ),
 
             ListTile(
               leading: Icon(
                 Icons.info_outline,
-                color: Colors.black,
+                color: UIData.blue,
               ),
               title: Text(
                 'Om',
-                style: TextStyle(fontSize: 17),
+                style: TextStyle(color: UIData.black, fontSize: 15, fontFamily: "Anton", fontWeight: FontWeight.normal),
                 ),
               onTap: (){
               },
               
             ),
-            
-            Container(
-              alignment: FractionalOffset.bottomCenter,
+                Divider(
+                  height: 1,
+                ),
+
+            new Expanded(
+              child:
+
+
+            Align(
+              alignment: Alignment.bottomCenter,
+              child:
+              Container(
+              //alignment: FractionalOffset.bottomCenter,
+              height: 60,
               decoration: new BoxDecoration(
-                color: Colors.pink,
+                color: UIData.pink,
               ),
-            
-              child: Align(      
+
                   
                   child: ListTile(
                     
                     leading: Icon(
                       Icons.exit_to_app,
-                      color: Colors.black, 
+                      color: Colors.white,
                     ),
                     title: Text(
                       'Logg ut',
+                      style: TextStyle(color: Colors.white, fontSize: 18, fontFamily: "Anton", fontWeight: FontWeight.normal),
                     ),
                     
                     onTap: (){
@@ -138,10 +168,15 @@ class _ProfilePageState extends State<ProfilePage> {
                     
                     
                 ),
-              ),
+
             ),
+            ),),
+              ],
+            ),
+
           ]
         )
+      ),
       ),
       ),
 
@@ -152,7 +187,7 @@ class _ProfilePageState extends State<ProfilePage> {
             builder: (context) => IconButton(
                 /*leading: new IconButton(icon: Image.asset('lib/assets/images/settings_icon.png', scale: 10,),
                 onPressed: () => Scaffold.of(context).openDrawer()),*/
-              icon: Image.asset("lib/assets/images/settings_icon.png", scale: 10),
+              icon: Image.asset("lib/assets/images/settings_icon.png", scale: 12),
 
 
               onPressed: () => Scaffold.of(context).openEndDrawer(),
