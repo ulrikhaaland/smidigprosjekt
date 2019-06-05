@@ -5,7 +5,6 @@ import 'package:smidigprosjekt/service/screen_service.dart';
 import 'package:smidigprosjekt/service/service_provider.dart';
 import 'package:smidigprosjekt/service/styles.dart';
 import 'package:smidigprosjekt/utils/uidata.dart';
-
 import 'bottomNavigation/second_tab/search_page.dart';
 
 void main() {

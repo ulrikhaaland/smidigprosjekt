@@ -8,7 +8,7 @@ import 'package:smidigprosjekt/auth.dart';
 import 'package:smidigprosjekt/objects/user.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:http/http.dart' as http;
-import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import '../service/service_provider.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -281,7 +281,7 @@ class LoginState extends State<Login> {
           uid,
           valueMap["userid"],
           valueMap["name"],
-          await updateFcmToken(valueMap["userid"]),
+          // await updateFcmToken(valueMap["userid"]),
           true,
           null,
           null,
@@ -292,11 +292,11 @@ class LoginState extends State<Login> {
     widget.onSignIn();
   }
 
-  Future<String> updateFcmToken(String uid) async {
-    String messagingToken;
-    messagingToken = await FirebaseMessaging().getToken();
-    print(messagingToken);
+  // Future<String> updateFcmToken(String uid) async {
+  //   String messagingToken;
+  //   messagingToken = await FirebaseMessaging().getToken();
+  //   print(messagingToken);
 
-    return messagingToken;
-  }
+  //   return messagingToken;
+  // }
 }

@@ -20,6 +20,7 @@ AppBar _buildAppBar(BuildContext context) {
 }
 
 class SearchPage extends StatefulWidget {
+  
   const SearchPage({Key key, this.auth, this.user, this.onSignOut})
       : super(key: key);
   final BaseAuth auth;
@@ -37,13 +38,16 @@ class SearchPage extends StatefulWidget {
 
 class SearchPageState extends State<SearchPage> {
   static final formKey = new GlobalKey<FormState>();
+  var items = List<String>();
+  var items2 = List<String>();
+
 
   //final Firestore firestoreInstance = Firestore.instance;
   //final BaseAuth auth = Auth();
 
   int screen = 0;
 
-  SearchPagefgState() {
+  SearchPageState() {
     searchBar = new SearchBar(
       showClearButton: true,
       inBar: true,
@@ -71,11 +75,39 @@ class SearchPageState extends State<SearchPage> {
   @override
   initState() {
     super.initState();
+    items.add("Carl");
+    items.add("John");
+    items.add("Eric");
+    items.add("Dan");
   }
 
   @override
   dispose() {
     super.dispose();
+  }
+
+    void filterSearchResults(String query) {
+    
+    List<String> dummySearchList = List<String>();
+      dummySearchList.addAll(items);
+        if(query.isNotEmpty) {
+          List<String> dummyListData = List<String>();
+          dummySearchList.forEach((item) {
+            if(item.contains(query)) {
+              dummyListData.add(item);
+            }
+          });
+          setState(() {
+            items.clear();
+            items.addAll(dummyListData);
+          });
+          return;
+      } else {
+        setState(() {
+          items.clear();
+          items.addAll(items);
+        });
+      }
   }
 
   @override
@@ -87,6 +119,7 @@ class SearchPageState extends State<SearchPage> {
         resizeToAvoidBottomPadding: true,
         //backgroundColor: UIData.white,
         appBar: new AppBar(
+
           backgroundColor: Colors.white,
           elevation: 1,
           centerTitle: true,
@@ -111,9 +144,6 @@ class SearchPageState extends State<SearchPage> {
             Column(
 
               children: <Widget>[
-                
-
-
 
                 Align(
 
@@ -128,6 +158,7 @@ class SearchPageState extends State<SearchPage> {
                     
 
                     child: TextField(
+                      
                       
                       autocorrect: false,
                       style: new TextStyle(color: Colors.black),
@@ -147,6 +178,8 @@ class SearchPageState extends State<SearchPage> {
                       
 
                       onChanged: (String value) {
+
+                        filterSearchResults(value);
 
                         // groupSearchName = value.toLowerCase();
                         // if (screen == 0) {
@@ -178,19 +211,15 @@ class SearchPageState extends State<SearchPage> {
 
 
                 new SingleChildScrollView(
-    child:
-
-
-
-
-                Center(
+                
+                child: Center(
                   child: new SizedBox(
                     height: ServiceProvider.instance.screenService
                         .getPortraitHeightByPercentage(context, 64.5),
                     //width: 100,
 
                     child: ListView.builder(
-                      itemCount: 10,  //list.lenght
+                      itemCount: items.length,  //list.lenght
                       scrollDirection: Axis.vertical,
                       itemBuilder: (context, index) {
                         return Row(
@@ -211,29 +240,33 @@ class SearchPageState extends State<SearchPage> {
                                  Padding(
                                    padding: EdgeInsets.all(10),
                                        child: Container(
-                                   height: 60,
-                                   child: SizedBox(
-                                    // height: 70,
-                                     child: ClipRRect(
-                                       borderRadius: new BorderRadius.circular(70),
-                                       child: Image.asset("lib/assets/images/fortnite.jpg", // fra list [index]
-                                         width: 62,
-                                         fit: BoxFit.cover,
-                                       ),
-                                     ),
-                                   ),
+                                         
+                                          height: 60,
+                                          child: SizedBox(
+                                            // height: 70,
+                                            child: ClipRRect(
+                                              borderRadius: new BorderRadius.circular(70),
+                                              child: Image.asset("lib/assets/images/fortnite.jpg", // fra list [index]
+                                                width: 62,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
 
-
-
-                                 ),
-                        ),
                                  Container(
                                    height: 60,
                                    child: Column(
+                                     
                                      children: <Widget>[
-                                       Text("Navn", style: TextStyle(fontWeight: FontWeight.bold)),
+                                     
+                                        Text( (items[index]),
+                                        style: TextStyle(fontWeight: FontWeight.bold),),
+                                        
                                        Text("Skole"),
                                        Text("linje", style: TextStyle(fontStyle: FontStyle.italic)),
+                                       
                                      ],
                                    ),
                                  ),
@@ -283,6 +316,7 @@ class SearchPageState extends State<SearchPage> {
                                             child: Image.asset("lib/assets/images/fortnite.jpg", // fra list [index]
                                               width: 62,
                                               fit: BoxFit.cover,
+                                              
                                             ),
                                           ),
                                         ),
@@ -295,7 +329,10 @@ class SearchPageState extends State<SearchPage> {
                                       height: 60,
                                       child: Column(
                                         children: <Widget>[
-                                          Text("Navn", style: TextStyle(fontWeight: FontWeight.bold)),
+                                          Text(
+                                            (items[index]),
+                                            style: TextStyle(fontWeight: FontWeight.bold),
+                                          ),
                                           Text("Skole"),
                                           Text("linje", style: TextStyle(fontStyle: FontStyle.italic)),
                                         ],

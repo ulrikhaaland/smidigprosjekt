@@ -7,7 +7,7 @@ import 'bottomNavigation/first_tab/feed_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'utils/essentials.dart';
 import 'package:smidigprosjekt/objects/user.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'utils/uidata.dart';
 import 'intro.dart';
 
@@ -33,7 +33,7 @@ class RootPageState extends State<RootPage> {
   String messagingToken;
   User user;
 
-  FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+  // FirebaseMessaging firebaseMessaging = FirebaseMessaging();
 
   AuthStatus authStatus = AuthStatus.loading;
 
@@ -87,40 +87,9 @@ class RootPageState extends State<RootPage> {
 
    users.forEach((u) {
       Firestore.instance.collection("users").add(u);
-    }); */ 
+    }); */
 
     getUserId();
-    firebaseMessaging.configure(onLaunch: (Map<String, dynamic> msg) {
-      print("onLaunch called");
-      handleMessage(msg);
-    }, onResume: (Map<String, dynamic> msg) {
-      print("onResume called");
-      handleMessage(msg);
-    }, onMessage: (Map<String, dynamic> msg) {
-      print("onMessage called");
-      handleMessage(msg);
-    });
-    firebaseMessaging
-        .requestNotificationPermissions(const IosNotificationSettings(
-      sound: true,
-      alert: true,
-      badge: true,
-    ));
-    firebaseMessaging.onIosSettingsRegistered
-        .listen((IosNotificationSettings setting) {
-      print("IOS Setting Registered");
-    });
-  }
-
-  Future<String> updateFcmToken() async {
-    if (currentUser != null) {
-      messagingToken = await firebaseMessaging.getToken();
-      print(messagingToken);
-      Firestore.instance
-          .document("users/$currentUser")
-          .updateData({"fcm": messagingToken});
-    }
-    return messagingToken;
   }
 
   void handleMessage(Map<String, dynamic> message) async {}
@@ -141,7 +110,7 @@ class RootPageState extends State<RootPage> {
         docSnap.data["id"],
         docSnap.data["feideid"],
         docSnap.data["name"],
-        await updateFcmToken(),
+        // await updateFcmToken(),
         docSnap.data["intro"],
         docSnap.data["skole"],
         docSnap.data["linje"],
