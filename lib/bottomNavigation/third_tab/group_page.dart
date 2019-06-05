@@ -7,7 +7,6 @@ import 'package:smidigprosjekt/objects/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:smidigprosjekt/utils/uidata.dart';
 import 'package:smidigprosjekt/service/service_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:ui';
 import 'dart:math';
 
@@ -453,6 +452,7 @@ void itemChange(bool val,int index){
                   children: <Widget>[
                     
                     Stack(
+                      alignment: Alignment.topRight,
                       children: <Widget>[
                         Padding(
                           padding:EdgeInsets.all(10),
@@ -468,28 +468,25 @@ void itemChange(bool val,int index){
                             )
                           )
                         ),
-                          Container(
-                            margin:EdgeInsets.only(right:2, top:2),
-                            height: 30,
-                            child: Align(
-                              alignment: Alignment.topRight,
-                              child: FittedBox(
-                              child:FloatingActionButton(
-                                elevation: 1,
-                                mini: true,
-                                backgroundColor: Colors.white,
-                                foregroundColor: UIData.black,
-                                onPressed: (){
-                                  setState((){
-                                    choosen = false;
-                                  });
-                                },
-                                child: Icon(Icons.clear, color: UIData.black),
-                              ),
-                            )
+                        Container(
+                          margin:EdgeInsets.only(right:2, top:2),
+                          height: 30,
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child:FloatingActionButton(
+                              elevation: 1,
+                              mini: true,
+                              backgroundColor: Colors.white,
+                              foregroundColor: UIData.black,
+                              onPressed: (){
+                                setState((){
+                                  choosen = false;
+                                });
+                              },
+                              child: Icon(Icons.clear, color: UIData.black),
                             ),
-                            
-                          ), 
+                          )
+                        ) 
                       ]
                     ),
                     FlatButton(
