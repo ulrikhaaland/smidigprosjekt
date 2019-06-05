@@ -448,31 +448,32 @@ void itemChange(bool val,int index){
                 
                 child: Row(
                   //mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
                     
                     Stack(
-                      //mainAxisAlignment: MainAxisAlignment.center,
-                      /* mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.end, */
                       children: <Widget>[
-                         new ClipRRect(
-                          borderRadius: new BorderRadius.circular(8.0),
-                          child: Container(
-                            padding:EdgeInsets.all(10),
-                            width: 100,
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),),
-                            child: Image.file(
-                              imgUrl,
-                              fit: BoxFit.fill,
+                        Padding(
+                          padding:EdgeInsets.all(10),
+                          child: ClipRRect(
+                            borderRadius: new BorderRadius.circular(8.0),
+                            child: Container(
+                              width: 100,
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),),
+                              child: Image.file(
+                                imgUrl,
+                                fit: BoxFit.fill,
+                              )
                             )
                           )
-                         ),
+                        ),
                           Container(
-                            margin:EdgeInsets.only(left:68, top:2),
+                            margin:EdgeInsets.only(right:2, top:2),
                             height: 30,
-                            child: FittedBox(
+                            child: Align(
+                              alignment: Alignment.topRight,
+                              child: FittedBox(
                               child:FloatingActionButton(
                                 elevation: 1,
                                 mini: true,
@@ -486,36 +487,20 @@ void itemChange(bool val,int index){
                                 child: Icon(Icons.clear, color: UIData.black),
                               ),
                             )
+                            ),
+                            
                           ), 
                       ]
                     ),
-                    FloatingActionButton(
-                      elevation: 1,
-                      mini: false,
-                      backgroundColor: Colors.white,
-                      foregroundColor: UIData.black,
+                    FlatButton(
+                      child: Icon(Icons.send, color: UIData.pink, size: 24),
                       onPressed: (){ 
                         uploadImage(imgUrl);
                         setState((){
                           choosen=false;
                         });
-                      },
-                      child: Icon(Icons.send, color: UIData.pink, size: 40)
+                      } 
                     )
-                   /*  Flexible(
-                      child: new TextField(
-                        controller: _controller,
-                        onSubmitted: _handleSubmit,
-                        decoration: InputDecoration(
-                          hintText: "Skriv noe..",
-                          fillColor: Colors.white,
-                          filled: true,
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0),
-                              borderSide: BorderSide(width: 0, style: BorderStyle.none)),
-                        )
-                      )
-                    ),  */
-                    
                   ],
                 ),
               )
