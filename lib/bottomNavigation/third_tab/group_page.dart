@@ -657,7 +657,6 @@ void uploadImage(imgUrl) async {
     final StorageUploadTask upTask = imgRef.child(timeKey.toString() + ".jpg").putFile(imgUrl);
     var url = await (await upTask.onComplete).ref.getDownloadURL();
     dbUrl = url.toString();
-
   }
 
   Future<void> openOptions() {
