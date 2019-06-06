@@ -643,7 +643,7 @@ void itemChange(bool val,int index){
 
             Padding(
               padding: EdgeInsets.only(bottom: 10, top:10),
-
+                child: GestureDetector(
                 child: ClipRRect(
                 borderRadius: new BorderRadius.circular(8.0),
                   child: Container(
@@ -652,32 +652,59 @@ void itemChange(bool val,int index){
                       image,
                       fit: BoxFit.cover
                     )
+                  ),
                 ),
-                
+
+                onTap: () {
+                  
+                  showImage(image);
+                              
+                  }
                 
               ),
             ),
-            
-            
+
           ],
         )
       ],
     );
   }
   
-  Widget _showImage(String message, String userName, String image, bool isText) {
-    return Row(
-      children: <Widget>[
-        GestureDetector(
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (_) {
-            return _message(message, userName, image, isText);
-                      
-            }));
-          },
-        ),
-      ],
-    );
+ showImage (String image) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      //child: new Dialog(
+        child: Stack(
+          children: <Widget>[
+            Container(
+              color: UIData.black,
+              width: ServiceProvider.instance.screenService.getWidthByPercentage(context, 100),
+              height: ServiceProvider.instance.screenService.getHeightByPercentage(context, 100),
+              child: Image.network(image),
+            ),
+            Container(
+                margin:EdgeInsets.only(left:10, top:10),
+                height: 30,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child:FloatingActionButton(
+                    elevation: 1,
+                    mini: false,
+                    backgroundColor: Colors.white,
+                    foregroundColor: UIData.black,
+                    onPressed: (){
+                      Navigator.pop(context);
+                    },
+                    child: Icon(Icons.clear, color: UIData.black, size: 40 
+                  )
+                )
+              ) 
+            )
+          ],
+        )
+      //),
+    ); 
   }
 
   _handleSubmit(String message) {
