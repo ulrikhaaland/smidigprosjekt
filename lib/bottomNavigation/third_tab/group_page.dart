@@ -577,23 +577,21 @@ void itemChange(bool val,int index){
             Padding(
               padding: EdgeInsets.only(bottom: 10, top:10),
               child: GestureDetector(
-              child: ClipRRect(
-              borderRadius: new BorderRadius.circular(8.0),
-                child: Container(
-                  constraints: BoxConstraints(minWidth: 0, maxWidth: ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 50)),
-                  child: Image.network(
-                    image,
-                    fit: BoxFit.cover
-                  )
-                ) 
-              ),
-                onTap: () {  
-                    showImage(image);            
+                child: ClipRRect(
+                borderRadius: new BorderRadius.circular(8.0),
+                  child: Container(
+                    constraints: BoxConstraints(minWidth: 0, maxWidth: ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 50)),
+                    child: Image.network(
+                      image,
+                      fit: BoxFit.cover
+                    )
+                  ) 
+                ),
+                onTap: () {
+                  _showImage(image);               
                 }
-              ),
-              
+              ), 
             )
-            
           ],
         ),
         
@@ -661,75 +659,68 @@ void itemChange(bool val,int index){
                     )
                   ),
                 ),
-
                 onTap: () {
-                  
-                  showImage(image);
-                              
-                  }
-                
+                  _showImage(image);            
+                } 
               ),
             ),
-
           ],
         )
       ],
     );
   }
   
- showImage (String image) {
+ _showImage (String image) {
     showDialog(
       context: context,
       barrierDismissible: true,
-      //child: new Dialog(
-        child: Stack(
-          children: <Widget>[
-            Container(
-              color: UIData.black,
-              width: ServiceProvider.instance.screenService.getWidthByPercentage(context, 100),
-              height: ServiceProvider.instance.screenService.getHeightByPercentage(context, 100),
+      child: Stack(
+        children: <Widget>[
+          Center(
+            child: Padding(
+              padding: EdgeInsets.all(10),
               child: Image.network(image),
-            ),
-            Container(
-                margin:EdgeInsets.only(left:10, top:10),
-                height: 30,
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child:FloatingActionButton(
-                    elevation: 1,
-                    mini: false,
-                    backgroundColor: Colors.white,
-                    foregroundColor: UIData.black,
-                    onPressed: (){
-                      Navigator.pop(context);
-                    },
-                    child: Icon(Icons.clear, color: UIData.black, size: 40 
-                  )
-                )
-              ) 
             )
-          ],
-        )
-      //),
+          ),
+          Container(
+              margin:EdgeInsets.only(left:10, top:10),
+              height: 30,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child:FloatingActionButton(
+                  elevation: 1,
+                  mini: false,
+                  backgroundColor: Colors.white,
+                  foregroundColor: UIData.black,
+                  onPressed: (){
+                    Navigator.pop(context);
+                  },
+                  child: Icon(Icons.clear, color: UIData.black, size: 40 
+                )
+              )
+            ) 
+          )
+        ],
+      )
     ); 
   }
 
   _handleSubmit(String message) {
     if(_controller.text.trim().isEmpty){}
     else{
-    _controller.text = "";
-    var db = Firestore.instance;
-    db.collection("chat_room").add({
-      "user_name": widget.user.getName(),
-      "message": message.trim(),
-      "image": "",
-      "isText": true,
-      "created_at": DateTime.now()
-    }).then((val) {
-      print("success");
-    }).catchError((err) {
-      print(err);
-    });
+      _controller.text = "";
+      var db = Firestore.instance;
+      db.collection("chat_room").add({
+        "user_name": widget.user.getName(),
+        "message": message.trim(),
+        "image": "",
+        "isText": true,
+        "created_at": DateTime.now()
+      }).then((val) {
+        print("success");
+      }).catchError((err) {
+        print(err);
+      });
     }
   }
 
