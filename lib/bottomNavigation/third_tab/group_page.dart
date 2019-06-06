@@ -504,6 +504,7 @@ void itemChange(bool val,int index){
               :
 
             Container(
+              height: 50,
                 margin: EdgeInsets.only(bottom: 10.0,top:10.0, right: 10.0, left: 10.0), 
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -515,6 +516,7 @@ void itemChange(bool val,int index){
                         minLines: 1,
                         maxLines: null,
                         decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(0),
                           hintText: "Skriv noe..",
                           fillColor: Colors.white,
                           filled: true,
