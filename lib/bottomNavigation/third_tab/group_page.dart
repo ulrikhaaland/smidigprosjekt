@@ -504,6 +504,7 @@ void itemChange(bool val,int index){
               :
 
             Container(
+              height: 50,
                 margin: EdgeInsets.only(bottom: 10.0,top:10.0, right: 10.0, left: 10.0), 
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -515,6 +516,7 @@ void itemChange(bool val,int index){
                         minLines: 1,
                         maxLines: null,
                         decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(0),
                           hintText: "Skriv noe..",
                           fillColor: Colors.white,
                           filled: true,
@@ -742,10 +744,37 @@ void uploadImage(imgUrl) async {
     final StorageReference imgRef = FirebaseStorage.instance.ref().child("Chat_Images");
     var timeKey = new DateTime.now();
     final StorageUploadTask upTask = imgRef.child(timeKey.toString() + ".jpg").putFile(imgUrl);
+    _onLoading();
     var url = await (await upTask.onComplete).ref.getDownloadURL();
     dbUrl = url.toString();
     print("DBURL AFTER UPLOAD:" + dbUrl);
     _sendImage(dbUrl);
+    Navigator.pop(context);
+  }
+
+  void _onLoading() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      child: new Dialog(
+        child: ClipRRect(
+          borderRadius: new BorderRadius.circular(8.0),
+          child: Container(
+            padding: EdgeInsets.only(top:12, bottom: 12, left: 16, right: 16),
+            child: new Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                new CircularProgressIndicator(
+                  valueColor:new AlwaysStoppedAnimation<Color>(UIData.pink),
+                ),
+                new Padding(padding: EdgeInsets.only(left:25)),
+                new Text("Vent litt..."),
+              ],
+            ),
+          )
+        )
+      ),
+    );
   }
 
   Future<void> openOptions() {
