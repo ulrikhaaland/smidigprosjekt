@@ -677,11 +677,11 @@ void itemChange(bool val,int index){
       //child: new Dialog(
         child: Stack(
           children: <Widget>[
-            Container(
-              color: UIData.black,
-              width: ServiceProvider.instance.screenService.getWidthByPercentage(context, 100),
-              height: ServiceProvider.instance.screenService.getHeightByPercentage(context, 100),
-              child: Image.network(image),
+            Center(
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: Image.network(image),
+              )
             ),
             Container(
                 margin:EdgeInsets.only(left:10, top:10),
