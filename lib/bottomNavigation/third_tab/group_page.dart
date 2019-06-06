@@ -504,6 +504,7 @@ void itemChange(bool val,int index){
               :
 
             Container(
+              height: 50,
                 margin: EdgeInsets.only(bottom: 10.0,top:10.0, right: 10.0, left: 10.0), 
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -515,6 +516,7 @@ void itemChange(bool val,int index){
                         minLines: 1,
                         maxLines: null,
                         decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(0),
                           hintText: "Skriv noe..",
                           fillColor: Colors.white,
                           filled: true,
@@ -574,23 +576,28 @@ void itemChange(bool val,int index){
 
             Padding(
               padding: EdgeInsets.only(bottom: 10, top:10),
-              child: ClipRRect(
-              borderRadius: new BorderRadius.circular(8.0),
-                child: Container(
-                  constraints: BoxConstraints(minWidth: 0, maxWidth: ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 50)),
-                  child: Image.network(
-                    image,
-                    fit: BoxFit.cover
-                  )
-                ) 
-              )
+              child: GestureDetector(
+                child: ClipRRect(
+                borderRadius: new BorderRadius.circular(8.0),
+                  child: Container(
+                    constraints: BoxConstraints(minWidth: 0, maxWidth: ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 50)),
+                    child: Image.network(
+                      image,
+                      fit: BoxFit.cover
+                    )
+                  ) 
+                ),
+                onTap: () {
+                  _showImage(image);               
+                }
+              ), 
             )
-            
           ],
         ),
+        
         Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70)),
+          elevation: 0,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70)),
               child: ClipRRect(
                 borderRadius: new BorderRadius.circular(100),
                 child: Image.asset("lib/assets/images/fortnite.jpg", // fra list [index]
@@ -641,39 +648,79 @@ void itemChange(bool val,int index){
 
             Padding(
               padding: EdgeInsets.only(bottom: 10, top:10),
-              child: ClipRRect(
-              borderRadius: new BorderRadius.circular(8.0),
-                child: Container(
-                  constraints: BoxConstraints(minWidth: 0, maxWidth: ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 50)),
-                  child: Image.network(
-                    image,
-                    fit: BoxFit.cover
-                  )
-                ) 
-              )
-            )
+                child: GestureDetector(
+                child: ClipRRect(
+                borderRadius: new BorderRadius.circular(8.0),
+                  child: Container(
+                    constraints: BoxConstraints(minWidth: 0, maxWidth: ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 50)),
+                    child: Image.network(
+                      image,
+                      fit: BoxFit.cover
+                    )
+                  ),
+                ),
+                onTap: () {
+                  _showImage(image);            
+                } 
+              ),
+            ),
           ],
         )
       ],
     );
   }
+  
+ _showImage (String image) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      child: Stack(
+        children: <Widget>[
+          Center(
+            child: Padding(
+              padding: EdgeInsets.all(10),
+              child: Image.network(image),
+            )
+          ),
+          Container(
+              margin:EdgeInsets.only(left:10, top:10),
+              height: 30,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child:FloatingActionButton(
+                  elevation: 1,
+                  mini: false,
+                  backgroundColor: Colors.white,
+                  foregroundColor: UIData.black,
+                  onPressed: (){
+                    Navigator.pop(context);
+                  },
+                  child: Icon(Icons.clear, color: UIData.black, size: 40 
+                )
+              )
+            ) 
+          )
+        ],
+      )
+    ); 
+  }
 
   _handleSubmit(String message) {
     if(_controller.text.trim().isEmpty){}
     else{
-    _controller.text = "";
-    var db = Firestore.instance;
-    db.collection("chat_room").add({
-      "user_name": widget.user.getName(),
-      "message": message.trim(),
-      "image": "",
-      "isText": true,
-      "created_at": DateTime.now()
-    }).then((val) {
-      print("success");
-    }).catchError((err) {
-      print(err);
-    });
+      _controller.text = "";
+      var db = Firestore.instance;
+      db.collection("chat_room").add({
+        "user_name": widget.user.getName(),
+        "message": message.trim(),
+        "image": "",
+        "isText": true,
+        "created_at": DateTime.now()
+      }).then((val) {
+        print("success");
+      }).catchError((err) {
+        print(err);
+      });
     }
   }
 
@@ -722,10 +769,37 @@ void uploadImage(imgUrl) async {
     final StorageReference imgRef = FirebaseStorage.instance.ref().child("Chat_Images");
     var timeKey = new DateTime.now();
     final StorageUploadTask upTask = imgRef.child(timeKey.toString() + ".jpg").putFile(imgUrl);
+    _onLoading();
     var url = await (await upTask.onComplete).ref.getDownloadURL();
     dbUrl = url.toString();
     print("DBURL AFTER UPLOAD:" + dbUrl);
     _sendImage(dbUrl);
+    Navigator.pop(context);
+  }
+
+  void _onLoading() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      child: new Dialog(
+        child: ClipRRect(
+          borderRadius: new BorderRadius.circular(8.0),
+          child: Container(
+            padding: EdgeInsets.only(top:12, bottom: 12, left: 16, right: 16),
+            child: new Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                new CircularProgressIndicator(
+                  valueColor:new AlwaysStoppedAnimation<Color>(UIData.pink),
+                ),
+                new Padding(padding: EdgeInsets.only(left:25)),
+                new Text("Vent litt..."),
+              ],
+            ),
+          )
+        )
+      ),
+    );
   }
 
   Future<void> openOptions() {
