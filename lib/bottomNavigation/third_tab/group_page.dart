@@ -589,8 +589,8 @@ void itemChange(bool val,int index){
           ],
         ),
         Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70)),
+          elevation: 0,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70)),
               child: ClipRRect(
                 borderRadius: new BorderRadius.circular(100),
                 child: Image.asset("lib/assets/images/fortnite.jpg", // fra list [index]
@@ -641,19 +641,39 @@ void itemChange(bool val,int index){
 
             Padding(
               padding: EdgeInsets.only(bottom: 10, top:10),
-              child: ClipRRect(
-              borderRadius: new BorderRadius.circular(8.0),
-                child: Container(
-                  constraints: BoxConstraints(minWidth: 0, maxWidth: ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 50)),
-                  child: Image.network(
-                    image,
-                    fit: BoxFit.cover
-                  )
-                ) 
-              )
-            )
+
+                child: ClipRRect(
+                borderRadius: new BorderRadius.circular(8.0),
+                  child: Container(
+                    constraints: BoxConstraints(minWidth: 0, maxWidth: ServiceProvider.instance.screenService.getPortraitWidthByPercentage(context, 50)),
+                    child: Image.network(
+                      image,
+                      fit: BoxFit.cover
+                    )
+                ),
+                
+                
+              ),
+            ),
+            
+            
           ],
         )
+      ],
+    );
+  }
+  
+  Widget _showImage(String message, String userName, String image, bool isText) {
+    return Row(
+      children: <Widget>[
+        GestureDetector(
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (_) {
+            return _message(message, userName, image, isText);
+                      
+            }));
+          },
+        ),
       ],
     );
   }
