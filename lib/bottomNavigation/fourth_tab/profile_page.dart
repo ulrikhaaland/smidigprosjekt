@@ -425,8 +425,6 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               new Container(
 
-
-
                 child: new
 
 
@@ -443,313 +441,309 @@ class _ProfilePageState extends State<ProfilePage> {
                         Align(
                           alignment: Alignment.topCenter,
                           child: Container(
-                            height: ((widget.myEvent.length)*190.0),
+                            height:ServiceProvider.instance.screenService.getPortraitHeightByPercentage(context, 50),
                             width: ServiceProvider.instance.screenService
                                 .getPortraitWidthByPercentage(context, 82),
-                            child: ListView.builder(
-                              // scrollDirection: Axis.vertical,
-                              //shrinkWrap: true,
-                              itemBuilder: (context, position){
-                                return Column(
-                                  children: <Widget>[
-
-                                    Divider(
-                                      color: UIData.grey,
-                                    ),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(_DateText(position),
-
-
-                                      ),
-                                    ),
-                                    Divider(
-                                      color: UIData.grey,
-                                      height: 0.2,
+                              child: StreamBuilder(
+                                  stream: Firestore.instance
+                                      .collection("events")
+                                      .orderBy('time', descending: false)
+                                      .snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData) return Center(child: Text("Laster.."));
+                                    return ListView.builder(
+                                      //itemExtent: 350.0,
+                                        itemCount: snapshot.data.documents.length,
+                                        itemBuilder: (context, index) {
+                                          DocumentSnapshot document = snapshot.data.documents[index];
+                                          if(document.data["id"].contains(widget.user.userName)) {
 
 
-                                    ),
 
-                                    GestureDetector(
-                                      onTap: () { _tapped(position);},
-
-
-                                      child: Column(
-                                        children: <Widget>[
-                                          tap == true && tapped != null && tapped == position ?
-                                          SizedBox (
-                                            height: 310,
-                                            child: Card(
-                                              elevation: 0.0,
-                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-
-                                              child: Column(
-                                                children: <Widget>[
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    //crossAxisAlignment: CrossAxisAlignment.stretch,
-
-                                                    children: <Widget>[
-                                                      ClipRRect(
-                                                        borderRadius: new BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
-                                                        child: Image.network(widget.myEvent[position].imgUrl,
-
-                                                          height: 122,
-                                                          width: 287,
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                      ),
-
-                                                    ],
-
+                                          return Column(
+                                            children: <Widget>[
+                                              Divider(
+                                                color: UIData.grey,
+                                              ),
+                                              Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Padding(
+                                                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                                  child: Text(
+                                                    _DateText(document),
                                                   ),
-                                                  Divider(
-                                                    height: 1,
-                                                  ),
+                                                ),
+                                              ),
+                                              Divider(
+                                                color: UIData.grey,
+                                                height: 0.2,
+                                              ),
+                                              GestureDetector(
+                                                onTap: () {
 
-
-
-                                                  Padding(
-                                                    padding: EdgeInsets.all(5),
-                                                    child: Container(
-                                                      height: 130,
-                                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), border: Border.all(color: Colors.white)),
-                                                      child: Padding(
-                                                        padding: EdgeInsets.all(8),
+                                                  _tapped(index);
+                                                },
+                                                child: Column(
+                                                  children: <Widget>[
+                                                    tap == true && tapped != null && tapped == index?
+                                                    SizedBox(
+                                                      height: 310,
+                                                      width: ServiceProvider.instance.screenService
+                                                          .getPortraitWidthByPercentage(context, 82),
+                                                      child: Card(
+                                                        elevation: 0.0,
+                                                        shape: RoundedRectangleBorder(
+                                                            borderRadius: BorderRadius.circular(8)),
                                                         child: Column(
-                                                          crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: <Widget>[
-                                                            Text("Beskrivelse:", style: TextStyle(fontWeight: FontWeight.bold)),
-                                                            Divider(
-                                                              height: 10,
-                                                              color: Colors.white,
-                                                            ),
-                                                            Text( '${widget.myEvent[position].desc}', style: TextStyle(fontSize: 13)
+                                                            Row(
+                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              //crossAxisAlignment: CrossAxisAlignment.stretch,
 
+                                                              children: <Widget>[
+                                                                ClipRRect(
+                                                                  borderRadius: new BorderRadius.only(
+                                                                      topLeft: Radius.circular(8),
+                                                                      topRight: Radius.circular(8)),
+                                                                  child: Image.network(
+                                                                    document.data["imgUrl"],
+                                                                    height: 120,
+                                                                    width: 287,
+                                                                    fit: BoxFit.cover,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            Divider(
+                                                              height: 1,
+                                                            ),
+                                                            Padding(
+                                                              padding: EdgeInsets.all(5),
+                                                              child: Container(
+                                                                height: 130,
+                                                                decoration: BoxDecoration(
+                                                                    borderRadius: BorderRadius.circular(8),
+                                                                    border: Border.all(color: Colors.white)),
+                                                                child: Padding(
+                                                                  padding: EdgeInsets.all(8),
+                                                                  child: Column(
+                                                                    crossAxisAlignment:
+                                                                    CrossAxisAlignment.start,
+                                                                    children: <Widget>[
+                                                                      Text("Beskrivelse:",
+                                                                          style: TextStyle(
+                                                                              fontWeight: FontWeight.bold)),
+                                                                      Divider(
+                                                                        height: 10,
+                                                                        color: Colors.white,
+                                                                      ),
+                                                                      Text('${document.data["desc"]}',
+                                                                          style: TextStyle(fontSize: 13)),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              child: Container(
+                                                                height: 40,
+                                                                margin: EdgeInsets.only(top: 0),
+                                                                width: ServiceProvider.instance.screenService
+                                                                    .getPortraitWidthByPercentage(context, 82),
+                                                                decoration: new BoxDecoration(
+                                                                  color: Colors.pink,
+                                                                  borderRadius: new BorderRadius.only(
+                                                                      bottomLeft: const Radius.circular(8.0),
+                                                                      bottomRight: const Radius.circular(8.0)),
+                                                                ),
+                                                                child: FlatButton(
+                                                                  color: UIData.pink,
+                                                                  shape: RoundedRectangleBorder(
+                                                                      borderRadius: BorderRadius.circular(100)),
+                                                                  padding: EdgeInsets.all(10),
+                                                                  onPressed: () {
+                                                                    //going = true;
+                                                                    _tapped(document);
+                                                                    //_starred(snapshot);
+                                                                  },
+                                                                  child: Row(
+                                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                                    children: <Widget>[
+                                                                      Icon(
+                                                                        // going && starred == position
+                                                                        //  ? Icons.star
+                                                                        Icons.star_border,
+                                                                        color: Colors.white,
+                                                                        size: 20,
+                                                                      ),
+                                                                      Padding(padding: EdgeInsets.all(3)),
+                                                                      Text("Interessert",
+                                                                          style: TextStyle(
+                                                                              color: Colors.white,
+                                                                              fontSize: 13)),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
                                                             ),
                                                           ],
                                                         ),
+                                                      ),
+                                                    )
+                                                        : SizedBox(
+                                                      height: 130,
+                                                      child: Card(
+                                                        elevation: 0.0,
+                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+
+                                                        child: Column(
+                                                          children: <Widget>[
+                                                            Row(
+                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              //crossAxisAlignment: CrossAxisAlignment.stretch,
+
+                                                              children: <Widget>[
+                                                                ClipRRect(
+                                                                  borderRadius: new BorderRadius.only(topLeft: Radius.circular(8), bottomLeft: Radius.circular(8)),
+                                                                  child: Image.network( document.data["imgUrl"],
+                                                                    height: 122,
+                                                                    width: 110,
+                                                                    fit: BoxFit.cover,
+                                                                  ),
+                                                                ),
+                                                                Padding(
+                                                                  padding: EdgeInsets.all(10),
+                                                                  child: Align(
+                                                                    alignment: Alignment.centerRight,
+                                                                    child:
+
+                                                                    Column(
+                                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                                      children: <Widget>[
+
+                                                                        Row(
+
+                                                                          children: <Widget>[
+
+                                                                            new Text( document.data["title"], style: ServiceProvider.instance.styles.cardTitle()),
+                                                                            new Container(
+                                                                              child: SizedBox(
+                                                                                height: 20,
+                                                                                child: IconButton(
+                                                                                  icon: Image.asset("lib/assets/images/editprofile_icon.png", scale: 14),
+                                                                                  padding: EdgeInsets.all(0),
+                                                                                  onPressed: () {
+                                                                                    showDialog(
+                                                                                        context: context,
+                                                                                        builder: (BuildContext context) {
+                                                                                          return AlertDialog(
+                                                                                            elevation: 2,
+                                                                                            //contentPadding: EdgeInsets.all(0),
+                                                                                            backgroundColor: UIData.blue,
+                                                                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+                                                                                            content: new GestureDetector(
+                                                                                              onTap: () {
+                                                                                                _delete(document);
+                                                                                              },
+                                                                                              //_delete(position),
+                                                                                              child: Row(
+                                                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                                                children: <Widget>[
+                                                                                                  Icon(Icons.delete, color: Colors.white),
+                                                                                                  Text("Slett event", style: TextStyle(color: Colors.white,), textAlign: TextAlign.center,),
+                                                                                                ],
+                                                                                              ),
+                                                                                            ),
+                                                                                          );
+                                                                                        }
+                                                                                    );
+
+                                                                                  },
+
+                                                                                ),
+
+                                                                              ),
+                                                                            ),
+
+                                                                          ],
+                                                                        ),
+
+
+                                                                        Divider(
+                                                                            color: Colors.white
+                                                                        ),
+                                                                        Row(
+                                                                          children: <Widget>[
+                                                                            Icon(Icons.location_on, color: UIData.blue, size: 20,),
+                                                                            Text( document.data["address"], style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                        Divider(
+                                                                          color: Colors.white,
+                                                                        ),
+                                                                        Row(
+                                                                          children: <Widget>[
+                                                                            Icon(Icons.access_time, color: UIData.black, size: 17,),
+                                                                            Text(' ${ document.data["time"].hour.toString()}' + ':' + '${ document.data["time"].minute.toString().padRight(2, '0')}', style: TextStyle( fontSize: 12),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ],
+
+
+                                                                    ),
+
+
+
+
+
+                                                                  ),
+
+
+
+
+                                                                ),
+
+
+                                                              ],
+
+                                                            ),
+
+
+
+                                                          ],
+
+                                                        ),
+
+
+
+
+
+
+
+
                                                       ),
 
                                                     ),
 
-                                                  ),
 
-                                                  Expanded(
-                                                    child:
 
+                                                  ],
+                                                ),
+                                              )
+                                            ],
+                                          ); };
 
-                                                    Container(
-                                                      height: 40,
-                                                      margin: EdgeInsets.only(top: 0),
-                                                      width: ServiceProvider.instance.screenService
-                                                          .getPortraitWidthByPercentage(context, 82),
+                                        },
 
-                                                      decoration: new BoxDecoration(
-                                                        color: Colors.pink,
-                                                        borderRadius: new BorderRadius.only(
-                                                            bottomLeft:  const  Radius.circular(8.0),
-                                                            bottomRight: const  Radius.circular(8.0)),
-                                                      ),
-                                                      child:
-                                                      FlatButton(
-                                                        color: UIData.pink,
-                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-                                                        padding: EdgeInsets.all(10),
-                                                        onPressed: () {
-                                                          //going = true;
-                                                          _tapped(position);
 
 
-
-                                                        },
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.center,
-                                                          children: <Widget>[
-
-                                                            Icon(Icons.star_border, color: Colors.white, size: 20,),
-                                                            Padding(
-                                                                padding: EdgeInsets.all(3)
-                                                            ),
-                                                            Text("Interessert", style: TextStyle(color: Colors.white, fontSize: 13)),
-
-                                                          ],
-                                                        ),
-
-
-                                                      ),),),
-
-
-
-
-                                                ],
-                                              ),
-
-
-
-
-
-
-
-
-                                            ),
-
-
-                                          ) : SizedBox(
-                                            height: 130,
-                                            child: Card(
-                                              elevation: 0.0,
-                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-
-                                              child: Column(
-                                                children: <Widget>[
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    //crossAxisAlignment: CrossAxisAlignment.stretch,
-
-                                                    children: <Widget>[
-                                                      ClipRRect(
-                                                        borderRadius: new BorderRadius.only(topLeft: Radius.circular(8), bottomLeft: Radius.circular(8)),
-                                                        child: Image.network(widget.myEvent[position].imgUrl,
-                                                          height: 122,
-                                                          width: 110,
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding: EdgeInsets.all(10),
-                                                        child: Align(
-                                                          alignment: Alignment.centerRight,
-                                                          child:
-
-                                                          Column(
-                                                            mainAxisAlignment: MainAxisAlignment.start,
-                                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                                            children: <Widget>[
-
-                                                              Row(
-
-                                                                children: <Widget>[
-
-                                                                  new Text(widget.myEvent[position].title, style: ServiceProvider.instance.styles.cardTitle()),
-                                                                  new Container(
-                                                                    child: SizedBox(
-                                                                      height: 20,
-                                                                      child: IconButton(
-                                                                        icon: Image.asset("lib/assets/images/editprofile_icon.png", scale: 12),
-                                                                        padding: EdgeInsets.all(0),
-                                                                        onPressed: () {
-                                                                          showDialog(
-                                                                            context: context,
-                                                                            builder: (BuildContext context) {
-                                                                              return AlertDialog(
-                                                                                elevation: 2,
-                                                                                  //contentPadding: EdgeInsets.all(0),
-                                                                                  backgroundColor: UIData.blue,
-                                                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-                                                                                content: new GestureDetector(
-                                                                                  onTap: () {
-                                                                                    _delete(position);
-                                                                                  },
-                                                                                  //_delete(position),
-                                                                                child: Row(
-                                                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                                                  children: <Widget>[
-                                                                                    Icon(Icons.delete, color: Colors.white),
-                                                                                  Text("Slett event", style: TextStyle(color: Colors.white,), textAlign: TextAlign.center,),
-                                                                                  ],
-                                                                                ),
-                                                                                ),
-                                                                              );
-                                                                            }
-                                                                          );
-
-                                                                        },
-
-                                                                      ),
-
-                                                                    ),
-                                                                  ),
-
-                                                                ],
-                                                              ),
-
-
-                                                              Divider(
-                                                                  color: Colors.white
-                                                              ),
-                                                              Row(
-                                                                children: <Widget>[
-                                                                  Icon(Icons.location_on, color: UIData.blue, size: 20,),
-                                                                  Text(widget.myEvent[position].address, style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              Divider(
-                                                                color: Colors.white,
-                                                              ),
-                                                              Row(
-                                                                children: <Widget>[
-                                                                  Icon(Icons.access_time, color: UIData.black, size: 17,),
-                                                                  Text(' ${widget.myEvent[position].time.hour.toString()}' + ':' + '${widget.myEvent[position].time.minute.toString().padRight(2, '0')}', style: TextStyle( fontSize: 12),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ],
-
-
-                                                          ),
-
-
-
-
-
-                                                        ),
-
-
-
-
-                                                      ),
-
-
-                                                    ],
-
-                                                  ),
-
-
-
-                                                ],
-
-                                              ),
-
-
-
-
-
-
-
-
-                                            ),
-
-                                          ),
-
-
-                                        ],
-                                      ),
-
-
-
-                                    )
-
-
-                                  ],
-                                );
-
-                              },
-                              itemCount: widget.myEvent.length,
-                            ),
+                                    );
+                                  })
 
 
                           ),
@@ -809,66 +803,76 @@ class _ProfilePageState extends State<ProfilePage> {
 
 
 
-  void _tapped(position) {
+  void _tapped(index) {
     setState((){
       if(tap) {
         tap = false;
-        tapped = position;
+        tapped = index;
       } else {
         tap = true;
-        tapped = position;
+        tapped = index;
       }
 
     });
 
   }
 
-  String _DateText(int position) {
-    if (widget.myEvent[position].time.month == 1){
-      return '${widget.myEvent[position].time.day.toString()}' + '. ' + 'Januar';
+    String _DateText(document) {
+    DateTime dt = document.data["time"];
+    if (dt.month == 1) {
+    return '${dt.day.toString()}' +
+    '. ' +
+    'Januar';
+    } else if (dt.month == 2) {
+    return '${dt.day.toString()}' +
+    '. ' +
+    'Februar';
+    } else if (dt.month == 3) {
+    return '${dt.day.toString()}' +
+    '. ' +
+    'Mars';
+    } else if (dt.month == 4) {
+    return '${dt.day.toString()}' +
+    '. ' +
+    'April';
+    } else if (dt.month == 5) {
+    return '${dt.day.toString()}' + '. ' + 'Mai';
+
+    } else if (dt.month == 6) {
+    return '${dt.day.toString()}' +
+    '. ' +
+    'Juni';
+    } else if (dt.month == 7) {
+    return '${dt.day.toString()}' +
+    '. ' +
+    'Juli';
+    } else if (dt.month == 8) {
+    return '${dt.day.toString()}' +
+    '. ' +
+    'August';
+    } else if (dt.month == 9) {
+    return '${dt.day.toString()}' +
+    '. ' +
+    'September';
+    } else if (dt.month == 10) {
+    return '${dt.day.toString()}' +
+    '. ' +
+    'Oktober';
+    } else if (dt.month == 11) {
+    return '${dt.day.toString()}' +
+    '. ' +
+    'November';
+    } else if (dt.month == 12) {
+    return '${dt.day.toString()}' +
+    '. ' +
+    'Desember';
     }
-    else if (widget.myEvent[position].time.month == 2){
-      return '${widget.myEvent[position].time.day.toString()}' + '. ' + 'Februar';
-    }
-    else if (widget.myEvent[position].time.month == 3){
-      return '${widget.myEvent[position].time.day.toString()}' + '. ' + 'Mars';
-    }
-    else if (widget.myEvent[position].time.month == 4){
-      return '${widget.myEvent[position].time.day.toString()}' + '. ' + 'April';
-    }
-    else if (widget.myEvent[position].time.month == 5){
-      return '${widget.myEvent[position].time.day.toString()}' + '. ' + 'Mai';
-    }
-    else if (widget.myEvent[position].time.month == 6){
-      return '${widget.myEvent[position].time.day.toString()}' + '. ' + 'Juni';
-    }
-    else if (widget.myEvent[position].time.month == 7){
-      return '${widget.myEvent[position].time.day.toString()}' + '. ' + 'Juli';
-    }
-    else if (widget.myEvent[position].time.month == 8){
-      return '${widget.myEvent[position].time.day.toString()}' + '. ' + 'August';
-    }
-    else if (widget.myEvent[position].time.month == 9){
-      return '${widget.myEvent[position].time.day.toString()}' + '. ' + 'September';
-    }
-    else if (widget.myEvent[position].time.month == 10){
-      return '${widget.myEvent[position].time.day.toString()}' + '. ' + 'Oktober';
-    }
-    else if (widget.myEvent[position].time.month == 11){
-      return '${widget.myEvent[position].time.day.toString()}' + '. ' + 'November';
-    }
-    else if (widget.myEvent[position].time.month == 12){
-      return '${widget.myEvent[position].time.day.toString()}' + '. ' + 'Desember';
     }
 
-  }
-
-  void _delete(int position) async {
-    var name = widget.myEvent[position].id;
+  void _delete(DocumentSnapshot document) async {
+    var name = document.data["id"];
       Firestore.instance.collection("events").document(name).delete();
-
-
-
+    Navigator.pop(context);
   }
 
   Future openCamera() async {

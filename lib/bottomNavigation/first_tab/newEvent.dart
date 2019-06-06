@@ -284,24 +284,28 @@ class PageOneState extends State<PageOne> {
                       child: StreamBuilder(
                           stream: Firestore.instance
                               .collection("events")
+                          .orderBy('time', descending: false)
                               .snapshots(),
                           builder: (context, snapshot) {
-                            if (!snapshot.hasData) return Text("loading...");
+                            if (!snapshot.hasData)
+                              return Center(child: new CircularProgressIndicator());
                             return ListView.builder(
-                              itemExtent: 350.0,
+                              //itemExtent: 50,  //tap == true && tapped != null && tapped == snapshot ? 350.0 :
                               itemCount: snapshot.data.documents.length,
-                              itemBuilder: (context, index) => _eventList(
+                              itemBuilder: (context, index)
+
+
+
+
+
+                              => _eventList(
                                   context, snapshot.data.documents[index]),
                             );
                           })),
                 ),
               ],
             ),
-            Padding(padding: EdgeInsets.all(100)),
-            Padding(padding: EdgeInsets.all(90)),
-            Align(
-              alignment: Alignment.center,
-            ),
+
           ],
         ),
       ),
@@ -585,51 +589,52 @@ class PageOneState extends State<PageOne> {
   }
 
   String _DateText(snapshot) {
-    if (snapshot.data["time"].month == 1) {
-      return '${snapshot.data["time"].day.toString()}' +
+    DateTime dt = snapshot.data["time"];
+    if (dt.month == 1) {
+      return '${dt.day.toString()}' +
           '. ' +
           'Januar';
-    } else if (snapshot.data["time"].month == 2) {
+    } else if (dt.month == 2) {
       return '${snapshot.data["time"].day.toString()}' +
           '. ' +
           'Februar';
-    } else if (snapshot.data["time"].month == 3) {
-      return '${snapshot.data["time"].day.toString()}' +
+    } else if (dt.month == 3) {
+      return '${dt.day.toString()}' +
           '. ' +
           'Mars';
-    } else if (snapshot.data["time"].month == 4) {
-      return '${snapshot.data["time"].day.toString()}' +
+    } else if (dt.month == 4) {
+      return '${dt.day.toString()}' +
           '. ' +
           'April';
-    } else if (snapshot.data["time"].month == 5) {
-      return '${snapshot.data["time"].day.toString()}' + '. ' + 'Mai';
+    } else if (dt.month == 5) {
+      return '${dt.day.toString()}' + '. ' + 'Mai';
 
-    } else if (snapshot.data["time"].time.month == 6) {
-      return '${snapshot.data["time"].day.toString()}' +
+    } else if (dt.month == 6) {
+      return '${dt.day.toString()}' +
           '. ' +
           'Juni';
-    } else if (snapshot.data["time"].month == 7) {
-      return '${snapshot.data["time"].day.toString()}' +
+    } else if (dt.month == 7) {
+      return '${dt.day.toString()}' +
           '. ' +
           'Juli';
-    } else if (snapshot.data["time"].month == 8) {
-      return '${snapshot.data["time"].day.toString()}' +
+    } else if (dt.month == 8) {
+      return '${dt.day.toString()}' +
           '. ' +
           'August';
-    } else if (snapshot.data["time"].month == 9) {
-      return '${snapshot.data["time"].day.toString()}' +
+    } else if (dt.month == 9) {
+      return '${dt.day.toString()}' +
           '. ' +
           'September';
-    } else if (snapshot.data["time"].month == 10) {
-      return '${snapshot.data["time"].day.toString()}' +
+    } else if (dt.month == 10) {
+      return '${dt.day.toString()}' +
           '. ' +
           'Oktober';
-    } else if (snapshot.data["time"].month == 11) {
-      return '${snapshot.data["time"].day.toString()}' +
+    } else if (dt.month == 11) {
+      return '${dt.day.toString()}' +
           '. ' +
           'November';
-    } else if (snapshot.data["time"].month == 12) {
-      return '${snapshot.data["time"].day.toString()}' +
+    } else if (dt.month == 12) {
+      return '${dt.day.toString()}' +
           '. ' +
           'Desember';
     }
