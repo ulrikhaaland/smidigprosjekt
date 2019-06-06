@@ -288,12 +288,15 @@ class PageOneState extends State<PageOne> {
                               .snapshots(),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData) return Center(child: Text("Laster.."));
+
                             return ListView.builder(
                               //itemExtent: 350.0,
                               itemCount: snapshot.data.documents.length,
                               itemBuilder: (context, index) {
                                 DocumentSnapshot document = snapshot.data.documents[index];
 
+                                var now = new DateTime.now();
+                                if (document.data["time"].isAfter(now)) {
 
 
                                 return Column(
@@ -533,7 +536,9 @@ class PageOneState extends State<PageOne> {
                                       ),
                                     )
                                   ],
-                                );
+                                );} else {
+                                  return Divider(color: UIData.grey, height: 0);
+                                };
 
                               }
 
