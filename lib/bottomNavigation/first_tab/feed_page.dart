@@ -345,7 +345,8 @@ class PageOneState extends State<PageOne> {
                                                         child: Image.network(
                                                           document.data["imgUrl"],
                                                           height: 120,
-                                                          width: 287,
+                                                          width: ServiceProvider.instance.screenService
+                                                              .getPortraitWidthByPercentage(context, 79.7),
                                                           fit: BoxFit.cover,
                                                         ),
                                                       ),
