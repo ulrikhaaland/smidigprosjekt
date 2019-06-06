@@ -91,7 +91,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
               title: Text(
                 widget.user.getName(),
-                style: TextStyle(color: UIData.black, fontSize: 15, fontFamily: "Anton", fontWeight: FontWeight.normal),
+                style: TextStyle(color: UIData.black, fontSize: 15, fontFamily: "Anton", fontWeight: FontWeight.bold),
               ),
               onTap: (){
                 
