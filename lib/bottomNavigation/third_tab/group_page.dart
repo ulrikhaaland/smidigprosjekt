@@ -587,17 +587,16 @@ void itemChange(bool val,int index){
                   )
                 ) 
               ),
-              onTap: () {
-                  
-                  showImage(image);
-                              
-              }
+                onTap: () {  
+                    showImage(image);            
+                }
               ),
               
             )
             
           ],
         ),
+        
         Card(
           elevation: 0,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70)),

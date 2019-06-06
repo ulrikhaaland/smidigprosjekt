@@ -75,7 +75,7 @@ class SearchPageState extends State<SearchPage> {
   @override
   initState() {
     super.initState();
-    items.add("Carl");
+    items.add(widget.user.userName);
     items.add("John");
     items.add("Eric");
     items.add("Dan");
