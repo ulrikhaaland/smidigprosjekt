@@ -576,6 +576,7 @@ void itemChange(bool val,int index){
 
             Padding(
               padding: EdgeInsets.only(bottom: 10, top:10),
+              child: GestureDetector(
               child: ClipRRect(
               borderRadius: new BorderRadius.circular(8.0),
                 child: Container(
@@ -585,7 +586,14 @@ void itemChange(bool val,int index){
                     fit: BoxFit.cover
                   )
                 ) 
-              )
+              ),
+              onTap: () {
+                  
+                  showImage(image);
+                              
+              }
+              ),
+              
             )
             
           ],
