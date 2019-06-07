@@ -45,7 +45,14 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return new GestureDetector(
+      onTap: () {
+        this._removeKeyboard(context);
+      },
+      child:
+
+
+      new Scaffold(
 
       
       endDrawer: SizedBox(
@@ -208,7 +215,7 @@ class _ProfilePageState extends State<ProfilePage> {
         key: formKey,
         child: userInfo(),
       ),
-    );
+    ),);
   }
 
   Widget userInfo() {
@@ -229,7 +236,7 @@ class _ProfilePageState extends State<ProfilePage> {
               elevation: 0,
               child: new Container(
                 height: ServiceProvider.instance.screenService
-                    .getPortraitHeightByPercentage(context, 70),
+                    .getPortraitHeightByPercentage(context, 60),
                 width: ServiceProvider.instance.screenService
                     .getPortraitWidthByPercentage(context, 85),
                 child: new Column(
@@ -260,36 +267,22 @@ class _ProfilePageState extends State<ProfilePage> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    new Center(
-                      child:
-
-                    new ListTile(
-                      leading: new Text(
-                        "Skole:",
-                        style: new TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      title: new TextFormField(
-                        initialValue: "widget.user.skole",
-                        textCapitalization: TextCapitalization.sentences,
-                        autocorrect: false,
-                        // onSaved: (val) => "widget.user.skole "= val,
-                      ),
+                    Padding(
+                        padding: EdgeInsets.all(7)
                     ),
-                  ),
-                    new ListTile(
-                      leading: new Text(
-                        "Linje:",
-                        style: new TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      title: new TextFormField(
-                        // initialValue: widget.user.linje,
-                        autocorrect: false,
-                        textCapitalization: TextCapitalization.sentences,
-                        // onSaved: (val) => widget.user.linje = val,
-                      ),
+                    new Text(
+                      widget.user.skole,
+                      //style: new TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 36),
+                        padding: EdgeInsets.all(7)
+                    ),
+                    new Text(
+                      widget.user.linje,
+                      // style: new TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Padding(
+                        padding: EdgeInsets.all(7)
                     ),
                     new ListTile(
                       leading: Text(
@@ -297,6 +290,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         style: new TextStyle(fontWeight: FontWeight.bold),
                       ),
                       title: new TextFormField(
+                       // textInputAction: TextInputAction.done,
                         maxLength: 160,
                         // initialValue: widget.user.bio,
                         textCapitalization: TextCapitalization.sentences,
@@ -305,11 +299,12 @@ class _ProfilePageState extends State<ProfilePage> {
                           color: Colors.black,
                         ),
                         key: new Key('bio'),
+                        initialValue: widget.user.bio,
                         decoration: new InputDecoration(
                             border: OutlineInputBorder(),
                             fillColor: Colors.black,
                             labelStyle: new TextStyle(color: Colors.grey[600])),
-                        // onSaved: (val) => widget.user.bio = val,
+                        onSaved: (val) => widget.user.bio = val,
                       ),
                     ),
                   ],
@@ -391,25 +386,32 @@ class _ProfilePageState extends State<ProfilePage> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    new ListTile(
-                        leading: new Text(
-                          "Skole:",
-                          style: new TextStyle(fontWeight: FontWeight.bold),
+                      Padding(
+                          padding: EdgeInsets.all(7)
+                      ),
+                    new Text(
+                      widget.user.skole,
+                          //style: new TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        title: new Text("widget.user.skole")),
-                    new ListTile(
-                        leading: new Text(
-                          "Linje:",
-                          style: new TextStyle(fontWeight: FontWeight.bold),
+                    Padding(
+                      padding: EdgeInsets.all(7)
+                    ),
+                    new Text(
+                      widget.user.linje,
+                         // style: new TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        title: new Text("widget.user.linje")),
-
-                    new ListTile(
-                        leading: Text(
-                          "Bio:",
-                          style: new TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        title: new Text("widget.user.bio")),
+                      Padding(
+                          padding: EdgeInsets.all(7)
+                      ),
+                    new Container(
+                      height: 80,
+                      width: 250,
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), border: Border.fromBorderSide(BorderSide(width: 1, color: UIData.grey, style: BorderStyle.solid))),
+                    child: Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Text(widget.user.bio),
+                    ),
+                    ),
 
                   ],
                 ),
@@ -875,13 +877,12 @@ class _ProfilePageState extends State<ProfilePage> {
   void _delete(DocumentSnapshot document) async {
     var name = document.data["id"];
       Firestore.instance.collection("events").document(name).delete();
+    Navigator.pop(context);
 
 
    final StorageReference imgRef = FirebaseStorage.instance.ref().child("Event_Images");
    await imgRef.child(name + ".jpg").delete();
 
-
-    Navigator.pop(context);
   }
 
   Future openCamera() async {
@@ -952,6 +953,9 @@ class _ProfilePageState extends State<ProfilePage> {
           );
 
         });
+  }
+  void _removeKeyboard(BuildContext context) {
+    FocusScope.of(context).requestFocus(new FocusNode());
   }
 
 }
