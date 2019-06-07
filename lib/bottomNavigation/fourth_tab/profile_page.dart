@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:smidigprosjekt/bottomNavigation/first_tab/feed_page.dart';
@@ -456,8 +457,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                         itemCount: snapshot.data.documents.length,
                                         itemBuilder: (context, index) {
                                           DocumentSnapshot document = snapshot.data.documents[index];
-                                          if(document.data["id"].contains(widget.user.userName)) {
-
+                                          var now = new DateTime.now();
+                                          if(document.data["id"].contains(widget.user.userName) && document.data["time"].isAfter(now)) {
 
 
                                           return Column(
@@ -552,13 +553,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                 width: ServiceProvider.instance.screenService
                                                                     .getPortraitWidthByPercentage(context, 82),
                                                                 decoration: new BoxDecoration(
-                                                                  color: Colors.pink,
+                                                                  color: UIData.blue,
                                                                   borderRadius: new BorderRadius.only(
                                                                       bottomLeft: const Radius.circular(8.0),
                                                                       bottomRight: const Radius.circular(8.0)),
                                                                 ),
                                                                 child: FlatButton(
-                                                                  color: UIData.pink,
+                                                                  color: UIData.blue,
                                                                   shape: RoundedRectangleBorder(
                                                                       borderRadius: BorderRadius.circular(100)),
                                                                   padding: EdgeInsets.all(10),
@@ -573,12 +574,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                       Icon(
                                                                         // going && starred == position
                                                                         //  ? Icons.star
-                                                                        Icons.star_border,
+                                                                        Icons.person,
                                                                         color: Colors.white,
                                                                         size: 20,
                                                                       ),
                                                                       Padding(padding: EdgeInsets.all(3)),
-                                                                      Text("Interessert",
+                                                                      Text("Mitt event",
                                                                           style: TextStyle(
                                                                               color: Colors.white,
                                                                               fontSize: 13)),
@@ -736,7 +737,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 ),
                                               )
                                             ],
-                                          ); };
+                                          ); } else {
+                                            return Divider(color: UIData.grey, height: 0);
+                                          };
 
                                         },
 
@@ -872,6 +875,12 @@ class _ProfilePageState extends State<ProfilePage> {
   void _delete(DocumentSnapshot document) async {
     var name = document.data["id"];
       Firestore.instance.collection("events").document(name).delete();
+
+
+   final StorageReference imgRef = FirebaseStorage.instance.ref().child("Event_Images");
+   await imgRef.child(name + ".jpg").delete();
+
+
     Navigator.pop(context);
   }
 

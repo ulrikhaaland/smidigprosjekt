@@ -215,6 +215,10 @@ class PageOneState extends State<PageOne> {
 
   int starred = -1;
 
+  List<String> list = [ 'hei', 'hallo',];
+
+  bool mine = false;
+
   @override
   void initState() {
     super.initState();
@@ -252,10 +256,9 @@ class PageOneState extends State<PageOne> {
                   scale: 10,
                 ),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => StateFilterPage()),
-                  );
+
+                  _sendToFilter(context);
+
                 },
               ),
             ),
@@ -298,7 +301,6 @@ class PageOneState extends State<PageOne> {
                                 var now = new DateTime.now();
                                 if (document.data["time"].isAfter(now)) {
 
-
                                 return Column(
                                   children: <Widget>[
                                     Divider(
@@ -319,8 +321,13 @@ class PageOneState extends State<PageOne> {
                                     ),
                                     GestureDetector(
                                       onTap: () {
-
                                         _tapped(index);
+
+                                        setState((){
+                                if(document.data["id"].contains(widget.user.userName)) {
+                                  mine = true;
+                                } else { mine = false;};
+                                        });
                                       },
                                       child: Column(
                                         children: <Widget>[
@@ -392,13 +399,13 @@ class PageOneState extends State<PageOne> {
                                                       width: ServiceProvider.instance.screenService
                                                           .getPortraitWidthByPercentage(context, 82),
                                                       decoration: new BoxDecoration(
-                                                        color: Colors.pink,
+                                                        color: mine && tapped != null && tapped == index? UIData.blue : UIData.pink,
                                                         borderRadius: new BorderRadius.only(
                                                             bottomLeft: const Radius.circular(8.0),
                                                             bottomRight: const Radius.circular(8.0)),
                                                       ),
                                                       child: FlatButton(
-                                                        color: UIData.pink,
+                                                        color: mine && tapped != null && tapped == index? UIData.blue : UIData.pink,
                                                         shape: RoundedRectangleBorder(
                                                             borderRadius: BorderRadius.circular(100)),
                                                         padding: EdgeInsets.all(10),
@@ -410,15 +417,26 @@ class PageOneState extends State<PageOne> {
                                                         child: Row(
                                                           mainAxisAlignment: MainAxisAlignment.center,
                                                           children: <Widget>[
+                                                            mine && tapped != null && tapped == index?
+                                                                Icon(Icons.person, color: Colors.white, size: 20)
+                                                                :
                                                             Icon(
                                                               // going && starred == position
                                                               //  ? Icons.star
+
                                                               Icons.star_border,
                                                               color: Colors.white,
                                                               size: 20,
                                                             ),
                                                             Padding(padding: EdgeInsets.all(3)),
-                                                            Text("Interessert",
+                                                            mine && tapped != null && tapped == index?
+                                                            Text("Mitt event", style: TextStyle(
+                                                                color: Colors.white,
+                                                                fontSize: 13) )
+                                                                :
+                                                            Text
+
+                                                              ("Interessert",
                                                                 style: TextStyle(
                                                                     color: Colors.white,
                                                                     fontSize: 13)),
@@ -536,7 +554,8 @@ class PageOneState extends State<PageOne> {
                                       ),
                                     )
                                   ],
-                                );} else {
+                                );
+                                } else {
                                   return Divider(color: UIData.grey, height: 0);
                                 };
 
@@ -647,6 +666,17 @@ class PageOneState extends State<PageOne> {
     print('refreshing');
     //setState(() => _getEventsData()
   }
+
+  void _sendToFilter(BuildContext context) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => StateFilterPage(),)
+    );
+
+    setState((){
+      list = result;
+    });
+  }
 }
 
 class StateFilterPage extends StatefulWidget {
@@ -658,6 +688,8 @@ class StateFilterPage extends StatefulWidget {
 }
 
 class FilterPage extends State<StateFilterPage> {
+  List<String> data;
+
   void initState() {
     super.initState();
   }
@@ -678,6 +710,8 @@ class FilterPage extends State<StateFilterPage> {
   bool gaming = false;
   bool fest = false;
   bool prosjekt = false;
+
+  var kategori;
 
   bool nullstill = true;
 
@@ -756,7 +790,7 @@ class FilterPage extends State<StateFilterPage> {
                               dropdown = newValue;
                             });
                           },
-                          items: <String>['Avstand', 'Popularitet', '']
+                          items: <String>['', 'Favoritter', 'Avstand', 'Popularitet']
                               .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem(
                               value: value,
@@ -1166,32 +1200,23 @@ class FilterPage extends State<StateFilterPage> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    nullstill = false;
-                    if (prosjekt) {
-                      pressedProsjekt();
-                      nullstill = true;
-                    }
-                    if (kaffe) {
-                      pressedKaffe();
-                      nullstill = true;
-                    }
-                    if (gaming) {
-                      pressedGaming();
-                      nullstill = true;
-                    }
-                    if (skole) {
-                      pressedSkole();
-                      nullstill = true;
-                    }
-                    if (fest) {
-                      pressedFest();
-                      nullstill = true;
-                    }
+                    setState((){
+                      if (skole) {skole = false;};
+                      if (kaffe) {kaffe = false;};
+                      if (gaming) {gaming = false;};
+                      if (fest) {fest = false;};
+                      if (prosjekt) {prosjekt = false;};
+                    });
                   },
-                  child: Text(
-                    "Nullstill filter",
-                    style: TextStyle(color: UIData.blue, fontSize: 15),
+                  child: Container(
+                    height: 20,
+                    child: Text(
+                      "Nullstill filter",
+                      style: TextStyle(color: UIData.blue, fontSize: 15),
+                    ),
                   ),
+
+
                 ),
                 Divider(
                   color: UIData.grey,
@@ -1206,22 +1231,33 @@ class FilterPage extends State<StateFilterPage> {
                         side: BorderSide(style: BorderStyle.none)),
                     onPressed: () {
                       if (kaffe) {
+                        kategori = cat[1];
+                        data.add(cat[1]);
                         print(cat[1]);
                       }
                       if (skole) {
+                        kategori = cat[0];
+                        data.add(cat[0]);
                         print(cat[0]);
                       }
                       if (gaming) {
+                        kategori = cat[2];
+                        data.add(cat[2]);
                         print(cat[2]);
                       }
                       if (fest) {
+                        kategori = cat[3];
+                        data.add(cat[3]);
                         print(cat[3]);
                       }
                       if (prosjekt) {
+                        kategori = cat[4];
+                        data.add(cat[4]);
                         print(cat[4]);
                       }
                       //print("${widget.user.userName}");
-                      Navigator.pop(context);
+
+                      Navigator.pop(context, data);
                     },
                     child: Text("Bruk filter",
                         style: TextStyle(color: Colors.white))),
@@ -1951,22 +1987,21 @@ class NewEventPage extends State<StatefullNew> {
   }
 
   void uploadImage(imgUrl, add, kat, bes, tit, titi) async {
+
+
+
     final StorageReference imgRef =
     FirebaseStorage.instance.ref().child("Event_Images");
-    var timeKey = new DateTime.now();
-    final StorageUploadTask upTask = imgRef.child(timeKey.toString() + ".jpg").putFile(imgUrl);
+
+    final id = new DateTime.now().millisecondsSinceEpoch;
+    String name = widget.user;
+    String idu = name + " " + id.toString();
+
+    final StorageUploadTask upTask = imgRef.child(idu + ".jpg").putFile(imgUrl);
 
     var url = await (await upTask.onComplete).ref.getDownloadURL();
     dbUrl = url.toString();
     print("upload $dbUrl");
-
-
-    id = new DateTime.now().millisecondsSinceEpoch;
-    String name = widget.user;
-    String idu = name + " " + id.toString();
-
-
-
 
 
     var data = {
