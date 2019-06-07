@@ -38,6 +38,8 @@ class _ProfilePageState extends State<ProfilePage> {
   bool going = false;
 
   File imgUrl;
+
+  String beskrivelse;
   @override
   void initState() {
     super.initState();
@@ -481,16 +483,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 color: UIData.grey,
                                                 height: 0.2,
                                               ),
-                                              GestureDetector(
-                                                onTap: () {
 
-                                                  _tapped(index);
-                                                },
-                                                child: Column(
+                                                Column(
                                                   children: <Widget>[
                                                     tap == true && tapped != null && tapped == index?
                                                     SizedBox(
-                                                      height: 310,
+                                                      height: 375,
                                                       width: ServiceProvider.instance.screenService
                                                           .getPortraitWidthByPercentage(context, 82),
                                                       child: Card(
@@ -500,27 +498,133 @@ class _ProfilePageState extends State<ProfilePage> {
                                                         child: Column(
                                                           children: <Widget>[
                                                             Row(
-                                                              mainAxisAlignment: MainAxisAlignment.start,
-                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              mainAxisAlignment: MainAxisAlignment.end,
+                                                              crossAxisAlignment: CrossAxisAlignment.end,
                                                               //crossAxisAlignment: CrossAxisAlignment.stretch,
 
                                                               children: <Widget>[
-                                                                ClipRRect(
-                                                                  borderRadius: new BorderRadius.only(
-                                                                      topLeft: Radius.circular(8),
-                                                                      topRight: Radius.circular(8)),
-                                                                  child: Image.network(
-                                                                    document.data["imgUrl"],
-                                                                    height: 120,
-                                                                    width: 287,
-                                                                    fit: BoxFit.cover,
-                                                                  ),
+                                                                IconButton(
+                                                                  //padding: EdgeInsets.all(0),
+                                                                  icon: Icon(Icons.delete, color: UIData.black, size: 22),
+                                                                  onPressed: () => showDialog(
+                                                                                       context: context,
+                                                                                        builder: (BuildContext context) {
+                                                                                          return AlertDialog(
+                                                                                            elevation: 2,
+                                                                                            //contentPadding: EdgeInsets.all(0),
+                                                                                            backgroundColor: UIData.blue,
+                                                                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+                                                                                            content: new GestureDetector(
+                                                                                              onTap: () {
+                                                                                                _delete(document);
+                                                                                              },
+                                                                                              //_delete(position),
+                                                                                              child: Row(
+                                                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                                                children: <Widget>[
+                                                                                                  Icon(Icons.delete, color: Colors.white),
+                                                                                                  Text("Slett event", style: TextStyle(color: Colors.white,), textAlign: TextAlign.center,),
+                                                                                                ],
+                                                                                              ),
+                                                                                            ),
+                                                                                          );
+                                                                                        }
+                                                                                    ),
+
+
+
                                                                 ),
+                                                                IconButton(
+                                                                  //padding: EdgeInsets.all(0),
+                                                                  icon: Image.asset("lib/assets/images/editprofile_icon.png", scale: 14,  color: UIData.pink),
+                                                                  onPressed: () {
+                                                                    _tapped(index);
+                                                                  },
+                                                                ),
+
                                                               ],
                                                             ),
                                                             Divider(
-                                                              height: 1,
+                                                              height: 0,
                                                             ),
+                                                            Padding(
+                                                              padding: EdgeInsets.fromLTRB(5, 0, 5,0),
+                                                              child: Container(
+                                                                height: 68,
+                                                                child: Padding(
+                                                                  padding: EdgeInsets.all(8),
+                                                                  child: Column(
+                                                                    crossAxisAlignment:
+                                                                    CrossAxisAlignment.start,
+                                                                    children: <Widget>[
+                                                                      new Container(
+                                                                        height: 50,
+                                                                        child:
+                                                                        new TextFormField(
+                                                                          textInputAction: TextInputAction.done,
+                                                                          //maxLength: 30,
+                                                                          // initialValue: widget.user.bio,
+                                                                          textCapitalization: TextCapitalization.sentences,
+                                                                          maxLines: 1,
+                                                                          style: new TextStyle(
+                                                                              color: UIData.black, fontSize: 13
+                                                                          ),
+                                                                          initialValue: document.data["address"],
+                                                                          onSaved: (val) =>
+                                                                          beskrivelse = val,
+
+
+                                                                        ),
+                                                                      ),
+
+
+
+
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Padding(
+                                                              padding: EdgeInsets.fromLTRB(5, 0, 5,0),
+                                                              child: Container(
+                                                                height: 68,
+                                                                child: Padding(
+                                                                  padding: EdgeInsets.all(8),
+                                                                  child: Column(
+                                                                    crossAxisAlignment:
+                                                                    CrossAxisAlignment.start,
+                                                                    children: <Widget>[
+                                                                      new Container(
+                                                                        height: 50,
+                                                                        child:
+                                                                        new TextFormField(
+                                                                          textInputAction: TextInputAction.done,
+                                                                          //maxLength: 30,
+                                                                          // initialValue: widget.user.bio,
+                                                                          textCapitalization: TextCapitalization.sentences,
+                                                                          maxLines: 1,
+                                                                          style: new TextStyle(
+                                                                              color: UIData.black, fontSize: 13
+                                                                          ),
+                                                                          initialValue: document.data["title"],
+
+                                                                          onSaved: (val) =>
+                                                                          beskrivelse = val,
+
+
+                                                                        ),
+                                                                      ),
+
+
+
+
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+
                                                             Padding(
                                                               padding: EdgeInsets.all(5),
                                                               child: Container(
@@ -534,15 +638,35 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                     crossAxisAlignment:
                                                                     CrossAxisAlignment.start,
                                                                     children: <Widget>[
-                                                                      Text("Beskrivelse:",
-                                                                          style: TextStyle(
-                                                                              fontWeight: FontWeight.bold)),
-                                                                      Divider(
-                                                                        height: 10,
-                                                                        color: Colors.white,
+                                                                      new Container(
+                                                                        height: 110,
+                                                                        child:
+
+                                                                        new TextFormField(
+                                                                          textInputAction: TextInputAction.done,
+                                                                          maxLength: 160,
+                                                                          // initialValue: widget.user.bio,
+                                                                          textCapitalization: TextCapitalization.sentences,
+                                                                          maxLines: 5,
+                                                                          style: new TextStyle(
+                                                                            color: UIData.black, fontSize: 13
+                                                                          ),
+                                                                          initialValue: document.data["desc"],
+                                                                          decoration: new InputDecoration(
+                                                                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide(color: UIData.grey, width: 1, style: BorderStyle.solid)),
+                                                                             // fillColor: UIData.black,
+                                                                              labelStyle: new TextStyle(color: Colors.grey[600], fontSize: 10)),
+
+                                                                          onSaved: (val) =>
+                                                                            beskrivelse = val,
+
+
+                                                                        ),
                                                                       ),
-                                                                      Text('${document.data["desc"]}',
-                                                                          style: TextStyle(fontSize: 13)),
+
+
+
+
                                                                     ],
                                                                   ),
                                                                 ),
@@ -567,26 +691,19 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                   padding: EdgeInsets.all(10),
                                                                   onPressed: () {
                                                                     //going = true;
-                                                                    _tapped(document);
+                                                                    _tapped(index);
+                                                                    final form = formKey.currentState;
+                                                                    form.save();
+                                                                    _update(document, beskrivelse);
                                                                     //_starred(snapshot);
                                                                   },
-                                                                  child: Row(
-                                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                                    children: <Widget>[
-                                                                      Icon(
-                                                                        // going && starred == position
-                                                                        //  ? Icons.star
-                                                                        Icons.person,
-                                                                        color: Colors.white,
-                                                                        size: 20,
-                                                                      ),
-                                                                      Padding(padding: EdgeInsets.all(3)),
-                                                                      Text("Mitt event",
+                                                                  child:
+                                                                      Text("Lagre",
                                                                           style: TextStyle(
                                                                               color: Colors.white,
                                                                               fontSize: 13)),
-                                                                    ],
-                                                                  ),
+
+
                                                                 ),
                                                               ),
                                                             ),
@@ -627,11 +744,19 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                       crossAxisAlignment: CrossAxisAlignment.start,
                                                                       children: <Widget>[
 
+
+
+
                                                                         Row(
 
                                                                           children: <Widget>[
 
-                                                                            new Text( document.data["title"], style: ServiceProvider.instance.styles.cardTitle()),
+                                                                        GestureDetector(
+                                                                        onTap: () {
+                                                                  _tapped(index);
+                                                                  },
+                                                                    child:
+                                                                    new Text( document.data["title"], style: ServiceProvider.instance.styles.cardTitle()),),
                                                                             new Container(
                                                                               child: SizedBox(
                                                                                 height: 20,
@@ -639,30 +764,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                                   icon: Image.asset("lib/assets/images/editprofile_icon.png", scale: 14),
                                                                                   padding: EdgeInsets.all(0),
                                                                                   onPressed: () {
-                                                                                    showDialog(
-                                                                                        context: context,
-                                                                                        builder: (BuildContext context) {
-                                                                                          return AlertDialog(
-                                                                                            elevation: 2,
-                                                                                            //contentPadding: EdgeInsets.all(0),
-                                                                                            backgroundColor: UIData.blue,
-                                                                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-                                                                                            content: new GestureDetector(
-                                                                                              onTap: () {
-                                                                                                _delete(document);
-                                                                                              },
-                                                                                              //_delete(position),
-                                                                                              child: Row(
-                                                                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                                                                children: <Widget>[
-                                                                                                  Icon(Icons.delete, color: Colors.white),
-                                                                                                  Text("Slett event", style: TextStyle(color: Colors.white,), textAlign: TextAlign.center,),
-                                                                                                ],
-                                                                                              ),
-                                                                                            ),
-                                                                                          );
-                                                                                        }
-                                                                                    );
+                                                                                      _tapped(index);
+
 
                                                                                   },
 
@@ -737,7 +840,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
                                                   ],
                                                 ),
-                                              )
+
                                             ],
                                           ); } else {
                                             return Divider(color: UIData.grey, height: 0);
@@ -885,6 +988,11 @@ class _ProfilePageState extends State<ProfilePage> {
 
   }
 
+  void _update(DocumentSnapshot document, String Beskrivelse) async {
+    var name = document.data["id"];
+    Firestore.instance.collection("events").document(name).updateData({"desc" : beskrivelse});
+  }
+
   Future openCamera() async {
     var picture = await ImagePicker.pickImage(
         source: ImageSource.camera );
@@ -959,6 +1067,41 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
 }
+
+
+
+
+// ## showDialog(
+//                                                                                        context: context,
+//                                                                                        builder: (BuildContext context) {
+//                                                                                          return AlertDialog(
+//                                                                                            elevation: 2,
+//                                                                                            //contentPadding: EdgeInsets.all(0),
+//                                                                                            backgroundColor: UIData.blue,
+//                                                                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+//                                                                                            content: new GestureDetector(
+//                                                                                              onTap: () {
+//                                                                                                _delete(document);
+//                                                                                              },
+//                                                                                              //_delete(position),
+//                                                                                              child: Row(
+//                                                                                                mainAxisAlignment: MainAxisAlignment.center,
+//                                                                                                children: <Widget>[
+//                                                                                                  Icon(Icons.delete, color: Colors.white),
+//                                                                                                  Text("Slett event", style: TextStyle(color: Colors.white,), textAlign: TextAlign.center,),
+//                                                                                                ],
+//                                                                                              ),
+//                                                                                            ),
+//                                                                                          );
+//                                                                                        }
+//                                                                                    );
+
+
+
+
+
+
+
 
 
 

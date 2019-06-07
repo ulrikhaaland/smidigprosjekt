@@ -219,6 +219,8 @@ class PageOneState extends State<PageOne> {
 
   bool mine = false;
 
+  bool today = false;
+
   @override
   void initState() {
     super.initState();
@@ -312,6 +314,7 @@ class PageOneState extends State<PageOne> {
                                         padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                                         child: Text(
                                           _DateText(document),
+                                          style: today ? TextStyle(color: UIData.blue, fontWeight: FontWeight.bold) : TextStyle()
                                         ),
                                       ),
                                     ),
@@ -612,50 +615,68 @@ class PageOneState extends State<PageOne> {
 
   String _DateText(document) {
     DateTime dt = document.data["time"];
+    var d = new DateTime.now().day;
+    var m = new DateTime.now().month;
+    if(d == dt.day && m == dt.month) {
+        today = true;
+      return "Idag";
+    } else
     if (dt.month == 1) {
+      today = false;
       return '${dt.day.toString()}' +
           '. ' +
           'Januar';
     } else if (dt.month == 2) {
+      today = false;
       return '${dt.day.toString()}' +
           '. ' +
           'Februar';
     } else if (dt.month == 3) {
+      today = false;
       return '${dt.day.toString()}' +
           '. ' +
           'Mars';
     } else if (dt.month == 4) {
+      today = false;
       return '${dt.day.toString()}' +
           '. ' +
           'April';
     } else if (dt.month == 5) {
+      today = false;
       return '${dt.day.toString()}' + '. ' + 'Mai';
 
     } else if (dt.month == 6) {
+      today = false;
       return '${dt.day.toString()}' +
           '. ' +
           'Juni';
     } else if (dt.month == 7) {
+      today = false;
       return '${dt.day.toString()}' +
           '. ' +
           'Juli';
     } else if (dt.month == 8) {
+      today = false;
       return '${dt.day.toString()}' +
           '. ' +
           'August';
     } else if (dt.month == 9) {
+      today = false;
       return '${dt.day.toString()}' +
           '. ' +
           'September';
     } else if (dt.month == 10) {
+      today = false;
       return '${dt.day.toString()}' +
           '. ' +
           'Oktober';
     } else if (dt.month == 11) {
+      today = false;
       return '${dt.day.toString()}' +
           '. ' +
           'November';
     } else if (dt.month == 12) {
+      today = false;
       return '${dt.day.toString()}' +
           '. ' +
           'Desember';
