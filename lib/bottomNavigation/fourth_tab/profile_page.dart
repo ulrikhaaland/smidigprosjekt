@@ -356,7 +356,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         padding: EdgeInsets.only(top: 46),
                       ),
                       new Text(
-                        "${widget.user.userName}",
+                        "${widget.user.userName}" ?? "N/A",
                         style: new TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -364,12 +364,12 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       Padding(padding: EdgeInsets.all(7)),
                       new Text(
-                        widget.user.school,
+                        widget.user.school ?? "N/A",
                         //style: new TextStyle(fontWeight: FontWeight.bold),
                       ),
                       Padding(padding: EdgeInsets.all(7)),
                       new Text(
-                        widget.user.program,
+                        widget.user.program ?? "N/A",
                         // style: new TextStyle(fontWeight: FontWeight.bold),
                       ),
                       Padding(padding: EdgeInsets.all(7)),
@@ -384,7 +384,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 style: BorderStyle.solid))),
                         child: Padding(
                           padding: EdgeInsets.all(10),
-                          child: Text(widget.user.bio),
+                          child: Text(widget.user.bio ?? "N/A"),
                         ),
                       ),
                     ],

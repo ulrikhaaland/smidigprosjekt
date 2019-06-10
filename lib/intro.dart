@@ -322,7 +322,7 @@ class IntroState extends State<Intro> {
 
   void _createGroup() async {
     DocumentReference ref = await Firestore.instance.collection("groups").add({
-      "name": "Ikke valgt",
+      "name": "Min gruppe",
       "memberamount": 1,
       "school": widget.user.school.toLowerCase(),
       "program": widget.user.program.toLowerCase()
@@ -356,9 +356,9 @@ class IntroState extends State<Intro> {
           int size;
           qSnap.documents.forEach((doc) {
             if (size == null) {
-              size = doc.data["members"];
+              size = doc.data["memberamount"];
               docId = doc.documentID;
-            } else if (doc.data["members"] < size) {
+            } else if (doc.data["memberamount"] < size) {
               docId = doc.documentID;
             }
           });
@@ -377,9 +377,9 @@ class IntroState extends State<Intro> {
         int size;
         qSnapSkole.documents.forEach((doc) {
           if (size == null) {
-            size = doc.data["members"];
+            size = doc.data["memberamount"];
             docId = doc.documentID;
-          } else if (doc.data["members"] < size) {
+          } else if (doc.data["memberamount"] < size) {
             docId = doc.documentID;
           }
         });
@@ -399,9 +399,9 @@ class IntroState extends State<Intro> {
       int size;
       qSnapLinje.documents.forEach((doc) {
         if (size == null) {
-          size = doc.data["members"];
+          size = doc.data["memberamount"];
           docId = doc.documentID;
-        } else if (doc.data["members"] < size) {
+        } else if (doc.data["memberamount"] < size) {
           docId = doc.documentID;
         }
       });
@@ -541,10 +541,12 @@ class IntroState extends State<Intro> {
   }
 
   saveData(bool fromForm) async {
-    widget.user.intro = false;
     if (fromForm) {
+      // widget.user.intro = false;
+
       _formKey.currentState.save();
     }
+
     Firestore.instance
         .document("users/${widget.user.id}")
         .updateData(widget.user.toJson());

@@ -28,13 +28,15 @@ class MyHomePage extends StatefulWidget {
       this.currentUser,
       this.userEmail,
       this.userName,
-      this.user});
+      this.user,
+      this.fromIntro});
   final BaseAuth auth;
   final VoidCallback onSignOut;
   final String currentUser;
   final String userName;
   final String userEmail;
   final User user;
+  bool fromIntro;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -97,7 +99,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
     pages = [one, two, three, four];
 
-    currentPage = one;
+    if (widget.fromIntro) {
+      currentPage = three;
+      currentTab = 2;
+    } else {
+      currentPage = one;
+    }
 
     super.initState();
   }

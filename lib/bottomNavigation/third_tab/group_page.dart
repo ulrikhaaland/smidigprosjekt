@@ -125,6 +125,10 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
     setState(() {
       isLoading = false;
     });
+
+    firestoreInstance
+        .document("groups/${_group.id}")
+        .updateData({"memberamount": _group.members.length});
   }
 
   @override
