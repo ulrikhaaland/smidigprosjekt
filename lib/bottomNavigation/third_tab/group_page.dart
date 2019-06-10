@@ -75,9 +75,16 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
 
   bool choosen = false;
 
+  int index;
+
   bool isLoading = true;
 
   Group _group;
+
+  var names;
+
+
+
 
   @override
   void initState() {
@@ -199,33 +206,47 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                         child: new SizedBox(
                           height: 70,
                           child: ListView.builder(
-                            itemCount: _group.members.length, //list.lenght
+                            itemCount: _group.members.length,
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (context, index) {
-                              return Card(
+                              return Padding(
+                                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                child:
+
+                               Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Card(
                                 elevation: 0,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(70),
-                                    side: index == 0
-                                        ? BorderSide(
+                                    side:  _group.members[index].userName.contains(widget.user.userName) ?
+                                         BorderSide(
                                             color: UIData.pink, width: 2)
                                         : BorderSide(color: Colors.white)),
                                 //decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), border: index == 0 ? Border.all(width: 3, color: UIData.pink) : Border.all(color: Colors.white) ),
                                 child: ClipRRect(
-                                  borderRadius: new BorderRadius.circular(70),
+                                  borderRadius: new BorderRadius.circular(80),
                                   child: Image.asset(
                                     "lib/assets/images/fortnite.jpg", // fra list [index]
 
-                                    width: 62,
+                                    width: 42,
+                                    height: 42,
                                     fit: BoxFit.cover,
                                   ),
                                 ),
-                              );
+                              ),
+                                 // Text(_group.members[index].userName),
+                                  _group.members[index].userName.contains(widget.user.userName) ? Text("Meg", style: TextStyle(fontSize: 11,fontWeight: FontWeight.bold))
+                                      :  Text("${_getFirstName(index)}", style: TextStyle(fontSize: 11,)),
+                                ],
+                              ),);
                             },
                           ),
                         ),
                       ),
-                      Padding(padding: EdgeInsets.all(4)),
+                     Padding(padding: EdgeInsets.all(4)),
                       new Container(
                         decoration: const BoxDecoration(
                           border: Border(
@@ -759,6 +780,12 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
 
   void _removeKeyboard(BuildContext context) {
     FocusScope.of(context).requestFocus(new FocusNode());
+  }
+  String  _getFirstName(int index) {
+    var fullnames = _group.members[index].userName;
+    var split = fullnames.split(' ');
+    String firstName = split[0];
+    return firstName;
   }
 
   Future openCamera() async {
