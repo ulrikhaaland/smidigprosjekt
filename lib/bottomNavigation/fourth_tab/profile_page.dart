@@ -320,16 +320,9 @@ class _ProfilePageState extends State<ProfilePage> {
                             onSaved: (val) => widget.user.bio = val,
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          new Align(
-            alignment: Alignment.center,
-            child: GestureDetector(
+             new Align(
+             alignment: Alignment.center,
+             child: GestureDetector(
               onTap: () {
                 openOptions();
               },
@@ -355,8 +348,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           fit: BoxFit.cover,
                         ),
                 ),
-              ),
-            ],
+              ),),),
+    ],),),),)],
           ));
     } else {
       return new SingleChildScrollView(
@@ -904,8 +897,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ]
 
               ),
-            ),
-          ]),
+
           new Align(
               alignment: Alignment.center,
               child: Card(
