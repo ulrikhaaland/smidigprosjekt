@@ -277,15 +277,12 @@ class LoginState extends State<Login> {
     }
     if (!hasUser) {
       User user = new User(
-          valueMap["email"],
-          uid,
-          valueMap["userid"],
-          valueMap["name"],
-          // await updateFcmToken(valueMap["userid"]),
-          true,
-          null,
-          null,
-          null);
+        email: valueMap["email"],
+        id: uid,
+        feideId: valueMap["userid"],
+        userName: valueMap["name"],
+        intro: true,
+      );
       await Firestore.instance.document("users/$uid").setData(user.toJson());
     }
 

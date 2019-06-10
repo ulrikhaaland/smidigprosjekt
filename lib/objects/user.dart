@@ -1,24 +1,26 @@
 class User {
   User(
-      this.email,
+      {this.email,
       this.id,
-      this.feideid,
+      this.feideId,
       this.userName,
       // this.fcm,
       this.intro,
-      this.skole,
-      this.linje,
-      this.bio);
+      this.school,
+      this.program,
+      this.bio,
+      this.groupId});
 
   final String userName;
   final String id;
-  final String feideid;
+  final String feideId;
   final String email;
   // final String fcm;
   bool intro;
-  String skole;
-  String linje;
+  String school;
+  String program;
   String bio;
+  String groupId;
 
   // String getToken() {
   //   return this.fcm;
@@ -38,13 +40,14 @@ class User {
 
   Map<String, dynamic> toJson() => {
         'id': this.id,
-        'feideid': this.feideid,
+        'feideid': this.feideId,
         'name': this.userName,
         'email': this.email,
         // 'fcm': this.fcm,
         'intro': this.intro,
-        'skole': this.skole,
-        'linje': this.linje,
+        'school': this.school,
+        'program': this.program,
         'bio': this.bio,
+        'groupid': this.groupId,
       };
 }
