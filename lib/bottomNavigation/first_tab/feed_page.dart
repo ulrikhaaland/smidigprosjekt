@@ -28,13 +28,15 @@ class MyHomePage extends StatefulWidget {
       this.currentUser,
       this.userEmail,
       this.userName,
-      this.user});
+      this.user,
+      this.fromIntro});
   final BaseAuth auth;
   final VoidCallback onSignOut;
   final String currentUser;
   final String userName;
   final String userEmail;
   final User user;
+  bool fromIntro;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -97,7 +99,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
     pages = [one, two, three, four];
 
-    currentPage = one;
+    if (widget.fromIntro) {
+      currentPage = three;
+      currentTab = 2;
+    } else {
+      currentPage = one;
+    }
 
     super.initState();
   }
@@ -222,6 +229,8 @@ class PageOneState extends State<PageOne> {
 
   bool mine = false;
 
+  bool today = false;
+
   @override
   void initState() {
     super.initState();
@@ -300,19 +309,20 @@ class PageOneState extends State<PageOne> {
                               return Center(child: Text("Laster.."));
 
                             return ListView.builder(
-                                //itemExtent: 350.0,
-                                itemCount: snapshot.data.documents.length,
-                                itemBuilder: (context, index) {
-                                  DocumentSnapshot document =
-                                      snapshot.data.documents[index];
 
-                                  var now = new DateTime.now();
-                                  if (document.data["time"].isAfter(now)) {
-                                    return Column(
-                                      children: <Widget>[
-                                        Divider(
-                                          color: UIData.grey,
-                                        ),
+                              //itemExtent: 350.0,
+                              itemCount: snapshot.data.documents.length,
+                              itemBuilder: (context, index) {
+                                DocumentSnapshot document = snapshot.data.documents[index];
+
+                                var now = new DateTime.now();
+                                if (document.data["time"].isAfter(now)) {
+
+                                return Column(
+                                  children: <Widget>[
+                                    Divider(
+                                      color: UIData.grey,
+                                    ),
                                         Align(
                                           alignment: Alignment.centerLeft,
                                           child: Padding(
@@ -320,6 +330,8 @@ class PageOneState extends State<PageOne> {
                                                 10, 0, 0, 0),
                                             child: Text(
                                               _DateText(document),
+                                              style: today ? TextStyle(color: UIData.blue, fontWeight: FontWeight.bold) : TextStyle()
+
                                             ),
                                           ),
                                         ),
@@ -728,30 +740,71 @@ class PageOneState extends State<PageOne> {
 
   String _DateText(document) {
     DateTime dt = document.data["time"];
+    var d = new DateTime.now().day;
+    var m = new DateTime.now().month;
+    if(d == dt.day && m == dt.month) {
+        today = true;
+      return "Idag";
+    } else
     if (dt.month == 1) {
-      return '${dt.day.toString()}' + '. ' + 'Januar';
+      today = false;
+      return '${dt.day.toString()}' +
+          '. ' +
+          'Januar';
     } else if (dt.month == 2) {
-      return '${dt.day.toString()}' + '. ' + 'Februar';
+      today = false;
+      return '${dt.day.toString()}' +
+          '. ' +
+          'Februar';
     } else if (dt.month == 3) {
-      return '${dt.day.toString()}' + '. ' + 'Mars';
+      today = false;
+      return '${dt.day.toString()}' +
+          '. ' +
+          'Mars';
     } else if (dt.month == 4) {
-      return '${dt.day.toString()}' + '. ' + 'April';
+      today = false;
+      return '${dt.day.toString()}' +
+          '. ' +
+          'April';
     } else if (dt.month == 5) {
+      today = false;
       return '${dt.day.toString()}' + '. ' + 'Mai';
     } else if (dt.month == 6) {
-      return '${dt.day.toString()}' + '. ' + 'Juni';
+      today = false;
+      return '${dt.day.toString()}' +
+          '. ' +
+          'Juni';
     } else if (dt.month == 7) {
-      return '${dt.day.toString()}' + '. ' + 'Juli';
+      today = false;
+      return '${dt.day.toString()}' +
+          '. ' +
+          'Juli';
     } else if (dt.month == 8) {
-      return '${dt.day.toString()}' + '. ' + 'August';
+      today = false;
+      return '${dt.day.toString()}' +
+          '. ' +
+          'August';
     } else if (dt.month == 9) {
-      return '${dt.day.toString()}' + '. ' + 'September';
+      today = false;
+      return '${dt.day.toString()}' +
+          '. ' +
+          'September';
     } else if (dt.month == 10) {
-      return '${dt.day.toString()}' + '. ' + 'Oktober';
+      today = false;
+      return '${dt.day.toString()}' +
+          '. ' +
+          'Oktober';
     } else if (dt.month == 11) {
-      return '${dt.day.toString()}' + '. ' + 'November';
+      today = false;
+      return '${dt.day.toString()}' +
+          '. ' +
+          'November';
     } else if (dt.month == 12) {
-      return '${dt.day.toString()}' + '. ' + 'Desember';
+      today = false;
+      return '${dt.day.toString()}' +
+          '. ' +
+          'Desember';
+
     }
   }
 
@@ -1826,8 +1879,9 @@ class NewEventPage extends State<StatefullNew> {
                                         width: 0, style: BorderStyle.none)),
                           ),
                           onChanged: (text) {
-                            add = text;
-                            setState(() {
+
+                           // add = text;
+                            setState((){
                               _validate = false;
                             });
                           },
@@ -1874,16 +1928,15 @@ class NewEventPage extends State<StatefullNew> {
                                           width: 0, style: BorderStyle.none)),
                             ),
                             onChanged: (text) {
-                              bes = text;
                               setState(() {
                                 _validateB = false;
                               });
                             },
                             onSubmitted: (text) {
-                              String b = text;
+                              //String b = text;
                               bes = text;
-                              //print(b);
-                              saveBes(b);
+                              print(bes);
+                              //saveBes(b);
                             },
                           ),
                         ),
@@ -1991,12 +2044,9 @@ class NewEventPage extends State<StatefullNew> {
                                 _time.hour,
                                 _time.minute);
 
-                            if (add != null &&
-                                kat != null &&
-                                bes != null &&
-                                titi != null &&
-                                imgUrl != null) {
-                              uploadImage(imgUrl, bes, tit, kat, add, titi);
+
+                            if(add != null && kat != null && bes != null && titi != null && imgUrl != null) {
+                              uploadImage(imgUrl, add, kat, bes, tit, titi);
                               Navigator.pop(context);
                             } else {
                               setState(() {

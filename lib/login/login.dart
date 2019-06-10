@@ -288,12 +288,4 @@ class LoginState extends State<Login> {
 
     widget.onSignIn();
   }
-
-  // Future<String> updateFcmToken(String uid) async {
-  //   String messagingToken;
-  //   messagingToken = await FirebaseMessaging().getToken();
-  //   print(messagingToken);
-
-  //   return messagingToken;
-  // }
 }

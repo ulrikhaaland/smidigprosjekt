@@ -91,6 +91,7 @@ flutter:
     - lib/assets/images/settings_icon.png
     - lib/assets/images/editprofile_icon.png
     - lib/assets/images/profilbilde.png
+    - lib/assets/images/info3.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

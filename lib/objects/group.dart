@@ -13,4 +13,5 @@ class Group {
         "name": this.name,
         "memberamount": this.memberAmount,
       };
+
 }

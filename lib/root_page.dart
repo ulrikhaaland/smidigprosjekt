@@ -33,6 +33,8 @@ class RootPageState extends State<RootPage> {
   String messagingToken;
   User user;
 
+  bool fromIntro = false;
+
   AuthStatus authStatus = AuthStatus.loading;
 
   initState() {
@@ -60,8 +62,8 @@ class RootPageState extends State<RootPage> {
         feideId: docSnap.data["feideid"],
         userName: docSnap.data["name"],
         intro: docSnap.data["intro"],
-        school: docSnap.data["skole"],
-        program: docSnap.data["linje"],
+        school: docSnap.data["school"],
+        program: docSnap.data["program"],
         bio: docSnap.data["bio"],
         groupId: docSnap.data["groupid"],
       );
@@ -69,6 +71,7 @@ class RootPageState extends State<RootPage> {
         authStatus =
             currentUser != null ? AuthStatus.signedIn : AuthStatus.notSignedIn;
         if (user.intro) {
+          fromIntro = true;
           authStatus = AuthStatus.intro;
         }
       });
@@ -102,6 +105,7 @@ class RootPageState extends State<RootPage> {
             userEmail: userEmail,
             userName: userName,
             user: user,
+            fromIntro: fromIntro,
             onSignOut: () => _updateAuthStatus(AuthStatus.notSignedIn));
       case AuthStatus.loading:
         return new Essentials(
