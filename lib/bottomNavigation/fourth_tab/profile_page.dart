@@ -274,16 +274,16 @@ class _ProfilePageState extends State<ProfilePage> {
                             padding: EdgeInsets.all(7)
                         ),
                         new Text(
-                          "jj"
-                          //widget.user.skole,
+
+                          widget.user.school,
                           //style: new TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Padding(
                             padding: EdgeInsets.all(7)
                         ),
                         new Text(
-                          "hh"
-                         // widget.user.linje,
+
+                          widget.user.program,
                           // style: new TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Padding(
@@ -395,16 +395,16 @@ class _ProfilePageState extends State<ProfilePage> {
                                   padding: EdgeInsets.all(7)
                               ),
                               new Text(
-                                "hei"
-                                //widget.user.skole,
+
+                                widget.user.school,
                                 //style: new TextStyle(fontWeight: FontWeight.bold),
                               ),
                               Padding(
                                   padding: EdgeInsets.all(7)
                               ),
                               new Text(
-                                "hei"
-                                //widget.user.linje,
+
+                                widget.user.program,
                                 // style: new TextStyle(fontWeight: FontWeight.bold),
                               ),
                               Padding(
@@ -565,7 +565,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                           new Container(
                                                                             height: 50,
                                                                             child:
-                                                                            new TextFormField(
+                                                                            new ListTile (
+                                                                              leading: Text("Tittel:", style: TextStyle(fontWeight: FontWeight.bold)),
+                                                                              title:  TextFormField(
                                                                               textInputAction: TextInputAction.done,
                                                                               //maxLength: 30,
                                                                               // initialValue: widget.user.bio,
@@ -579,7 +581,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                               tittel = val,
 
 
-                                                                            ),
+                                                                            ),),
                                                                           ),
 
 
@@ -603,7 +605,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                           new Container(
                                                                             height: 50,
                                                                             child:
-                                                                            new TextFormField(
+                                                                            new ListTile(
+                                                                              leading: Text("Addresse:", style: TextStyle(fontWeight: FontWeight.bold)),
+                                                                              title: TextFormField(
                                                                               textInputAction: TextInputAction.done,
                                                                               //maxLength: 30,
                                                                               // initialValue: widget.user.bio,
@@ -618,7 +622,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                               addresse = val,
 
 
-                                                                            ),
+                                                                            ),),
                                                                           ),
 
 

@@ -44,19 +44,19 @@ class IntroState extends State<Intro> {
   Widget build(BuildContext context) {
     List<Widget> list = [
       introPage(
-          "FÅ MED DEG HVA SOM SKJER I STUDENTBYEN!",
+          "Bli med i en kollokviegruppe!",
           "lib/assets/images/illustrasjon1.png",
-          "Utforsk og bli med på arrangementer andre grupper har laget eller som er i regi av skolen.",
+          "Velg egen gruppe ved å søke opp bruker-navn eller få tildelt en tilfeldig gruppe basert på studiet du går.",
           1),
       introPage(
-          "GJENNOMFØR UTFORDRINGER MED GRUPPEN",
+          "Gjennomfør utfordringer med gruppen",
           "lib/assets/images/illustrasjon2.png",
-          "Gjennomfør utfordringer med gruppen din. Gå til gruppesiden for å se hva neste utfordring er, og følg med på \nhvor mange dere har fullført.",
+          "Gjennomfør utfordringer med gruppen din. Gå til gruppesiden for å se hva neste utfordring er, og følg med på hvor mange dere har fullført.",
           2),
       introPage(
-          "BLI MED I EN KOLLOKVIE-GRUPPE!",
-          "lib/assets/images/illustrasjon3.gif",
-          "Velg egen gruppe ved å søke opp bruker-navn eller få tildelt en tilfeldig gruppe basert på studiet du går.",
+          "Utforsk og finn eventer!",
+          "lib/assets/images/info3.png",
+          "Utforsk og bli med på arrangementer andre grupper har laget eller lag dine egne.",
           3),
       // userInfo(),
     ];
@@ -217,9 +217,9 @@ class IntroState extends State<Intro> {
               },
               indicatorLayout: PageIndicatorLayout.COLOR,
               itemCount: list.length,
-              pagination: SwiperPagination(
-                  builder: DotSwiperPaginationBuilder(space: 10)),
-              // control: new SwiperControl(),
+             // pagination: SwiperPagination(
+                  //builder: DotSwiperPaginationBuilder(space: 10)),
+               control: new SwiperControl(size: 20, disableColor: UIData.grey, color: UIData.black),
             )
           : content = Column(
               children: <Widget>[
@@ -248,7 +248,7 @@ class IntroState extends State<Intro> {
                             .getHeightByPercentage(context, 15),
                         child: Center(
                           child: Text("Bli tildelt en gruppe automatisk",
-                              style: Styles().textLight()),
+                              style: TextStyle(color: Colors.white)),
                         ),
                       ),
                     ),
@@ -267,7 +267,7 @@ class IntroState extends State<Intro> {
                             .getHeightByPercentage(context, 15),
                         child: Center(
                           child: Text("Søk etter en gruppe",
-                              style: Styles().textLight()),
+                              style: TextStyle(color: Colors.white)),
                         ),
                       ),
                     ),
@@ -286,16 +286,13 @@ class IntroState extends State<Intro> {
                             .getHeightByPercentage(context, 15),
                         child: Center(
                           child: Text("Opprett din egen gruppe",
-                              style: Styles().textLight()),
+                              style: TextStyle(color: Colors.white)),
                         ),
                       ),
                     ),
                   ),
                 ),
-                Text(
-                  "Du kan når som helst endre valget ditt",
-                  style: Styles().textLight(),
-                ),
+
               ],
             );
     }
@@ -450,6 +447,7 @@ class IntroState extends State<Intro> {
           imageLink,
         ),
       ),
+      Padding(padding: EdgeInsets.all(10)),
       Padding(
         padding: EdgeInsets.only(left: 12, right: 12),
         child: Container(
@@ -457,7 +455,7 @@ class IntroState extends State<Intro> {
               .getHeightByPercentage(context, 10),
           child: Text(
             title,
-            style: TextStyle(fontSize: 24, fontFamily: 'ANTON'),
+            style: TextStyle(fontSize: 20, fontFamily: 'ANTON', fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
         ),
@@ -473,7 +471,7 @@ class IntroState extends State<Intro> {
           child: Text(
             textDesc,
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 13,
             ),
             textAlign: TextAlign.center,
           ),

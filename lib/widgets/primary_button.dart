@@ -27,7 +27,7 @@ class PrimaryButton extends StatelessWidget {
                   .getPortraitWidthByPercentage(context, 25)),
           child: new FlatButton(
               child: new Text(text,
-                  style: new TextStyle(color: Colors.white, fontSize: 20.0)),
+                  style: new TextStyle(color: Colors.white, fontSize: 15.0)),
               shape: new RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(24.0))),
               color: UIData.pink,
