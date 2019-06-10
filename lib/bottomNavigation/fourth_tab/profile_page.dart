@@ -30,16 +30,17 @@ class _ProfilePageState extends State<ProfilePage> {
   bool newFoto = false;
   bool edit = false;
 
-
   int tapped = -1;
   double cardWidth;
   bool tap = false;
-
   bool going = false;
 
   File imgUrl;
 
   String beskrivelse;
+  String addresse;
+  String tittel;
+
   @override
   void initState() {
     super.initState();
@@ -516,7 +517,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
                                                                                             content: new GestureDetector(
                                                                                               onTap: () {
-                                                                                                _delete(document);
+                                                                                                _delete(document, index);
                                                                                               },
                                                                                               //_delete(position),
                                                                                               child: Row(
@@ -569,9 +570,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                           style: new TextStyle(
                                                                               color: UIData.black, fontSize: 13
                                                                           ),
-                                                                          initialValue: document.data["address"],
+                                                                          initialValue: document.data["title"],
                                                                           onSaved: (val) =>
-                                                                          beskrivelse = val,
+                                                                          tittel = val,
 
 
                                                                         ),
@@ -607,10 +608,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                           style: new TextStyle(
                                                                               color: UIData.black, fontSize: 13
                                                                           ),
-                                                                          initialValue: document.data["title"],
+                                                                          initialValue: document.data["address"],
 
                                                                           onSaved: (val) =>
-                                                                          beskrivelse = val,
+                                                                          addresse = val,
 
 
                                                                         ),
@@ -695,6 +696,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                     final form = formKey.currentState;
                                                                     form.save();
                                                                     _update(document, beskrivelse);
+                                                                    _updateAdd(document, addresse);
+                                                                    _updateTit(document, tittel);
                                                                     //_starred(snapshot);
                                                                   },
                                                                   child:
@@ -977,10 +980,11 @@ class _ProfilePageState extends State<ProfilePage> {
     }
     }
 
-  void _delete(DocumentSnapshot document) async {
+  void _delete(DocumentSnapshot document, int index) async {
     var name = document.data["id"];
       Firestore.instance.collection("events").document(name).delete();
-    Navigator.pop(context);
+      _tapped(index);
+      Navigator.pop(context);
 
 
    final StorageReference imgRef = FirebaseStorage.instance.ref().child("Event_Images");
@@ -992,6 +996,17 @@ class _ProfilePageState extends State<ProfilePage> {
     var name = document.data["id"];
     Firestore.instance.collection("events").document(name).updateData({"desc" : beskrivelse});
   }
+  void _updateAdd(DocumentSnapshot document, String Addresse) async {
+    var name = document.data["id"];
+    Firestore.instance.collection("events").document(name).updateData({"address" : addresse});
+  }
+  void _updateTit(DocumentSnapshot document, String Tittel) async {
+    var name = document.data["id"];
+    Firestore.instance.collection("events").document(name).updateData({"title" : tittel});
+  }
+
+
+
 
   Future openCamera() async {
     var picture = await ImagePicker.pickImage(

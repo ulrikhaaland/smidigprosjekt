@@ -1708,7 +1708,7 @@ class NewEventPage extends State<StatefullNew> {
                                     width: 0, style: BorderStyle.none) ),
                           ),
                           onChanged: (text) {
-                            add = text;
+                           // add = text;
                             setState((){
                               _validate = false;
                             });
@@ -1751,7 +1751,7 @@ class NewEventPage extends State<StatefullNew> {
                                       width: 0, style: BorderStyle.none) ),
                             ),
                             onChanged: (text) {
-                              bes = text;
+                              //bes = text;
                               setState((){
                                 _validateB = false;
                               });
@@ -1759,7 +1759,7 @@ class NewEventPage extends State<StatefullNew> {
                             onSubmitted: (text) {
                               String b = text;
                               bes = text;
-                              //print(b);
+                              print(bes);
                               saveBes(b);
                             },
                           ),
@@ -1859,7 +1859,7 @@ class NewEventPage extends State<StatefullNew> {
                                 _time.minute);
 
                             if(add != null && kat != null && bes != null && titi != null && imgUrl != null) {
-                              uploadImage(imgUrl, bes, tit, kat, add, titi);
+                              uploadImage(imgUrl, add, kat, bes, tit, titi);
                               Navigator.pop(context);
                             } else  {
                               setState((){
