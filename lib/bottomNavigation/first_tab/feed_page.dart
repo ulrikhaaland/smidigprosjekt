@@ -24,17 +24,19 @@ import 'package:smidigprosjekt/bottomNavigation/fourth_tab/profile_page.dart';
 class MyHomePage extends StatefulWidget {
   MyHomePage(
       {this.auth,
-        this.onSignOut,
-        this.currentUser,
-        this.userEmail,
-        this.userName,
-        this.user});
+      this.onSignOut,
+      this.currentUser,
+      this.userEmail,
+      this.userName,
+      this.user,
+      this.fromIntro});
   final BaseAuth auth;
   final VoidCallback onSignOut;
   final String currentUser;
   final String userName;
   final String userEmail;
   final User user;
+  bool fromIntro;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -97,7 +99,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
     pages = [one, two, three, four];
 
-    currentPage = one;
+    if (widget.fromIntro) {
+      currentPage = three;
+      currentTab = 2;
+    } else {
+      currentPage = one;
+    }
 
     super.initState();
   }
@@ -215,7 +222,10 @@ class PageOneState extends State<PageOne> {
 
   int starred = -1;
 
-  List<String> list = [ 'hei', 'hallo',];
+  List<String> list = [
+    'hei',
+    'hallo',
+  ];
 
   bool mine = false;
 
@@ -245,6 +255,11 @@ class PageOneState extends State<PageOne> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       backgroundColor: UIData.grey,
       appBar: new AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.dashboard),
+          color: Colors.black,
+          onPressed: () => widget.auth.signOut(),
+        ),
         elevation: 1,
         backgroundColor: Colors.white,
         actions: <Widget>[
@@ -258,9 +273,7 @@ class PageOneState extends State<PageOne> {
                   scale: 10,
                 ),
                 onPressed: () {
-
                   _sendToFilter(context);
-
                 },
               ),
             ),
@@ -292,9 +305,11 @@ class PageOneState extends State<PageOne> {
                               .orderBy('time', descending: false)
                               .snapshots(),
                           builder: (context, snapshot) {
-                            if (!snapshot.hasData) return Center(child: Text("Laster.."));
+                            if (!snapshot.hasData)
+                              return Center(child: Text("Laster.."));
 
                             return ListView.builder(
+
                               //itemExtent: 350.0,
                               itemCount: snapshot.data.documents.length,
                               itemBuilder: (context, index) {
@@ -308,265 +323,378 @@ class PageOneState extends State<PageOne> {
                                     Divider(
                                       color: UIData.grey,
                                     ),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Padding(
-                                        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                        child: Text(
-                                          _DateText(document),
-                                          style: today ? TextStyle(color: UIData.blue, fontWeight: FontWeight.bold) : TextStyle()
-                                        ),
-                                      ),
-                                    ),
-                                    Divider(
-                                      color: UIData.grey,
-                                      height: 0.2,
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        _tapped(index);
+                                        Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Padding(
+                                            padding: EdgeInsets.fromLTRB(
+                                                10, 0, 0, 0),
+                                            child: Text(
+                                              _DateText(document),
+                                              style: today ? TextStyle(color: UIData.blue, fontWeight: FontWeight.bold) : TextStyle()
 
-                                        setState((){
-                                if(document.data["id"].contains(widget.user.userName)) {
-                                  mine = true;
-                                } else { mine = false;};
-                                        });
-                                      },
-                                      child: Column(
-                                        children: <Widget>[
-                                          tap == true && tapped != null && tapped == index?
-                                          SizedBox(
-                                            height: 310,
-                                            width: ServiceProvider.instance.screenService
-                                                .getPortraitWidthByPercentage(context, 82),
-                                            child: Card(
-                                              elevation: 0.0,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(8)),
-                                              child: Column(
-                                                children: <Widget>[
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    //crossAxisAlignment: CrossAxisAlignment.stretch,
-
-                                                    children: <Widget>[
-                                                      ClipRRect(
-                                                        borderRadius: new BorderRadius.only(
-                                                            topLeft: Radius.circular(8),
-                                                            topRight: Radius.circular(8)),
-                                                        child: Image.network(
-                                                          document.data["imgUrl"],
-                                                          height: 120,
-                                                          width: ServiceProvider.instance.screenService
-                                                              .getPortraitWidthByPercentage(context, 79.7),
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Divider(
-                                                    height: 1,
-                                                  ),
-                                                  Padding(
-                                                    padding: EdgeInsets.all(5),
-                                                    child: Container(
-                                                      height: 130,
-                                                      decoration: BoxDecoration(
-                                                          borderRadius: BorderRadius.circular(8),
-                                                          border: Border.all(color: Colors.white)),
-                                                      child: Padding(
-                                                        padding: EdgeInsets.all(8),
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                          CrossAxisAlignment.start,
-                                                          children: <Widget>[
-                                                            Text("Beskrivelse:",
-                                                                style: TextStyle(
-                                                                    fontWeight: FontWeight.bold)),
-                                                            Divider(
-                                                              height: 10,
-                                                              color: Colors.white,
-                                                            ),
-                                                            Text('${document.data["desc"]}',
-                                                                style: TextStyle(fontSize: 13)),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Expanded(
-                                                    child: Container(
-                                                      height: 40,
-                                                      margin: EdgeInsets.only(top: 0),
-                                                      width: ServiceProvider.instance.screenService
-                                                          .getPortraitWidthByPercentage(context, 82),
-                                                      decoration: new BoxDecoration(
-                                                        color: mine && tapped != null && tapped == index? UIData.blue : UIData.pink,
-                                                        borderRadius: new BorderRadius.only(
-                                                            bottomLeft: const Radius.circular(8.0),
-                                                            bottomRight: const Radius.circular(8.0)),
-                                                      ),
-                                                      child: FlatButton(
-                                                        color: mine && tapped != null && tapped == index? UIData.blue : UIData.pink,
-                                                        shape: RoundedRectangleBorder(
-                                                            borderRadius: BorderRadius.circular(100)),
-                                                        padding: EdgeInsets.all(10),
-                                                        onPressed: () {
-                                                          //going = true;
-                                                          _tapped(document);
-                                                          _starred(snapshot);
-                                                        },
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.center,
-                                                          children: <Widget>[
-                                                            mine && tapped != null && tapped == index?
-                                                                Icon(Icons.person, color: Colors.white, size: 20)
-                                                                :
-                                                            Icon(
-                                                              // going && starred == position
-                                                              //  ? Icons.star
-
-                                                              Icons.star_border,
-                                                              color: Colors.white,
-                                                              size: 20,
-                                                            ),
-                                                            Padding(padding: EdgeInsets.all(3)),
-                                                            mine && tapped != null && tapped == index?
-                                                            Text("Mitt event", style: TextStyle(
-                                                                color: Colors.white,
-                                                                fontSize: 13) )
-                                                                :
-                                                            Text
-
-                                                              ("Interessert",
-                                                                style: TextStyle(
-                                                                    color: Colors.white,
-                                                                    fontSize: 13)),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ) :
-                                          SizedBox(
-                                            height: 130,
-                                            width: ServiceProvider.instance.screenService
-                                                .getPortraitWidthByPercentage(context, 82),
-                                            child: Card(
-                                              elevation: 0.0,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(8)),
-                                              child: Column(
-                                                children: <Widget>[
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    //crossAxisAlignment: CrossAxisAlignment.stretch,
-
-                                                    children: <Widget>[
-                                                      ClipRRect(
-                                                        borderRadius: new BorderRadius.only(
-                                                            topLeft: Radius.circular(8),
-                                                            bottomLeft: Radius.circular(8)),
-                                                        child: Image.network(
-                                                          document.data["imgUrl"],
-                                                          height: 122,
-                                                          width: 110,
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding: EdgeInsets.all(10),
-                                                        child: Align(
-                                                          alignment: Alignment.centerRight,
-                                                          child: Column(
-                                                            mainAxisAlignment:
-                                                            MainAxisAlignment.start,
-                                                            crossAxisAlignment:
-                                                            CrossAxisAlignment.start,
-                                                            children: <Widget>[
-                                                              Row(
-                                                                children: <Widget>[
-                                                                  new Text(
-                                                                      document.data["title"],
-                                                                      style: ServiceProvider
-                                                                          .instance.styles
-                                                                          .cardTitle()),
-                                                                  Icon(
-                                                                    Icons.star,
-                                                                    color:
-                                                                    going && starred == snapshot
-                                                                        ? UIData.pink
-                                                                        : Colors.white,
-                                                                    size: 20,
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              Divider(color: Colors.white),
-                                                              Row(
-                                                                children: <Widget>[
-                                                                  Icon(
-                                                                    Icons.location_on,
-                                                                    color: UIData.blue,
-                                                                    size: 20,
-                                                                  ),
-                                                                  Text(
-                                                                    document.data["address"],
-                                                                    style: TextStyle(
-                                                                        fontStyle: FontStyle.italic,
-                                                                        fontSize: 12),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              Divider(
-                                                                color: Colors.white,
-                                                              ),
-                                                              Row(
-                                                                children: <Widget>[
-                                                                  Icon(
-                                                                    Icons.access_time,
-                                                                    color: UIData.black,
-                                                                    size: 17,
-                                                                  ),
-                                                                  Text(
-                                                                    ' ${document.data["time"].hour.toString()}' +
-                                                                        ':' +
-                                                                        '${document.data["time"].minute.toString().padRight(2, '0')}',
-                                                                    style: TextStyle(fontSize: 12),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
                                             ),
                                           ),
+                                        ),
+                                        Divider(
+                                          color: UIData.grey,
+                                          height: 0.2,
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            _tapped(index);
 
+                                            setState(() {
+                                              if (document.data["id"].contains(
+                                                  widget.user.userName)) {
+                                                mine = true;
+                                              } else {
+                                                mine = false;
+                                              }
+                                              ;
+                                            });
+                                          },
+                                          child: Column(
+                                            children: <Widget>[
+                                              tap == true &&
+                                                      tapped != null &&
+                                                      tapped == index
+                                                  ? SizedBox(
+                                                      height: 310,
+                                                      width: ServiceProvider
+                                                          .instance
+                                                          .screenService
+                                                          .getPortraitWidthByPercentage(
+                                                              context, 82),
+                                                      child: Card(
+                                                        elevation: 0.0,
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            8)),
+                                                        child: Column(
+                                                          children: <Widget>[
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .start,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              //crossAxisAlignment: CrossAxisAlignment.stretch,
 
+                                                              children: <
+                                                                  Widget>[
+                                                                ClipRRect(
+                                                                  borderRadius: new BorderRadius
+                                                                          .only(
+                                                                      topLeft: Radius
+                                                                          .circular(
+                                                                              8),
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              8)),
+                                                                  child: Image
+                                                                      .network(
+                                                                    document.data[
+                                                                        "imgUrl"],
+                                                                    height: 120,
+                                                                    width: ServiceProvider
+                                                                        .instance
+                                                                        .screenService
+                                                                        .getPortraitWidthByPercentage(
+                                                                            context,
+                                                                            79.7),
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            Divider(
+                                                              height: 1,
+                                                            ),
+                                                            Padding(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(5),
+                                                              child: Container(
+                                                                height: 130,
+                                                                decoration: BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            8),
+                                                                    border: Border.all(
+                                                                        color: Colors
+                                                                            .white)),
+                                                                child: Padding(
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .all(
+                                                                              8),
+                                                                  child: Column(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children: <
+                                                                        Widget>[
+                                                                      Text(
+                                                                          "Beskrivelse:",
+                                                                          style:
+                                                                              TextStyle(fontWeight: FontWeight.bold)),
+                                                                      Divider(
+                                                                        height:
+                                                                            10,
+                                                                        color: Colors
+                                                                            .white,
+                                                                      ),
+                                                                      Text(
+                                                                          '${document.data["desc"]}',
+                                                                          style:
+                                                                              TextStyle(fontSize: 13)),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              child: Container(
+                                                                height: 40,
+                                                                margin: EdgeInsets
+                                                                    .only(
+                                                                        top: 0),
+                                                                width: ServiceProvider
+                                                                    .instance
+                                                                    .screenService
+                                                                    .getPortraitWidthByPercentage(
+                                                                        context,
+                                                                        82),
+                                                                decoration:
+                                                                    new BoxDecoration(
+                                                                  color: mine &&
+                                                                          tapped !=
+                                                                              null &&
+                                                                          tapped ==
+                                                                              index
+                                                                      ? UIData
+                                                                          .blue
+                                                                      : UIData
+                                                                          .pink,
+                                                                  borderRadius: new BorderRadius
+                                                                          .only(
+                                                                      bottomLeft:
+                                                                          const Radius.circular(
+                                                                              8.0),
+                                                                      bottomRight:
+                                                                          const Radius.circular(
+                                                                              8.0)),
+                                                                ),
+                                                                child:
+                                                                    FlatButton(
+                                                                  color: mine &&
+                                                                          tapped !=
+                                                                              null &&
+                                                                          tapped ==
+                                                                              index
+                                                                      ? UIData
+                                                                          .blue
+                                                                      : UIData
+                                                                          .pink,
+                                                                  shape: RoundedRectangleBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              100)),
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .all(
+                                                                              10),
+                                                                  onPressed:
+                                                                      () {
+                                                                    //going = true;
+                                                                    _tapped(
+                                                                        document);
+                                                                    _starred(
+                                                                        snapshot);
+                                                                  },
+                                                                  child: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .center,
+                                                                    children: <
+                                                                        Widget>[
+                                                                      mine &&
+                                                                              tapped !=
+                                                                                  null &&
+                                                                              tapped ==
+                                                                                  index
+                                                                          ? Icon(
+                                                                              Icons.person,
+                                                                              color: Colors.white,
+                                                                              size: 20)
+                                                                          : Icon(
+                                                                              // going && starred == position
+                                                                              //  ? Icons.star
 
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                );
-                                } else {
-                                  return Divider(color: UIData.grey, height: 0);
-                                };
+                                                                              Icons.star_border,
+                                                                              color: Colors.white,
+                                                                              size: 20,
+                                                                            ),
+                                                                      Padding(
+                                                                          padding:
+                                                                              EdgeInsets.all(3)),
+                                                                      mine &&
+                                                                              tapped !=
+                                                                                  null &&
+                                                                              tapped ==
+                                                                                  index
+                                                                          ? Text(
+                                                                              "Mitt event",
+                                                                              style: TextStyle(color: Colors.white, fontSize: 13))
+                                                                          : Text("Interessert", style: TextStyle(color: Colors.white, fontSize: 13)),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    )
+                                                  : SizedBox(
+                                                      height: 130,
+                                                      width: ServiceProvider
+                                                          .instance
+                                                          .screenService
+                                                          .getPortraitWidthByPercentage(
+                                                              context, 82),
+                                                      child: Card(
+                                                        elevation: 0.0,
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            8)),
+                                                        child: Column(
+                                                          children: <Widget>[
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .start,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              //crossAxisAlignment: CrossAxisAlignment.stretch,
 
-                              }
-
-
-
-                            );
+                                                              children: <
+                                                                  Widget>[
+                                                                ClipRRect(
+                                                                  borderRadius: new BorderRadius
+                                                                          .only(
+                                                                      topLeft: Radius
+                                                                          .circular(
+                                                                              8),
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              8)),
+                                                                  child: Image
+                                                                      .network(
+                                                                    document.data[
+                                                                        "imgUrl"],
+                                                                    height: 122,
+                                                                    width: 110,
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                  ),
+                                                                ),
+                                                                Padding(
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .all(
+                                                                              10),
+                                                                  child: Align(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .centerRight,
+                                                                    child:
+                                                                        Column(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .start,
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .start,
+                                                                      children: <
+                                                                          Widget>[
+                                                                        Row(
+                                                                          children: <
+                                                                              Widget>[
+                                                                            new Text(document.data["title"],
+                                                                                style: ServiceProvider.instance.styles.cardTitle()),
+                                                                            Icon(
+                                                                              Icons.star,
+                                                                              color: going && starred == snapshot ? UIData.pink : Colors.white,
+                                                                              size: 20,
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                        Divider(
+                                                                            color:
+                                                                                Colors.white),
+                                                                        Row(
+                                                                          children: <
+                                                                              Widget>[
+                                                                            Icon(
+                                                                              Icons.location_on,
+                                                                              color: UIData.blue,
+                                                                              size: 20,
+                                                                            ),
+                                                                            Text(
+                                                                              document.data["address"],
+                                                                              style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                        Divider(
+                                                                          color:
+                                                                              Colors.white,
+                                                                        ),
+                                                                        Row(
+                                                                          children: <
+                                                                              Widget>[
+                                                                            Icon(
+                                                                              Icons.access_time,
+                                                                              color: UIData.black,
+                                                                              size: 17,
+                                                                            ),
+                                                                            Text(
+                                                                              ' ${document.data["time"].hour.toString()}' + ':' + '${document.data["time"].minute.toString().padRight(2, '0')}',
+                                                                              style: TextStyle(fontSize: 12),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    );
+                                  } else {
+                                    return Divider(
+                                        color: UIData.grey, height: 0);
+                                  }
+                                  ;
+                                });
                           })),
                 ),
               ],
@@ -583,10 +711,7 @@ class PageOneState extends State<PageOne> {
   }
 
   Widget _eventList(BuildContext context, DocumentSnapshot snapshot) {
-
     // Text(snapshot.data["address"])
-
-
   }
 
   void _starred(snapshot) {
@@ -644,7 +769,6 @@ class PageOneState extends State<PageOne> {
     } else if (dt.month == 5) {
       today = false;
       return '${dt.day.toString()}' + '. ' + 'Mai';
-
     } else if (dt.month == 6) {
       today = false;
       return '${dt.day.toString()}' +
@@ -680,6 +804,7 @@ class PageOneState extends State<PageOne> {
       return '${dt.day.toString()}' +
           '. ' +
           'Desember';
+
     }
   }
 
@@ -690,11 +815,12 @@ class PageOneState extends State<PageOne> {
 
   void _sendToFilter(BuildContext context) async {
     final result = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => StateFilterPage(),)
-    );
+        context,
+        MaterialPageRoute(
+          builder: (context) => StateFilterPage(),
+        ));
 
-    setState((){
+    setState(() {
       list = result;
     });
   }
@@ -811,8 +937,12 @@ class FilterPage extends State<StateFilterPage> {
                               dropdown = newValue;
                             });
                           },
-                          items: <String>['', 'Favoritter', 'Avstand', 'Popularitet']
-                              .map<DropdownMenuItem<String>>((String value) {
+                          items: <String>[
+                            '',
+                            'Favoritter',
+                            'Avstand',
+                            'Popularitet'
+                          ].map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem(
                               value: value,
                               child: Padding(
@@ -857,15 +987,15 @@ class FilterPage extends State<StateFilterPage> {
                             //color: (pressed ? Colors.white : UIData.pink),
                             shape: (nullstill && skole
                                 ? RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                side: BorderSide(
-                                    width: 1,
-                                    style: BorderStyle.solid,
-                                    color: UIData.black))
+                                    borderRadius: BorderRadius.circular(8),
+                                    side: BorderSide(
+                                        width: 1,
+                                        style: BorderStyle.solid,
+                                        color: UIData.black))
                                 : RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                side: BorderSide(
-                                    width: 0, style: BorderStyle.none))),
+                                    borderRadius: BorderRadius.circular(8),
+                                    side: BorderSide(
+                                        width: 0, style: BorderStyle.none))),
 
                             child: Padding(
                               padding: EdgeInsets.all(7),
@@ -901,15 +1031,15 @@ class FilterPage extends State<StateFilterPage> {
                             //color: (pressed ? Colors.white : UIData.pink),
                             shape: (nullstill && kaffe
                                 ? RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                side: BorderSide(
-                                    width: 1,
-                                    style: BorderStyle.solid,
-                                    color: UIData.black))
+                                    borderRadius: BorderRadius.circular(8),
+                                    side: BorderSide(
+                                        width: 1,
+                                        style: BorderStyle.solid,
+                                        color: UIData.black))
                                 : RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                side: BorderSide(
-                                    width: 0, style: BorderStyle.none))),
+                                    borderRadius: BorderRadius.circular(8),
+                                    side: BorderSide(
+                                        width: 0, style: BorderStyle.none))),
 
                             child: Padding(
                               padding: EdgeInsets.all(7),
@@ -945,15 +1075,15 @@ class FilterPage extends State<StateFilterPage> {
                             //color: (pressed ? Colors.white : UIData.pink),
                             shape: (nullstill && gaming
                                 ? RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                side: BorderSide(
-                                    width: 1,
-                                    style: BorderStyle.solid,
-                                    color: UIData.black))
+                                    borderRadius: BorderRadius.circular(8),
+                                    side: BorderSide(
+                                        width: 1,
+                                        style: BorderStyle.solid,
+                                        color: UIData.black))
                                 : RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                side: BorderSide(
-                                    width: 0, style: BorderStyle.none))),
+                                    borderRadius: BorderRadius.circular(8),
+                                    side: BorderSide(
+                                        width: 0, style: BorderStyle.none))),
 
                             child: Padding(
                               padding: EdgeInsets.all(7),
@@ -994,15 +1124,15 @@ class FilterPage extends State<StateFilterPage> {
                             //color: (pressed ? Colors.white : UIData.pink),
                             shape: (nullstill && fest
                                 ? RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                side: BorderSide(
-                                    width: 1,
-                                    style: BorderStyle.solid,
-                                    color: UIData.black))
+                                    borderRadius: BorderRadius.circular(8),
+                                    side: BorderSide(
+                                        width: 1,
+                                        style: BorderStyle.solid,
+                                        color: UIData.black))
                                 : RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                side: BorderSide(
-                                    width: 0, style: BorderStyle.none))),
+                                    borderRadius: BorderRadius.circular(8),
+                                    side: BorderSide(
+                                        width: 0, style: BorderStyle.none))),
 
                             child: Padding(
                               padding: EdgeInsets.all(7),
@@ -1038,15 +1168,15 @@ class FilterPage extends State<StateFilterPage> {
                             //color: (pressed ? Colors.white : UIData.pink),
                             shape: (nullstill && prosjekt
                                 ? RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                side: BorderSide(
-                                    width: 1,
-                                    style: BorderStyle.solid,
-                                    color: UIData.black))
+                                    borderRadius: BorderRadius.circular(8),
+                                    side: BorderSide(
+                                        width: 1,
+                                        style: BorderStyle.solid,
+                                        color: UIData.black))
                                 : RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                side: BorderSide(
-                                    width: 0, style: BorderStyle.none))),
+                                    borderRadius: BorderRadius.circular(8),
+                                    side: BorderSide(
+                                        width: 0, style: BorderStyle.none))),
 
                             child: Padding(
                               padding: EdgeInsets.all(7),
@@ -1221,12 +1351,27 @@ class FilterPage extends State<StateFilterPage> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    setState((){
-                      if (skole) {skole = false;};
-                      if (kaffe) {kaffe = false;};
-                      if (gaming) {gaming = false;};
-                      if (fest) {fest = false;};
-                      if (prosjekt) {prosjekt = false;};
+                    setState(() {
+                      if (skole) {
+                        skole = false;
+                      }
+                      ;
+                      if (kaffe) {
+                        kaffe = false;
+                      }
+                      ;
+                      if (gaming) {
+                        gaming = false;
+                      }
+                      ;
+                      if (fest) {
+                        fest = false;
+                      }
+                      ;
+                      if (prosjekt) {
+                        prosjekt = false;
+                      }
+                      ;
                     });
                   },
                   child: Container(
@@ -1236,8 +1381,6 @@ class FilterPage extends State<StateFilterPage> {
                       style: TextStyle(color: UIData.blue, fontSize: 15),
                     ),
                   ),
-
-
                 ),
                 Divider(
                   color: UIData.grey,
@@ -1344,12 +1487,12 @@ class FilterPage extends State<StateFilterPage> {
 class Event {
   Event(
       {this.imgUrl,
-        this.address,
-        this.cat,
-        this.desc,
-        this.id,
-        this.time,
-        this.title});
+      this.address,
+      this.cat,
+      this.desc,
+      this.id,
+      this.time,
+      this.title});
 
   final String address;
   final String cat;
@@ -1458,7 +1601,6 @@ class NewEventPage extends State<StatefullNew> {
 
   @override
   Widget build(BuildContext context) {
-
     return GestureDetector(
       onTap: () {
         this._removeKeyboard(context);
@@ -1488,10 +1630,16 @@ class NewEventPage extends State<StatefullNew> {
                     children: <Widget>[
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: _validateK ? Row(children: <Widget>[
-                          Text("Kategori: "),
-                          Text("* Velg en kategori", style: TextStyle(color: UIData.pink, fontSize: 10))
-                        ],) :Text("Kategori:"),
+                        child: _validateK
+                            ? Row(
+                                children: <Widget>[
+                                  Text("Kategori: "),
+                                  Text("* Velg en kategori",
+                                      style: TextStyle(
+                                          color: UIData.pink, fontSize: 10))
+                                ],
+                              )
+                            : Text("Kategori:"),
                       ),
                       Divider(
                         color: UIData.grey,
@@ -1513,7 +1661,7 @@ class NewEventPage extends State<StatefullNew> {
                                   print(cat[index]);
                                   kat = cat[index];
 
-                                  setState((){
+                                  setState(() {
                                     _validateK = false;
                                   });
                                   //RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: BorderSide(width: 2, style: BorderStyle.solid));
@@ -1522,26 +1670,26 @@ class NewEventPage extends State<StatefullNew> {
                                 highlightColor: UIData.grey,
                                 child: Card(
                                   shape: (tap == true &&
-                                      tapped != null &&
-                                      tapped == index
+                                          tapped != null &&
+                                          tapped == index
                                       ? RoundedRectangleBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(8),
-                                      side: BorderSide(
-                                          width: 1,
-                                          style: BorderStyle.solid,
-                                          color: UIData.black))
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          side: BorderSide(
+                                              width: 1,
+                                              style: BorderStyle.solid,
+                                              color: UIData.black))
                                       : RoundedRectangleBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(8),
-                                      side: BorderSide(
-                                          width: 0,
-                                          style: BorderStyle.none))),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          side: BorderSide(
+                                              width: 0,
+                                              style: BorderStyle.none))),
                                   child: Padding(
                                     padding: EdgeInsets.all(7),
                                     child: Column(
                                       mainAxisAlignment:
-                                      MainAxisAlignment.center,
+                                          MainAxisAlignment.center,
                                       children: <Widget>[
                                         Image.asset(
                                           cate[index],
@@ -1583,7 +1731,7 @@ class NewEventPage extends State<StatefullNew> {
                                   onPressed: () {
                                     selectDate(context);
 
-                                    setState((){
+                                    setState(() {
                                       _validateD = false;
                                     });
                                   },
@@ -1594,19 +1742,24 @@ class NewEventPage extends State<StatefullNew> {
                                   ),
                                   shape: RoundedRectangleBorder(
                                       borderRadius:
-                                      BorderRadius.all(Radius.circular(8)),
-                                      side: _validateD ? BorderSide(style: BorderStyle.solid, width: 1, color: UIData.pink) :
-                                      BorderSide(style: BorderStyle.none)),
+                                          BorderRadius.all(Radius.circular(8)),
+                                      side: _validateD
+                                          ? BorderSide(
+                                              style: BorderStyle.solid,
+                                              width: 1,
+                                              color: UIData.pink)
+                                          : BorderSide(
+                                              style: BorderStyle.none)),
                                   color: Colors.white,
                                   label: (datovalg
                                       ? Text(
-                                    dats,
-                                    style: TextStyle(color: UIData.black),
-                                  )
+                                          dats,
+                                          style: TextStyle(color: UIData.black),
+                                        )
                                       : Text("Dato",
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontWeight: FontWeight.normal))),
+                                          style: TextStyle(
+                                              color: Colors.grey,
+                                              fontWeight: FontWeight.normal))),
                                 ),
                               ),
                               Padding(
@@ -1619,28 +1772,32 @@ class NewEventPage extends State<StatefullNew> {
                                   onPressed: () {
                                     selectTime(context);
 
-                                    setState((){
+                                    setState(() {
                                       _validateS = false;
                                     });
-
                                   },
                                   icon: Icon(Icons.access_time,
                                       color: UIData.blue, size: 22),
                                   shape: RoundedRectangleBorder(
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(8)),
-                            side: _validateS ? BorderSide(style: BorderStyle.solid, width: 1, color: UIData.pink) :
-                            BorderSide(style: BorderStyle.none)),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8)),
+                                      side: _validateS
+                                          ? BorderSide(
+                                              style: BorderStyle.solid,
+                                              width: 1,
+                                              color: UIData.pink)
+                                          : BorderSide(
+                                              style: BorderStyle.none)),
                                   color: Colors.white,
                                   label: (tidspunkt
                                       ? Text(
-                                    tids,
-                                    style: TextStyle(color: UIData.black),
-                                  )
+                                          tids,
+                                          style: TextStyle(color: UIData.black),
+                                        )
                                       : Text("Tid",
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontWeight: FontWeight.normal))),
+                                          style: TextStyle(
+                                              color: Colors.grey,
+                                              fontWeight: FontWeight.normal))),
                                 ),
                               ),
                             ],
@@ -1652,27 +1809,34 @@ class NewEventPage extends State<StatefullNew> {
                       ),
                       Container(
                         width: 300.0,
-                        height: _validateT ? 70 :50,
+                        height: _validateT ? 70 : 50,
                         child: TextField(
                           controller: _tit,
                           textCapitalization: TextCapitalization.sentences,
                           decoration: InputDecoration(
                             hintText: "Tittel",
                             filled: true,
-                            errorStyle: TextStyle(color: UIData.pink, fontSize: 10,),
+                            errorStyle: TextStyle(
+                              color: UIData.pink,
+                              fontSize: 10,
+                            ),
                             errorText: _validateT ? "* Fyll ut" : null,
                             contentPadding: EdgeInsets.all(17.0),
                             fillColor: Colors.white,
                             hintStyle: TextStyle(color: Colors.grey),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8.0),
-                                borderSide: _validateT ? BorderSide(
-                                    width: 1, style: BorderStyle.solid, color: UIData.pink) :BorderSide(
-                                    width: 0, style: BorderStyle.none) ),
+                                borderSide: _validateT
+                                    ? BorderSide(
+                                        width: 1,
+                                        style: BorderStyle.solid,
+                                        color: UIData.pink)
+                                    : BorderSide(
+                                        width: 0, style: BorderStyle.none)),
                           ),
                           onChanged: (text) {
                             tit = text;
-                            setState((){
+                            setState(() {
                               _validateT = false;
                             });
                           },
@@ -1689,13 +1853,16 @@ class NewEventPage extends State<StatefullNew> {
                       ),
                       Container(
                         width: 300.0,
-                        height: _validate ? 70 :50,
+                        height: _validate ? 70 : 50,
                         child: TextField(
                           textCapitalization: TextCapitalization.sentences,
                           controller: _add,
                           decoration: InputDecoration(
                             hintText: "Addresse",
-                            errorStyle: TextStyle(color: UIData.pink, fontSize: 10,),
+                            errorStyle: TextStyle(
+                              color: UIData.pink,
+                              fontSize: 10,
+                            ),
                             errorText: _validate ? "* Fyll ut" : null,
                             filled: true,
                             contentPadding: EdgeInsets.all(17.0),
@@ -1703,11 +1870,16 @@ class NewEventPage extends State<StatefullNew> {
                             hintStyle: TextStyle(color: Colors.grey),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8.0),
-                                borderSide: _validate ? BorderSide(
-                                    width: 1, style: BorderStyle.solid, color: UIData.pink) :BorderSide(
-                                    width: 0, style: BorderStyle.none) ),
+                                borderSide: _validate
+                                    ? BorderSide(
+                                        width: 1,
+                                        style: BorderStyle.solid,
+                                        color: UIData.pink)
+                                    : BorderSide(
+                                        width: 0, style: BorderStyle.none)),
                           ),
                           onChanged: (text) {
+
                            // add = text;
                             setState((){
                               _validate = false;
@@ -1718,7 +1890,6 @@ class NewEventPage extends State<StatefullNew> {
                             add = text;
                             //print(a);
                             saveAdd(a);
-
                           },
                         ),
                       ),
@@ -1732,35 +1903,40 @@ class NewEventPage extends State<StatefullNew> {
                           height: 105.0,
                           child: TextField(
                             controller: _bes,
-
                             textInputAction: TextInputAction.done,
                             textCapitalization: TextCapitalization.sentences,
                             maxLines: 6,
                             decoration: InputDecoration(
                               hintText: "Beskrivelse",
                               filled: true,
-                              errorStyle: TextStyle(color: UIData.pink, fontSize: 10,),
+                              errorStyle: TextStyle(
+                                color: UIData.pink,
+                                fontSize: 10,
+                              ),
                               errorText: _validateB ? "* Fyll ut" : null,
                               contentPadding: EdgeInsets.all(17.0),
                               fillColor: Colors.white,
                               hintStyle: TextStyle(color: Colors.grey),
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8.0),
-                                  borderSide: _validateB ? BorderSide(
-                                      width: 1, style: BorderStyle.solid, color: UIData.pink) :BorderSide(
-                                      width: 0, style: BorderStyle.none) ),
+                                  borderSide: _validateB
+                                      ? BorderSide(
+                                          width: 1,
+                                          style: BorderStyle.solid,
+                                          color: UIData.pink)
+                                      : BorderSide(
+                                          width: 0, style: BorderStyle.none)),
                             ),
                             onChanged: (text) {
-                              //bes = text;
-                              setState((){
+                              setState(() {
                                 _validateB = false;
                               });
                             },
                             onSubmitted: (text) {
-                              String b = text;
+                              //String b = text;
                               bes = text;
                               print(bes);
-                              saveBes(b);
+                              //saveBes(b);
                             },
                           ),
                         ),
@@ -1772,10 +1948,16 @@ class NewEventPage extends State<StatefullNew> {
                         children: <Widget>[
                           Align(
                             alignment: Alignment.centerLeft,
-                            child: _validateP ? Row(children: <Widget>[
-                              Text("Legg til bilde: "),
-                              Text("* Velg bilde", style: TextStyle(color: UIData.pink, fontSize: 10))
-                            ],) : Text("Legg til bilde:"),
+                            child: _validateP
+                                ? Row(
+                                    children: <Widget>[
+                                      Text("Legg til bilde: "),
+                                      Text("* Velg bilde",
+                                          style: TextStyle(
+                                              color: UIData.pink, fontSize: 10))
+                                    ],
+                                  )
+                                : Text("Legg til bilde:"),
                           ),
                           Divider(
                             color: UIData.grey,
@@ -1784,56 +1966,61 @@ class NewEventPage extends State<StatefullNew> {
                             alignment: Alignment.centerLeft,
                             child: choosen
                                 ? Column(
-                              //mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
-                              children: <Widget>[
-                                FlatButton.icon(
-                                  onPressed: openOptions,
-                                  color: UIData.grey,
-                                  icon: Icon(Icons.replay,
-                                      color: UIData.blue),
-                                  label: Text("Ta på nytt",
-                                      style: TextStyle(
-                                          color: UIData.blue,
-                                          fontWeight: FontWeight.bold)),
-                                ),
-                           ClipRRect(
-                              borderRadius: new BorderRadius.circular(8.0),
-                                child: Container(
-                                    height: 200,
-                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),),
-                                    child: Image.file(
-                                      imgUrl,
-                                      fit: BoxFit.fill,
+                                    //mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      FlatButton.icon(
+                                        onPressed: openOptions,
+                                        color: UIData.grey,
+                                        icon: Icon(Icons.replay,
+                                            color: UIData.blue),
+                                        label: Text("Ta på nytt",
+                                            style: TextStyle(
+                                                color: UIData.blue,
+                                                fontWeight: FontWeight.bold)),
+                                      ),
+                                      ClipRRect(
+                                        borderRadius:
+                                            new BorderRadius.circular(8.0),
+                                        child: Container(
+                                            height: 200,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            child: Image.file(
+                                              imgUrl,
+                                              fit: BoxFit.fill,
 
-                                      // width: 200,
-                                      //height: 400,
-                                    )),),
-                              ],
-                            )
+                                              // width: 200,
+                                              //height: 400,
+                                            )),
+                                      ),
+                                    ],
+                                  )
                                 : Container(
-                              height: 80,
-                              child: FittedBox(
-                                child: FloatingActionButton(
-                                  onPressed: () {
-                                    openOptions();
-                                    //choosen = true;
-                                  },
-                                  child: Icon(
-                                    Icons.photo_camera,
-                                    size: 30.0,
+                                    height: 80,
+                                    child: FittedBox(
+                                      child: FloatingActionButton(
+                                        onPressed: () {
+                                          openOptions();
+                                          //choosen = true;
+                                        },
+                                        child: Icon(
+                                          Icons.photo_camera,
+                                          size: 30.0,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(8.0)),
+                                        ),
+                                        backgroundColor: Colors.white,
+                                        foregroundColor: UIData.black,
+                                        elevation: 0.0,
+                                      ),
+                                    ),
                                   ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(8.0)),
-                                  ),
-                                  backgroundColor: Colors.white,
-                                  foregroundColor: UIData.black,
-                                  elevation: 0.0,
-                                ),
-                              ),
-                            ),
                           ),
                         ],
                       ),
@@ -1847,10 +2034,9 @@ class NewEventPage extends State<StatefullNew> {
                           padding: EdgeInsets.fromLTRB(30, 15, 30, 15),
                           shape: RoundedRectangleBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(100)),
+                                  BorderRadius.all(Radius.circular(100)),
                               side: BorderSide(style: BorderStyle.none)),
                           onPressed: () {
-
                             DateTime titi = new DateTime(
                                 _date.year,
                                 _date.month,
@@ -1858,31 +2044,40 @@ class NewEventPage extends State<StatefullNew> {
                                 _time.hour,
                                 _time.minute);
 
+
                             if(add != null && kat != null && bes != null && titi != null && imgUrl != null) {
                               uploadImage(imgUrl, add, kat, bes, tit, titi);
                               Navigator.pop(context);
-                            } else  {
-                              setState((){
-                                _add.text.isEmpty ? _validate = true : _validate = false;
-                                _bes.text.isEmpty ? _validateB = true : _validateB = false;
-                                _tit.text.isEmpty ? _validateT = true : _validateT = false;
-                                dats == null ? _validateD = true : _validateD = false;
-                                tids == null ? _validateS = true : _validateS = false;
-                                tap? _validateK = false : _validateK = true;
-                                choosen? _validateP = false : _validateP = true;
+                            } else {
+                              setState(() {
+                                _add.text.isEmpty
+                                    ? _validate = true
+                                    : _validate = false;
+                                _bes.text.isEmpty
+                                    ? _validateB = true
+                                    : _validateB = false;
+                                _tit.text.isEmpty
+                                    ? _validateT = true
+                                    : _validateT = false;
+                                dats == null
+                                    ? _validateD = true
+                                    : _validateD = false;
+                                tids == null
+                                    ? _validateS = true
+                                    : _validateS = false;
+                                tap ? _validateK = false : _validateK = true;
+                                choosen
+                                    ? _validateP = false
+                                    : _validateP = true;
                               });
-                              Toast.show("Alle felt på fylles", context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM, backgroundColor: UIData.black);
-
+                              Toast.show("Alle felt på fylles", context,
+                                  duration: Toast.LENGTH_SHORT,
+                                  gravity: Toast.BOTTOM,
+                                  backgroundColor: UIData.black);
                             }
                             print("post pressed");
 
-
-
                             //if(add != null && kat != null && bes != null && titi != null && dbUrl != null) {
-
-
-
-
                           },
                           child: Text("Post event",
                               style: TextStyle(color: Colors.white)))
@@ -1898,10 +2093,7 @@ class NewEventPage extends State<StatefullNew> {
     );
   }
 
-  Future<void> save() async {
-
-
-}
+  Future<void> save() async {}
 
   String saveAdd(a) {
     print(a);
@@ -2008,11 +2200,8 @@ class NewEventPage extends State<StatefullNew> {
   }
 
   void uploadImage(imgUrl, add, kat, bes, tit, titi) async {
-
-
-
     final StorageReference imgRef =
-    FirebaseStorage.instance.ref().child("Event_Images");
+        FirebaseStorage.instance.ref().child("Event_Images");
 
     final id = new DateTime.now().millisecondsSinceEpoch;
     String name = widget.user;
@@ -2024,7 +2213,6 @@ class NewEventPage extends State<StatefullNew> {
     dbUrl = url.toString();
     print("upload $dbUrl");
 
-
     var data = {
       "address": add,
       "cat": kat,
@@ -2034,12 +2222,7 @@ class NewEventPage extends State<StatefullNew> {
       "title": tit,
       "imgUrl": dbUrl,
     };
-    Firestore.instance
-        .document("events/$idu")
-        .setData(data);
-
-
-
+    Firestore.instance.document("events/$idu").setData(data);
   }
 
   void _tapped(index) {
@@ -2058,8 +2241,6 @@ class NewEventPage extends State<StatefullNew> {
     FocusScope.of(context).requestFocus(new FocusNode());
   }
 }
-
-
 
 //// ##  : SizedBox(
 //                       height: 130,

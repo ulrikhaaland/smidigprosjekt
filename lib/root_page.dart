@@ -33,61 +33,12 @@ class RootPageState extends State<RootPage> {
   String messagingToken;
   User user;
 
-  // FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+  bool fromIntro = false;
 
   AuthStatus authStatus = AuthStatus.loading;
 
   initState() {
     super.initState();
-
-    /* var users = [
-      {
-        "bio": "Enkelt og greit menneske.",
-        "email": "",
-        "linje": "Økonomi og administrasjon",
-        "skole": "Oslo Met",
-        "name": "Per Arne Heimesen",
-      },
-      {
-        "bio": "Ser etter studenter som er interessert i å få gode karakterer.",
-        "email": "",
-        "linje": "Markedsføring",
-        "skole": "Universitet i Oslo",
-        "name": "Camilla Hunders",
-      },
-      {
-        "bio": "Glad i å fiske og se på tv",
-        "email": "",
-        "linje": "IT",
-        "skole": "Oslo Met",
-        "name": "Pripjet Vladikovski",
-      },
-      {
-        "bio": "Hater instagram ads",
-        "email": "",
-        "linje": "Film og Tv",
-        "skole": "Høyskolen Kristiania",
-        "name": "Amanda Gundersen",
-      },
-      {
-        "bio": "Jeg er ikke din kokk",
-        "email": "",
-        "linje": "Kunst",
-        "skole": "Høyskolen Kristiania",
-        "name": "Lerant Dufreau",
-      },
-      {
-        "bio": "Trene, venner og seriemordere.",
-        "email": "",
-        "linje": "Ernæring",
-        "skole": "Oslo Met",
-        "name": "Fredrik Holtet",
-      },
-    ]; 
-
-   users.forEach((u) {
-      Firestore.instance.collection("users").add(u);
-    }); */
 
     getUserId();
   }
@@ -106,21 +57,22 @@ class RootPageState extends State<RootPage> {
         await Firestore.instance.document("users/$currentUser").get();
     if (docSnap.exists) {
       user = new User(
-        docSnap.data["email"],
-        docSnap.data["id"],
-        docSnap.data["feideid"],
-        docSnap.data["name"],
-        // await updateFcmToken(),
-        docSnap.data["intro"],
-        docSnap.data["skole"],
-        docSnap.data["linje"],
-        docSnap.data["bio"],
+        email: docSnap.data["email"],
+        id: docSnap.data["id"],
+        feideId: docSnap.data["feideid"],
+        userName: docSnap.data["name"],
+        intro: docSnap.data["intro"],
+        school: docSnap.data["school"],
+        program: docSnap.data["program"],
+        bio: docSnap.data["bio"],
+        groupId: docSnap.data["groupid"],
       );
       setState(() {
         authStatus =
             currentUser != null ? AuthStatus.signedIn : AuthStatus.notSignedIn;
         if (user.intro) {
-          authStatus = AuthStatus.signedIn;
+          fromIntro = true;
+          authStatus = AuthStatus.intro;
         }
       });
     } else {
@@ -153,6 +105,7 @@ class RootPageState extends State<RootPage> {
             userEmail: userEmail,
             userName: userName,
             user: user,
+            fromIntro: fromIntro,
             onSignOut: () => _updateAuthStatus(AuthStatus.notSignedIn));
       case AuthStatus.loading:
         return new Essentials(
@@ -161,7 +114,7 @@ class RootPageState extends State<RootPage> {
       case AuthStatus.intro:
         return new Intro(
             user: user,
-            onIntroFinished: () => getUserId(),
+            onIntroFinished: () => _updateAuthStatus(AuthStatus.signedIn),
             onSignOut: () => _updateAuthStatus(AuthStatus.notSignedIn));
     }
   }
