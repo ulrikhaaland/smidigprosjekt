@@ -228,8 +228,15 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                                 //decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), border: index == 0 ? Border.all(width: 3, color: UIData.pink) : Border.all(color: Colors.white) ),
                                 child: ClipRRect(
                                   borderRadius: new BorderRadius.circular(80),
-                                  child: Image.asset(
-                                    "lib/assets/images/fortnite.jpg", // fra list [index]
+                                  child: _group.members[index].userName.contains(widget.user.userName) ?
+                                  Image.network(widget.user.profileImage,
+                                    width: 42,
+                                    height: 42,
+                                    fit: BoxFit.cover,
+                                  )
+                                      : Image.asset(
+                                    //_group.members[index].profileImage, // fra list [index]
+                                    "lib/assets/images/fortnite.jpg",
 
                                     width: 42,
                                     height: 42,
