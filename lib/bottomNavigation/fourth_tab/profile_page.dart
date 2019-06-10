@@ -323,8 +323,6 @@ class _ProfilePageState extends State<ProfilePage> {
                       ],
                     ),
                   ),
-                ),
-              ),
             ),
           ),
           new Align(
@@ -356,8 +354,11 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                 ),
               ),
+            )
+            )
             ],
-          ));
+          )
+          );
     } else {
       return new SingleChildScrollView(
           child: new Stack(
@@ -903,9 +904,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
                   ]
 
-              ),
+              
             ),
-          ]),
+          
           new Align(
               alignment: Alignment.center,
               child: Card(
@@ -932,7 +933,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               )),
         ],
-      ));
+      )
+      );
     }
   }
 
