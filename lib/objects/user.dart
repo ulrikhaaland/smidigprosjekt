@@ -9,6 +9,7 @@ class User {
       this.school,
       this.program,
       this.bio,
+      this.profileImage,
       this.groupId});
 
   final String userName;
@@ -20,6 +21,7 @@ class User {
   String school;
   String program;
   String bio;
+  String profileImage;
   String groupId;
 
   // String getToken() {
@@ -28,6 +30,10 @@ class User {
 
   String getName() {
     return this.userName;
+  }
+
+  String getProfileImage() {
+    return this.profileImage;
   }
 
   String getId() {
@@ -48,6 +54,7 @@ class User {
         'school': this.school,
         'program': this.program,
         'bio': this.bio,
+        'profileImage': this.profileImage,
         'groupid': this.groupId,
       };
 }

@@ -1,3 +1,4 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -7,6 +8,8 @@ import 'package:smidigprosjekt/objects/user.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_page_indicator/flutter_page_indicator.dart';
 import 'dart:async';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:smidigprosjekt/widgets/primary_button.dart';
 import './service/service_provider.dart';
@@ -31,9 +34,17 @@ class IntroState extends State<Intro> {
   String skole;
   String linje;
   String bio;
+  String profileImage;
 
   bool swipes = true;
   bool userinfo = false;
+
+  var dbUrl;
+  bool newFoto = false;
+
+  File imgUrl;
+
+  Firestore firestoreInstance = Firestore.instance;
 
   @override
   void initState() {
@@ -172,7 +183,9 @@ class IntroState extends State<Intro> {
                 Align(
                   alignment: Alignment.topCenter,
                   child: GestureDetector(
-                    onTap: null,
+                    onTap: (){
+                      openOptions();
+                      },
                     child: CircleAvatar(
                       radius: ServiceProvider.instance.screenService
                           .getHeightByPercentage(context, 8.5),
@@ -183,7 +196,20 @@ class IntroState extends State<Intro> {
                         backgroundColor: Colors.white,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
+                          children: newFoto? 
+                          [
+                            ClipRRect(
+                              borderRadius: new BorderRadius.circular(70),
+                              child:Image.file(
+                                imgUrl,
+                                width: ServiceProvider.instance.screenService.getHeightByPercentage(context, 18.5),
+                                height: ServiceProvider.instance.screenService.getHeightByPercentage(context, 16.5),
+                                fit: BoxFit.cover,
+                              )
+                            )
+                          ]
+                          : 
+                          <Widget>[
                             Icon(
                               Icons.add_a_photo,
                               size: 40,
@@ -538,6 +564,128 @@ class IntroState extends State<Intro> {
         },
       )
     ]));
+  }
+
+  Future openCamera() async {
+    var picture = await ImagePicker.pickImage(source: ImageSource.camera);
+    setState(() {
+      imgUrl = picture;
+      newFoto = true;
+    });
+    uploadImage(imgUrl);
+  }
+
+  Future openGallery() async {
+    var gallery = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      imgUrl = gallery;
+      newFoto = true;
+    });
+    uploadImage(imgUrl);
+  }
+
+  Future<void> openOptions() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0)),
+            content: new SingleChildScrollView(
+              child: new ListBody(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Icon(Icons.photo_camera, color: UIData.blue),
+                      Padding(
+                        padding: EdgeInsets.all(7.0),
+                      ),
+                      GestureDetector(
+                        child: new Text(
+                          'Ta et bilde',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        onTap: openCamera,
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                  ),
+                  Divider(),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Icon(Icons.photo, color: UIData.blue),
+                      Padding(
+                        padding: EdgeInsets.all(7.0),
+                      ),
+                      GestureDetector(
+                        child: new Text('Velg fra kamerarull',
+                            style: TextStyle(fontSize: 20)),
+                        onTap: openGallery,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  void uploadImage(imgUrl) async {
+    final StorageReference imgRef =
+        FirebaseStorage.instance.ref().child("Profile_Images");
+    var timeKey = new DateTime.now();
+    final StorageUploadTask upTask =
+        imgRef.child(timeKey.toString() + ".jpg").putFile(imgUrl);
+    _onLoading();
+    var url = await (await upTask.onComplete).ref.getDownloadURL();
+    dbUrl = url.toString();
+    print("DBURL AFTER UPLOAD:" + dbUrl);
+    _sendImage(dbUrl);
+    Navigator.pop(context);
+  }
+
+  _sendImage(String dbUrl) {
+    var db = Firestore.instance;
+    db.collection("users/${widget.user.id}").add({
+      "profile_picture": dbUrl
+    }).then((val) {
+      db.document("users/${widget.user.id}").updateData(widget.user.toJson());                
+      print("success");
+    }).catchError((err) {
+      print(err);
+    });
+    widget.user.profileImage = dbUrl;
+  }
+
+  void _onLoading() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      child: new Dialog(
+          child: ClipRRect(
+              borderRadius: new BorderRadius.circular(8.0),
+              child: Container(
+                padding:
+                    EdgeInsets.only(top: 12, bottom: 12, left: 16, right: 16),
+                child: new Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    new CircularProgressIndicator(
+                      valueColor:
+                          new AlwaysStoppedAnimation<Color>(UIData.pink),
+                    ),
+                    new Padding(padding: EdgeInsets.only(left: 25)),
+                    new Text("Vent litt..."),
+                  ],
+                ),
+              ))),
+    );
   }
 
   saveData(bool fromForm) async {

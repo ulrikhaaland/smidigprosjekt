@@ -31,6 +31,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String bio = "";
   String program = "";
   String school = "";
+  String profileImage = "";
   bool newFoto = false;
   bool edit = false;
 
@@ -40,11 +41,17 @@ class _ProfilePageState extends State<ProfilePage> {
 
   bool going = false;
 
+  var dbUrl;
+
   File imgUrl;
+
+  Firestore firestoreInstance = Firestore.instance;
+
   @override
   void initState() {
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -303,8 +310,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           height: 122,
                           fit: BoxFit.cover,
                         )
-                      : Image.asset(
-                          "lib/assets/images/fortnite.jpg",
+                      : Image.network(
+                          widget.user.profileImage,
                           width: 122,
                           height: 122,
                           fit: BoxFit.cover,
@@ -363,7 +370,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                       Padding(padding: EdgeInsets.all(7)),
-                      new Text(
+                      /* new Text(
                         widget.user.school,
                         //style: new TextStyle(fontWeight: FontWeight.bold),
                       ),
@@ -371,7 +378,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       new Text(
                         widget.user.program,
                         // style: new TextStyle(fontWeight: FontWeight.bold),
-                      ),
+                      ), */
                       Padding(padding: EdgeInsets.all(7)),
                       new Container(
                         height: 80,
@@ -805,8 +812,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           height: 122,
                           fit: BoxFit.cover,
                         )
-                      : Image.asset(
-                          "lib/assets/images/fortnite.jpg",
+                      : Image.network(
+                          widget.user.profileImage,
                           width: 122,
                           height: 122,
                           fit: BoxFit.cover,
@@ -875,6 +882,8 @@ class _ProfilePageState extends State<ProfilePage> {
       imgUrl = picture;
       newFoto = true;
     });
+    Navigator.of(context, rootNavigator: true).pop();
+    uploadImage(imgUrl);
   }
 
   Future openGallery() async {
@@ -883,6 +892,8 @@ class _ProfilePageState extends State<ProfilePage> {
       imgUrl = gallery;
       newFoto = true;
     });
+    Navigator.of(context, rootNavigator: true).pop();
+    uploadImage(imgUrl);
   }
 
   Future<void> openOptions() {
@@ -940,7 +951,65 @@ class _ProfilePageState extends State<ProfilePage> {
   void _removeKeyboard(BuildContext context) {
     FocusScope.of(context).requestFocus(new FocusNode());
   }
+
+  void uploadImage(imgUrl) async {
+    final StorageReference imgRef =
+        FirebaseStorage.instance.ref().child("Profile_Images");
+    var timeKey = new DateTime.now();
+    final StorageUploadTask upTask =
+        imgRef.child(timeKey.toString() + ".jpg").putFile(imgUrl);
+    _onLoading();
+    var url = await (await upTask.onComplete).ref.getDownloadURL();
+    dbUrl = url.toString();
+    print("DBURL AFTER UPLOAD:" + dbUrl);
+    _sendImage(dbUrl);
+    Navigator.pop(context);
+  }
+
+  _sendImage(String dbUrl) {
+    var db = Firestore.instance;
+    db.document("users/${widget.user.id}").updateData({
+      "profileImage": dbUrl
+    }).then((val) {
+      db.document("users/${widget.user.id}").updateData(widget.user.toJson());                
+      print("success");
+    }).catchError((err) {
+      print(err);
+    });
+    widget.user.profileImage = dbUrl;
+  }
+
+  /* Firestore.instance
+                              .document("users/${widget.user.id}")
+                              .updateData(widget.user.toJson()); */
+
+  void _onLoading() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      child: new Dialog(
+          child: ClipRRect(
+              borderRadius: new BorderRadius.circular(8.0),
+              child: Container(
+                padding:
+                    EdgeInsets.only(top: 12, bottom: 12, left: 16, right: 16),
+                child: new Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    new CircularProgressIndicator(
+                      valueColor:
+                          new AlwaysStoppedAnimation<Color>(UIData.pink),
+                    ),
+                    new Padding(padding: EdgeInsets.only(left: 25)),
+                    new Text("Vent litt..."),
+                  ],
+                ),
+              ))),
+    );
+  }
 }
+
+
 
 //## new Align(
 //                      alignment: Alignment.bottomCenter,
