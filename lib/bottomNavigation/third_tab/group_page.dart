@@ -202,7 +202,8 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
       "Grille i parken",
       "Velg film sammen og dra på kino",
       "Dra på Syng sammen",
-      "4 stjerners middag"
+      "4 stjerners middag",
+      "Dere har ingen flere utfordringer"
     ];
 
 
@@ -212,6 +213,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
         inputs[index] = val;
         if(inputs[index] = true) {
           if (index == 4) {
+            percentage = proList[5];
             activeChallenge = "Dere har ingen flere utfordringer";
             db.collection("groups/${_group.id}/challenges").document(
                 "utfordring" + "${index + 1}").updateData({"isDone": true});
@@ -457,7 +459,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                               .getHeightByPercentage(context, 38),
                           color: Colors.white,
                           child: new ListView.builder(
-                              itemCount: taskList.length,
+                              itemCount: 4,
                               itemBuilder: (context, int index) {
                                 DocumentSnapshot document =
                                 snapshot.data.documents[index];
