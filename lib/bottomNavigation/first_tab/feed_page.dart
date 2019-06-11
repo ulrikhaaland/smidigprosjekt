@@ -2070,7 +2070,7 @@ class NewEventPage extends State<StatefullNew> {
                                     ? _validateP = false
                                     : _validateP = true;
                               });
-                              Toast.show("Alle felt på fylles", context,
+                              Toast.show("Alle felt må fylles ut", context,
                                   duration: Toast.LENGTH_SHORT,
                                   gravity: Toast.BOTTOM,
                                   backgroundColor: UIData.black);

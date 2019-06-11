@@ -83,6 +83,8 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
 
   var names;
 
+  QuerySnapshot qSnapChallenge;
+
 
 
 
@@ -110,6 +112,9 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
     _tabController.dispose();
     super.dispose();
   }
+  
+
+  
 
   _getGroup() async {
     DocumentSnapshot docSnap =
@@ -133,10 +138,51 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
       isLoading = false;
     });
 
-    firestoreInstance
+    await firestoreInstance
         .document("groups/${_group.id}")
         .updateData({"memberamount": _group.members.length});
+
+    _getChallenges();
   }
+
+  _getChallenges() async{
+    qSnapChallenge = await Firestore.instance
+    .collection("groups/${_group.id}/challenges").getDocuments();
+    if(qSnapChallenge.documents.isEmpty){
+      print("Empty");
+      _createChallenges();
+    }
+  } 
+
+   _createChallenges() {
+    var db = Firestore.instance;
+    db.collection("groups/${_group.id}/challenges").add({
+      "id": 0,
+      "challenge": "Ta en kaffe sammen",
+      "isDone": false
+    });
+    db.collection("groups/${_group.id}/challenges").add({
+      "id": 1,
+      "challenge": "Grille i parken",
+      "isDone": false
+    });
+    db.collection("groups/${_group.id}/challenges").add({
+      "id": 2,
+      "challenge": "Velg film sammen og dra på kino",
+      "isDone": false
+    });
+    db.collection("groups/${_group.id}/challenges").add({
+      "id": 3,
+      "challenge": "Dra på Syng sammen",
+      "isDone": false
+    }); 
+    db.collection("groups/${_group.id}/challenges").add({
+      "id": 4,
+      "challenge": "4 stjerners middag",
+      "isDone": false
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
