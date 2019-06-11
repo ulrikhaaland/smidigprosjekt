@@ -236,7 +236,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                                   )
                                       : Image.asset(
                                     //_group.members[index].profileImage, // fra list [index]
-                                    "lib/assets/images/fortnite.jpg",
+                                    "lib/assets/images/profilbilde.png",
 
                                     width: 42,
                                     height: 42,
@@ -649,8 +649,8 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(70)),
           child: ClipRRect(
             borderRadius: new BorderRadius.circular(100),
-            child: Image.asset(
-              "lib/assets/images/fortnite.jpg", // fra list [index]
+            child:
+              Image.network(widget.user.profileImage, // fra list [index]
               height: 40,
               width: 40,
               fit: BoxFit.cover,
