@@ -159,7 +159,9 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
     db.collection("groups/${_group.id}/challenges").document("utfordring1").setData({
       "id": 0,
       "challenge": "Ta en kaffe sammen",
-      "isDone": false
+      "isDone": false,
+      "prosent": 0.0,
+      "activeChallange": "Ta en kaffe sammen"
     });
     db.collection("groups/${_group.id}/challenges").document("utfordring2").setData({
       "id": 1,
@@ -188,12 +190,12 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     var db = Firestore.instance;
     List<double> proList = [
-      0,
-      20,
-      40,
-      60,
-      80,
-      100,
+      0.0,
+      20.0,
+      40.0,
+      60.0,
+      80.0,
+      100.0,
     ];
     List<String> taskList = [
       "Ta en kaffe sammen",
@@ -213,12 +215,18 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
             activeChallenge = "Dere har ingen flere utfordringer";
             db.collection("groups/${_group.id}/challenges").document(
                 "utfordring" + "${index + 1}").updateData({"isDone": true});
+            db.collection("groups/${_group.id}/challenges").document(
+                "utfordring1").updateData({"prosent": percentage});
           }
           else {
             activeChallenge = taskList[index + 1];
             percentage = proList[index + 1];
             db.collection("groups/${_group.id}/challenges").document(
                 "utfordring" + "${index + 1}").updateData({"isDone": true});
+            db.collection("groups/${_group.id}/challenges").document(
+                "utfordring1").updateData({"prosent": percentage, "activeChallange": activeChallenge});
+
+
           }}
 
       });
@@ -388,8 +396,8 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                                 new Padding(
                                   padding: EdgeInsets.only(bottom: 5),
                                 ),
-                                new Text(
-                                  activeChallenge,
+                                new Text(snapshot.data.documents[0].data["activeChallange"],
+
                                   textAlign: TextAlign.left,
                                   style: new TextStyle(
                                       color: UIData.black, fontFamily: 'Anton'),
@@ -412,7 +420,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                               foregroundPainter: new MyPainter(
                                   lineColor: UIData.lightPink,
                                   completeColor: UIData.pink,
-                                  completePercent: percentage,
+                                  completePercent: snapshot.data.documents[0].data["prosent"] + .0,
                                   width: 15.0),
                               child: new Padding(
                                   padding: const EdgeInsets.all(30.0),
@@ -421,7 +429,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                                       splashColor: Color(0x00FFFFFF),
                                       shape: new CircleBorder(),
                                       child: new Text(
-                                          percentage.toStringAsFixed(0) + "%"),
+                  (snapshot.data.documents[0].data["prosent"]).toStringAsFixed(0) + "%"),
                                       onPressed: () {})),
                             ),
                           ),
