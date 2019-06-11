@@ -12,6 +12,7 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:smidigprosjekt/widgets/primary_button.dart';
+import 'package:toast/toast.dart';
 import './service/service_provider.dart';
 import './utils/uidata.dart';
 import 'service/styles.dart';
@@ -167,12 +168,20 @@ class IntroState extends State<Intro> {
                         PrimaryButton(
                           text: "Gå videre",
                           onPressed: () {
-                            if (_formKey.currentState.validate()) {
-                              saveData(true);
+                            if(dbUrl != null) {
+                              if (_formKey.currentState.validate()) {
+                                saveData(true);
 
-                              setState(() {
-                                userinfo = !userinfo;
-                              });
+                                setState(() {
+                                  userinfo = !userinfo;
+                                });
+                                 uploadImage(imgUrl);
+                              }
+                            }else{
+                              Toast.show("Vennligst legg til bilde", context,
+                                  duration: Toast.LENGTH_LONG,
+                                  gravity: Toast.CENTER,
+                                  backgroundColor: UIData.pink);
                             }
                           },
                         )
@@ -570,7 +579,7 @@ class IntroState extends State<Intro> {
       imgUrl = picture;
       newFoto = true;
     });
-    uploadImage(imgUrl);
+    Navigator.of(context, rootNavigator: true).pop();
   }
 
   Future openGallery() async {
@@ -579,7 +588,7 @@ class IntroState extends State<Intro> {
       imgUrl = gallery;
       newFoto = true;
     });
-    uploadImage(imgUrl);
+    Navigator.of(context, rootNavigator: true).pop(); 
   }
 
   Future<void> openOptions() {
