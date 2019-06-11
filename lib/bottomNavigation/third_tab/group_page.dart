@@ -471,11 +471,13 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                                       controlAffinity:
                                           ListTileControlAffinity.trailing,
                                       onChanged: (bool val) {
-                                        itemChange(val, index);
+
                                         //if (inputs[index] == true) {
                                         if(inputs[index] == true) {
 
+
                                         } else {
+                                          itemChange(val, index);
                                           setState(() {
                                             percentage = newPercentage;
 
