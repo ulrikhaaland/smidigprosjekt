@@ -168,7 +168,7 @@ class IntroState extends State<Intro> {
                         PrimaryButton(
                           text: "Gå videre",
                           onPressed: () {
-                            if(dbUrl != null) {
+                            if(imgUrl != null) {
                               if (_formKey.currentState.validate()) {
                                 saveData(true);
 
