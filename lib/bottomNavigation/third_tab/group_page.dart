@@ -62,7 +62,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
   MediaQueryData queryData;
   List<bool> inputs = [false, false, false, false, false];
   double percentage = 0.0;
-  double newPercentage = 0.0;
+  double newPercentage;
   String activeChallenge = "";
   AnimationController percentageAnimationController;
 
@@ -94,7 +94,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
     _getGroup();
     _tabController = new TabController(vsync: this, length: 3);
     setState(() {
-      percentage = 0.0;
+      //percentage = 0.0;
     });
 
     percentageAnimationController = new AnimationController(
@@ -156,27 +156,27 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
 
    _createChallenges() {
     var db = Firestore.instance;
-    db.collection("groups/${_group.id}/challenges").add({
+    db.collection("groups/${_group.id}/challenges").document("utfordring1").setData({
       "id": 0,
       "challenge": "Ta en kaffe sammen",
       "isDone": false
     });
-    db.collection("groups/${_group.id}/challenges").add({
+    db.collection("groups/${_group.id}/challenges").document("utfordring2").setData({
       "id": 1,
       "challenge": "Grille i parken",
       "isDone": false
     });
-    db.collection("groups/${_group.id}/challenges").add({
+    db.collection("groups/${_group.id}/challenges").document("utfordring3").setData({
       "id": 2,
       "challenge": "Velg film sammen og dra på kino",
       "isDone": false
     });
-    db.collection("groups/${_group.id}/challenges").add({
+    db.collection("groups/${_group.id}/challenges").document("utfordring4").setData({
       "id": 3,
       "challenge": "Dra på Syng sammen",
       "isDone": false
     }); 
-    db.collection("groups/${_group.id}/challenges").add({
+    db.collection("groups/${_group.id}/challenges").document("utfordring5").setData({
       "id": 4,
       "challenge": "4 stjerners middag",
       "isDone": false
@@ -186,6 +186,15 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    var db = Firestore.instance;
+    List<double> proList = [
+      0,
+      20,
+      40,
+      60,
+      80,
+      100,
+    ];
     List<String> taskList = [
       "Ta en kaffe sammen",
       "Grille i parken",
@@ -194,28 +203,24 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
       "4 stjerners middag"
     ];
 
-    if (inputs[4] == true) {
-      activeChallenge = "Dere har ingen utfordringer igjen!";
-    }
-    if (inputs[4] == false) {
-      activeChallenge = taskList[4];
-    }
-    if (inputs[3] == false) {
-      activeChallenge = taskList[3];
-    }
-    if (inputs[2] == false) {
-      activeChallenge = taskList[2];
-    }
-    if (inputs[1] == false) {
-      activeChallenge = taskList[1];
-    }
-    if (inputs[0] == false) {
-      activeChallenge = taskList[0];
-    }
+
 
     void itemChange(bool val, int index) {
       setState(() {
         inputs[index] = val;
+        if(inputs[index] = true) {
+          if (index == 4) {
+            activeChallenge = "Dere har ingen flere utfordringer";
+            db.collection("groups/${_group.id}/challenges").document(
+                "utfordring" + "${index + 1}").updateData({"isDone": true});
+          }
+          else {
+            activeChallenge = taskList[index + 1];
+            percentage = proList[index + 1];
+            db.collection("groups/${_group.id}/challenges").document(
+                "utfordring" + "${index + 1}").updateData({"isDone": true});
+          }}
+
       });
     }
 
@@ -341,12 +346,23 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                 )),
             body: TabBarView(controller: _tabController, children: [
               new SingleChildScrollView(
-                child: Column(
+                child: StreamBuilder(
+                  stream: Firestore.instance
+                .collection("groups").document("${_group.id}").collection("challenges")
+                 //document("groups/${_group.id}/challenges")
+                .snapshots(),
+                builder: (context, snapshot) {
+
+                 if (!snapshot.hasData)
+                  return
+               Container();
+                return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     new Padding(
                       padding: EdgeInsets.only(top: 30),
                     ),
+
                     new Center(
                       child: new Row(
                         mainAxisSize: MainAxisSize.min,
@@ -390,6 +406,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                      * Percentage indicator here
                      *
                      */
+
                           new Container(
                             child: new CustomPaint(
                               foregroundPainter: new MyPainter(
@@ -408,6 +425,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                                       onPressed: () {})),
                             ),
                           ),
+
                           /*
                      *
                      * Percentage indicator Ends here
@@ -433,6 +451,12 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                           child: new ListView.builder(
                               itemCount: taskList.length,
                               itemBuilder: (context, int index) {
+                                DocumentSnapshot document =
+                                snapshot.data.documents[index];
+                              inputs[index] = document.data["isDone"];
+                              //percentage = document.data["prosent"] + .0;
+
+
                                 return new Column(children: [
                                   new Padding(
                                     padding: EdgeInsets.only(top: 5),
@@ -448,18 +472,9 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                                           ListTileControlAffinity.trailing,
                                       onChanged: (bool val) {
                                         itemChange(val, index);
-                                        if (inputs[index] == true) {
-                                          setState(() {
-                                            percentage = newPercentage;
-                                            newPercentage +=
-                                                100 / taskList.length;
-                                            if (newPercentage > 100.0) {
-                                              percentage = 100.0;
-                                              newPercentage = 100.0;
-                                            }
-                                            percentageAnimationController
-                                                .forward(from: 0.0);
-                                          });
+                                        //if (inputs[index] == true) {
+                                        if(inputs[index] == true) {
+
                                         } else {
                                           setState(() {
                                             percentage = newPercentage;
@@ -482,8 +497,9 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                       color: UIData.grey,
                       height: 20,
                     ),
+
                   ],
-                ),
+                );}),
               ),
               new Stack(
                 children: <Widget>[
