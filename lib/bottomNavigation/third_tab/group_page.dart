@@ -608,6 +608,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                                       document['message'],
                                       document['user_name'],
                                       document['image'],
+                                      document['profileImage'],
                                       document['isText']);
                             },
                             itemCount: snapshot.data.documents.length,
@@ -896,6 +897,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
         "user_name": widget.user.getName(),
         "message": message.trim(),
         "image": "",
+        "profileImage": "",
         "isText": true,
         "created_at": DateTime.now()
       }).then((val) {
@@ -912,6 +914,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
       "user_name": widget.user.getName(),
       "image": dbUrl,
       "message": "",
+      "profileImage": "",
       "isText": false,
       "created_at": DateTime.now()
     }).then((val) {
