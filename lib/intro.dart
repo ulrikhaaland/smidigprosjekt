@@ -252,7 +252,7 @@ class IntroState extends State<Intro> {
     } else {
       swipes == true
           ? content = Swiper(
-              loop: false,
+              loop: true,
               itemBuilder: (BuildContext context, int index) {
                 return list[index];
               },
@@ -315,25 +315,25 @@ class IntroState extends State<Intro> {
                     ),
                   ),
                 ),
-                // Padding(
-                //   padding: EdgeInsets.only(bottom: 24),
-                //   child: GestureDetector(
-                //     onTap: () => _groupDecision(3),
-                //     child: Card(
-                //       color: UIData.darkblue,
-                //       child: Container(
-                //         width: ServiceProvider.instance.screenService
-                //             .getWidthByPercentage(context, 85),
-                //         height: ServiceProvider.instance.screenService
-                //             .getHeightByPercentage(context, 15),
-                //         child: Center(
-                //           child: Text("Opprett din egen gruppe",
-                //               style: TextStyle(color: Colors.white)),
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 24),
+                  child: GestureDetector(
+                    onTap: () => _groupDecision(2),
+                    child: Card(
+                      color: UIData.darkblue,
+                      child: Container(
+                        width: ServiceProvider.instance.screenService
+                            .getWidthByPercentage(context, 85),
+                        height: ServiceProvider.instance.screenService
+                            .getHeightByPercentage(context, 15),
+                        child: Center(
+                          child: Text("Opprett din egen gruppe",
+                              style: TextStyle(color: Colors.white)),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             );
     }

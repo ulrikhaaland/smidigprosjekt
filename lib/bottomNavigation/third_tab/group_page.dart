@@ -116,8 +116,13 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
   }
 
   _getGroup() async {
-    DocumentSnapshot docSnap =
-        await firestoreInstance.document("groups/${widget.user.groupId}").get();
+    DocumentSnapshot docSnap;
+    if (widget.user.groupId != null) {
+      docSnap = await firestoreInstance
+          .document("groups/${widget.user.groupId}")
+          .get();
+    }
+
     if (docSnap.exists) {
       _group = Group(
           name: docSnap.data["name"],
@@ -129,11 +134,15 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
           .collection("groups/${widget.user.groupId}/members")
           .getDocuments();
       qSnap.documents.forEach((d) => _group.members.add(User(
-            id: d.data["id"],
-            userName: d.data["name"],
-            school: d.data["school"],
-            program: d.data["program"],
-          )));
+          id: d.data["id"],
+          userName: d.data["name"],
+          school: d.data["school"],
+          program: d.data["program"],
+          profileImage: d.data["profileImage"])));
+      firestoreInstance
+          .document("groups/${_group.id}")
+          .updateData({"memberamount": _group.members.length});
+      await _getChallenges();
     } else {
       widget.user.introChoice = IntroChoice.search;
     }
@@ -141,27 +150,22 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
     setState(() {
       isLoading = false;
     });
-
-    await firestoreInstance
-        .document("groups/${_group.id}")
-        .updateData({"memberamount": _group.members.length});
-
-    _getChallenges();
   }
 
-  _getChallenges() async {
+  Future<Null> _getChallenges() async {
     qSnapChallenge = await Firestore.instance
         .collection("groups/${_group.id}/challenges")
         .getDocuments();
     if (qSnapChallenge.documents.isEmpty) {
       print("Empty");
-      _createChallenges();
+      await _createChallenges();
     }
+    return;
   }
 
-  _createChallenges() {
+  Future<Null> _createChallenges() async {
     var db = Firestore.instance;
-    db
+    await db
         .collection("groups/${_group.id}/challenges")
         .document("utfordring1")
         .setData({
@@ -171,11 +175,11 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
       "prosent": 0.0,
       "activeChallange": "Ta en kaffe sammen"
     });
-    db
+    await db
         .collection("groups/${_group.id}/challenges")
         .document("utfordring2")
         .setData({"id": 1, "challenge": "Grille i parken", "isDone": false});
-    db
+    await db
         .collection("groups/${_group.id}/challenges")
         .document("utfordring3")
         .setData({
@@ -183,14 +187,15 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
       "challenge": "Velg film sammen og dra på kino",
       "isDone": false
     });
-    db
+    await db
         .collection("groups/${_group.id}/challenges")
         .document("utfordring4")
         .setData({"id": 3, "challenge": "Dra på Syng sammen", "isDone": false});
-    db
+    await db
         .collection("groups/${_group.id}/challenges")
         .document("utfordring5")
         .setData({"id": 4, "challenge": "4 stjerners middag", "isDone": false});
+    return;
   }
 
   @override
@@ -227,7 +232,10 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
             db
                 .collection("groups/${_group.id}/challenges")
                 .document("utfordring1")
-                .updateData({"prosent": percentage});
+                .updateData({
+              "prosent": percentage,
+              "activeChallange": activeChallenge
+            });
           } else {
             activeChallenge = taskList[index + 1];
             percentage = proList[index + 1];
@@ -265,19 +273,24 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
             setState(() {
               isLoading = true;
             });
+            DocumentReference docRef =
+                await firestoreInstance.collection("groups").add({
+              "name": "Min gruppe",
+            });
             _group = Group(
                 name: "Min gruppe",
-                id: null,
+                id: docRef.documentID,
                 memberAmount: groupMembers.length,
                 members: groupMembers);
-            DocumentReference docRef = await firestoreInstance
-                .collection("groups")
-                .add(_group.toJson());
+            await firestoreInstance
+                .document("groups/${_group.id}")
+                .updateData(_group.toJson());
             _group.members.forEach((m) {
               firestoreInstance
                   .collection("groups/${docRef.documentID}/members")
                   .add(m.toJson());
             });
+            widget.user.groupId = docRef.documentID;
             setState(() {
               isLoading = false;
               widget.user.introChoice = IntroChoice.assigned;
@@ -334,11 +347,13 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                                         child: ClipRRect(
                                           borderRadius:
                                               new BorderRadius.circular(80),
-                                          child: _group.members[index].userName
-                                                  .contains(
-                                                      widget.user.userName)
+                                          child: _group.members[index]
+                                                      .profileImage !=
+                                                  null
                                               ? Image.network(
-                                                  widget.user.profileImage,
+                                                  _group.members[index]
+                                                      .profileImage,
+                                                  //widget.user.profileImage,
                                                   width: 42,
                                                   height: 42,
                                                   fit: BoxFit.cover,
@@ -353,6 +368,16 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                                                 ),
                                         ),
                                       ),
+                                      _group.members[index].userName
+                                              .contains(widget.user.userName)
+                                          ? Text("Meg",
+                                              style: TextStyle(
+                                                  fontSize: 11,
+                                                  fontWeight: FontWeight.bold))
+                                          : Text(
+                                              "${_getFirstName(index)}",
+                                              style: TextStyle(fontSize: 11),
+                                            ),
                                     ]),
                               );
                             },
@@ -410,6 +435,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) return Container();
+
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -511,7 +537,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                                     .getHeightByPercentage(context, 38),
                                 color: Colors.white,
                                 child: new ListView.builder(
-                                    itemCount: 4,
+                                    itemCount: 5,
                                     itemBuilder: (context, int index) {
                                       DocumentSnapshot document =
                                           snapshot.data.documents[index];
@@ -602,7 +628,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                                   : _message(
                                       document['message'],
                                       document['user_name'],
-                                      document['image'],
+                                      document['profileImage'],
                                       document['isText']);
                             },
                             itemCount: snapshot.data.documents.length,
@@ -785,6 +811,10 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
   }
 
   Widget _message(String message, String userName, String image, bool isText) {
+    var fullnames = userName;
+    var split = fullnames.split(' ');
+    String firstName = split[0];
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -795,7 +825,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
           child: ClipRRect(
             borderRadius: new BorderRadius.circular(100),
             child: Image.asset(
-              "lib/assets/images/fortnite.jpg", // fra list [index]
+              "lib/assets/images/profilbilde.png", // fra list [index]
               height: 40,
               width: 40,
               fit: BoxFit.cover,
@@ -803,11 +833,12 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
           ),
         ),
         Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            Text(firstName, style: TextStyle(fontSize: 11, color: Colors.grey)),
             isText
                 ? Padding(
-                    padding: EdgeInsets.only(top: 10, bottom: 10),
+                    padding: EdgeInsets.only(top: 2, bottom: 10),
                     child: ClipRRect(
                         borderRadius: new BorderRadius.circular(8.0),
                         child: new Container(
@@ -883,6 +914,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
         "user_name": widget.user.getName(),
         "message": message.trim(),
         "image": "",
+        "profileImage": "",
         "isText": true,
         "created_at": DateTime.now()
       }).then((val) {
@@ -899,6 +931,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
       "user_name": widget.user.getName(),
       "image": dbUrl,
       "message": "",
+      "profileImage": "",
       "isText": false,
       "created_at": DateTime.now()
     }).then((val) {
