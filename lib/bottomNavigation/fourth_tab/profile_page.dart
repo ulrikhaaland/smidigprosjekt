@@ -342,6 +342,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       .getPortraitWidthByPercentage(context, 85),
                   child: new Column(
                     children: <Widget>[
+                      myProfile ?
                       new Align(
                         alignment: Alignment.centerRight,
                         child: new IconButton(
@@ -356,7 +357,17 @@ class _ProfilePageState extends State<ProfilePage> {
                             });
                           },
                         ),
-                      ),
+                      ) :
+                    new Align(
+                    alignment: Alignment.centerRight,
+                    child: new IconButton(
+                    icon: Image.asset(
+                    "lib/assets/images/editprofile_icon.png",
+                    color: Colors.white,
+                    scale: 11,
+                    ),
+                    onPressed: null ),),
+
                       new Padding(
                         padding: EdgeInsets.only(top: 46),
                       ),
@@ -398,10 +409,11 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             Padding(padding: EdgeInsets.all(10)),
+            myProfile ?
             new Text(
               "Mine events:",
               style: new TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
+            ) : new Container(),
             new Container(
               child: new Stack(
                 //child: new Stack(
@@ -432,7 +444,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       var now = new DateTime.now();
                                       if (document.data["id"]
                                               .contains(widget.user.userName) &&
-                                          document.data["time"].isAfter(now)) {
+                                          document.data["time"].isAfter(now ) && myProfile == true) {
                                         return Column(
                                           children: <Widget>[
                                             Divider(
