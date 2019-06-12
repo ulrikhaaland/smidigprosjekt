@@ -174,8 +174,7 @@ class IntroState extends State<Intro> {
                               setState(() {
                                 userinfo = !userinfo;
                               });
-                                uploadImage(imgUrl);
-
+                              uploadImage(imgUrl);
                             }
                           },
                         )
@@ -650,22 +649,19 @@ class IntroState extends State<Intro> {
         imgRef.child(timeKey.toString() + ".jpg").putFile(imgUrl);
     var url = await (await upTask.onComplete).ref.getDownloadURL();
     dbUrl = url.toString();
+    widget.user.profileImage = dbUrl;
     print("DBURL AFTER UPLOAD:" + dbUrl);
     _sendImage(dbUrl);
-    Navigator.pop(context);
   }
 
   _sendImage(String dbUrl) {
     var db = Firestore.instance;
     db
-        .collection("users/${widget.user.id}")
-        .add({"profile_picture": dbUrl}).then((val) {
-      db.document("users/${widget.user.id}").updateData(widget.user.toJson());
-      print("success");
-    }).catchError((err) {
-      print(err);
-    });
-    widget.user.profileImage = dbUrl;
+        .document("users/${widget.user.id}")
+        .updateData(widget.user.toJson())
+        .catchError((e) => print(e.toString()));
+
+    print("success");
   }
 
   saveData(bool fromForm) async {
