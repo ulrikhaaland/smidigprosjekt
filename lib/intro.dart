@@ -271,7 +271,7 @@ class IntroState extends State<Intro> {
                   height: ServiceProvider.instance.screenService
                       .getHeightByPercentage(context, 7.5),
                   child: Text(
-                    "Du har 2 valgmuligheter:",
+                    "Du har 3 valgmuligheter:",
                     style: Styles().title(),
                   ),
                 ),
@@ -325,7 +325,7 @@ class IntroState extends State<Intro> {
                         height: ServiceProvider.instance.screenService
                             .getHeightByPercentage(context, 15),
                         child: Center(
-                          child: Text("Opprett din egen gruppe",
+                          child: Text("Jeg vil ikke ha en gruppe",
                               style: TextStyle(color: Colors.white)),
                         ),
                       ),
