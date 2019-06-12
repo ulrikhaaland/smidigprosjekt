@@ -168,16 +168,16 @@ class IntroState extends State<Intro> {
                         PrimaryButton(
                           text: "Gå videre",
                           onPressed: () {
-                            if(imgUrl != null) {
+                            if (imgUrl != null) {
                               if (_formKey.currentState.validate()) {
                                 saveData(true);
 
                                 setState(() {
                                   userinfo = !userinfo;
                                 });
-                                 uploadImage(imgUrl);
+                                uploadImage(imgUrl);
                               }
-                            }else{
+                            } else {
                               Toast.show("Vennligst legg til bilde", context,
                                   duration: Toast.LENGTH_LONG,
                                   gravity: Toast.CENTER,
@@ -252,7 +252,7 @@ class IntroState extends State<Intro> {
     } else {
       swipes == true
           ? content = Swiper(
-              loop: false,
+              loop: true,
               itemBuilder: (BuildContext context, int index) {
                 return list[index];
               },
@@ -273,7 +273,7 @@ class IntroState extends State<Intro> {
                   height: ServiceProvider.instance.screenService
                       .getHeightByPercentage(context, 7.5),
                   child: Text(
-                    "Du har 3 valgmuligheter:",
+                    "Du har 2 valgmuligheter:",
                     style: Styles().title(),
                   ),
                 ),
@@ -315,25 +315,25 @@ class IntroState extends State<Intro> {
                     ),
                   ),
                 ),
-                // Padding(
-                //   padding: EdgeInsets.only(bottom: 24),
-                //   child: GestureDetector(
-                //     onTap: () => _groupDecision(3),
-                //     child: Card(
-                //       color: UIData.darkblue,
-                //       child: Container(
-                //         width: ServiceProvider.instance.screenService
-                //             .getWidthByPercentage(context, 85),
-                //         height: ServiceProvider.instance.screenService
-                //             .getHeightByPercentage(context, 15),
-                //         child: Center(
-                //           child: Text("Opprett din egen gruppe",
-                //               style: TextStyle(color: Colors.white)),
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 24),
+                  child: GestureDetector(
+                    onTap: () => _groupDecision(2),
+                    child: Card(
+                      color: UIData.darkblue,
+                      child: Container(
+                        width: ServiceProvider.instance.screenService
+                            .getWidthByPercentage(context, 85),
+                        height: ServiceProvider.instance.screenService
+                            .getHeightByPercentage(context, 15),
+                        child: Center(
+                          child: Text("Opprett din egen gruppe",
+                              style: TextStyle(color: Colors.white)),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             );
     }
@@ -593,7 +593,7 @@ class IntroState extends State<Intro> {
       imgUrl = gallery;
       newFoto = true;
     });
-    Navigator.of(context, rootNavigator: true).pop(); 
+    Navigator.of(context, rootNavigator: true).pop();
   }
 
   Future<void> openOptions() {
@@ -654,7 +654,6 @@ class IntroState extends State<Intro> {
     var timeKey = new DateTime.now();
     final StorageUploadTask upTask =
         imgRef.child(timeKey.toString() + ".jpg").putFile(imgUrl);
-    _onLoading();
     var url = await (await upTask.onComplete).ref.getDownloadURL();
     dbUrl = url.toString();
     print("DBURL AFTER UPLOAD:" + dbUrl);
@@ -674,35 +673,10 @@ class IntroState extends State<Intro> {
     });
     widget.user.profileImage = dbUrl;
   }
-
-  void _onLoading() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      child: new Dialog(
-          child: ClipRRect(
-              borderRadius: new BorderRadius.circular(8.0),
-              child: Container(
-                padding:
-                    EdgeInsets.only(top: 12, bottom: 12, left: 16, right: 16),
-                child: new Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    new CircularProgressIndicator(
-                      valueColor:
-                          new AlwaysStoppedAnimation<Color>(UIData.pink),
-                    ),
-                    new Padding(padding: EdgeInsets.only(left: 25)),
-                    new Text("Vent litt..."),
-                  ],
-                ),
-              ))),
-    );
-  }
-
+  
   saveData(bool fromForm) async {
     if (fromForm) {
-      // widget.user.intro = false;
+      widget.user.intro = false;
 
       _formKey.currentState.save();
     }

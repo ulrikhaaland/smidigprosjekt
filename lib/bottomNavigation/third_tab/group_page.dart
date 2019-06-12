@@ -116,8 +116,13 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
   }
 
   _getGroup() async {
-    DocumentSnapshot docSnap =
-        await firestoreInstance.document("groups/${widget.user.groupId}").get();
+    DocumentSnapshot docSnap;
+    if (widget.user.groupId != null) {
+      docSnap = await firestoreInstance
+          .document("groups/${widget.user.groupId}")
+          .get();
+    }
+
     if (docSnap.exists) {
       _group = Group(
           name: docSnap.data["name"],
@@ -129,13 +134,15 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
           .collection("groups/${widget.user.groupId}/members")
           .getDocuments();
       qSnap.documents.forEach((d) => _group.members.add(User(
-            id: d.data["id"],
-            userName: d.data["name"],
-            school: d.data["school"],
-            program: d.data["program"],
-        profileImage: d.data["profileImage"]
-
-          )));
+          id: d.data["id"],
+          userName: d.data["name"],
+          school: d.data["school"],
+          program: d.data["program"],
+          profileImage: d.data["profileImage"])));
+      firestoreInstance
+          .document("groups/${_group.id}")
+          .updateData({"memberamount": _group.members.length});
+      await _getChallenges();
     } else {
       widget.user.introChoice = IntroChoice.search;
     }
@@ -143,27 +150,22 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
     setState(() {
       isLoading = false;
     });
-
-    await firestoreInstance
-        .document("groups/${_group.id}")
-        .updateData({"memberamount": _group.members.length});
-
-    _getChallenges();
   }
 
-  _getChallenges() async {
+  Future<Null> _getChallenges() async {
     qSnapChallenge = await Firestore.instance
         .collection("groups/${_group.id}/challenges")
         .getDocuments();
     if (qSnapChallenge.documents.isEmpty) {
       print("Empty");
-      _createChallenges();
+      await _createChallenges();
     }
+    return;
   }
 
-  _createChallenges() {
+  Future<Null> _createChallenges() async {
     var db = Firestore.instance;
-    db
+    await db
         .collection("groups/${_group.id}/challenges")
         .document("utfordring1")
         .setData({
@@ -173,11 +175,11 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
       "prosent": 0.0,
       "activeChallange": "Ta en kaffe sammen"
     });
-    db
+    await db
         .collection("groups/${_group.id}/challenges")
         .document("utfordring2")
         .setData({"id": 1, "challenge": "Grille i parken", "isDone": false});
-    db
+    await db
         .collection("groups/${_group.id}/challenges")
         .document("utfordring3")
         .setData({
@@ -185,14 +187,15 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
       "challenge": "Velg film sammen og dra på kino",
       "isDone": false
     });
-    db
+    await db
         .collection("groups/${_group.id}/challenges")
         .document("utfordring4")
         .setData({"id": 3, "challenge": "Dra på Syng sammen", "isDone": false});
-    db
+    await db
         .collection("groups/${_group.id}/challenges")
         .document("utfordring5")
         .setData({"id": 4, "challenge": "4 stjerners middag", "isDone": false});
+    return;
   }
 
   @override
@@ -222,12 +225,17 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
           if (index == 4) {
             percentage = proList[5];
             activeChallenge = "Dere har ingen flere utfordringer";
-            db.collection("groups/${_group.id}/challenges")
+            db
+                .collection("groups/${_group.id}/challenges")
                 .document("utfordring" + "${index + 1}")
                 .updateData({"isDone": true});
-            db.collection("groups/${_group.id}/challenges")
+            db
+                .collection("groups/${_group.id}/challenges")
                 .document("utfordring1")
-                .updateData({"prosent": percentage, "activeChallange": activeChallenge});
+                .updateData({
+              "prosent": percentage,
+              "activeChallange": activeChallenge
+            });
           } else {
             activeChallenge = taskList[index + 1];
             percentage = proList[index + 1];
@@ -265,19 +273,24 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
             setState(() {
               isLoading = true;
             });
+            DocumentReference docRef =
+                await firestoreInstance.collection("groups").add({
+              "name": "Min gruppe",
+            });
             _group = Group(
                 name: "Min gruppe",
-                id: null,
+                id: docRef.documentID,
                 memberAmount: groupMembers.length,
                 members: groupMembers);
-            DocumentReference docRef = await firestoreInstance
-                .collection("groups")
-                .add(_group.toJson());
+            await firestoreInstance
+                .document("groups/${_group.id}")
+                .updateData(_group.toJson());
             _group.members.forEach((m) {
               firestoreInstance
                   .collection("groups/${docRef.documentID}/members")
                   .add(m.toJson());
             });
+            widget.user.groupId = docRef.documentID;
             setState(() {
               isLoading = false;
               widget.user.introChoice = IntroChoice.assigned;
@@ -334,14 +347,17 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                                         child: ClipRRect(
                                           borderRadius:
                                               new BorderRadius.circular(80),
-                                          child: _group.members[index].profileImage != null ?
-                                           Image.network(
-                                        _group.members[index].profileImage,
-                                          //widget.user.profileImage,
-                                          width: 42,
-                                          height: 42,
-                                          fit: BoxFit.cover,
-                                        )
+                                          child: _group.members[index]
+                                                      .profileImage !=
+                                                  null
+                                              ? Image.network(
+                                                  _group.members[index]
+                                                      .profileImage,
+                                                  //widget.user.profileImage,
+                                                  width: 42,
+                                                  height: 42,
+                                                  fit: BoxFit.cover,
+                                                )
                                               : Image.asset(
                                                   //_group.members[index].profileImage, // fra list [index]
                                                   "lib/assets/images/profilbilde.png",
@@ -352,8 +368,16 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                                                 ),
                                         ),
                                       ),
-                                      _group.members[index].userName.contains(widget.user.userName) ? Text("Meg", style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold))
-                                          : Text("${_getFirstName(index)}", style: TextStyle(fontSize: 11),),
+                                      _group.members[index].userName
+                                              .contains(widget.user.userName)
+                                          ? Text("Meg",
+                                              style: TextStyle(
+                                                  fontSize: 11,
+                                                  fontWeight: FontWeight.bold))
+                                          : Text(
+                                              "${_getFirstName(index)}",
+                                              style: TextStyle(fontSize: 11),
+                                            ),
                                     ]),
                               );
                             },
@@ -411,6 +435,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) return Container();
+
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -500,73 +525,68 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                               ], // Text and meter row children
                             ),
                           ),
+                          new Padding(
+                            padding: EdgeInsets.only(top: 30),
+                          ),
+                          new ClipRRect(
+                              borderRadius: new BorderRadius.circular(8.0),
+                              child: new Container(
+                                width: ServiceProvider.instance.screenService
+                                    .getPortraitWidthByPercentage(context, 80),
+                                height: ServiceProvider.instance.screenService
+                                    .getHeightByPercentage(context, 38),
+                                color: Colors.white,
+                                child: new ListView.builder(
+                                    itemCount: 5,
+                                    itemBuilder: (context, int index) {
+                                      DocumentSnapshot document =
+                                          snapshot.data.documents[index];
+                                      inputs[index] = document.data["isDone"];
+                                      //percentage = document.data["prosent"] + .0;
 
-                    new Padding(
-                      padding: EdgeInsets.only(top: 30),
-                    ),
-                    new ClipRRect(
-                        borderRadius: new BorderRadius.circular(8.0),
-                        child: new Container(
-                          width: ServiceProvider.instance.screenService
-                              .getPortraitWidthByPercentage(context, 80),
-                          height: ServiceProvider.instance.screenService
-                              .getHeightByPercentage(context, 38),
-                          color: Colors.white,
-                          child: new ListView.builder(
-                              itemCount: 5,
-                              itemBuilder: (context, int index) {
-                                DocumentSnapshot document =
-                                snapshot.data.documents[index];
-                              inputs[index] = document.data["isDone"];
-                              //percentage = document.data["prosent"] + .0;
+                                      return new Column(children: [
+                                        new Padding(
+                                          padding: EdgeInsets.only(top: 5),
+                                        ),
+                                        new CheckboxListTile(
+                                            value: inputs[index],
+                                            title: new Text(taskList[index],
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontFamily: "Anton")),
+                                            activeColor: UIData.blue,
+                                            controlAffinity:
+                                                ListTileControlAffinity
+                                                    .trailing,
+                                            onChanged: (bool val) {
+                                              //if (inputs[index] == true) {
+                                              if (inputs[index] == true) {
+                                              } else {
+                                                itemChange(val, index);
+                                                setState(() {
+                                                  percentage = newPercentage;
 
-
-                                return new Column(children: [
-                                  new Padding(
-                                    padding: EdgeInsets.only(top: 5),
-                                  ),
-                                  new CheckboxListTile(
-                                      value: inputs[index],
-                                      title: new Text(taskList[index],
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              fontFamily: "Anton")),
-                                      activeColor: UIData.blue,
-                                      controlAffinity:
-                                          ListTileControlAffinity.trailing,
-                                      onChanged: (bool val) {
-
-                                        //if (inputs[index] == true) {
-                                        if(inputs[index] == true) {
-
-
-                                        } else {
-                                          itemChange(val, index);
-                                          setState(() {
-                                            percentage = newPercentage;
-
-                                            newPercentage -=
-                                                100 / taskList.length;
-                                            if (newPercentage < 0) {
-                                              percentage = 0.0;
-                                              newPercentage = 0.0;
-                                            }
-                                            percentageAnimationController
-                                                .reverse(from: 100.0);
-                                          });
-                                        }
-                                      })
-                                ]);
-                              }),
-                        )),
-                    new Divider(
-                      color: UIData.grey,
-                      height: 20,
-                    ),
-
-                  ],
-                );}),
-
+                                                  newPercentage -=
+                                                      100 / taskList.length;
+                                                  if (newPercentage < 0) {
+                                                    percentage = 0.0;
+                                                    newPercentage = 0.0;
+                                                  }
+                                                  percentageAnimationController
+                                                      .reverse(from: 100.0);
+                                                });
+                                              }
+                                            })
+                                      ]);
+                                    }),
+                              )),
+                          new Divider(
+                            color: UIData.grey,
+                            height: 20,
+                          ),
+                        ],
+                      );
+                    }),
               ),
               new Stack(
                 children: <Widget>[
@@ -608,7 +628,6 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                                   : _message(
                                       document['message'],
                                       document['user_name'],
-                                      document['image'],
                                       document['profileImage'],
                                       document['isText']);
                             },
@@ -795,7 +814,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
     var fullnames = userName;
     var split = fullnames.split(' ');
     String firstName = split[0];
-    
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -812,14 +831,11 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
               fit: BoxFit.cover,
             ),
           ),
-        ), 
+        ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              firstName,
-              style: TextStyle(fontSize: 11, color: Colors.grey)
-            ),
+            Text(firstName, style: TextStyle(fontSize: 11, color: Colors.grey)),
             isText
                 ? Padding(
                     padding: EdgeInsets.only(top: 2, bottom: 10),
