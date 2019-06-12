@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:smidigprosjekt/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:smidigprosjekt/bottomNavigation/fourth_tab/profile_page.dart';
 import 'package:smidigprosjekt/service/service_provider.dart';
 import 'package:smidigprosjekt/utils/uidata.dart';
 import 'package:smidigprosjekt/userSearch/search.dart';
@@ -169,44 +170,52 @@ class SearchState extends State<Search> {
                     ),
                     child: FlatButton(
                       onPressed: () {
-                        bool cleared = false;
-                        String snackText = "";
-                        widget.addUsers.forEach((u) =>
-                            u.userName == doc.data["name"]
-                                ? cleared = false
-                                : cleared = true);
-                        if (cleared) {
-                          widget.addUsers.add(User(
-                            userName: doc.data["name"],
-                            id: doc.data["id"],
-                            email: doc.data["email"],
-                            school: doc.data["school"],
-                            program: doc.data["program"],
-                            profileImage: doc.data["profileimage"],
-                            bio: doc.data["bio"],
-                          ));
-                          snackText =
-                              "${doc.data["name"]} har blitt lagt valgt!";
-                        } else {
-                          snackText =
-                              "${doc.data["name"]} har allerede blitt valgt!";
-                        }
+                        if (widget.fromGroup) {
+                          bool cleared = false;
+                          String snackText = "";
+                          widget.addUsers.forEach((u) =>
+                              u.userName == doc.data["name"]
+                                  ? cleared = false
+                                  : cleared = true);
+                          if (cleared) {
+                            widget.addUsers.add(User(
+                              userName: doc.data["name"],
+                              id: doc.data["id"],
+                              email: doc.data["email"],
+                              school: doc.data["school"],
+                              program: doc.data["program"],
+                              profileImage: doc.data["profileimage"],
+                              bio: doc.data["bio"],
+                            ));
+                            snackText =
+                                "${doc.data["name"]} har blitt lagt valgt!";
+                          } else {
+                            snackText =
+                                "${doc.data["name"]} har allerede blitt valgt!";
+                          }
 
-                        Scaffold.of(context).showSnackBar(new SnackBar(
-                            backgroundColor: UIData.blue,
-                            content: Container(
-                              height: ServiceProvider.instance.screenService
-                                  .getHeightByPercentage(context, 2.5),
-                              child: Column(
-                                children: <Widget>[
-                                  Text(
-                                    snackText,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ],
-                              ),
-                            )));
+                          Scaffold.of(context).showSnackBar(new SnackBar(
+                              backgroundColor: UIData.blue,
+                              content: Container(
+                                height: ServiceProvider.instance.screenService
+                                    .getHeightByPercentage(context, 2.5),
+                                child: Column(
+                                  children: <Widget>[
+                                    Text(
+                                      snackText,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ],
+                                ),
+                              )));
+                        } else {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => ProfilePage(
+                                  user: widget.user,
+                                ),
+                          ));
+                        }
                       },
                       child:
                           Text("Velg", style: TextStyle(color: Colors.white)),

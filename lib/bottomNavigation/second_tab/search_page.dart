@@ -50,6 +50,7 @@ class SearchPageState extends State<SearchPage> {
         ),
         body: Search(
           fromGroup: false,
+          user: widget.user,
         ));
   }
 }
