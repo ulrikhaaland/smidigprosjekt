@@ -109,7 +109,7 @@ class SearchState extends State<Search> {
 
   Widget _buildResultItems(BuildContext context, DocumentSnapshot doc) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         SizedBox(
           width: 150,
@@ -130,7 +130,14 @@ class SearchState extends State<Search> {
                       // height: 70,
                       child: ClipRRect(
                         borderRadius: new BorderRadius.circular(70),
-                        child: Image.asset(
+                        child:(doc.data["profileImage"]) !=null?
+                        Image.network(
+                          (doc.data["profileImage"]), // fra list [index]
+                          width: 62,
+                          fit: BoxFit.cover,
+                        )
+                        :
+                        Image.asset(
                           "lib/assets/images/profilbilde.png", // fra list [index]
                           width: 62,
                           fit: BoxFit.cover,
@@ -176,7 +183,7 @@ class SearchState extends State<Search> {
                           email: doc.data["email"],
                           school: doc.data["school"],
                           program: doc.data["program"],
-                          profileImage: doc.data["profileimage"],
+                          profileImage: doc.data["profileImage"],
                           bio: doc.data["bio"],
                         );
                         if (widget.fromGroup) {
