@@ -695,8 +695,10 @@ class PageOneState extends State<PageOne> {
                                                                           style:
                                                                               TextStyle(fontSize: 12),
                                                                         ),
+
                                                                       ],
                                                                     ),
+
                                                                   ],
                                                                 ),
                                                               ),
@@ -707,6 +709,10 @@ class PageOneState extends State<PageOne> {
                                                     ),
                                                   ),
                                                 ),
+                                          tap == true &&
+                                              tapped != null &&
+                                              tapped == index
+                                              ? Icon(Icons.keyboard_arrow_up, size: 25,) : Icon(Icons.keyboard_arrow_down, size: 25,)
                                         ],
                                       ),
                                     )

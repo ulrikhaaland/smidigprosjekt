@@ -353,6 +353,8 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                                                 ),
                                         ),
                                       ),
+                                      _group.members[index].userName.contains(widget.user.userName) ? Text("Meg", style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold))
+                                          : Text("${_getFirstName(index)}", style: TextStyle(fontSize: 11),),
                                     ]),
                               );
                             },
@@ -499,68 +501,73 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                               ], // Text and meter row children
                             ),
                           ),
-                          new Padding(
-                            padding: EdgeInsets.only(top: 30),
-                          ),
-                          new ClipRRect(
-                              borderRadius: new BorderRadius.circular(8.0),
-                              child: new Container(
-                                width: ServiceProvider.instance.screenService
-                                    .getPortraitWidthByPercentage(context, 80),
-                                height: ServiceProvider.instance.screenService
-                                    .getHeightByPercentage(context, 38),
-                                color: Colors.white,
-                                child: new ListView.builder(
-                                    itemCount: 4,
-                                    itemBuilder: (context, int index) {
-                                      DocumentSnapshot document =
-                                          snapshot.data.documents[index];
-                                      inputs[index] = document.data["isDone"];
-                                      //percentage = document.data["prosent"] + .0;
 
-                                      return new Column(children: [
-                                        new Padding(
-                                          padding: EdgeInsets.only(top: 5),
-                                        ),
-                                        new CheckboxListTile(
-                                            value: inputs[index],
-                                            title: new Text(taskList[index],
-                                                style: TextStyle(
-                                                    fontSize: 15,
-                                                    fontFamily: "Anton")),
-                                            activeColor: UIData.blue,
-                                            controlAffinity:
-                                                ListTileControlAffinity
-                                                    .trailing,
-                                            onChanged: (bool val) {
-                                              //if (inputs[index] == true) {
-                                              if (inputs[index] == true) {
-                                              } else {
-                                                itemChange(val, index);
-                                                setState(() {
-                                                  percentage = newPercentage;
+                    new Padding(
+                      padding: EdgeInsets.only(top: 30),
+                    ),
+                    new ClipRRect(
+                        borderRadius: new BorderRadius.circular(8.0),
+                        child: new Container(
+                          width: ServiceProvider.instance.screenService
+                              .getPortraitWidthByPercentage(context, 80),
+                          height: ServiceProvider.instance.screenService
+                              .getHeightByPercentage(context, 38),
+                          color: Colors.white,
+                          child: new ListView.builder(
+                              itemCount: 5,
+                              itemBuilder: (context, int index) {
+                                DocumentSnapshot document =
+                                snapshot.data.documents[index];
+                              inputs[index] = document.data["isDone"];
+                              //percentage = document.data["prosent"] + .0;
 
-                                                  newPercentage -=
-                                                      100 / taskList.length;
-                                                  if (newPercentage < 0) {
-                                                    percentage = 0.0;
-                                                    newPercentage = 0.0;
-                                                  }
-                                                  percentageAnimationController
-                                                      .reverse(from: 100.0);
-                                                });
-                                              }
-                                            })
-                                      ]);
-                                    }),
-                              )),
-                          new Divider(
-                            color: UIData.grey,
-                            height: 20,
-                          ),
-                        ],
-                      );
-                    }),
+
+                                return new Column(children: [
+                                  new Padding(
+                                    padding: EdgeInsets.only(top: 5),
+                                  ),
+                                  new CheckboxListTile(
+                                      value: inputs[index],
+                                      title: new Text(taskList[index],
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              fontFamily: "Anton")),
+                                      activeColor: UIData.blue,
+                                      controlAffinity:
+                                          ListTileControlAffinity.trailing,
+                                      onChanged: (bool val) {
+
+                                        //if (inputs[index] == true) {
+                                        if(inputs[index] == true) {
+
+
+                                        } else {
+                                          itemChange(val, index);
+                                          setState(() {
+                                            percentage = newPercentage;
+
+                                            newPercentage -=
+                                                100 / taskList.length;
+                                            if (newPercentage < 0) {
+                                              percentage = 0.0;
+                                              newPercentage = 0.0;
+                                            }
+                                            percentageAnimationController
+                                                .reverse(from: 100.0);
+                                          });
+                                        }
+                                      })
+                                ]);
+                              }),
+                        )),
+                    new Divider(
+                      color: UIData.grey,
+                      height: 20,
+                    ),
+
+                  ],
+                );}),
+
               ),
               new Stack(
                 children: <Widget>[
