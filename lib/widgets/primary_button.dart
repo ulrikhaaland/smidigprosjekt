@@ -25,6 +25,8 @@ class PrimaryButton extends StatelessWidget {
                   .getPortraitWidthByPercentage(context, 25),
               right: ServiceProvider.instance.screenService
                   .getPortraitWidthByPercentage(context, 25)),
+
+
           child: new FlatButton(
               child: new Text(text,
                   style: new TextStyle(color: Colors.white, fontSize: 15.0)),

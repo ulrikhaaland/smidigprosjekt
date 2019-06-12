@@ -35,6 +35,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   bool newFoto = false;
   bool edit = false;
+  bool myProfile = true;
 
   int tapped = -1;
   double cardWidth;
@@ -63,7 +64,7 @@ class _ProfilePageState extends State<ProfilePage> {
         this._removeKeyboard(context);
       },
       child: new Scaffold(
-        endDrawer: SizedBox(
+        endDrawer: myProfile ? SizedBox(
           width: 250,
           child: Drawer(
             child: Container(
@@ -169,10 +170,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ])),
           ),
-        ),
+        ) : Container(),
         backgroundColor: UIData.grey,
         appBar: new AppBar(
           actions: <Widget>[
+            myProfile ?
             Builder(
               builder: (context) => IconButton(
                     /*leading: new IconButton(icon: Image.asset('lib/assets/images/settings_icon.png', scale: 10,),
@@ -181,7 +183,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         scale: 12),
                     onPressed: () => Scaffold.of(context).openEndDrawer(),
                   ),
-            ),
+            ) : Container(),
           ],
           elevation: 1,
           backgroundColor: Colors.white,
