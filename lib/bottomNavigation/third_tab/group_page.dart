@@ -472,14 +472,17 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                                       new Padding(
                                         padding: EdgeInsets.only(bottom: 5),
                                       ),
+                                      snapshot.data.documents[0]
+                                          .data["activeChallange"] != null ?
                                       new Text(
+
                                         snapshot.data.documents[0]
                                             .data["activeChallange"],
                                         textAlign: TextAlign.left,
                                         style: new TextStyle(
                                             color: UIData.black,
                                             fontFamily: 'Anton'),
-                                      ),
+                                      ) : new Text(""),
                                     ],
                                   ),
                                 ),

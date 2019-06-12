@@ -131,7 +131,7 @@ class SearchState extends State<Search> {
                       child: ClipRRect(
                         borderRadius: new BorderRadius.circular(70),
                         child: Image.asset(
-                          "lib/assets/images/fortnite.jpg", // fra list [index]
+                          "lib/assets/images/profilbilde.png", // fra list [index]
                           width: 62,
                           fit: BoxFit.cover,
                         ),
@@ -139,7 +139,8 @@ class SearchState extends State<Search> {
                     ),
                   ),
                 ),
-                Expanded(
+                Container(
+                  height: 60,
                   child: Column(
                     children: <Widget>[
                       Expanded(
@@ -148,6 +149,7 @@ class SearchState extends State<Search> {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
+                      Padding(padding: EdgeInsets.all(1)),
                       Expanded(child: Text(doc.data["school"])),
                       Expanded(
                         child: Text(doc.data["program"],
@@ -161,7 +163,7 @@ class SearchState extends State<Search> {
                     margin: EdgeInsets.only(top: 0),
                     width: 150,
                     decoration: new BoxDecoration(
-                      color: Colors.pink,
+                      color: UIData.pink,
                       borderRadius: new BorderRadius.only(
                           bottomLeft: const Radius.circular(8.0),
                           bottomRight: const Radius.circular(8.0)),
