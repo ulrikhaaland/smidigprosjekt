@@ -133,6 +133,8 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
             userName: d.data["name"],
             school: d.data["school"],
             program: d.data["program"],
+        profileImage: d.data["profileImage"]
+
           )));
     } else {
       widget.user.introChoice = IntroChoice.search;
@@ -332,15 +334,14 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                                         child: ClipRRect(
                                           borderRadius:
                                               new BorderRadius.circular(80),
-                                          child: _group.members[index].userName
-                                                  .contains(
-                                                      widget.user.userName)
-                                              ? Image.network(
-                                                  widget.user.profileImage,
-                                                  width: 42,
-                                                  height: 42,
-                                                  fit: BoxFit.cover,
-                                                )
+                                          child: _group.members[index].profileImage != null ?
+                                           Image.network(
+                                        _group.members[index].profileImage,
+                                          //widget.user.profileImage,
+                                          width: 42,
+                                          height: 42,
+                                          fit: BoxFit.cover,
+                                        )
                                               : Image.asset(
                                                   //_group.members[index].profileImage, // fra list [index]
                                                   "lib/assets/images/profilbilde.png",
