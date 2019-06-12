@@ -654,7 +654,6 @@ class IntroState extends State<Intro> {
     var timeKey = new DateTime.now();
     final StorageUploadTask upTask =
         imgRef.child(timeKey.toString() + ".jpg").putFile(imgUrl);
-    _onLoading();
     var url = await (await upTask.onComplete).ref.getDownloadURL();
     dbUrl = url.toString();
     print("DBURL AFTER UPLOAD:" + dbUrl);
@@ -674,32 +673,7 @@ class IntroState extends State<Intro> {
     });
     widget.user.profileImage = dbUrl;
   }
-
-  void _onLoading() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      child: new Dialog(
-          child: ClipRRect(
-              borderRadius: new BorderRadius.circular(8.0),
-              child: Container(
-                padding:
-                    EdgeInsets.only(top: 12, bottom: 12, left: 16, right: 16),
-                child: new Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    new CircularProgressIndicator(
-                      valueColor:
-                          new AlwaysStoppedAnimation<Color>(UIData.pink),
-                    ),
-                    new Padding(padding: EdgeInsets.only(left: 25)),
-                    new Text("Vent litt..."),
-                  ],
-                ),
-              ))),
-    );
-  }
-
+  
   saveData(bool fromForm) async {
     if (fromForm) {
       widget.user.intro = false;

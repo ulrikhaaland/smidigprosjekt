@@ -254,11 +254,7 @@ class PageOneState extends State<PageOne> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       backgroundColor: UIData.grey,
       appBar: new AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.dashboard),
-          color: Colors.black,
-          onPressed: () => widget.auth.signOut(),
-        ),
+        
         elevation: 1,
         backgroundColor: Colors.white,
         actions: <Widget>[
