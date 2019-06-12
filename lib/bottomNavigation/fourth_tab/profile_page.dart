@@ -367,9 +367,8 @@ class _ProfilePageState extends State<ProfilePage> {
         fotoWidget = Image.asset(
           //_group.members[index].profileImage, // fra list [index]
           "lib/assets/images/profilbilde.png",
-
-          width: 42,
-          height: 42,
+          width: 122,
+          height: 122,
           fit: BoxFit.cover,
         );
       }
