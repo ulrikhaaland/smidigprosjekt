@@ -800,19 +800,24 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
           child: ClipRRect(
             borderRadius: new BorderRadius.circular(100),
             child: Image.asset(
-              "lib/assets/images/fortnite.jpg", // fra list [index]
+              "lib/assets/images/profilbilde.png", // fra list [index]
               height: 40,
               width: 40,
               fit: BoxFit.cover,
             ),
           ),
         ),
+        
         Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            Text(
+          userName,
+          style: TextStyle(fontSize: 11, color: Colors.grey)
+        ),
             isText
                 ? Padding(
-                    padding: EdgeInsets.only(top: 10, bottom: 10),
+                    padding: EdgeInsets.only(top: 2, bottom: 10),
                     child: ClipRRect(
                         borderRadius: new BorderRadius.circular(8.0),
                         child: new Container(
