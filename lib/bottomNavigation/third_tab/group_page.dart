@@ -290,7 +290,11 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                   .collection("groups/${docRef.documentID}/members")
                   .add(m.toJson());
             });
+            await _getChallenges();
             widget.user.groupId = docRef.documentID;
+            firestoreInstance.document("users/${widget.user.id}").updateData({
+              "groupid": _group.id,
+            });
             setState(() {
               isLoading = false;
               widget.user.introChoice = IntroChoice.assigned;
