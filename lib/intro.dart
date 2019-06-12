@@ -77,7 +77,12 @@ class IntroState extends State<Intro> {
     if (userinfo) {
       content = Form(
         key: _formKey,
-        child: Column(
+        child: SingleChildScrollView(
+
+        child: GestureDetector(
+          onTap: () {_removeKeyboard(context);},
+          child:
+        Column(
           children: <Widget>[
             Container(
               height: ServiceProvider.instance.screenService
@@ -92,10 +97,10 @@ class IntroState extends State<Intro> {
                         .getHeightByPercentage(context, 6.25),
                   ),
                   color: Colors.white,
-                  elevation: 2,
+                  elevation: 0,
                   child: Container(
                     height: ServiceProvider.instance.screenService
-                        .getHeightByPercentage(context, 66),
+                        .getHeightByPercentage(context, 69),
                     width: ServiceProvider.instance.screenService
                         .getWidthByPercentage(context, 90),
                     child: Column(
@@ -240,7 +245,7 @@ class IntroState extends State<Intro> {
               ],
             ),
           ],
-        ),
+        ),),),
       );
     } else {
       swipes == true
@@ -266,7 +271,7 @@ class IntroState extends State<Intro> {
                   height: ServiceProvider.instance.screenService
                       .getHeightByPercentage(context, 7.5),
                   child: Text(
-                    "Du har 2 valgmuligheter:",
+                    "Du har 3 valgmuligheter:",
                     style: Styles().title(),
                   ),
                 ),
@@ -320,7 +325,7 @@ class IntroState extends State<Intro> {
                         height: ServiceProvider.instance.screenService
                             .getHeightByPercentage(context, 15),
                         child: Center(
-                          child: Text("Opprett din egen gruppe",
+                          child: Text("Jeg vil ikke ha en gruppe",
                               style: TextStyle(color: Colors.white)),
                         ),
                       ),
@@ -674,5 +679,8 @@ class IntroState extends State<Intro> {
     Firestore.instance
         .document("users/${widget.user.id}")
         .updateData(widget.user.toJson());
+  }
+  void _removeKeyboard(BuildContext context) {
+    FocusScope.of(context).requestFocus(new FocusNode());
   }
 }

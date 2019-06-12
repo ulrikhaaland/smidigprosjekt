@@ -323,25 +323,25 @@ class _ProfilePageState extends State<ProfilePage> {
                   //decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), border: index == 0 ? Border.all(width: 3, color: UIData.pink) : Border.all(color: Colors.white) ),
                   child: ClipRRect(
                     borderRadius: new BorderRadius.circular(70),
-                    child: widget.user.profileImage != null
-                        ? Image.network(
+                    child: newFoto?
+    GestureDetector(
+    onTap: () => openOptions(),
+    child:
+    Image.file(
+    imgUrl,
+    width: 122,
+    height: 122,
+    fit: BoxFit.cover,
+    )
+    )
+        :
+                         Image.network(
                             widget.user.profileImage,
                             width: 122,
                             height: 122,
                             fit: BoxFit.cover,
                           )
-                        : GestureDetector(
-                            onTap: () => openGallery(),
-                            child: CircleAvatar(
-                              radius: ServiceProvider.instance.screenService
-                                  .getHeightByPercentage(context, 6.5),
-                              backgroundColor: Colors.transparent,
-                              child: Icon(Icons.add_a_photo,
-                                  size: ServiceProvider.instance.screenService
-                                      .getHeightByPercentage(context, 6.5),
-                                  color: Colors.black),
-                            ),
-                          ),
+
                   ),
                 ),
               ))
@@ -367,9 +367,8 @@ class _ProfilePageState extends State<ProfilePage> {
         fotoWidget = Image.asset(
           //_group.members[index].profileImage, // fra list [index]
           "lib/assets/images/profilbilde.png",
-
-          width: 42,
-          height: 42,
+          width: 122,
+          height: 122,
           fit: BoxFit.cover,
         );
       }
