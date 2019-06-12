@@ -165,7 +165,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
           .updateData({"memberamount": _group.members.length});
       await _getChallenges();
       
-      await _getProfileImg();
+      //await _getProfileImg();
     } else {
       widget.user.introChoice = IntroChoice.search;
     }
