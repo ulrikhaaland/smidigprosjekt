@@ -459,7 +459,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                               .getHeightByPercentage(context, 38),
                           color: Colors.white,
                           child: new ListView.builder(
-                              itemCount: 4,
+                              itemCount: 5,
                               itemBuilder: (context, int index) {
                                 DocumentSnapshot document =
                                 snapshot.data.documents[index];
