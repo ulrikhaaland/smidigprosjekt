@@ -330,7 +330,18 @@ class _ProfilePageState extends State<ProfilePage> {
                             height: 122,
                             fit: BoxFit.cover,
                           )
-                        : Image.asset("lib/assets/images/profilbilde.png"),
+                        : GestureDetector(
+                            onTap: () => null,
+                            child: CircleAvatar(
+                              radius: ServiceProvider.instance.screenService
+                                  .getHeightByPercentage(context, 6.5),
+                              backgroundColor: Colors.transparent,
+                              child: Icon(Icons.add_a_photo,
+                                  size: ServiceProvider.instance.screenService
+                                      .getHeightByPercentage(context, 6.5),
+                                  color: Colors.black),
+                            ),
+                          ),
                   ),
                 ),
               ))

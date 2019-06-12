@@ -308,7 +308,7 @@ class IntroState extends State<Intro> {
                         height: ServiceProvider.instance.screenService
                             .getHeightByPercentage(context, 15),
                         child: Center(
-                          child: Text("Søk etter eller opprett din egen gruppe",
+                          child: Text("Søk etter gruppe",
                               style: TextStyle(color: Colors.white)),
                         ),
                       ),
