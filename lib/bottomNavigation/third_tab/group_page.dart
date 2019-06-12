@@ -89,6 +89,8 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
 
   var names;
 
+  bool profileImgLoaded = false;
+
   @override
   void initState() {
     super.initState();
@@ -107,6 +109,25 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
               percentage, newPercentage, percentageAnimationController.value);
         });
       });
+
+      
+  }
+
+  _getProfileImg() {
+    print("START!!!!!");
+    while(profileImgLoaded == false) {
+        print("SEARCHING!!!!!");
+        for(int i = 0; i < _group.members.length; i++){
+          print("LOOKING!!!!!"+ i.toString());
+          if(_group.members[i].profileImage !=null){
+            setState((){
+              profileImgLoaded = true;
+              print(profileImgLoaded.toString());
+            });  
+            print("FOUND!!!!!");
+          }
+        }
+      }
   }
 
   @override
@@ -143,6 +164,8 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
           .document("groups/${_group.id}")
           .updateData({"memberamount": _group.members.length});
       await _getChallenges();
+      
+      await _getProfileImg();
     } else {
       widget.user.introChoice = IntroChoice.search;
     }
@@ -351,13 +374,20 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                                         child: ClipRRect(
                                           borderRadius:
                                               new BorderRadius.circular(80),
-                                          child: _group.members[index]
-                                                      .profileImage !=
-                                                  null
-                                              ? Image.network(
-                                                  _group.members[index]
-                                                      .profileImage,
+                                          child: profileImgLoaded? 
+                                          _group.members[index].profileImage !=null? 
+                                          Image.network(
+                                                  _group.members[index].profileImage,
                                                   //widget.user.profileImage,
+                                                  width: 42,
+                                                  height: 42,
+                                                  fit: BoxFit.cover,
+                                                )
+                                                :
+                                                Image.asset(
+                                                  //_group.members[index].profileImage, // fra list [index]
+                                                  "lib/assets/images/profilbilde.png",
+
                                                   width: 42,
                                                   height: 42,
                                                   fit: BoxFit.cover,
