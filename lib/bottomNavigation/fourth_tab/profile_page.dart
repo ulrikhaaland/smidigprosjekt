@@ -331,7 +331,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             fit: BoxFit.cover,
                           )
                         : GestureDetector(
-                            onTap: () => openGallery(),
+                            onTap: () => openOptions(),
                             child: CircleAvatar(
                               radius: ServiceProvider.instance.screenService
                                   .getHeightByPercentage(context, 6.5),
