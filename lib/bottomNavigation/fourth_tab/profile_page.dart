@@ -245,7 +245,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: new IconButton(
                         icon: Image.asset(
                           "lib/assets/images/editprofile_icon.png",
-                          color: UIData.black,
+                          color: UIData.pink,
                           scale: 11,
                         ),
                         onPressed: () {

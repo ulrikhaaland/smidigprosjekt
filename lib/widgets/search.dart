@@ -109,7 +109,7 @@ class SearchState extends State<Search> {
 
   Widget _buildResultItems(BuildContext context, DocumentSnapshot doc) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         SizedBox(
           width: 150,
