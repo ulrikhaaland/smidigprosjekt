@@ -15,10 +15,12 @@ class ProfilePage extends StatefulWidget {
     this.onSignOut,
     this.endDrawer,
     this.myEvent,
+    this.myProfile,
   });
   final User user;
   final List<Event> myEvent;
   final VoidCallback onSignOut;
+  bool myProfile;
 
   final Widget endDrawer;
   @override
@@ -35,7 +37,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   bool newFoto = false;
   bool edit = false;
-  bool myProfile = true;
 
   int tapped = -1;
   double cardWidth;
@@ -64,7 +65,7 @@ class _ProfilePageState extends State<ProfilePage> {
         this._removeKeyboard(context);
       },
       child: new Scaffold(
-        endDrawer: myProfile
+        endDrawer: widget.myProfile
             ? SizedBox(
                 width: 250,
                 child: Drawer(
@@ -181,7 +182,7 @@ class _ProfilePageState extends State<ProfilePage> {
             onPressed: () => Navigator.of(context).pop(),
           ),
           actions: <Widget>[
-            myProfile
+            widget.myProfile
                 ? Builder(
                     builder: (context) => IconButton(
                           /*leading: new IconButton(icon: Image.asset('lib/assets/images/settings_icon.png', scale: 10,),
@@ -378,32 +379,32 @@ class _ProfilePageState extends State<ProfilePage> {
                       .getPortraitWidthByPercentage(context, 85),
                   child: new Column(
                     children: <Widget>[
-                      myProfile ?
-                      new Align(
-                        alignment: Alignment.centerRight,
-                        child: new IconButton(
-                          icon: Image.asset(
-                            "lib/assets/images/editprofile_icon.png",
-                            color: UIData.black,
-                            scale: 11,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              edit = !edit;
-                            });
-                          },
-                        ),
-                      ) :
-                    new Align(
-                    alignment: Alignment.centerRight,
-                    child: new IconButton(
-                    icon: Image.asset(
-                    "lib/assets/images/editprofile_icon.png",
-                    color: Colors.white,
-                    scale: 11,
-                    ),
-                    onPressed: null ),),
-
+                      widget.myProfile
+                          ? new Align(
+                              alignment: Alignment.centerRight,
+                              child: new IconButton(
+                                icon: Image.asset(
+                                  "lib/assets/images/editprofile_icon.png",
+                                  color: UIData.black,
+                                  scale: 11,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    edit = !edit;
+                                  });
+                                },
+                              ),
+                            )
+                          : new Align(
+                              alignment: Alignment.centerRight,
+                              child: new IconButton(
+                                  icon: Image.asset(
+                                    "lib/assets/images/editprofile_icon.png",
+                                    color: Colors.white,
+                                    scale: 11,
+                                  ),
+                                  onPressed: null),
+                            ),
                       new Padding(
                         padding: EdgeInsets.only(top: 46),
                       ),
@@ -445,11 +446,13 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             Padding(padding: EdgeInsets.all(10)),
-            myProfile ?
-            new Text(
-              "Mine events:",
-              style: new TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ) : new Container(),
+            widget.myProfile
+                ? new Text(
+                    "Mine events:",
+                    style: new TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  )
+                : new Container(),
             new Container(
               child: new Stack(
                 //child: new Stack(
@@ -480,7 +483,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                       var now = new DateTime.now();
                                       if (document.data["id"]
                                               .contains(widget.user.userName) &&
-                                          document.data["time"].isAfter(now ) && myProfile == true) {
+                                          document.data["time"].isAfter(now) &&
+                                          widget.myProfile == true) {
                                         return Column(
                                           children: <Widget>[
                                             Divider(

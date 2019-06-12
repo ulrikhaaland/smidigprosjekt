@@ -170,6 +170,15 @@ class SearchState extends State<Search> {
                     ),
                     child: FlatButton(
                       onPressed: () {
+                        User clickedUser = User(
+                          userName: doc.data["name"],
+                          id: doc.data["id"],
+                          email: doc.data["email"],
+                          school: doc.data["school"],
+                          program: doc.data["program"],
+                          profileImage: doc.data["profileimage"],
+                          bio: doc.data["bio"],
+                        );
                         if (widget.fromGroup) {
                           bool cleared = false;
                           String snackText = "";
@@ -178,15 +187,7 @@ class SearchState extends State<Search> {
                                   ? cleared = false
                                   : cleared = true);
                           if (cleared) {
-                            widget.addUsers.add(User(
-                              userName: doc.data["name"],
-                              id: doc.data["id"],
-                              email: doc.data["email"],
-                              school: doc.data["school"],
-                              program: doc.data["program"],
-                              profileImage: doc.data["profileimage"],
-                              bio: doc.data["bio"],
-                            ));
+                            widget.addUsers.add(clickedUser);
                             snackText =
                                 "${doc.data["name"]} har blitt lagt valgt!";
                           } else {
@@ -212,7 +213,8 @@ class SearchState extends State<Search> {
                         } else {
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => ProfilePage(
-                                  user: widget.user,
+                                  user: clickedUser,
+                                  myProfile: false,
                                 ),
                           ));
                         }
