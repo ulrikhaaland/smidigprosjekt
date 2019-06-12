@@ -30,7 +30,7 @@ class PrimaryButton extends StatelessWidget {
                   style: new TextStyle(color: Colors.white, fontSize: 15.0)),
               shape: new RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(24.0))),
-              color: UIData.pink,
+              color: color ?? UIData.pink,
               onPressed: onPressed),
         ));
   }

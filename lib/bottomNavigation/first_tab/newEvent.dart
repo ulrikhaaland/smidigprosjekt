@@ -24,11 +24,11 @@ import 'package:smidigprosjekt/bottomNavigation/fourth_tab/profile_page.dart';
 class MyHomePage extends StatefulWidget {
   MyHomePage(
       {this.auth,
-        this.onSignOut,
-        this.currentUser,
-        this.userEmail,
-        this.userName,
-        this.user});
+      this.onSignOut,
+      this.currentUser,
+      this.userEmail,
+      this.userName,
+      this.user});
   final BaseAuth auth;
   final VoidCallback onSignOut;
   final String currentUser;
@@ -81,7 +81,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
     two = SearchPage(
       key: keyTwo,
-      auth: auth,
       user: widget.user,
     );
 
@@ -284,28 +283,22 @@ class PageOneState extends State<PageOne> {
                       child: StreamBuilder(
                           stream: Firestore.instance
                               .collection("events")
-                          .orderBy('time', descending: false)
+                              .orderBy('time', descending: false)
                               .snapshots(),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData)
-                              return Center(child: new CircularProgressIndicator());
+                              return Center(
+                                  child: new CircularProgressIndicator());
                             return ListView.builder(
                               //itemExtent: 50,  //tap == true && tapped != null && tapped == snapshot ? 350.0 :
                               itemCount: snapshot.data.documents.length,
-                              itemBuilder: (context, index)
-
-
-
-
-
-                              => _eventList(
+                              itemBuilder: (context, index) => _eventList(
                                   context, snapshot.data.documents[index]),
                             );
                           })),
                 ),
               ],
             ),
-
           ],
         ),
       ),
@@ -313,9 +306,7 @@ class PageOneState extends State<PageOne> {
   }
 
   Widget _eventList(BuildContext context, DocumentSnapshot snapshot) {
-
     // Text(snapshot.data["address"])
-
 
     return Column(
       children: <Widget>[
@@ -326,17 +317,11 @@ class PageOneState extends State<PageOne> {
           alignment: Alignment.centerLeft,
           child: Padding(
             padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-            child: Text(
+            child: Text("hei"
+                //snapshot.data["time"]
 
-                "hei"
-              //snapshot.data["time"]
-
-
-
-
-
-              // _DateText(snapshot),
-            ),
+                // _DateText(snapshot),
+                ),
           ),
         ),
         Divider(
@@ -345,218 +330,213 @@ class PageOneState extends State<PageOne> {
         ),
         GestureDetector(
           onTap: () {
-
             _tapped(snapshot);
           },
           child: Column(
             children: <Widget>[
-              tap == true && tapped != null && tapped == snapshot ?
-              SizedBox(
-                height: 310,
-                width: ServiceProvider.instance.screenService
-                    .getPortraitWidthByPercentage(context, 82),
-                child: Card(
-                  elevation: 0.0,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  child: Column(
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        //crossAxisAlignment: CrossAxisAlignment.stretch,
+              tap == true && tapped != null && tapped == snapshot
+                  ? SizedBox(
+                      height: 310,
+                      width: ServiceProvider.instance.screenService
+                          .getPortraitWidthByPercentage(context, 82),
+                      child: Card(
+                        elevation: 0.0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                        child: Column(
+                          children: <Widget>[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              //crossAxisAlignment: CrossAxisAlignment.stretch,
 
-                        children: <Widget>[
-                          ClipRRect(
-                            borderRadius: new BorderRadius.only(
-                                topLeft: Radius.circular(8),
-                                topRight: Radius.circular(8)),
-                            child: Image.network(
-                              snapshot.data["imgUrl"],
-                              height: 120,
-                              width: 287,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Divider(
-                        height: 1,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(5),
-                        child: Container(
-                          height: 130,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: Colors.white)),
-                          child: Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Column(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text("Beskrivelse:",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold)),
-                                Divider(
-                                  height: 10,
-                                  color: Colors.white,
+                                ClipRRect(
+                                  borderRadius: new BorderRadius.only(
+                                      topLeft: Radius.circular(8),
+                                      topRight: Radius.circular(8)),
+                                  child: Image.network(
+                                    snapshot.data["imgUrl"],
+                                    height: 120,
+                                    width: 287,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                                Text('${snapshot.data["desc"]}',
-                                    style: TextStyle(fontSize: 13)),
                               ],
                             ),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          height: 40,
-                          margin: EdgeInsets.only(top: 0),
-                          width: ServiceProvider.instance.screenService
-                              .getPortraitWidthByPercentage(context, 82),
-                          decoration: new BoxDecoration(
-                            color: Colors.pink,
-                            borderRadius: new BorderRadius.only(
-                                bottomLeft: const Radius.circular(8.0),
-                                bottomRight: const Radius.circular(8.0)),
-                          ),
-                          child: FlatButton(
-                            color: UIData.pink,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(100)),
-                            padding: EdgeInsets.all(10),
-                            onPressed: () {
-                              //going = true;
-                              _tapped(snapshot);
-                              _starred(snapshot);
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(
-                                  // going && starred == position
-                                  //  ? Icons.star
-                                  Icons.star_border,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                                Padding(padding: EdgeInsets.all(3)),
-                                Text("Interessert",
-                                    style: TextStyle(
+                            Divider(
+                              height: 1,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(5),
+                              child: Container(
+                                height: 130,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(color: Colors.white)),
+                                child: Padding(
+                                  padding: EdgeInsets.all(8),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text("Beskrivelse:",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold)),
+                                      Divider(
+                                        height: 10,
                                         color: Colors.white,
-                                        fontSize: 13)),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ) :
-              SizedBox(
-                height: 130,
-                width: ServiceProvider.instance.screenService
-                    .getPortraitWidthByPercentage(context, 82),
-                child: Card(
-                  elevation: 0.0,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  child: Column(
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        //crossAxisAlignment: CrossAxisAlignment.stretch,
-
-                        children: <Widget>[
-                          ClipRRect(
-                            borderRadius: new BorderRadius.only(
-                                topLeft: Radius.circular(8),
-                                bottomLeft: Radius.circular(8)),
-                            child: Image.network(
-                              snapshot.data["imgUrl"],
-                              height: 122,
-                              width: 110,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Column(
-                                mainAxisAlignment:
-                                MainAxisAlignment.start,
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Row(
-                                    children: <Widget>[
-                                      new Text(
-                                          snapshot.data["title"],
-                                          style: ServiceProvider
-                                              .instance.styles
-                                              .cardTitle()),
-                                      Icon(
-                                        Icons.star,
-                                        color:
-                                        going && starred == snapshot
-                                            ? UIData.pink
-                                            : Colors.white,
-                                        size: 20,
                                       ),
+                                      Text('${snapshot.data["desc"]}',
+                                          style: TextStyle(fontSize: 13)),
                                     ],
                                   ),
-                                  Divider(color: Colors.white),
-                                  Row(
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.location_on,
-                                        color: UIData.blue,
-                                        size: 20,
-                                      ),
-                                      Text(
-                                        snapshot.data["address"],
-                                        style: TextStyle(
-                                            fontStyle: FontStyle.italic,
-                                            fontSize: 12),
-                                      ),
-                                    ],
-                                  ),
-                                  Divider(
-                                    color: Colors.white,
-                                  ),
-                                  Row(
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.access_time,
-                                        color: UIData.black,
-                                        size: 17,
-                                      ),
-                                      Text(
-                                        ' ${snapshot.data["time"].hour.toString()}' +
-                                            ':' +
-                                            '${snapshot.data["time"].minute.toString().padRight(2, '0')}',
-                                        style: TextStyle(fontSize: 12),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                            Expanded(
+                              child: Container(
+                                height: 40,
+                                margin: EdgeInsets.only(top: 0),
+                                width: ServiceProvider.instance.screenService
+                                    .getPortraitWidthByPercentage(context, 82),
+                                decoration: new BoxDecoration(
+                                  color: Colors.pink,
+                                  borderRadius: new BorderRadius.only(
+                                      bottomLeft: const Radius.circular(8.0),
+                                      bottomRight: const Radius.circular(8.0)),
+                                ),
+                                child: FlatButton(
+                                  color: UIData.pink,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(100)),
+                                  padding: EdgeInsets.all(10),
+                                  onPressed: () {
+                                    //going = true;
+                                    _tapped(snapshot);
+                                    _starred(snapshot);
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Icon(
+                                        // going && starred == position
+                                        //  ? Icons.star
+                                        Icons.star_border,
+                                        color: Colors.white,
+                                        size: 20,
+                                      ),
+                                      Padding(padding: EdgeInsets.all(3)),
+                                      Text("Interessert",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 13)),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
+                    )
+                  : SizedBox(
+                      height: 130,
+                      width: ServiceProvider.instance.screenService
+                          .getPortraitWidthByPercentage(context, 82),
+                      child: Card(
+                        elevation: 0.0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                        child: Column(
+                          children: <Widget>[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              //crossAxisAlignment: CrossAxisAlignment.stretch,
 
-
-
+                              children: <Widget>[
+                                ClipRRect(
+                                  borderRadius: new BorderRadius.only(
+                                      topLeft: Radius.circular(8),
+                                      bottomLeft: Radius.circular(8)),
+                                  child: Image.network(
+                                    snapshot.data["imgUrl"],
+                                    height: 122,
+                                    width: 110,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Row(
+                                          children: <Widget>[
+                                            new Text(snapshot.data["title"],
+                                                style: ServiceProvider
+                                                    .instance.styles
+                                                    .cardTitle()),
+                                            Icon(
+                                              Icons.star,
+                                              color:
+                                                  going && starred == snapshot
+                                                      ? UIData.pink
+                                                      : Colors.white,
+                                              size: 20,
+                                            ),
+                                          ],
+                                        ),
+                                        Divider(color: Colors.white),
+                                        Row(
+                                          children: <Widget>[
+                                            Icon(
+                                              Icons.location_on,
+                                              color: UIData.blue,
+                                              size: 20,
+                                            ),
+                                            Text(
+                                              snapshot.data["address"],
+                                              style: TextStyle(
+                                                  fontStyle: FontStyle.italic,
+                                                  fontSize: 12),
+                                            ),
+                                          ],
+                                        ),
+                                        Divider(
+                                          color: Colors.white,
+                                        ),
+                                        Row(
+                                          children: <Widget>[
+                                            Icon(
+                                              Icons.access_time,
+                                              color: UIData.black,
+                                              size: 17,
+                                            ),
+                                            Text(
+                                              ' ${snapshot.data["time"].hour.toString()}' +
+                                                  ':' +
+                                                  '${snapshot.data["time"].minute.toString().padRight(2, '0')}',
+                                              style: TextStyle(fontSize: 12),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
             ],
           ),
         )
@@ -591,52 +571,29 @@ class PageOneState extends State<PageOne> {
   String _DateText(snapshot) {
     DateTime dt = snapshot.data["time"];
     if (dt.month == 1) {
-      return '${dt.day.toString()}' +
-          '. ' +
-          'Januar';
+      return '${dt.day.toString()}' + '. ' + 'Januar';
     } else if (dt.month == 2) {
-      return '${snapshot.data["time"].day.toString()}' +
-          '. ' +
-          'Februar';
+      return '${snapshot.data["time"].day.toString()}' + '. ' + 'Februar';
     } else if (dt.month == 3) {
-      return '${dt.day.toString()}' +
-          '. ' +
-          'Mars';
+      return '${dt.day.toString()}' + '. ' + 'Mars';
     } else if (dt.month == 4) {
-      return '${dt.day.toString()}' +
-          '. ' +
-          'April';
+      return '${dt.day.toString()}' + '. ' + 'April';
     } else if (dt.month == 5) {
       return '${dt.day.toString()}' + '. ' + 'Mai';
-
     } else if (dt.month == 6) {
-      return '${dt.day.toString()}' +
-          '. ' +
-          'Juni';
+      return '${dt.day.toString()}' + '. ' + 'Juni';
     } else if (dt.month == 7) {
-      return '${dt.day.toString()}' +
-          '. ' +
-          'Juli';
+      return '${dt.day.toString()}' + '. ' + 'Juli';
     } else if (dt.month == 8) {
-      return '${dt.day.toString()}' +
-          '. ' +
-          'August';
+      return '${dt.day.toString()}' + '. ' + 'August';
     } else if (dt.month == 9) {
-      return '${dt.day.toString()}' +
-          '. ' +
-          'September';
+      return '${dt.day.toString()}' + '. ' + 'September';
     } else if (dt.month == 10) {
-      return '${dt.day.toString()}' +
-          '. ' +
-          'Oktober';
+      return '${dt.day.toString()}' + '. ' + 'Oktober';
     } else if (dt.month == 11) {
-      return '${dt.day.toString()}' +
-          '. ' +
-          'November';
+      return '${dt.day.toString()}' + '. ' + 'November';
     } else if (dt.month == 12) {
-      return '${dt.day.toString()}' +
-          '. ' +
-          'Desember';
+      return '${dt.day.toString()}' + '. ' + 'Desember';
     }
   }
 
@@ -799,15 +756,15 @@ class FilterPage extends State<StateFilterPage> {
                             //color: (pressed ? Colors.white : UIData.pink),
                             shape: (nullstill && skole
                                 ? RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                side: BorderSide(
-                                    width: 1,
-                                    style: BorderStyle.solid,
-                                    color: UIData.black))
+                                    borderRadius: BorderRadius.circular(8),
+                                    side: BorderSide(
+                                        width: 1,
+                                        style: BorderStyle.solid,
+                                        color: UIData.black))
                                 : RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                side: BorderSide(
-                                    width: 0, style: BorderStyle.none))),
+                                    borderRadius: BorderRadius.circular(8),
+                                    side: BorderSide(
+                                        width: 0, style: BorderStyle.none))),
 
                             child: Padding(
                               padding: EdgeInsets.all(7),
@@ -843,15 +800,15 @@ class FilterPage extends State<StateFilterPage> {
                             //color: (pressed ? Colors.white : UIData.pink),
                             shape: (nullstill && kaffe
                                 ? RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                side: BorderSide(
-                                    width: 1,
-                                    style: BorderStyle.solid,
-                                    color: UIData.black))
+                                    borderRadius: BorderRadius.circular(8),
+                                    side: BorderSide(
+                                        width: 1,
+                                        style: BorderStyle.solid,
+                                        color: UIData.black))
                                 : RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                side: BorderSide(
-                                    width: 0, style: BorderStyle.none))),
+                                    borderRadius: BorderRadius.circular(8),
+                                    side: BorderSide(
+                                        width: 0, style: BorderStyle.none))),
 
                             child: Padding(
                               padding: EdgeInsets.all(7),
@@ -887,15 +844,15 @@ class FilterPage extends State<StateFilterPage> {
                             //color: (pressed ? Colors.white : UIData.pink),
                             shape: (nullstill && gaming
                                 ? RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                side: BorderSide(
-                                    width: 1,
-                                    style: BorderStyle.solid,
-                                    color: UIData.black))
+                                    borderRadius: BorderRadius.circular(8),
+                                    side: BorderSide(
+                                        width: 1,
+                                        style: BorderStyle.solid,
+                                        color: UIData.black))
                                 : RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                side: BorderSide(
-                                    width: 0, style: BorderStyle.none))),
+                                    borderRadius: BorderRadius.circular(8),
+                                    side: BorderSide(
+                                        width: 0, style: BorderStyle.none))),
 
                             child: Padding(
                               padding: EdgeInsets.all(7),
@@ -936,15 +893,15 @@ class FilterPage extends State<StateFilterPage> {
                             //color: (pressed ? Colors.white : UIData.pink),
                             shape: (nullstill && fest
                                 ? RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                side: BorderSide(
-                                    width: 1,
-                                    style: BorderStyle.solid,
-                                    color: UIData.black))
+                                    borderRadius: BorderRadius.circular(8),
+                                    side: BorderSide(
+                                        width: 1,
+                                        style: BorderStyle.solid,
+                                        color: UIData.black))
                                 : RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                side: BorderSide(
-                                    width: 0, style: BorderStyle.none))),
+                                    borderRadius: BorderRadius.circular(8),
+                                    side: BorderSide(
+                                        width: 0, style: BorderStyle.none))),
 
                             child: Padding(
                               padding: EdgeInsets.all(7),
@@ -980,15 +937,15 @@ class FilterPage extends State<StateFilterPage> {
                             //color: (pressed ? Colors.white : UIData.pink),
                             shape: (nullstill && prosjekt
                                 ? RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                side: BorderSide(
-                                    width: 1,
-                                    style: BorderStyle.solid,
-                                    color: UIData.black))
+                                    borderRadius: BorderRadius.circular(8),
+                                    side: BorderSide(
+                                        width: 1,
+                                        style: BorderStyle.solid,
+                                        color: UIData.black))
                                 : RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                side: BorderSide(
-                                    width: 0, style: BorderStyle.none))),
+                                    borderRadius: BorderRadius.circular(8),
+                                    side: BorderSide(
+                                        width: 0, style: BorderStyle.none))),
 
                             child: Padding(
                               padding: EdgeInsets.all(7),
@@ -1284,12 +1241,12 @@ class FilterPage extends State<StateFilterPage> {
 class Event {
   Event(
       {this.imgUrl,
-        this.address,
-        this.cat,
-        this.desc,
-        this.id,
-        this.time,
-        this.title});
+      this.address,
+      this.cat,
+      this.desc,
+      this.id,
+      this.time,
+      this.title});
 
   final String address;
   final String cat;
@@ -1442,26 +1399,26 @@ class NewEventPage extends State<StatefullNew> {
                                 highlightColor: UIData.grey,
                                 child: Card(
                                   shape: (tap == true &&
-                                      tapped != null &&
-                                      tapped == index
+                                          tapped != null &&
+                                          tapped == index
                                       ? RoundedRectangleBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(8),
-                                      side: BorderSide(
-                                          width: 1,
-                                          style: BorderStyle.solid,
-                                          color: UIData.black))
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          side: BorderSide(
+                                              width: 1,
+                                              style: BorderStyle.solid,
+                                              color: UIData.black))
                                       : RoundedRectangleBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(8),
-                                      side: BorderSide(
-                                          width: 0,
-                                          style: BorderStyle.none))),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          side: BorderSide(
+                                              width: 0,
+                                              style: BorderStyle.none))),
                                   child: Padding(
                                     padding: EdgeInsets.all(7),
                                     child: Column(
                                       mainAxisAlignment:
-                                      MainAxisAlignment.center,
+                                          MainAxisAlignment.center,
                                       children: <Widget>[
                                         Image.asset(
                                           cate[index],
@@ -1510,19 +1467,19 @@ class NewEventPage extends State<StatefullNew> {
                                   ),
                                   shape: RoundedRectangleBorder(
                                       borderRadius:
-                                      BorderRadius.all(Radius.circular(8)),
+                                          BorderRadius.all(Radius.circular(8)),
                                       side:
-                                      BorderSide(style: BorderStyle.none)),
+                                          BorderSide(style: BorderStyle.none)),
                                   color: Colors.white,
                                   label: (datovalg
                                       ? Text(
-                                    dats,
-                                    style: TextStyle(color: UIData.black),
-                                  )
+                                          dats,
+                                          style: TextStyle(color: UIData.black),
+                                        )
                                       : Text("Dato",
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontWeight: FontWeight.normal))),
+                                          style: TextStyle(
+                                              color: Colors.grey,
+                                              fontWeight: FontWeight.normal))),
                                 ),
                               ),
                               Padding(
@@ -1539,19 +1496,19 @@ class NewEventPage extends State<StatefullNew> {
                                       color: UIData.blue, size: 22),
                                   shape: RoundedRectangleBorder(
                                       borderRadius:
-                                      BorderRadius.all(Radius.circular(8)),
+                                          BorderRadius.all(Radius.circular(8)),
                                       side:
-                                      BorderSide(style: BorderStyle.none)),
+                                          BorderSide(style: BorderStyle.none)),
                                   color: Colors.white,
                                   label: (tidspunkt
                                       ? Text(
-                                    tids,
-                                    style: TextStyle(color: UIData.black),
-                                  )
+                                          tids,
+                                          style: TextStyle(color: UIData.black),
+                                        )
                                       : Text("Tid",
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontWeight: FontWeight.normal))),
+                                          style: TextStyle(
+                                              color: Colors.grey,
+                                              fontWeight: FontWeight.normal))),
                                 ),
                               ),
                             ],
@@ -1669,57 +1626,57 @@ class NewEventPage extends State<StatefullNew> {
                             alignment: Alignment.centerLeft,
                             child: choosen
                                 ? Column(
-                              //mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
-                              children: <Widget>[
-                                FlatButton.icon(
-                                  onPressed: openOptions,
-                                  color: UIData.grey,
-                                  icon: Icon(Icons.replay,
-                                      color: UIData.blue),
-                                  label: Text("Ta på nytt",
-                                      style: TextStyle(
-                                          color: UIData.blue,
-                                          fontWeight: FontWeight.bold)),
-                                ),
-                                Container(
-                                    height: 200,
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                      BorderRadius.circular(8),
-                                    ),
-                                    child: Image.file(
-                                      imgUrl,
-                                      fit: BoxFit.fill,
+                                    //mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      FlatButton.icon(
+                                        onPressed: openOptions,
+                                        color: UIData.grey,
+                                        icon: Icon(Icons.replay,
+                                            color: UIData.blue),
+                                        label: Text("Ta på nytt",
+                                            style: TextStyle(
+                                                color: UIData.blue,
+                                                fontWeight: FontWeight.bold)),
+                                      ),
+                                      Container(
+                                          height: 200,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          child: Image.file(
+                                            imgUrl,
+                                            fit: BoxFit.fill,
 
-                                      // width: 200,
-                                      //height: 400,
-                                    )),
-                              ],
-                            )
+                                            // width: 200,
+                                            //height: 400,
+                                          )),
+                                    ],
+                                  )
                                 : Container(
-                              height: 80,
-                              child: FittedBox(
-                                child: FloatingActionButton(
-                                  onPressed: () {
-                                    openOptions();
-                                    //choosen = true;
-                                  },
-                                  child: Icon(
-                                    Icons.photo_camera,
-                                    size: 30.0,
+                                    height: 80,
+                                    child: FittedBox(
+                                      child: FloatingActionButton(
+                                        onPressed: () {
+                                          openOptions();
+                                          //choosen = true;
+                                        },
+                                        child: Icon(
+                                          Icons.photo_camera,
+                                          size: 30.0,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(8.0)),
+                                        ),
+                                        backgroundColor: Colors.white,
+                                        foregroundColor: UIData.black,
+                                        elevation: 0.0,
+                                      ),
+                                    ),
                                   ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(8.0)),
-                                  ),
-                                  backgroundColor: Colors.white,
-                                  foregroundColor: UIData.black,
-                                  elevation: 0.0,
-                                ),
-                              ),
-                            ),
                           ),
                         ],
                       ),
@@ -1733,7 +1690,7 @@ class NewEventPage extends State<StatefullNew> {
                           padding: EdgeInsets.fromLTRB(30, 15, 30, 15),
                           shape: RoundedRectangleBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(100)),
+                                  BorderRadius.all(Radius.circular(100)),
                               side: BorderSide(style: BorderStyle.none)),
                           onPressed: () {
                             uploadImage(imgUrl);
@@ -1887,10 +1844,10 @@ class NewEventPage extends State<StatefullNew> {
 
   void uploadImage(imgUrl) async {
     final StorageReference imgRef =
-    FirebaseStorage.instance.ref().child("Event_Images");
+        FirebaseStorage.instance.ref().child("Event_Images");
     var timeKey = new DateTime.now();
     final StorageUploadTask upTask =
-    imgRef.child(timeKey.toString() + ".jpg").putFile(imgUrl);
+        imgRef.child(timeKey.toString() + ".jpg").putFile(imgUrl);
 
     var url = await (await upTask.onComplete).ref.getDownloadURL();
     dbUrl = url.toString();
@@ -1913,8 +1870,6 @@ class NewEventPage extends State<StatefullNew> {
     FocusScope.of(context).requestFocus(new FocusNode());
   }
 }
-
-
 
 //// ##  : SizedBox(
 //                       height: 130,

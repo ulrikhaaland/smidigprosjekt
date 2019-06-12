@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:smidigprosjekt/bottomNavigation/third_tab/create_or_search.dart';
 import 'package:smidigprosjekt/objects/group.dart';
 import 'package:smidigprosjekt/objects/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:smidigprosjekt/service/styles.dart';
 import 'package:smidigprosjekt/utils/uidata.dart';
 import 'package:smidigprosjekt/service/service_provider.dart';
 import 'dart:ui';
@@ -81,16 +83,16 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
 
   Group _group;
 
-  var names;
+  List<User> groupMembers = <User>[];
 
   QuerySnapshot qSnapChallenge;
 
-
-
+  var names;
 
   @override
   void initState() {
     super.initState();
+    groupMembers.add(widget.user);
     _getGroup();
     _tabController = new TabController(vsync: this, length: 3);
     setState(() {
@@ -112,28 +114,30 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
     _tabController.dispose();
     super.dispose();
   }
-  
-
-  
 
   _getGroup() async {
     DocumentSnapshot docSnap =
         await firestoreInstance.document("groups/${widget.user.groupId}").get();
-    _group = Group(
-        name: docSnap.data["name"],
-        id: docSnap.documentID,
-        members: [],
-        memberAmount: docSnap.data["members"]);
-    _group.members = [];
-    QuerySnapshot qSnap = await firestoreInstance
-        .collection("groups/${widget.user.groupId}/members")
-        .getDocuments();
-    qSnap.documents.forEach((d) => _group.members.add(User(
-          id: d.data["id"],
-          userName: d.data["name"],
-          school: d.data["school"],
-          program: d.data["program"],
-        )));
+    if (docSnap.exists) {
+      _group = Group(
+          name: docSnap.data["name"],
+          id: docSnap.documentID,
+          members: [],
+          memberAmount: docSnap.data["members"]);
+      _group.members = [];
+      QuerySnapshot qSnap = await firestoreInstance
+          .collection("groups/${widget.user.groupId}/members")
+          .getDocuments();
+      qSnap.documents.forEach((d) => _group.members.add(User(
+            id: d.data["id"],
+            userName: d.data["name"],
+            school: d.data["school"],
+            program: d.data["program"],
+          )));
+    } else {
+      widget.user.introChoice = IntroChoice.search;
+    }
+
     setState(() {
       isLoading = false;
     });
@@ -145,46 +149,49 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
     _getChallenges();
   }
 
-  _getChallenges() async{
+  _getChallenges() async {
     qSnapChallenge = await Firestore.instance
-    .collection("groups/${_group.id}/challenges").getDocuments();
-    if(qSnapChallenge.documents.isEmpty){
+        .collection("groups/${_group.id}/challenges")
+        .getDocuments();
+    if (qSnapChallenge.documents.isEmpty) {
       print("Empty");
       _createChallenges();
     }
-  } 
+  }
 
-   _createChallenges() {
+  _createChallenges() {
     var db = Firestore.instance;
-    db.collection("groups/${_group.id}/challenges").document("utfordring1").setData({
+    db
+        .collection("groups/${_group.id}/challenges")
+        .document("utfordring1")
+        .setData({
       "id": 0,
       "challenge": "Ta en kaffe sammen",
       "isDone": false,
       "prosent": 0.0,
       "activeChallange": "Ta en kaffe sammen"
     });
-    db.collection("groups/${_group.id}/challenges").document("utfordring2").setData({
-      "id": 1,
-      "challenge": "Grille i parken",
-      "isDone": false
-    });
-    db.collection("groups/${_group.id}/challenges").document("utfordring3").setData({
+    db
+        .collection("groups/${_group.id}/challenges")
+        .document("utfordring2")
+        .setData({"id": 1, "challenge": "Grille i parken", "isDone": false});
+    db
+        .collection("groups/${_group.id}/challenges")
+        .document("utfordring3")
+        .setData({
       "id": 2,
       "challenge": "Velg film sammen og dra på kino",
       "isDone": false
     });
-    db.collection("groups/${_group.id}/challenges").document("utfordring4").setData({
-      "id": 3,
-      "challenge": "Dra på Syng sammen",
-      "isDone": false
-    }); 
-    db.collection("groups/${_group.id}/challenges").document("utfordring5").setData({
-      "id": 4,
-      "challenge": "4 stjerners middag",
-      "isDone": false
-    });
+    db
+        .collection("groups/${_group.id}/challenges")
+        .document("utfordring4")
+        .setData({"id": 3, "challenge": "Dra på Syng sammen", "isDone": false});
+    db
+        .collection("groups/${_group.id}/challenges")
+        .document("utfordring5")
+        .setData({"id": 4, "challenge": "4 stjerners middag", "isDone": false});
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -206,31 +213,37 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
       "Dere har ingen flere utfordringer"
     ];
 
-
-
     void itemChange(bool val, int index) {
       setState(() {
         inputs[index] = val;
-        if(inputs[index] = true) {
+        if (inputs[index] = true) {
           if (index == 4) {
             percentage = proList[5];
             activeChallenge = "Dere har ingen flere utfordringer";
-            db.collection("groups/${_group.id}/challenges").document(
-                "utfordring" + "${index + 1}").updateData({"isDone": true});
-            db.collection("groups/${_group.id}/challenges").document(
-                "utfordring1").updateData({"prosent": percentage});
-          }
-          else {
+            db
+                .collection("groups/${_group.id}/challenges")
+                .document("utfordring" + "${index + 1}")
+                .updateData({"isDone": true});
+            db
+                .collection("groups/${_group.id}/challenges")
+                .document("utfordring1")
+                .updateData({"prosent": percentage});
+          } else {
             activeChallenge = taskList[index + 1];
             percentage = proList[index + 1];
-            db.collection("groups/${_group.id}/challenges").document(
-                "utfordring" + "${index + 1}").updateData({"isDone": true});
-            db.collection("groups/${_group.id}/challenges").document(
-                "utfordring1").updateData({"prosent": percentage, "activeChallange": activeChallenge});
-
-
-          }}
-
+            db
+                .collection("groups/${_group.id}/challenges")
+                .document("utfordring" + "${index + 1}")
+                .updateData({"isDone": true});
+            db
+                .collection("groups/${_group.id}/challenges")
+                .document("utfordring1")
+                .updateData({
+              "prosent": percentage,
+              "activeChallange": activeChallenge
+            });
+          }
+        }
       });
     }
 
@@ -243,6 +256,33 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
           child: CircularProgressIndicator(),
         ),
       );
+
+    if (widget.user.introChoice == IntroChoice.search)
+      return CreateOrSearchPage(
+          groupMembers: groupMembers,
+          user: widget.user,
+          onDone: () async {
+            setState(() {
+              isLoading = true;
+            });
+            _group = Group(
+                name: "Min gruppe",
+                id: null,
+                memberAmount: groupMembers.length,
+                members: groupMembers);
+            DocumentReference docRef = await firestoreInstance
+                .collection("groups")
+                .add(_group.toJson());
+            _group.members.forEach((m) {
+              firestoreInstance
+                  .collection("groups/${docRef.documentID}/members")
+                  .add(m.toJson());
+            });
+            setState(() {
+              isLoading = false;
+              widget.user.introChoice = IntroChoice.assigned;
+            });
+          });
 
     return GestureDetector(
         onTap: () {
@@ -272,49 +312,54 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                             itemBuilder: (context, index) {
                               return Padding(
                                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                child:
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Card(
+                                        elevation: 0,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(70),
+                                            side: _group.members[index].userName
+                                                    .contains(
+                                                        widget.user.userName)
+                                                ? BorderSide(
+                                                    color: UIData.pink,
+                                                    width: 2)
+                                                : BorderSide(
+                                                    color: Colors.white)),
+                                        //decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), border: index == 0 ? Border.all(width: 3, color: UIData.pink) : Border.all(color: Colors.white) ),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              new BorderRadius.circular(80),
+                                          child: _group.members[index].userName
+                                                  .contains(
+                                                      widget.user.userName)
+                                              ? Image.network(
+                                                  widget.user.profileImage,
+                                                  width: 42,
+                                                  height: 42,
+                                                  fit: BoxFit.cover,
+                                                )
+                                              : Image.asset(
+                                                  //_group.members[index].profileImage, // fra list [index]
+                                                  "lib/assets/images/profilbilde.png",
 
-                               Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Card(
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(70),
-                                    side:  _group.members[index].userName.contains(widget.user.userName) ?
-                                         BorderSide(
-                                            color: UIData.pink, width: 2)
-                                        : BorderSide(color: Colors.white)),
-                                //decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), border: index == 0 ? Border.all(width: 3, color: UIData.pink) : Border.all(color: Colors.white) ),
-                                child: ClipRRect(
-                                  borderRadius: new BorderRadius.circular(80),
-                                  child: _group.members[index].userName.contains(widget.user.userName) ?
-                                  Image.network(widget.user.profileImage,
-                                    width: 42,
-                                    height: 42,
-                                    fit: BoxFit.cover,
-                                  )
-                                      : Image.asset(
-                                    //_group.members[index].profileImage, // fra list [index]
-                                    "lib/assets/images/profilbilde.png",
-
-                                    width: 42,
-                                    height: 42,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                                 // Text(_group.members[index].userName),
-                                  _group.members[index].userName.contains(widget.user.userName) ? Text("Meg", style: TextStyle(fontSize: 11,fontWeight: FontWeight.bold))
-                                      :  Text("${_getFirstName(index)}", style: TextStyle(fontSize: 11,)),
-                                ],
-                              ),);
+                                                  width: 42,
+                                                  height: 42,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                        ),
+                                      ),
+                                    ]),
+                              );
                             },
                           ),
                         ),
                       ),
-                     Padding(padding: EdgeInsets.all(4)),
+                      Padding(padding: EdgeInsets.all(4)),
                       new Container(
                         decoration: const BoxDecoration(
                           border: Border(
@@ -357,96 +402,104 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
             body: TabBarView(controller: _tabController, children: [
               new SingleChildScrollView(
                 child: StreamBuilder(
-                  stream: Firestore.instance
-                .collection("groups").document("${_group.id}").collection("challenges")
-                 //document("groups/${_group.id}/challenges")
-                .snapshots(),
-                builder: (context, snapshot) {
-
-                 if (!snapshot.hasData)
-                  return
-               Container();
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    new Padding(
-                      padding: EdgeInsets.only(top: 30),
-                    ),
-
-                    new Center(
-                      child: new Row(
-                        mainAxisSize: MainAxisSize.min,
+                    stream: Firestore.instance
+                        .collection("groups")
+                        .document("${_group.id}")
+                        .collection("challenges")
+                        //document("groups/${_group.id}/challenges")
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) return Container();
+                      return Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           new Padding(
-                            padding: EdgeInsets.only(left: 45),
+                            padding: EdgeInsets.only(top: 30),
                           ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                          new Center(
+                            child: new Row(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                new Text(
-                                  "Neste utfordring:",
-                                  textAlign: TextAlign.left,
-                                  style: new TextStyle(
-                                    color: UIData.black,
-                                    fontFamily: 'Anton',
-                                    fontWeight: FontWeight.bold,
+                                new Padding(
+                                  padding: EdgeInsets.only(left: 45),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      new Text(
+                                        "Neste utfordring:",
+                                        textAlign: TextAlign.left,
+                                        style: new TextStyle(
+                                          color: UIData.black,
+                                          fontFamily: 'Anton',
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      new Padding(
+                                        padding: EdgeInsets.only(bottom: 5),
+                                      ),
+                                      new Text(
+                                        snapshot.data.documents[0]
+                                            .data["activeChallange"],
+                                        textAlign: TextAlign.left,
+                                        style: new TextStyle(
+                                            color: UIData.black,
+                                            fontFamily: 'Anton'),
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 new Padding(
-                                  padding: EdgeInsets.only(bottom: 5),
+                                  padding: EdgeInsets.only(right: 10),
                                 ),
-                                new Text(snapshot.data.documents[0].data["activeChallange"],
 
-                                  textAlign: TextAlign.left,
-                                  style: new TextStyle(
-                                      color: UIData.black, fontFamily: 'Anton'),
-                                ),
-                              ],
-                            ),
-                          ),
-                          new Padding(
-                            padding: EdgeInsets.only(right: 10),
-                          ),
-
-                          /*
+                                /*
                      *
                      * Percentage indicator here
                      *
                      */
 
-                          new Container(
-                            child: new CustomPaint(
-                              foregroundPainter: new MyPainter(
-                                  lineColor: UIData.lightPink,
-                                  completeColor: UIData.pink,
-                                  completePercent: snapshot.data.documents[0].data["prosent"] + .0,
-                                  width: 15.0),
-                              child: new Padding(
-                                  padding: const EdgeInsets.all(30.0),
-                                  child: new FlatButton(
-                                      color: UIData.grey,
-                                      splashColor: Color(0x00FFFFFF),
-                                      shape: new CircleBorder(),
-                                      child: new Text(
-                  (snapshot.data.documents[0].data["prosent"]).toStringAsFixed(0) + "%"),
-                                      onPressed: () {})),
-                            ),
-                          ),
+                                new Container(
+                                  child: new CustomPaint(
+                                    foregroundPainter: new MyPainter(
+                                        lineColor: UIData.lightPink,
+                                        completeColor: UIData.pink,
+                                        completePercent: snapshot.data
+                                                .documents[0].data["prosent"] +
+                                            .0,
+                                        width: 15.0),
+                                    child: new Padding(
+                                        padding: const EdgeInsets.all(30.0),
+                                        child: new FlatButton(
+                                            color: UIData.grey,
+                                            splashColor: Color(0x00FFFFFF),
+                                            shape: new CircleBorder(),
+                                            child: new Text((snapshot
+                                                        .data
+                                                        .documents[0]
+                                                        .data["prosent"])
+                                                    .toStringAsFixed(0) +
+                                                "%"),
+                                            onPressed: () {})),
+                                  ),
+                                ),
 
-                          /*
+                                /*
                      *
                      * Percentage indicator Ends here
                      *
                      */
-                          new Padding(
-                            padding: EdgeInsets.only(right: 35),
+                                new Padding(
+                                  padding: EdgeInsets.only(right: 35),
+                                ),
+                              ], // Text and meter row children
+                            ),
                           ),
-                        ], // Text and meter row children
-                      ),
-                    ),
+
                     new Padding(
                       padding: EdgeInsets.only(top: 30),
                     ),
@@ -512,6 +565,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
 
                   ],
                 );}),
+
               ),
               new Stack(
                 children: <Widget>[
@@ -723,8 +777,8 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(70)),
           child: ClipRRect(
             borderRadius: new BorderRadius.circular(100),
-            child:
-              Image.network(widget.user.profileImage, // fra list [index]
+            child: Image.network(
+              widget.user.profileImage, // fra list [index]
               height: 40,
               width: 40,
               fit: BoxFit.cover,
@@ -862,7 +916,8 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
   void _removeKeyboard(BuildContext context) {
     FocusScope.of(context).requestFocus(new FocusNode());
   }
-  String  _getFirstName(int index) {
+
+  String _getFirstName(int index) {
     var fullnames = _group.members[index].userName;
     var split = fullnames.split(' ');
     String firstName = split[0];

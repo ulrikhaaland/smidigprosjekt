@@ -1,32 +1,33 @@
+enum IntroChoice {
+  search,
+  assigned,
+}
+
 class User {
   User(
       {this.email,
       this.id,
       this.feideId,
       this.userName,
-      // this.fcm,
       this.intro,
       this.school,
       this.program,
       this.bio,
       this.profileImage,
-      this.groupId});
+      this.groupId,
+      this.introChoice});
 
   final String userName;
   final String id;
   final String feideId;
   final String email;
-  // final String fcm;
+  IntroChoice introChoice;
   bool intro;
   String school;
   String program;
   String bio;
   String profileImage;
   String groupId;
-
-  // String getToken() {
-  //   return this.fcm;
-  // }
 
   String getName() {
     return this.userName;
@@ -49,7 +50,6 @@ class User {
         'feideid': this.feideId,
         'name': this.userName,
         'email': this.email,
-        // 'fcm': this.fcm,
         'intro': this.intro,
         'school': this.school,
         'program': this.program,

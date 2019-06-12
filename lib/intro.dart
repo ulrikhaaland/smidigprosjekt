@@ -192,9 +192,9 @@ class IntroState extends State<Intro> {
                 Align(
                   alignment: Alignment.topCenter,
                   child: GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       openOptions();
-                      },
+                    },
                     child: CircleAvatar(
                       radius: ServiceProvider.instance.screenService
                           .getHeightByPercentage(context, 8.5),
@@ -205,34 +205,40 @@ class IntroState extends State<Intro> {
                         backgroundColor: Colors.white,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: newFoto? 
-                          [
-                            ClipRRect(
-                              borderRadius: new BorderRadius.circular(70),
-                              child:Image.file(
-                                imgUrl,
-                                width: ServiceProvider.instance.screenService.getHeightByPercentage(context, 18.5),
-                                height: ServiceProvider.instance.screenService.getHeightByPercentage(context, 16.5),
-                                fit: BoxFit.cover,
-                              )
-                            )
-                          ]
-                          : 
-                          <Widget>[
-                            Icon(
-                              Icons.add_a_photo,
-                              size: 40,
-                              color: UIData.black,
-                            ),
-                            Container(
-                              height: ServiceProvider.instance.screenService
-                                  .getHeightByPercentage(context, 1),
-                            ),
-                            Text(
-                              "Legg til et bilde",
-                              style: Styles().textLight(),
-                            )
-                          ],
+                          children: newFoto
+                              ? [
+                                  ClipRRect(
+                                      borderRadius:
+                                          new BorderRadius.circular(70),
+                                      child: Image.file(
+                                        imgUrl,
+                                        width: ServiceProvider
+                                            .instance.screenService
+                                            .getHeightByPercentage(
+                                                context, 18.5),
+                                        height: ServiceProvider
+                                            .instance.screenService
+                                            .getHeightByPercentage(
+                                                context, 16.5),
+                                        fit: BoxFit.cover,
+                                      ))
+                                ]
+                              : <Widget>[
+                                  Icon(
+                                    Icons.add_a_photo,
+                                    size: 40,
+                                    color: UIData.black,
+                                  ),
+                                  Container(
+                                    height: ServiceProvider
+                                        .instance.screenService
+                                        .getHeightByPercentage(context, 1),
+                                  ),
+                                  Text(
+                                    "Legg til et bilde",
+                                    style: Styles().textLight(),
+                                  )
+                                ],
                         ),
                       ),
                     ),
@@ -252,9 +258,10 @@ class IntroState extends State<Intro> {
               },
               indicatorLayout: PageIndicatorLayout.COLOR,
               itemCount: list.length,
-             // pagination: SwiperPagination(
-                  //builder: DotSwiperPaginationBuilder(space: 10)),
-               control: new SwiperControl(size: 20, disableColor: UIData.grey, color: UIData.black),
+              // pagination: SwiperPagination(
+              //builder: DotSwiperPaginationBuilder(space: 10)),
+              control: new SwiperControl(
+                  size: 20, disableColor: UIData.grey, color: UIData.black),
             )
           : content = Column(
               children: <Widget>[
@@ -301,33 +308,32 @@ class IntroState extends State<Intro> {
                         height: ServiceProvider.instance.screenService
                             .getHeightByPercentage(context, 15),
                         child: Center(
-                          child: Text("Søk etter en gruppe",
+                          child: Text("Søk etter eller opprett din egen gruppe",
                               style: TextStyle(color: Colors.white)),
                         ),
                       ),
                     ),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 24),
-                  child: GestureDetector(
-                    onTap: () => _groupDecision(3),
-                    child: Card(
-                      color: UIData.darkblue,
-                      child: Container(
-                        width: ServiceProvider.instance.screenService
-                            .getWidthByPercentage(context, 85),
-                        height: ServiceProvider.instance.screenService
-                            .getHeightByPercentage(context, 15),
-                        child: Center(
-                          child: Text("Opprett din egen gruppe",
-                              style: TextStyle(color: Colors.white)),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-
+                // Padding(
+                //   padding: EdgeInsets.only(bottom: 24),
+                //   child: GestureDetector(
+                //     onTap: () => _groupDecision(3),
+                //     child: Card(
+                //       color: UIData.darkblue,
+                //       child: Container(
+                //         width: ServiceProvider.instance.screenService
+                //             .getWidthByPercentage(context, 85),
+                //         height: ServiceProvider.instance.screenService
+                //             .getHeightByPercentage(context, 15),
+                //         child: Center(
+                //           child: Text("Opprett din egen gruppe",
+                //               style: TextStyle(color: Colors.white)),
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ],
             );
     }
@@ -340,14 +346,12 @@ class IntroState extends State<Intro> {
     switch (decision) {
       case 1:
         _assignToGroup();
+        widget.user.introChoice = IntroChoice.assigned;
         break;
       case 2:
+        widget.user.introChoice = IntroChoice.search;
         widget.onIntroFinished();
         break;
-      case 3:
-        _createGroup();
-        break;
-
       default:
     }
   }
@@ -490,7 +494,8 @@ class IntroState extends State<Intro> {
               .getHeightByPercentage(context, 10),
           child: Text(
             title,
-            style: TextStyle(fontSize: 20, fontFamily: 'ANTON', fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontSize: 20, fontFamily: 'ANTON', fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
         ),
@@ -659,10 +664,10 @@ class IntroState extends State<Intro> {
 
   _sendImage(String dbUrl) {
     var db = Firestore.instance;
-    db.collection("users/${widget.user.id}").add({
-      "profile_picture": dbUrl
-    }).then((val) {
-      db.document("users/${widget.user.id}").updateData(widget.user.toJson());                
+    db
+        .collection("users/${widget.user.id}")
+        .add({"profile_picture": dbUrl}).then((val) {
+      db.document("users/${widget.user.id}").updateData(widget.user.toJson());
       print("success");
     }).catchError((err) {
       print(err);
