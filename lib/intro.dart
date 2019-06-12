@@ -673,7 +673,7 @@ class IntroState extends State<Intro> {
     });
     widget.user.profileImage = dbUrl;
   }
-  
+
   saveData(bool fromForm) async {
     if (fromForm) {
       widget.user.intro = false;

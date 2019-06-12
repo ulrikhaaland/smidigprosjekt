@@ -628,6 +628,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                                   : _message(
                                       document['message'],
                                       document['user_name'],
+                                      null,
                                       document['profileImage'],
                                       document['isText']);
                             },
@@ -798,19 +799,29 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(70)),
           child: ClipRRect(
             borderRadius: new BorderRadius.circular(100),
-            child: Image.network(
-              widget.user.profileImage, // fra list [index]
-              height: 40,
-              width: 40,
-              fit: BoxFit.cover,
-            ),
+            child: widget.user.profileImage != null
+                ? Image.network(
+                    widget.user.profileImage, // fra list [index]
+                    height: 40,
+                    width: 40,
+                    fit: BoxFit.cover,
+                  )
+                : Image.asset(
+                    //_group.members[index].profileImage, // fra list [index]
+                    "lib/assets/images/profilbilde.png",
+
+                    width: 42,
+                    height: 42,
+                    fit: BoxFit.cover,
+                  ),
           ),
         ),
       ],
     );
   }
 
-  Widget _message(String message, String userName, String image, String profileImage, bool isText) {
+  Widget _message(String message, String userName, String image,
+      String profileImage, bool isText) {
     var fullnames = userName;
     var split = fullnames.split(' ');
     String firstName = split[0];
