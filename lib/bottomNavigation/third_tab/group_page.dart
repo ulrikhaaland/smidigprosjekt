@@ -64,7 +64,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
   MediaQueryData queryData;
   List<bool> inputs = [false, false, false, false, false];
   double percentage = 0.0;
-  double newPercentage = 0.0;
+  double newPercentage;
   String activeChallenge = "";
   AnimationController percentageAnimationController;
 
@@ -85,6 +85,8 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
 
   List<User> groupMembers = <User>[];
 
+  QuerySnapshot qSnapChallenge;
+
   var names;
 
   @override
@@ -94,7 +96,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
     _getGroup();
     _tabController = new TabController(vsync: this, length: 3);
     setState(() {
-      percentage = 0.0;
+      //percentage = 0.0;
     });
 
     percentageAnimationController = new AnimationController(
@@ -140,43 +142,108 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
       isLoading = false;
     });
 
-    firestoreInstance
+    await firestoreInstance
         .document("groups/${_group.id}")
         .updateData({"memberamount": _group.members.length});
+
+    _getChallenges();
+  }
+
+  _getChallenges() async {
+    qSnapChallenge = await Firestore.instance
+        .collection("groups/${_group.id}/challenges")
+        .getDocuments();
+    if (qSnapChallenge.documents.isEmpty) {
+      print("Empty");
+      _createChallenges();
+    }
+  }
+
+  _createChallenges() {
+    var db = Firestore.instance;
+    db
+        .collection("groups/${_group.id}/challenges")
+        .document("utfordring1")
+        .setData({
+      "id": 0,
+      "challenge": "Ta en kaffe sammen",
+      "isDone": false,
+      "prosent": 0.0,
+      "activeChallange": "Ta en kaffe sammen"
+    });
+    db
+        .collection("groups/${_group.id}/challenges")
+        .document("utfordring2")
+        .setData({"id": 1, "challenge": "Grille i parken", "isDone": false});
+    db
+        .collection("groups/${_group.id}/challenges")
+        .document("utfordring3")
+        .setData({
+      "id": 2,
+      "challenge": "Velg film sammen og dra på kino",
+      "isDone": false
+    });
+    db
+        .collection("groups/${_group.id}/challenges")
+        .document("utfordring4")
+        .setData({"id": 3, "challenge": "Dra på Syng sammen", "isDone": false});
+    db
+        .collection("groups/${_group.id}/challenges")
+        .document("utfordring5")
+        .setData({"id": 4, "challenge": "4 stjerners middag", "isDone": false});
   }
 
   @override
   Widget build(BuildContext context) {
+    var db = Firestore.instance;
+    List<double> proList = [
+      0.0,
+      20.0,
+      40.0,
+      60.0,
+      80.0,
+      100.0,
+    ];
     List<String> taskList = [
       "Ta en kaffe sammen",
       "Grille i parken",
       "Velg film sammen og dra på kino",
       "Dra på Syng sammen",
-      "4 stjerners middag"
+      "4 stjerners middag",
+      "Dere har ingen flere utfordringer"
     ];
-
-    if (inputs[4] == true) {
-      activeChallenge = "Dere har ingen utfordringer igjen!";
-    }
-    if (inputs[4] == false) {
-      activeChallenge = taskList[4];
-    }
-    if (inputs[3] == false) {
-      activeChallenge = taskList[3];
-    }
-    if (inputs[2] == false) {
-      activeChallenge = taskList[2];
-    }
-    if (inputs[1] == false) {
-      activeChallenge = taskList[1];
-    }
-    if (inputs[0] == false) {
-      activeChallenge = taskList[0];
-    }
 
     void itemChange(bool val, int index) {
       setState(() {
         inputs[index] = val;
+        if (inputs[index] = true) {
+          if (index == 4) {
+            percentage = proList[5];
+            activeChallenge = "Dere har ingen flere utfordringer";
+            db
+                .collection("groups/${_group.id}/challenges")
+                .document("utfordring" + "${index + 1}")
+                .updateData({"isDone": true});
+            db
+                .collection("groups/${_group.id}/challenges")
+                .document("utfordring1")
+                .updateData({"prosent": percentage});
+          } else {
+            activeChallenge = taskList[index + 1];
+            percentage = proList[index + 1];
+            db
+                .collection("groups/${_group.id}/challenges")
+                .document("utfordring" + "${index + 1}")
+                .updateData({"isDone": true});
+            db
+                .collection("groups/${_group.id}/challenges")
+                .document("utfordring1")
+                .updateData({
+              "prosent": percentage,
+              "activeChallange": activeChallenge
+            });
+          }
+        }
       });
     }
 
@@ -246,56 +313,47 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                               return Padding(
                                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Card(
-                                      elevation: 0,
-                                      shape: RoundedRectangleBorder(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Card(
+                                        elevation: 0,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(70),
+                                            side: _group.members[index].userName
+                                                    .contains(
+                                                        widget.user.userName)
+                                                ? BorderSide(
+                                                    color: UIData.pink,
+                                                    width: 2)
+                                                : BorderSide(
+                                                    color: Colors.white)),
+                                        //decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), border: index == 0 ? Border.all(width: 3, color: UIData.pink) : Border.all(color: Colors.white) ),
+                                        child: ClipRRect(
                                           borderRadius:
-                                              BorderRadius.circular(70),
-                                          side: _group.members[index].userName
+                                              new BorderRadius.circular(80),
+                                          child: _group.members[index].userName
                                                   .contains(
                                                       widget.user.userName)
-                                              ? BorderSide(
-                                                  color: UIData.pink, width: 2)
-                                              : BorderSide(
-                                                  color: Colors.white)),
-                                      //decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), border: index == 0 ? Border.all(width: 3, color: UIData.pink) : Border.all(color: Colors.white) ),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            new BorderRadius.circular(80),
-                                        child: _group.members[index].userName
-                                                .contains(widget.user.userName)
-                                            ? Image.network(
-                                                widget.user.profileImage,
-                                                width: 42,
-                                                height: 42,
-                                                fit: BoxFit.cover,
-                                              )
-                                            : Image.asset(
-                                                //_group.members[index].profileImage, // fra list [index]
-                                                "lib/assets/images/fortnite.jpg",
+                                              ? Image.network(
+                                                  widget.user.profileImage,
+                                                  width: 42,
+                                                  height: 42,
+                                                  fit: BoxFit.cover,
+                                                )
+                                              : Image.asset(
+                                                  //_group.members[index].profileImage, // fra list [index]
+                                                  "lib/assets/images/profilbilde.png",
 
-                                                width: 42,
-                                                height: 42,
-                                                fit: BoxFit.cover,
-                                              ),
+                                                  width: 42,
+                                                  height: 42,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                        ),
                                       ),
-                                    ),
-                                    // Text(_group.members[index].userName),
-                                    _group.members[index].userName
-                                            .contains(widget.user.userName)
-                                        ? Text("Meg",
-                                            style: TextStyle(
-                                                fontSize: 11,
-                                                fontWeight: FontWeight.bold))
-                                        : Text("${_getFirstName(index)}",
-                                            style: TextStyle(
-                                              fontSize: 11,
-                                            )),
-                                  ],
-                                ),
+                                    ]),
                               );
                             },
                           ),
@@ -343,149 +401,166 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                 )),
             body: TabBarView(controller: _tabController, children: [
               new SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    new Padding(
-                      padding: EdgeInsets.only(top: 30),
-                    ),
-                    new Center(
-                      child: new Row(
-                        mainAxisSize: MainAxisSize.min,
+                child: StreamBuilder(
+                    stream: Firestore.instance
+                        .collection("groups")
+                        .document("${_group.id}")
+                        .collection("challenges")
+                        //document("groups/${_group.id}/challenges")
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) return Container();
+                      return Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           new Padding(
-                            padding: EdgeInsets.only(left: 45),
+                            padding: EdgeInsets.only(top: 30),
                           ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                          new Center(
+                            child: new Row(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                new Text(
-                                  "Neste utfordring:",
-                                  textAlign: TextAlign.left,
-                                  style: new TextStyle(
-                                    color: UIData.black,
-                                    fontFamily: 'Anton',
-                                    fontWeight: FontWeight.bold,
+                                new Padding(
+                                  padding: EdgeInsets.only(left: 45),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      new Text(
+                                        "Neste utfordring:",
+                                        textAlign: TextAlign.left,
+                                        style: new TextStyle(
+                                          color: UIData.black,
+                                          fontFamily: 'Anton',
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      new Padding(
+                                        padding: EdgeInsets.only(bottom: 5),
+                                      ),
+                                      new Text(
+                                        snapshot.data.documents[0]
+                                            .data["activeChallange"],
+                                        textAlign: TextAlign.left,
+                                        style: new TextStyle(
+                                            color: UIData.black,
+                                            fontFamily: 'Anton'),
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 new Padding(
-                                  padding: EdgeInsets.only(bottom: 5),
+                                  padding: EdgeInsets.only(right: 10),
                                 ),
-                                new Text(
-                                  activeChallenge,
-                                  textAlign: TextAlign.left,
-                                  style: new TextStyle(
-                                      color: UIData.black, fontFamily: 'Anton'),
-                                ),
-                              ],
-                            ),
-                          ),
-                          new Padding(
-                            padding: EdgeInsets.only(right: 10),
-                          ),
 
-                          /*
+                                /*
                      *
                      * Percentage indicator here
                      *
                      */
-                          new Container(
-                            child: new CustomPaint(
-                              foregroundPainter: new MyPainter(
-                                  lineColor: UIData.lightPink,
-                                  completeColor: UIData.pink,
-                                  completePercent: percentage,
-                                  width: 15.0),
-                              child: new Padding(
-                                  padding: const EdgeInsets.all(30.0),
-                                  child: new FlatButton(
-                                      color: UIData.grey,
-                                      splashColor: Color(0x00FFFFFF),
-                                      shape: new CircleBorder(),
-                                      child: new Text(
-                                          percentage.toStringAsFixed(0) + "%"),
-                                      onPressed: () {})),
-                            ),
-                          ),
-                          /*
+
+                                new Container(
+                                  child: new CustomPaint(
+                                    foregroundPainter: new MyPainter(
+                                        lineColor: UIData.lightPink,
+                                        completeColor: UIData.pink,
+                                        completePercent: snapshot.data
+                                                .documents[0].data["prosent"] +
+                                            .0,
+                                        width: 15.0),
+                                    child: new Padding(
+                                        padding: const EdgeInsets.all(30.0),
+                                        child: new FlatButton(
+                                            color: UIData.grey,
+                                            splashColor: Color(0x00FFFFFF),
+                                            shape: new CircleBorder(),
+                                            child: new Text((snapshot
+                                                        .data
+                                                        .documents[0]
+                                                        .data["prosent"])
+                                                    .toStringAsFixed(0) +
+                                                "%"),
+                                            onPressed: () {})),
+                                  ),
+                                ),
+
+                                /*
                      *
                      * Percentage indicator Ends here
                      *
                      */
-                          new Padding(
-                            padding: EdgeInsets.only(right: 35),
+                                new Padding(
+                                  padding: EdgeInsets.only(right: 35),
+                                ),
+                              ], // Text and meter row children
+                            ),
                           ),
-                        ], // Text and meter row children
-                      ),
-                    ),
-                    new Padding(
-                      padding: EdgeInsets.only(top: 30),
-                    ),
-                    new ClipRRect(
-                        borderRadius: new BorderRadius.circular(8.0),
-                        child: new Container(
-                          width: ServiceProvider.instance.screenService
-                              .getPortraitWidthByPercentage(context, 80),
-                          height: ServiceProvider.instance.screenService
-                              .getHeightByPercentage(context, 38),
-                          color: Colors.white,
-                          child: new ListView.builder(
-                              itemCount: taskList.length,
-                              itemBuilder: (context, int index) {
-                                return new Column(children: [
-                                  new Padding(
-                                    padding: EdgeInsets.only(top: 5),
-                                  ),
-                                  new CheckboxListTile(
-                                      value: inputs[index],
-                                      title: new Text(taskList[index],
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              fontFamily: "Anton")),
-                                      activeColor: UIData.blue,
-                                      controlAffinity:
-                                          ListTileControlAffinity.trailing,
-                                      onChanged: (bool val) {
-                                        itemChange(val, index);
-                                        if (inputs[index] == true) {
-                                          setState(() {
-                                            percentage = newPercentage;
-                                            newPercentage +=
-                                                100 / taskList.length;
-                                            if (newPercentage > 100.0) {
-                                              percentage = 100.0;
-                                              newPercentage = 100.0;
-                                            }
-                                            percentageAnimationController
-                                                .forward(from: 0.0);
-                                          });
-                                        } else {
-                                          setState(() {
-                                            percentage = newPercentage;
+                          new Padding(
+                            padding: EdgeInsets.only(top: 30),
+                          ),
+                          new ClipRRect(
+                              borderRadius: new BorderRadius.circular(8.0),
+                              child: new Container(
+                                width: ServiceProvider.instance.screenService
+                                    .getPortraitWidthByPercentage(context, 80),
+                                height: ServiceProvider.instance.screenService
+                                    .getHeightByPercentage(context, 38),
+                                color: Colors.white,
+                                child: new ListView.builder(
+                                    itemCount: 4,
+                                    itemBuilder: (context, int index) {
+                                      DocumentSnapshot document =
+                                          snapshot.data.documents[index];
+                                      inputs[index] = document.data["isDone"];
+                                      //percentage = document.data["prosent"] + .0;
 
-                                            newPercentage -=
-                                                100 / taskList.length;
-                                            if (newPercentage < 0) {
-                                              percentage = 0.0;
-                                              newPercentage = 0.0;
-                                            }
-                                            percentageAnimationController
-                                                .reverse(from: 100.0);
-                                          });
-                                        }
-                                      })
-                                ]);
-                              }),
-                        )),
-                    new Divider(
-                      color: UIData.grey,
-                      height: 20,
-                    ),
-                  ],
-                ),
+                                      return new Column(children: [
+                                        new Padding(
+                                          padding: EdgeInsets.only(top: 5),
+                                        ),
+                                        new CheckboxListTile(
+                                            value: inputs[index],
+                                            title: new Text(taskList[index],
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontFamily: "Anton")),
+                                            activeColor: UIData.blue,
+                                            controlAffinity:
+                                                ListTileControlAffinity
+                                                    .trailing,
+                                            onChanged: (bool val) {
+                                              //if (inputs[index] == true) {
+                                              if (inputs[index] == true) {
+                                              } else {
+                                                itemChange(val, index);
+                                                setState(() {
+                                                  percentage = newPercentage;
+
+                                                  newPercentage -=
+                                                      100 / taskList.length;
+                                                  if (newPercentage < 0) {
+                                                    percentage = 0.0;
+                                                    newPercentage = 0.0;
+                                                  }
+                                                  percentageAnimationController
+                                                      .reverse(from: 100.0);
+                                                });
+                                              }
+                                            })
+                                      ]);
+                                    }),
+                              )),
+                          new Divider(
+                            color: UIData.grey,
+                            height: 20,
+                          ),
+                        ],
+                      );
+                    }),
               ),
               new Stack(
                 children: <Widget>[
@@ -697,8 +772,8 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(70)),
           child: ClipRRect(
             borderRadius: new BorderRadius.circular(100),
-            child: Image.asset(
-              "lib/assets/images/fortnite.jpg", // fra list [index]
+            child: Image.network(
+              widget.user.profileImage, // fra list [index]
               height: 40,
               width: 40,
               fit: BoxFit.cover,
