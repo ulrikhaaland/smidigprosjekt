@@ -36,7 +36,11 @@ class SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return new GestureDetector(
+      onTap: () {_removeKeyboard(context);},
+
+    child:
+    Scaffold(
         backgroundColor: UIData.grey,
         resizeToAvoidBottomPadding: true,
         appBar: new AppBar(
@@ -51,6 +55,9 @@ class SearchPageState extends State<SearchPage> {
         body: Search(
           fromGroup: false,
           user: widget.user,
-        ));
+        )),);
+  }
+  void _removeKeyboard(BuildContext context) {
+    FocusScope.of(context).requestFocus(new FocusNode());
   }
 }
