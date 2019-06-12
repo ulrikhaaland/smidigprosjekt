@@ -353,6 +353,8 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                                                 ),
                                         ),
                                       ),
+                                      _group.members[index].userName.contains(widget.user.userName) ? Text("Meg", style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold))
+                                          : Text("${_getFirstName(index)}", style: TextStyle(fontSize: 11),),
                                     ]),
                               );
                             },
