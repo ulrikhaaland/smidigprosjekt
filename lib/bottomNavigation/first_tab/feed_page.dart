@@ -577,6 +577,7 @@ class PageOneState extends State<PageOne> {
                                                       .getPortraitWidthByPercentage(
                                                           context, 82),
                                                   child: Card(
+
                                                     elevation: 0.0,
                                                     shape:
                                                         RoundedRectangleBorder(
