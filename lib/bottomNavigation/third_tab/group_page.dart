@@ -220,14 +220,12 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
           if (index == 4) {
             percentage = proList[5];
             activeChallenge = "Dere har ingen flere utfordringer";
-            db
-                .collection("groups/${_group.id}/challenges")
+            db.collection("groups/${_group.id}/challenges")
                 .document("utfordring" + "${index + 1}")
                 .updateData({"isDone": true});
-            db
-                .collection("groups/${_group.id}/challenges")
+            db.collection("groups/${_group.id}/challenges")
                 .document("utfordring1")
-                .updateData({"prosent": percentage});
+                .updateData({"prosent": percentage, "activeChallange": activeChallenge});
           } else {
             activeChallenge = taskList[index + 1];
             percentage = proList[index + 1];
