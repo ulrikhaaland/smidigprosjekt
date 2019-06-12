@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:smidigprosjekt/bottomNavigation/third_tab/create_or_search.dart';
 import 'package:smidigprosjekt/objects/group.dart';
 import 'package:smidigprosjekt/objects/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:smidigprosjekt/service/styles.dart';
 import 'package:smidigprosjekt/utils/uidata.dart';
 import 'package:smidigprosjekt/service/service_provider.dart';
 import 'dart:ui';
@@ -81,14 +83,14 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
 
   Group _group;
 
+  List<User> groupMembers = <User>[];
+
   var names;
-
-
-
 
   @override
   void initState() {
     super.initState();
+    groupMembers.add(widget.user);
     _getGroup();
     _tabController = new TabController(vsync: this, length: 3);
     setState(() {
@@ -114,21 +116,26 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
   _getGroup() async {
     DocumentSnapshot docSnap =
         await firestoreInstance.document("groups/${widget.user.groupId}").get();
-    _group = Group(
-        name: docSnap.data["name"],
-        id: docSnap.documentID,
-        members: [],
-        memberAmount: docSnap.data["members"]);
-    _group.members = [];
-    QuerySnapshot qSnap = await firestoreInstance
-        .collection("groups/${widget.user.groupId}/members")
-        .getDocuments();
-    qSnap.documents.forEach((d) => _group.members.add(User(
-          id: d.data["id"],
-          userName: d.data["name"],
-          school: d.data["school"],
-          program: d.data["program"],
-        )));
+    if (docSnap.exists) {
+      _group = Group(
+          name: docSnap.data["name"],
+          id: docSnap.documentID,
+          members: [],
+          memberAmount: docSnap.data["members"]);
+      _group.members = [];
+      QuerySnapshot qSnap = await firestoreInstance
+          .collection("groups/${widget.user.groupId}/members")
+          .getDocuments();
+      qSnap.documents.forEach((d) => _group.members.add(User(
+            id: d.data["id"],
+            userName: d.data["name"],
+            school: d.data["school"],
+            program: d.data["program"],
+          )));
+    } else {
+      widget.user.introChoice = IntroChoice.search;
+    }
+
     setState(() {
       isLoading = false;
     });
@@ -183,6 +190,33 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
         ),
       );
 
+    if (widget.user.introChoice == IntroChoice.search)
+      return CreateOrSearchPage(
+          groupMembers: groupMembers,
+          user: widget.user,
+          onDone: () async {
+            setState(() {
+              isLoading = true;
+            });
+            _group = Group(
+                name: "Min gruppe",
+                id: null,
+                memberAmount: groupMembers.length,
+                members: groupMembers);
+            DocumentReference docRef = await firestoreInstance
+                .collection("groups")
+                .add(_group.toJson());
+            _group.members.forEach((m) {
+              firestoreInstance
+                  .collection("groups/${docRef.documentID}/members")
+                  .add(m.toJson());
+            });
+            setState(() {
+              isLoading = false;
+              widget.user.introChoice = IntroChoice.assigned;
+            });
+          });
+
     return GestureDetector(
         onTap: () {
           this._removeKeyboard(context);
@@ -211,49 +245,63 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                             itemBuilder: (context, index) {
                               return Padding(
                                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                child:
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Card(
+                                      elevation: 0,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(70),
+                                          side: _group.members[index].userName
+                                                  .contains(
+                                                      widget.user.userName)
+                                              ? BorderSide(
+                                                  color: UIData.pink, width: 2)
+                                              : BorderSide(
+                                                  color: Colors.white)),
+                                      //decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), border: index == 0 ? Border.all(width: 3, color: UIData.pink) : Border.all(color: Colors.white) ),
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            new BorderRadius.circular(80),
+                                        child: _group.members[index].userName
+                                                .contains(widget.user.userName)
+                                            ? Image.network(
+                                                widget.user.profileImage,
+                                                width: 42,
+                                                height: 42,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Image.asset(
+                                                //_group.members[index].profileImage, // fra list [index]
+                                                "lib/assets/images/fortnite.jpg",
 
-                               Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Card(
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(70),
-                                    side:  _group.members[index].userName.contains(widget.user.userName) ?
-                                         BorderSide(
-                                            color: UIData.pink, width: 2)
-                                        : BorderSide(color: Colors.white)),
-                                //decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), border: index == 0 ? Border.all(width: 3, color: UIData.pink) : Border.all(color: Colors.white) ),
-                                child: ClipRRect(
-                                  borderRadius: new BorderRadius.circular(80),
-                                  child: _group.members[index].userName.contains(widget.user.userName) ?
-                                  Image.network(widget.user.profileImage,
-                                    width: 42,
-                                    height: 42,
-                                    fit: BoxFit.cover,
-                                  )
-                                      : Image.asset(
-                                    //_group.members[index].profileImage, // fra list [index]
-                                    "lib/assets/images/fortnite.jpg",
-
-                                    width: 42,
-                                    height: 42,
-                                    fit: BoxFit.cover,
-                                  ),
+                                                width: 42,
+                                                height: 42,
+                                                fit: BoxFit.cover,
+                                              ),
+                                      ),
+                                    ),
+                                    // Text(_group.members[index].userName),
+                                    _group.members[index].userName
+                                            .contains(widget.user.userName)
+                                        ? Text("Meg",
+                                            style: TextStyle(
+                                                fontSize: 11,
+                                                fontWeight: FontWeight.bold))
+                                        : Text("${_getFirstName(index)}",
+                                            style: TextStyle(
+                                              fontSize: 11,
+                                            )),
+                                  ],
                                 ),
-                              ),
-                                 // Text(_group.members[index].userName),
-                                  _group.members[index].userName.contains(widget.user.userName) ? Text("Meg", style: TextStyle(fontSize: 11,fontWeight: FontWeight.bold))
-                                      :  Text("${_getFirstName(index)}", style: TextStyle(fontSize: 11,)),
-                                ],
-                              ),);
+                              );
                             },
                           ),
                         ),
                       ),
-                     Padding(padding: EdgeInsets.all(4)),
+                      Padding(padding: EdgeInsets.all(4)),
                       new Container(
                         decoration: const BoxDecoration(
                           border: Border(
@@ -788,7 +836,8 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
   void _removeKeyboard(BuildContext context) {
     FocusScope.of(context).requestFocus(new FocusNode());
   }
-  String  _getFirstName(int index) {
+
+  String _getFirstName(int index) {
     var fullnames = _group.members[index].userName;
     var split = fullnames.split(' ');
     String firstName = split[0];
