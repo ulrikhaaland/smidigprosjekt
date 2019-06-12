@@ -791,6 +791,10 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
   }
 
   Widget _message(String message, String userName, String image, bool isText) {
+    var fullnames = userName;
+    var split = fullnames.split(' ');
+    String firstName = split[0];
+    
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -807,15 +811,14 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
               fit: BoxFit.cover,
             ),
           ),
-        ),
-        
+        ), 
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-          userName,
-          style: TextStyle(fontSize: 11, color: Colors.grey)
-        ),
+              firstName,
+              style: TextStyle(fontSize: 11, color: Colors.grey)
+            ),
             isText
                 ? Padding(
                     padding: EdgeInsets.only(top: 2, bottom: 10),
