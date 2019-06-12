@@ -168,20 +168,13 @@ class IntroState extends State<Intro> {
                         PrimaryButton(
                           text: "Gå videre",
                           onPressed: () {
-                            if(imgUrl != null) {
-                              if (_formKey.currentState.validate()) {
-                                saveData(true);
+                            if (_formKey.currentState.validate()) {
+                              saveData(true);
 
-                                setState(() {
-                                  userinfo = !userinfo;
-                                });
-                                 uploadImage(imgUrl);
-                              }
-                            }else{
-                              Toast.show("Vennligst legg til bilde", context,
-                                  duration: Toast.LENGTH_LONG,
-                                  gravity: Toast.CENTER,
-                                  backgroundColor: UIData.pink);
+                              setState(() {
+                                userinfo = !userinfo;
+                              });
+                                uploadImage(imgUrl);
                             }
                           },
                         )
@@ -673,7 +666,7 @@ class IntroState extends State<Intro> {
     });
     widget.user.profileImage = dbUrl;
   }
-  
+
   saveData(bool fromForm) async {
     if (fromForm) {
       // widget.user.intro = false;
