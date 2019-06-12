@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:smidigprosjekt/auth.dart';
 import 'package:smidigprosjekt/bottomNavigation/first_tab/feed_page.dart';
 import 'package:smidigprosjekt/objects/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,10 +16,14 @@ class ProfilePage extends StatefulWidget {
     this.onSignOut,
     this.endDrawer,
     this.myEvent,
+    this.auth,
+    this.myProfile,
   });
   final User user;
   final List<Event> myEvent;
   final VoidCallback onSignOut;
+  bool myProfile;
+  final BaseAuth auth;
 
   final Widget endDrawer;
   @override
@@ -63,125 +68,137 @@ class _ProfilePageState extends State<ProfilePage> {
         this._removeKeyboard(context);
       },
       child: new Scaffold(
-        endDrawer: SizedBox(
-          width: 250,
-          child: Drawer(
-            child: Container(
-                color: Colors.white,
-                child: Stack(children: <Widget>[
-                  Column(
-                    children: <Widget>[
-                      Container(
-                        color: Colors.white,
-                        height: 80,
-                        padding: EdgeInsets.fromLTRB(0, 43, 0, 0),
-                        child: Text(
-                          "Innstillinger",
-                          style: ServiceProvider.instance.styles.title(),
-                        ),
-                      ),
-                      Divider(
-                        color: Colors.black45,
-                        height: 1,
-                      ),
-                      ListTile(
-                        title: Text(
-                          widget.user.getName(),
-                          style: TextStyle(
-                              color: UIData.black,
-                              fontSize: 15,
-                              fontFamily: "Anton",
-                              fontWeight: FontWeight.bold),
-                        ),
-                        onTap: () {},
-                      ),
-                      Divider(
-                        height: 1,
-                      ),
-                      ListTile(
-                        leading: Icon(
-                          Icons.help_outline,
-                          color: UIData.blue,
-                        ),
-                        title: Text(
-                          'Hjelp',
-                          style: TextStyle(
-                              color: UIData.black,
-                              fontSize: 15,
-                              fontFamily: "Anton",
-                              fontWeight: FontWeight.normal),
-                        ),
-                        onTap: () {},
-                        contentPadding: EdgeInsets.only(top: 0, left: 15),
-                      ),
-                      Divider(
-                        height: 1,
-                      ),
-                      ListTile(
-                        leading: Icon(
-                          Icons.info_outline,
-                          color: UIData.blue,
-                        ),
-                        title: Text(
-                          'Om',
-                          style: TextStyle(
-                              color: UIData.black,
-                              fontSize: 15,
-                              fontFamily: "Anton",
-                              fontWeight: FontWeight.normal),
-                        ),
-                        onTap: () {},
-                      ),
-                      Divider(
-                        height: 1,
-                      ),
-                      new Expanded(
-                        child: Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Container(
-                            //alignment: FractionalOffset.bottomCenter,
-                            height: 60,
-                            decoration: new BoxDecoration(
-                              color: UIData.pink,
+        endDrawer: widget.myProfile
+            ? SizedBox(
+                width: 250,
+                child: Drawer(
+                  child: Container(
+                      color: Colors.white,
+                      child: Stack(children: <Widget>[
+                        Column(
+                          children: <Widget>[
+                            Container(
+                              color: Colors.white,
+                              height: 80,
+                              padding: EdgeInsets.fromLTRB(0, 43, 0, 0),
+                              child: Text(
+                                "Innstillinger",
+                                style: ServiceProvider.instance.styles.title(),
+                              ),
                             ),
-
-                            child: ListTile(
+                            Divider(
+                              color: Colors.black45,
+                              height: 1,
+                            ),
+                            ListTile(
+                              title: Text(
+                                widget.user.userName,
+                                style: TextStyle(
+                                    color: UIData.black,
+                                    fontSize: 15,
+                                    fontFamily: "Anton",
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              onTap: () {},
+                            ),
+                            Divider(
+                              height: 1,
+                            ),
+                            ListTile(
                               leading: Icon(
-                                Icons.exit_to_app,
-                                color: Colors.white,
+                                Icons.help_outline,
+                                color: UIData.blue,
                               ),
                               title: Text(
-                                'Logg ut',
+                                'Hjelp',
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
+                                    color: UIData.black,
+                                    fontSize: 15,
                                     fontFamily: "Anton",
                                     fontWeight: FontWeight.normal),
                               ),
-                              onTap: () {
-                                widget.onSignOut();
-                              },
+                              onTap: () {},
+                              contentPadding: EdgeInsets.only(top: 0, left: 15),
                             ),
-                          ),
+                            Divider(
+                              height: 1,
+                            ),
+                            ListTile(
+                              leading: Icon(
+                                Icons.info_outline,
+                                color: UIData.blue,
+                              ),
+                              title: Text(
+                                'Om',
+                                style: TextStyle(
+                                    color: UIData.black,
+                                    fontSize: 15,
+                                    fontFamily: "Anton",
+                                    fontWeight: FontWeight.normal),
+                              ),
+                              onTap: () {},
+                            ),
+                            Divider(
+                              height: 1,
+                            ),
+                            new Expanded(
+                              child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Container(
+                                  //alignment: FractionalOffset.bottomCenter,
+                                  height: 60,
+                                  decoration: new BoxDecoration(
+                                    color: UIData.pink,
+                                  ),
+
+                                  child: ListTile(
+                                    leading: Icon(
+                                      Icons.exit_to_app,
+                                      color: Colors.white,
+                                    ),
+                                    title: Text(
+                                      'Logg ut',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                          fontFamily: "Anton",
+                                          fontWeight: FontWeight.normal),
+                                    ),
+                                    onTap: () {
+                                      widget.onSignOut();
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                ])),
-          ),
-        ),
+                      ])),
+                ),
+              )
+            : Container(),
         backgroundColor: UIData.grey,
         appBar: new AppBar(
+          leading: !widget.myProfile
+              ? IconButton(
+                  color: Colors.black,
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () => Navigator.of(context).pop(),
+                )
+              : Container(),
           actions: <Widget>[
-            Builder(
-              builder: (context) => IconButton(
-                    /*leading: new IconButton(icon: Image.asset('lib/assets/images/settings_icon.png', scale: 10,),
+            widget.myProfile
+                ? Builder(
+                    builder: (context) => IconButton(
+                          /*leading: new IconButton(icon: Image.asset('lib/assets/images/settings_icon.png', scale: 10,),
                 onPressed: () => Scaffold.of(context).openDrawer()),*/
-                    icon: Image.asset("lib/assets/images/settings_icon.png",
-                        scale: 12),
-                    onPressed: () => Scaffold.of(context).openEndDrawer(),
-                  ),
-            ),
+                          icon: Image.asset(
+                              "lib/assets/images/settings_icon.png",
+                              scale: 12),
+                          onPressed: () => Scaffold.of(context).openEndDrawer(),
+                        ),
+                  )
+                : Container(),
           ],
           elevation: 1,
           backgroundColor: Colors.white,
@@ -306,19 +323,46 @@ class _ProfilePageState extends State<ProfilePage> {
                   //decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), border: index == 0 ? Border.all(width: 3, color: UIData.pink) : Border.all(color: Colors.white) ),
                   child: ClipRRect(
                     borderRadius: new BorderRadius.circular(70),
-                    child: widget.user.profileImage != null ?  Image.network(
+                    child: widget.user.profileImage != null
+                        ? Image.network(
                             widget.user.profileImage,
                             width: 122,
                             height: 122,
                             fit: BoxFit.cover,
-                          ) :
-                        Image.asset("lib/assets/images/profilbilde.png"),
+                          )
+                        : Image.asset("lib/assets/images/profilbilde.png"),
                   ),
                 ),
               ))
         ],
       ));
     } else {
+      Widget fotoWidget = Container();
+      if (newFoto) {
+        fotoWidget = Image.file(
+          imgUrl,
+          width: 122,
+          height: 122,
+          fit: BoxFit.cover,
+        );
+      } else if (widget.user.profileImage != null) {
+        fotoWidget = Image.network(
+          widget.user.profileImage,
+          width: 122,
+          height: 122,
+          fit: BoxFit.cover,
+        );
+      } else {
+        fotoWidget = Image.asset(
+          //_group.members[index].profileImage, // fra list [index]
+          "lib/assets/images/profilbilde.png",
+
+          width: 42,
+          height: 42,
+          fit: BoxFit.cover,
+        );
+      }
+
       return new SingleChildScrollView(
           child: new Stack(
         children: <Widget>[
@@ -340,21 +384,32 @@ class _ProfilePageState extends State<ProfilePage> {
                       .getPortraitWidthByPercentage(context, 85),
                   child: new Column(
                     children: <Widget>[
-                      new Align(
-                        alignment: Alignment.centerRight,
-                        child: new IconButton(
-                          icon: Image.asset(
-                            "lib/assets/images/editprofile_icon.png",
-                            color: UIData.black,
-                            scale: 11,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              edit = !edit;
-                            });
-                          },
-                        ),
-                      ),
+                      widget.myProfile
+                          ? new Align(
+                              alignment: Alignment.centerRight,
+                              child: new IconButton(
+                                icon: Image.asset(
+                                  "lib/assets/images/editprofile_icon.png",
+                                  color: UIData.black,
+                                  scale: 11,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    edit = !edit;
+                                  });
+                                },
+                              ),
+                            )
+                          : new Align(
+                              alignment: Alignment.centerRight,
+                              child: new IconButton(
+                                  icon: Image.asset(
+                                    "lib/assets/images/editprofile_icon.png",
+                                    color: Colors.white,
+                                    scale: 11,
+                                  ),
+                                  onPressed: null),
+                            ),
                       new Padding(
                         padding: EdgeInsets.only(top: 46),
                       ),
@@ -396,10 +451,13 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             Padding(padding: EdgeInsets.all(10)),
-            new Text(
-              "Mine events:",
-              style: new TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
+            widget.myProfile
+                ? new Text(
+                    "Mine events:",
+                    style: new TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  )
+                : new Container(),
             new Container(
               child: new Stack(
                 //child: new Stack(
@@ -430,7 +488,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                       var now = new DateTime.now();
                                       if (document.data["id"]
                                               .contains(widget.user.userName) &&
-                                          document.data["time"].isAfter(now)) {
+                                          document.data["time"].isAfter(now) &&
+                                          widget.myProfile == true) {
                                         return Column(
                                           children: <Widget>[
                                             Divider(
@@ -898,7 +957,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                         return Divider(
                                             color: UIData.grey, height: 0);
                                       }
-                                      ;
                                     },
                                   );
                                 })),
@@ -922,19 +980,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 //decoration: BoxDecoration(borderRadius: BorderRadius.circular(60), border: index == 0 ? Border.all(width: 3, color: UIData.pink) : Border.all(color: Colors.white) ),
                 child: ClipRRect(
                   borderRadius: new BorderRadius.circular(70),
-                  child: newFoto
-                      ? Image.file(
-                          imgUrl,
-                          width: 122,
-                          height: 122,
-                          fit: BoxFit.cover,
-                        )
-                      : Image.network(
-                          widget.user.profileImage,
-                          width: 122,
-                          height: 122,
-                          fit: BoxFit.cover,
-                        ),
+                  child: fotoWidget,
                 ),
               )),
         ],

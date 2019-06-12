@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:smidigprosjekt/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:smidigprosjekt/bottomNavigation/fourth_tab/profile_page.dart';
 import 'package:smidigprosjekt/service/service_provider.dart';
 import 'package:smidigprosjekt/utils/uidata.dart';
 import 'package:smidigprosjekt/userSearch/search.dart';
@@ -130,7 +131,7 @@ class SearchState extends State<Search> {
                       child: ClipRRect(
                         borderRadius: new BorderRadius.circular(70),
                         child: Image.asset(
-                          "lib/assets/images/fortnite.jpg", // fra list [index]
+                          "lib/assets/images/profilbilde.png", // fra list [index]
                           width: 62,
                           fit: BoxFit.cover,
                         ),
@@ -138,7 +139,8 @@ class SearchState extends State<Search> {
                     ),
                   ),
                 ),
-                Expanded(
+                Container(
+                  height: 60,
                   child: Column(
                     children: <Widget>[
                       Expanded(
@@ -147,6 +149,7 @@ class SearchState extends State<Search> {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
+                      Padding(padding: EdgeInsets.all(1)),
                       Expanded(child: Text(doc.data["school"])),
                       Expanded(
                         child: Text(doc.data["program"],
@@ -160,51 +163,61 @@ class SearchState extends State<Search> {
                     margin: EdgeInsets.only(top: 0),
                     width: 150,
                     decoration: new BoxDecoration(
-                      color: Colors.pink,
+                      color: UIData.pink,
                       borderRadius: new BorderRadius.only(
                           bottomLeft: const Radius.circular(8.0),
                           bottomRight: const Radius.circular(8.0)),
                     ),
                     child: FlatButton(
                       onPressed: () {
-                        bool cleared = false;
-                        String snackText = "";
-                        widget.addUsers.forEach((u) =>
-                            u.userName == doc.data["name"]
-                                ? cleared = false
-                                : cleared = true);
-                        if (cleared) {
-                          widget.addUsers.add(User(
-                            userName: doc.data["name"],
-                            id: doc.data["id"],
-                            email: doc.data["email"],
-                            school: doc.data["school"],
-                            program: doc.data["program"],
-                            profileImage: doc.data["profileimage"],
-                            bio: doc.data["bio"],
-                          ));
-                          snackText =
-                              "${doc.data["name"]} har blitt lagt valgt!";
-                        } else {
-                          snackText =
-                              "${doc.data["name"]} har allerede blitt valgt!";
-                        }
+                        User clickedUser = User(
+                          userName: doc.data["name"],
+                          id: doc.data["id"],
+                          email: doc.data["email"],
+                          school: doc.data["school"],
+                          program: doc.data["program"],
+                          profileImage: doc.data["profileimage"],
+                          bio: doc.data["bio"],
+                        );
+                        if (widget.fromGroup) {
+                          bool cleared = false;
+                          String snackText = "";
+                          widget.addUsers.forEach((u) =>
+                              u.userName == doc.data["name"]
+                                  ? cleared = false
+                                  : cleared = true);
+                          if (cleared) {
+                            widget.addUsers.add(clickedUser);
+                            snackText =
+                                "${doc.data["name"]} har blitt lagt valgt!";
+                          } else {
+                            snackText =
+                                "${doc.data["name"]} har allerede blitt valgt!";
+                          }
 
-                        Scaffold.of(context).showSnackBar(new SnackBar(
-                            backgroundColor: UIData.blue,
-                            content: Container(
-                              height: ServiceProvider.instance.screenService
-                                  .getHeightByPercentage(context, 2.5),
-                              child: Column(
-                                children: <Widget>[
-                                  Text(
-                                    snackText,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ],
-                              ),
-                            )));
+                          Scaffold.of(context).showSnackBar(new SnackBar(
+                              backgroundColor: UIData.blue,
+                              content: Container(
+                                height: ServiceProvider.instance.screenService
+                                    .getHeightByPercentage(context, 2.5),
+                                child: Column(
+                                  children: <Widget>[
+                                    Text(
+                                      snackText,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ],
+                                ),
+                              )));
+                        } else {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => ProfilePage(
+                                  user: clickedUser,
+                                  myProfile: false,
+                                ),
+                          ));
+                        }
                       },
                       child:
                           Text("Velg", style: TextStyle(color: Colors.white)),

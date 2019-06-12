@@ -91,6 +91,8 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     four = ProfilePage(
+      auth: auth,
+      myProfile: true,
       user: widget.user,
       // myEvent: myEvent,
       onSignOut: () => _signOut(),
@@ -254,7 +256,6 @@ class PageOneState extends State<PageOne> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       backgroundColor: UIData.grey,
       appBar: new AppBar(
-        
         elevation: 1,
         backgroundColor: Colors.white,
         actions: <Widget>[
@@ -573,7 +574,6 @@ class PageOneState extends State<PageOne> {
                                                       .getPortraitWidthByPercentage(
                                                           context, 82),
                                                   child: Card(
-
                                                     elevation: 0.0,
                                                     shape:
                                                         RoundedRectangleBorder(
@@ -692,10 +692,8 @@ class PageOneState extends State<PageOne> {
                                                                           style:
                                                                               TextStyle(fontSize: 12),
                                                                         ),
-
                                                                       ],
                                                                     ),
-
                                                                   ],
                                                                 ),
                                                               ),
@@ -707,9 +705,16 @@ class PageOneState extends State<PageOne> {
                                                   ),
                                                 ),
                                           tap == true &&
-                                              tapped != null &&
-                                              tapped == index
-                                              ? Icon(Icons.keyboard_arrow_up, size: 25,) : Icon(Icons.keyboard_arrow_down, size: 25,)
+                                                  tapped != null &&
+                                                  tapped == index
+                                              ? Icon(
+                                                  Icons.keyboard_arrow_up,
+                                                  size: 25,
+                                                )
+                                              : Icon(
+                                                  Icons.keyboard_arrow_down,
+                                                  size: 25,
+                                                )
                                         ],
                                       ),
                                     )

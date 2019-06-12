@@ -175,6 +175,7 @@ class IntroState extends State<Intro> {
                                 userinfo = !userinfo;
                               });
                                 uploadImage(imgUrl);
+
                             }
                           },
                         )
@@ -245,7 +246,7 @@ class IntroState extends State<Intro> {
     } else {
       swipes == true
           ? content = Swiper(
-              loop: false,
+              loop: true,
               itemBuilder: (BuildContext context, int index) {
                 return list[index];
               },
@@ -266,7 +267,7 @@ class IntroState extends State<Intro> {
                   height: ServiceProvider.instance.screenService
                       .getHeightByPercentage(context, 7.5),
                   child: Text(
-                    "Du har 3 valgmuligheter:",
+                    "Du har 2 valgmuligheter:",
                     style: Styles().title(),
                   ),
                 ),
@@ -308,25 +309,25 @@ class IntroState extends State<Intro> {
                     ),
                   ),
                 ),
-                // Padding(
-                //   padding: EdgeInsets.only(bottom: 24),
-                //   child: GestureDetector(
-                //     onTap: () => _groupDecision(3),
-                //     child: Card(
-                //       color: UIData.darkblue,
-                //       child: Container(
-                //         width: ServiceProvider.instance.screenService
-                //             .getWidthByPercentage(context, 85),
-                //         height: ServiceProvider.instance.screenService
-                //             .getHeightByPercentage(context, 15),
-                //         child: Center(
-                //           child: Text("Opprett din egen gruppe",
-                //               style: TextStyle(color: Colors.white)),
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 24),
+                  child: GestureDetector(
+                    onTap: () => _groupDecision(2),
+                    child: Card(
+                      color: UIData.darkblue,
+                      child: Container(
+                        width: ServiceProvider.instance.screenService
+                            .getWidthByPercentage(context, 85),
+                        height: ServiceProvider.instance.screenService
+                            .getHeightByPercentage(context, 15),
+                        child: Center(
+                          child: Text("Opprett din egen gruppe",
+                              style: TextStyle(color: Colors.white)),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             );
     }
@@ -586,7 +587,7 @@ class IntroState extends State<Intro> {
       imgUrl = gallery;
       newFoto = true;
     });
-    Navigator.of(context, rootNavigator: true).pop(); 
+    Navigator.of(context, rootNavigator: true).pop();
   }
 
   Future<void> openOptions() {
@@ -669,7 +670,7 @@ class IntroState extends State<Intro> {
 
   saveData(bool fromForm) async {
     if (fromForm) {
-      // widget.user.intro = false;
+      widget.user.intro = false;
 
       _formKey.currentState.save();
     }
