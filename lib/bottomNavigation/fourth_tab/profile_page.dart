@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:smidigprosjekt/auth.dart';
 import 'package:smidigprosjekt/bottomNavigation/first_tab/feed_page.dart';
 import 'package:smidigprosjekt/objects/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,12 +16,14 @@ class ProfilePage extends StatefulWidget {
     this.onSignOut,
     this.endDrawer,
     this.myEvent,
+    this.auth,
     this.myProfile,
   });
   final User user;
   final List<Event> myEvent;
   final VoidCallback onSignOut;
   bool myProfile;
+  final BaseAuth auth;
 
   final Widget endDrawer;
   @override
@@ -176,11 +179,13 @@ class _ProfilePageState extends State<ProfilePage> {
             : Container(),
         backgroundColor: UIData.grey,
         appBar: new AppBar(
-          leading: IconButton(
-            color: Colors.black,
-            icon: Icon(Icons.arrow_back),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
+          leading: !widget.myProfile
+              ? IconButton(
+                  color: Colors.black,
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () => Navigator.of(context).pop(),
+                )
+              : Container(),
           actions: <Widget>[
             widget.myProfile
                 ? Builder(
