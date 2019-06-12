@@ -43,12 +43,12 @@ class _CreateOrSearchPageState extends State<CreateOrSearchPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  "Lag en gruppe",
-                  style: Styles().title(),
+                  "Lag en gruppe:",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 ),
                 Container(
                   height: ServiceProvider.instance.screenService
-                      .getHeightByPercentage(context, 1),
+                      .getHeightByPercentage(context, 3),
                 ),
                 Text(
                   "Søk etter andre mennesker og legg de til i gruppen din!",
@@ -56,7 +56,7 @@ class _CreateOrSearchPageState extends State<CreateOrSearchPage> {
                 ),
                 Container(
                   height: ServiceProvider.instance.screenService
-                      .getHeightByPercentage(context, 1),
+                      .getHeightByPercentage(context, 5),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -67,17 +67,17 @@ class _CreateOrSearchPageState extends State<CreateOrSearchPage> {
                       if (widget.user.profileImage != null) {
                         finalChild = Image.network(
                           widget.user.profileImage,
-                          width: 42,
-                          height: 42,
+                          width: 52,
+                          height: 52,
                           fit: BoxFit.cover,
                         );
                       } else {
                         finalChild = Image.asset(
                           //_group.members[index].profileImage, // fra list [index]
-                          "lib/assets/images/fortnite.jpg",
+                          "lib/assets/images/profilbilde.png",
 
-                          width: 42,
-                          height: 42,
+                          width: 52,
+                          height: 52,
                           fit: BoxFit.cover,
                         );
                       }
@@ -99,13 +99,14 @@ class _CreateOrSearchPageState extends State<CreateOrSearchPage> {
                       width: ServiceProvider.instance.screenService
                           .getWidthByPercentage(context, 2),
                     ),
+                    Padding(padding: EdgeInsets.all(7)),
                     Column(
                       children: <Widget>[
                         ClipRRect(
                           borderRadius: new BorderRadius.circular(80),
                           child: Container(
-                            width: 42,
-                            height: 42,
+                            width: 52,
+                            height: 52,
                             color: UIData.blue,
                             child: IconButton(
                               icon: Icon(Icons.add),
@@ -123,7 +124,7 @@ class _CreateOrSearchPageState extends State<CreateOrSearchPage> {
                 ),
                 Container(
                   height: ServiceProvider.instance.screenService
-                      .getHeightByPercentage(context, 2),
+                      .getHeightByPercentage(context, 5),
                 ),
                 PrimaryButton(
                   text: "Opprett gruppe",
@@ -139,7 +140,7 @@ class _CreateOrSearchPageState extends State<CreateOrSearchPage> {
           backgroundColor: Colors.white,
           centerTitle: true,
           title: new Text(
-            "Søk etter eller opprett gruppe",
+            "Lag gruppe",
             style: ServiceProvider.instance.styles.title(),
           ),
         ),
