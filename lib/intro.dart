@@ -168,16 +168,16 @@ class IntroState extends State<Intro> {
                         PrimaryButton(
                           text: "Gå videre",
                           onPressed: () {
-                            if(imgUrl != null) {
+                            if (imgUrl != null) {
                               if (_formKey.currentState.validate()) {
                                 saveData(true);
 
                                 setState(() {
                                   userinfo = !userinfo;
                                 });
-                                 uploadImage(imgUrl);
+                                uploadImage(imgUrl);
                               }
-                            }else{
+                            } else {
                               Toast.show("Vennligst legg til bilde", context,
                                   duration: Toast.LENGTH_LONG,
                                   gravity: Toast.CENTER,
@@ -273,7 +273,7 @@ class IntroState extends State<Intro> {
                   height: ServiceProvider.instance.screenService
                       .getHeightByPercentage(context, 7.5),
                   child: Text(
-                    "Du har 3 valgmuligheter:",
+                    "Du har 2 valgmuligheter:",
                     style: Styles().title(),
                   ),
                 ),
@@ -593,7 +593,7 @@ class IntroState extends State<Intro> {
       imgUrl = gallery;
       newFoto = true;
     });
-    Navigator.of(context, rootNavigator: true).pop(); 
+    Navigator.of(context, rootNavigator: true).pop();
   }
 
   Future<void> openOptions() {
@@ -702,7 +702,7 @@ class IntroState extends State<Intro> {
 
   saveData(bool fromForm) async {
     if (fromForm) {
-      // widget.user.intro = false;
+      widget.user.intro = false;
 
       _formKey.currentState.save();
     }
