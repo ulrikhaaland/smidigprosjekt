@@ -22,7 +22,7 @@ Android
   Android Emulator or Android device with USB debugging enabled
 
 iOS
-
+  iPhone Emulator
 ```
 
 ### Installing
@@ -32,6 +32,23 @@ A step by step instruction on how to install and run the app
 ```
 Open project folder in your IDE(This readme is based on Visual Studio Code)
 Install flutter and dart extensions to VS Code
+
+Open pubspec.yaml file
+
+If on iOS make sure these lines are correct:
+  cloud_firestore: 0.8.2+3 should be commented out like this #cloud_firestore: 0.8.2+3
+
+  cloud_firestore:
+      git:
+     url: git://github.com/koyachi/flutter_plugins.git
+      ref: temporary-fix/specify-firestore-5.1.0
+       path: packages/cloud_firestore
+  These lines should NOT be commented out
+  
+If on android do the opposite of this
+
+SAVE FILE
+
 Top navigation bar > Debug > Start Without Debugging
 Choose Flutter & Dart if prompted
 If using emulator, choose emulated device
@@ -50,6 +67,7 @@ Here you will see the errors
 Double click errors
 Migrate these lines to AndroidX manually with help from this sheet:
 https://developer.android.com/jetpack/androidx/migrate
+
 build and repeat this until all errors are gone.
 
 Try to run in VS Code again
