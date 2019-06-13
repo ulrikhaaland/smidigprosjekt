@@ -89,7 +89,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
 
   var names;
 
-  bool profileImgLoaded = false;
+  bool isImgLoaded = false;
 
   @override
   void initState() {
@@ -108,26 +108,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
           percentage = lerpDouble(
               percentage, newPercentage, percentageAnimationController.value);
         });
-      });
-
-      
-  }
-
-  _getProfileImg() {
-    print("START!!!!!");
-    while(profileImgLoaded == false) {
-        print("SEARCHING!!!!!");
-        for(int i = 0; i < _group.members.length; i++){
-          print("LOOKING!!!!!"+ i.toString());
-          if(_group.members[i].profileImage !=null){
-            setState((){
-              profileImgLoaded = true;
-              print(profileImgLoaded.toString());
-            });  
-            print("FOUND!!!!!");
-          }
-        }
-      }
+      });   
   }
 
   @override
@@ -172,6 +153,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
 
     setState(() {
       isLoading = false;
+      isImgLoaded = true;
     });
   }
 
@@ -374,7 +356,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                                         child: ClipRRect(
                                           borderRadius:
                                               new BorderRadius.circular(80),
-                                          child: profileImgLoaded? 
+                                          child: isImgLoaded? 
                                           _group.members[index].profileImage !=null? 
                                           Image.network(
                                                   _group.members[index].profileImage,

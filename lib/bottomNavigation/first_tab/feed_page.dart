@@ -72,6 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
+     _getProfileImage();
     print(widget.user.getName());
     one = PageOne(
       key: keyOne,
@@ -117,6 +118,21 @@ class _MyHomePageState extends State<MyHomePage> {
     } catch (e) {
       print(e);
     }
+  }
+
+  _getProfileImage() async {
+    print("started");
+    QuerySnapshot qSnapProfileImage = await Firestore.instance
+    .collection("users")
+    .where("id", isEqualTo: widget.user.id)
+    .getDocuments();
+    qSnapProfileImage.documents.forEach((doc) {
+      print(doc.data["profileImage"]);
+      if(doc.data["profileImage"] != null){
+        widget.user.profileImage = doc.data["profileImage"];
+      }
+      print(widget.user.profileImage);
+    });
   }
 
   @override
