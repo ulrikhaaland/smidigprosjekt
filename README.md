@@ -8,18 +8,19 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
-
+What you need to install the software
 ```
 General
-  Flutter SDK
+  Flutter SDK: https://flutter.dev/docs/get-started/install
   IDE (I used Visual Studio Code)
+  Flutter & Dart extensions in IDE
 
 Android
-  Android SDK
-  Google USB drivers
-  Android Studio
-  Android Emulator or Android device with USB debugging enabled
+  Android Studio: https://developer.android.com/studio
+  Flutter & Dart extensions in android Studio.
+  Android SDK(Can download from Android studio)
+  If using android device: Google USB drivers(Can download from Android studio) and Android device with USB debugging enabled
+  If using android emulator: Android Emulator(Can download from Android studio) 
 
 iOS
   iPhone Emulator
@@ -57,9 +58,10 @@ Wait
 //ONLY FOR ANDROID
 After a short amount of time you will probably get alot of errors
 Open Android Studio
-Open android folder in project folder( dont open project folder in android studio)
+Open only the android folder from the project folder(don't open the project folder)
 Top navigation bar > Refactor > Migrate to AndroidX
-If it succeeds try to run project in VS code
+If it succeeds try to build project again
+If that succeeds try to run project in VS code
 If it still fails, open android studio again
 Try to build project
 When building, there is a navigation meny in the bottom left, click it
