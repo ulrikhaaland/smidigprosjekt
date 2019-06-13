@@ -19,7 +19,10 @@ Android
   Android Studio: https://developer.android.com/studio
   Flutter & Dart extensions in android Studio.
   Android SDK(Can download from Android studio)
-  If using android device: Google USB drivers(Can download from Android studio) and Android device with USB debugging enabled
+  
+  If using android device: Google USB drivers(Can download from Android studio)
+  and Android device with USB debugging enabled
+  
   If using android emulator: Android Emulator(Can download from Android studio) 
 
 iOS
