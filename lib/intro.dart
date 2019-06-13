@@ -179,7 +179,9 @@ class IntroState extends State<Intro> {
                               setState(() {
                                 userinfo = !userinfo;
                               });
-                              uploadImage(imgUrl);
+                              if(imgUrl != null) {
+                                uploadImage(imgUrl);
+                              }
                             }
                           },
                         )
