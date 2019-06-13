@@ -65,6 +65,7 @@ class RootPageState extends State<RootPage> {
         school: docSnap.data["school"],
         program: docSnap.data["program"],
         bio: docSnap.data["bio"],
+        profileImage: docSnap.data["profileImage"],
         groupId: docSnap.data["groupid"],
       );
       setState(() {
