@@ -487,7 +487,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             height: ServiceProvider.instance.screenService
                                 .getPortraitHeightByPercentage(context, 50),
                             width: ServiceProvider.instance.screenService
-                                .getPortraitWidthByPercentage(context, 82),
+                                .getPortraitWidthByPercentage(context, 87),
                             child: StreamBuilder(
                                 stream: Firestore.instance
                                     .collection("events")

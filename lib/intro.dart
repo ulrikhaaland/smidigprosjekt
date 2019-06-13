@@ -290,7 +290,7 @@ class IntroState extends State<Intro> {
                             .getHeightByPercentage(context, 15),
                         child: Center(
                           child: Text("Bli tildelt en gruppe automatisk",
-                              style: TextStyle(color: Colors.white)),
+                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                         ),
                       ),
                     ),
@@ -309,7 +309,7 @@ class IntroState extends State<Intro> {
                             .getHeightByPercentage(context, 15),
                         child: Center(
                           child: Text("Søk etter gruppe",
-                              style: TextStyle(color: Colors.white)),
+                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                         ),
                       ),
                     ),
@@ -328,7 +328,7 @@ class IntroState extends State<Intro> {
                             .getHeightByPercentage(context, 15),
                         child: Center(
                           child: Text("Jeg vil ikke ha en gruppe",
-                              style: TextStyle(color: Colors.white)),
+                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                         ),
                       ),
                     ),
