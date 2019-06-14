@@ -53,6 +53,8 @@ If on android do the opposite of this
 
 SAVE FILE
 
+Run 'flutter packages get' in VS Code terminal or Flutter Terminal.
+
 Top navigation bar > Debug > Start Without Debugging
 Choose Flutter & Dart if prompted
 If using emulator, choose emulated device
@@ -75,5 +77,5 @@ https://developer.android.com/jetpack/androidx/migrate
 
 build and repeat this until all errors are gone.
 
-Try to run in VS Code again
+Try to run in VS Code again(Remember 'flutter packages get')
 ```
