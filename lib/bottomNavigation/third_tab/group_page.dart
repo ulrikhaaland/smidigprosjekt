@@ -222,12 +222,13 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
       "Velg film sammen og dra på kino",
       "Dra på Syng sammen",
       "4 stjerners middag",
-      "Dere har ingen flere utfordringer"
+      //"Dere har ingen flere utfordringer"
     ];
 
      _getChallengeData(bool val, int index){
+       print(proListIndex.toString());
       if (inputs[index] = true) {
-          if (index == 4) {
+          if (proListIndex >= 4) {
             percentage = proList[proListIndex +1];
             activeChallenge = "Dere har ingen flere utfordringer";
             db
@@ -242,7 +243,12 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
               "activeChallange": activeChallenge
             });
           } else {
-            activeChallenge = taskList[index + 1];
+            if(index < 4){
+              activeChallenge = taskList[index + 1];
+            }
+            else if(activeChallenge != null) {
+              activeChallenge = taskList[0];
+            }
             percentage = proList[proListIndex + 1];
             db
                 .collection("groups/${_group.id}/challenges")
@@ -268,8 +274,6 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
         });
       });
     }
-
-   
 
     queryData = MediaQuery.of(context);
 
