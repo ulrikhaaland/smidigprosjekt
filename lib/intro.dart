@@ -581,8 +581,10 @@ class IntroState extends State<Intro> {
   Future openCamera() async {
     var picture = await ImagePicker.pickImage(source: ImageSource.camera);
     setState(() {
-      imgUrl = picture;
-      newFoto = true;
+      if(picture != null){
+        imgUrl = picture;
+        newFoto = true;
+      }
     });
     Navigator.of(context, rootNavigator: true).pop();
   }
@@ -590,8 +592,10 @@ class IntroState extends State<Intro> {
   Future openGallery() async {
     var gallery = await ImagePicker.pickImage(source: ImageSource.gallery);
     setState(() {
-      imgUrl = gallery;
-      newFoto = true;
+      if(gallery != null){
+        imgUrl = gallery;
+        newFoto = true;
+      }
     });
     Navigator.of(context, rootNavigator: true).pop();
   }

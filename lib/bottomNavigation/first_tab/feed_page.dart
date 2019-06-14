@@ -317,7 +317,12 @@ class PageOneState extends State<PageOne> {
                           .snapshots(),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData)
-                          return Center(child: Text("Laster.."));
+                          return Scaffold(
+                            backgroundColor: Colors.white,
+                            body: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          );
 
                         return ListView.builder(
 
@@ -1881,7 +1886,7 @@ class NewEventPage extends State<StatefullNew> {
                           textCapitalization: TextCapitalization.sentences,
                           controller: _add,
                           decoration: InputDecoration(
-                            hintText: "Addresse",
+                            hintText: "Adresse",
                             errorStyle: TextStyle(
                               color: UIData.pink,
                               fontSize: 10,
@@ -2198,30 +2203,24 @@ class NewEventPage extends State<StatefullNew> {
 
   Future openCamera() async {
     var picture = await ImagePicker.pickImage(source: ImageSource.camera);
-
-    setState(() {
-      imgUrl = picture;
-      choosen = true;
-    });
-
-    //uploadImage(imgUrl);
-
-    //dbUrl = picture.path.toString();
-    print("You selected: " + dbUrl);
     Navigator.pop(context);
+    setState(() {
+      if(picture != null){
+        imgUrl = picture;
+        choosen = true;
+      }  
+    });
   }
 
   Future openGallery() async {
     var gallery = await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      imgUrl = gallery;
-      choosen = true;
-    });
     Navigator.pop(context);
-    //uploadImage(imgUrl);
-
-    // dbUrl = gallery.path.toString();
-    //saveUrlDb(dbUrl);
+    setState(() {
+      if(gallery != null){
+        imgUrl = gallery;
+        choosen = true;
+      }
+    });
   }
 
   void uploadImage(imgUrl, add, kat, bes, tit, titi) async {

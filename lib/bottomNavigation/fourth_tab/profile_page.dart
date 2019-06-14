@@ -696,7 +696,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                           child:
                                                                               new ListTile(
                                                                             leading:
-                                                                                Text("Addresse:", style: TextStyle(fontWeight: FontWeight.bold)),
+                                                                                Text("Adresse:", style: TextStyle(fontWeight: FontWeight.bold)),
                                                                             title:
                                                                                 TextFormField(
                                                                               textInputAction: TextInputAction.done,
@@ -1083,22 +1083,28 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future openCamera() async {
     var picture = await ImagePicker.pickImage(source: ImageSource.camera);
-    setState(() {
-      imgUrl = picture;
-      newFoto = true;
-    });
     Navigator.of(context, rootNavigator: true).pop();
-    uploadImage(imgUrl);
+    setState(() {
+      if(picture != null){
+        imgUrl = picture;
+        newFoto = true;
+        uploadImage(imgUrl);
+      }
+    });
   }
 
   Future openGallery() async {
     var gallery = await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      imgUrl = gallery;
-      newFoto = true;
-    });
     Navigator.of(context, rootNavigator: true).pop();
-    uploadImage(imgUrl);
+    setState(() {
+      if(gallery != null){
+        imgUrl = gallery;
+        newFoto = true;
+        uploadImage(imgUrl);
+      }
+    });
+    
+    
   }
 
   Future<void> openOptions() {

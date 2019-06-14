@@ -91,6 +91,8 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
 
   bool isImgLoaded = false;
 
+  int proListIndex;
+
   @override
   void initState() {
     super.initState();
@@ -223,12 +225,10 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
       "Dere har ingen flere utfordringer"
     ];
 
-    void itemChange(bool val, int index) {
-      setState(() {
-        inputs[index] = val;
-        if (inputs[index] = true) {
+     _getChallengeData(bool val, int index){
+      if (inputs[index] = true) {
           if (index == 4) {
-            percentage = proList[5];
+            percentage = proList[proListIndex +1];
             activeChallenge = "Dere har ingen flere utfordringer";
             db
                 .collection("groups/${_group.id}/challenges")
@@ -243,7 +243,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
             });
           } else {
             activeChallenge = taskList[index + 1];
-            percentage = proList[index + 1];
+            percentage = proList[proListIndex + 1];
             db
                 .collection("groups/${_group.id}/challenges")
                 .document("utfordring" + "${index + 1}")
@@ -257,8 +257,53 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
             });
           }
         }
+    }
+
+    void itemChange(bool val, int index) async {
+      setState(() {
+        inputs[index] = val;
+        Firestore.instance.collection('groups/${_group.id}/challenges').where("isDone", isEqualTo: true).getDocuments().then((myDocuments){
+          print("${myDocuments.documents.length}");
+           proListIndex = myDocuments.documents.length;
+           print("INDEX"+ proListIndex.toString());
+           _getChallengeData(val, index);
+        });
+        print("this"+proListIndex.toString());
+        /* if (inputs[index] = true) {
+          if (index == 4) {
+            percentage = proList[proListIndex +1];
+            activeChallenge = "Dere har ingen flere utfordringer";
+            db
+                .collection("groups/${_group.id}/challenges")
+                .document("utfordring" + "${index + 1}")
+                .updateData({"isDone": true});
+            db
+                .collection("groups/${_group.id}/challenges")
+                .document("utfordring1")
+                .updateData({
+              "prosent": percentage,
+              "activeChallange": activeChallenge
+            });
+          } else {
+            activeChallenge = taskList[index + 1];
+            percentage = proList[proListIndex + 1];
+            db
+                .collection("groups/${_group.id}/challenges")
+                .document("utfordring" + "${index + 1}")
+                .updateData({"isDone": true});
+            db
+                .collection("groups/${_group.id}/challenges")
+                .document("utfordring1")
+                .updateData({
+              "prosent": percentage,
+              "activeChallange": activeChallenge
+            });
+          }
+        } */
       });
     }
+
+   
 
     queryData = MediaQuery.of(context);
 
@@ -586,14 +631,8 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                                                 setState(() {
                                                   percentage = newPercentage;
 
-                                                  newPercentage -=
-                                                      100 / taskList.length;
-                                                  if (newPercentage < 0) {
-                                                    percentage = 0.0;
-                                                    newPercentage = 0.0;
-                                                  }
                                                   percentageAnimationController
-                                                      .reverse(from: 100.0);
+                                                      .forward(from: 0.0);
                                                 });
                                               }
                                             })
@@ -991,22 +1030,26 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
 
   Future openCamera() async {
     var picture = await ImagePicker.pickImage(source: ImageSource.camera);
-    setState(() {
-      imgUrl = picture;
-      choosen = true;
-    });
-    dbUrl = picture.path.toString();
     Navigator.of(context, rootNavigator: true).pop();
+    setState(() {
+      if(picture != null) {
+        imgUrl = picture;
+        choosen = true;
+        dbUrl = picture.path.toString();
+      }
+    });
   }
 
   Future openGallery() async {
     var gallery = await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      imgUrl = gallery;
-      choosen = true;
-    });
-    dbUrl = gallery.path.toString();
     Navigator.of(context, rootNavigator: true).pop();
+    setState(() {
+      if(gallery != null){
+        imgUrl = gallery;
+        choosen = true;
+        dbUrl = gallery.path.toString();
+      } 
+    });  
   }
 
   void uploadImage(imgUrl) async {
