@@ -64,7 +64,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
   MediaQueryData queryData;
   List<bool> inputs = [false, false, false, false, false];
   double percentage = 0.0;
-  double newPercentage;
+  double newPercentage = 0.0;
   String activeChallenge = "";
   AnimationController percentageAnimationController;
 
@@ -263,43 +263,9 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
       setState(() {
         inputs[index] = val;
         Firestore.instance.collection('groups/${_group.id}/challenges').where("isDone", isEqualTo: true).getDocuments().then((myDocuments){
-          print("${myDocuments.documents.length}");
            proListIndex = myDocuments.documents.length;
-           print("INDEX"+ proListIndex.toString());
            _getChallengeData(val, index);
         });
-        print("this"+proListIndex.toString());
-        /* if (inputs[index] = true) {
-          if (index == 4) {
-            percentage = proList[proListIndex +1];
-            activeChallenge = "Dere har ingen flere utfordringer";
-            db
-                .collection("groups/${_group.id}/challenges")
-                .document("utfordring" + "${index + 1}")
-                .updateData({"isDone": true});
-            db
-                .collection("groups/${_group.id}/challenges")
-                .document("utfordring1")
-                .updateData({
-              "prosent": percentage,
-              "activeChallange": activeChallenge
-            });
-          } else {
-            activeChallenge = taskList[index + 1];
-            percentage = proList[proListIndex + 1];
-            db
-                .collection("groups/${_group.id}/challenges")
-                .document("utfordring" + "${index + 1}")
-                .updateData({"isDone": true});
-            db
-                .collection("groups/${_group.id}/challenges")
-                .document("utfordring1")
-                .updateData({
-              "prosent": percentage,
-              "activeChallange": activeChallenge
-            });
-          }
-        } */
       });
     }
 
@@ -629,8 +595,7 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
                                               } else {
                                                 itemChange(val, index);
                                                 setState(() {
-                                                  percentage = newPercentage;
-
+                                                  newPercentage += 20;
                                                   percentageAnimationController
                                                       .forward(from: 0.0);
                                                 });
@@ -1061,7 +1026,6 @@ class _GroupPageState extends State<GroupPage> with TickerProviderStateMixin {
     _onLoading();
     var url = await (await upTask.onComplete).ref.getDownloadURL();
     dbUrl = url.toString();
-    print("DBURL AFTER UPLOAD:" + dbUrl);
     _sendImage(dbUrl);
     Navigator.pop(context);
   }

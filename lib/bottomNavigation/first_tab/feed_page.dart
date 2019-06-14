@@ -303,6 +303,17 @@ class PageOneState extends State<PageOne> {
           children: <Widget>[
             Column(
               children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(top:12)
+                ),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Text("Eventer",
+                  style: TextStyle(color: UIData.black, fontSize: 18, fontWeight: FontWeight.bold))
+                ),
+                Divider(
+                  color: Colors.white,
+                ),
                 Align(
                   alignment: Alignment.topCenter,
                   child: Container(
@@ -336,9 +347,6 @@ class PageOneState extends State<PageOne> {
                               if (document.data["time"].isAfter(now)) {
                                 return Column(
                                   children: <Widget>[
-                                    Divider(
-                                      color: UIData.grey,
-                                    ),
                                     Align(
                                       alignment: Alignment.centerLeft,
                                       child: Padding(
